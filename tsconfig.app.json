@@ -25,7 +25,8 @@
     "paths": {
       "@src/*": ["*"],
       "@components/*": ["components/*"],
-      "@config/*": ["config/*"]
+      "@config/*": ["config/*"],
+      "@assets/*": ["assets/*"]
     }
   },
   "include": ["src", ".storybook/**/*.ts"]
