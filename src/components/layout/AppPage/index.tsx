@@ -5,6 +5,7 @@ import { Nav } from "@inubekit/nav";
 import { useMediaQuery } from "@inubekit/hooks";
 
 import { nav, userMenu } from "@config/nav";
+import { useAppContext } from "@context/AppContext";
 import {
   StyledAppPage,
   StyledContainer,
@@ -22,6 +23,7 @@ const renderLogo = (imgUrl: string) => {
 };
 
 function AppPage() {
+  const { logoUrl } = useAppContext();
   const isTablet = useMediaQuery("(max-width: 944px)");
 
   return (
@@ -30,7 +32,7 @@ function AppPage() {
         <Header
           portalId="portal"
           navigation={nav}
-          logoURL={renderLogo("ruta/al/logo")}
+          logoURL={renderLogo(logoUrl)}
           userName="Usuario"
           userMenu={userMenu}
         />

@@ -26,7 +26,8 @@
       "@src/*": ["*"],
       "@components/*": ["components/*"],
       "@config/*": ["config/*"],
-      "@assets/*": ["assets/*"]
+      "@assets/*": ["assets/*"],
+      "@context/*": ["context/*"]
     }
   },
   "include": ["src", ".storybook/**/*.ts"]
