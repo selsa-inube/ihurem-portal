@@ -21,7 +21,7 @@ const nav: INav = {
         },
         confirmInitiated: {
           id: "confirmInitiated",
-          label: "Confirmar iniciados",
+          label: "Confirmar ",
           icon: <MdOutlineThumbUp />,
           path: "/confirm-initiated",
         },

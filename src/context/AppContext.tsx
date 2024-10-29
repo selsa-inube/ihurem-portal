@@ -5,7 +5,6 @@ interface AppContextType {
   setUser: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
-// Crea el contexto
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
