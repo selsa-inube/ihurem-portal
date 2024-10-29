@@ -4,7 +4,7 @@ import { Header } from "@inubekit/header";
 import { Nav } from "@inubekit/nav";
 import { useMediaQuery } from "@inubekit/hooks";
 
-import { navigationMock, userMenu } from "./navigationMock";
+import { nav, userMenu } from "@config/nav";
 import {
   StyledAppPage,
   StyledContainer,
@@ -12,12 +12,6 @@ import {
   StyledLogo,
   StyledMain,
 } from "./styles";
-
-const appData = {
-  businessUnit: {
-    urlLogo: "https://ruta-del-logo.com/logo.png",
-  },
-};
 
 const renderLogo = (imgUrl: string) => {
   return (
@@ -35,9 +29,9 @@ function AppPage() {
       <Grid templateRows="auto 1fr" height="100vh" justifyContent="unset">
         <Header
           portalId="portal"
-          navigation={navigationMock}
-          logoURL={renderLogo(appData.businessUnit.urlLogo)}
-          userName="Leonardo Garzón"
+          navigation={nav}
+          logoURL={renderLogo("ruta/al/logo")}
+          userName="Usuario"
           userMenu={userMenu}
         />
         <StyledContainer>
@@ -47,7 +41,7 @@ function AppPage() {
           >
             {!isTablet && (
               <Nav
-                navigation={navigationMock}
+                navigation={nav}
                 logoutPath="/logout"
                 logoutTitle="Cerrar sesión"
               />
