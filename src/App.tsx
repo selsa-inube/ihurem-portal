@@ -1,13 +1,14 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import { AppPage } from "@components/layout/AppPage";
+import { AppProvider } from "./context/AppContext";
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<AppPage />}></Route>
-      </Routes>
-    </Router>
+    <AppProvider>
+      <Router>
+        <AppPage />
+      </Router>
+    </AppProvider>
   );
 }
 
