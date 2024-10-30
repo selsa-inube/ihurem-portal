@@ -18,7 +18,17 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+
+    /* Paths */
+    "baseUrl": "src",
+    "paths": {
+      "@src/*": ["*"],
+      "@components/*": ["components/*"],
+      "@config/*": ["config/*"],
+      "@assets/*": ["assets/*"],
+      "@context/*": ["context/*"]
+    }
   },
-  "include": ["src"]
+  "include": ["src", ".storybook/**/*.ts"]
 }
