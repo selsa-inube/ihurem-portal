@@ -2,6 +2,7 @@ import { Grid } from "@inubekit/grid";
 import { Stack } from "@inubekit/stack";
 import { Text } from "@inubekit/text";
 import { Button } from "@inubekit/button";
+import { useMediaQueries } from "@inubekit/hooks"; // Asegúrate de tener este hook disponible
 
 import selsaLogo from "@assets/images/logoInube.png";
 import errorImage from "@assets/images/img-team-building-68.png";
@@ -31,14 +32,22 @@ function ErrorPage(props: ErrorPageProps) {
     onClick,
   } = props;
 
+  const mediaQueries = ["(max-width: 600px)"];
+  const matches = useMediaQueries(mediaQueries);
+
   return (
-    <Stack padding="20px" gap="64px" direction="column" alignItems="center">
+    <Stack
+      padding={matches["(max-width: 600px)"] ? "20px" : "20px"}
+      gap={matches["(max-width: 600px)"] ? "10px" : "64px"}
+      direction="column"
+      alignItems="center"
+    >
       <Stack direction="row" justifyContent="start" width="100%">
         <StyledCompanyLogo
           src={logo}
           alt={logoAlt}
-          width="54px"
-          height="54px"
+          width={matches["(max-width: 600px)"] ? "40px" : "54px"}
+          height={matches["(max-width: 600px)"] ? "40px" : "54px"}
         />
       </Stack>
 
@@ -46,22 +55,27 @@ function ErrorPage(props: ErrorPageProps) {
         templateRows="auto"
         templateColumns="1fr"
         alignItems="center"
-        gap="28px"
+        gap={matches["(max-width: 600px)"] ? "28px" : "28px"}
       >
         <Stack
           direction="column"
           alignItems="center"
-          gap="30px"
-          padding="50px 0px"
+          gap={matches["(max-width: 600px)"] ? "24px" : "30px"}
+          padding={matches["(max-width: 600px)"] ? "90px 0px" : "50px 0px"}
         >
-          <Text type="headline" textAlign="center" weight="bold" size="large">
+          <Text
+            type="headline"
+            textAlign="center"
+            weight="bold"
+            size={matches["(max-width: 600px)"] ? "medium" : "large"}
+          >
             {heading}
           </Text>
           <StyledErrorImage
             src={image}
             alt={imageAlt}
-            width="256px"
-            height="240px"
+            width={matches["(max-width: 600px)"] ? "180px" : "256px"}
+            height={matches["(max-width: 600px)"] ? "160px" : "240px"}
           />
         </Stack>
 
@@ -82,7 +96,7 @@ function ErrorPage(props: ErrorPageProps) {
       </Grid>
 
       <StyledFooter>
-        <Text appearance="gray" textAlign="center" size="medium">
+        <Text appearance="gray" textAlign="center" size="small">
           © 2024 Inube
         </Text>
       </StyledFooter>
