@@ -6,7 +6,7 @@ import { Button } from "@inubekit/button";
 import selsaLogo from "@assets/images/logoInube.png";
 import errorImage from "@assets/images/img-team-building-68.png";
 
-import { StyledCompanyLogo, StyledErrorImage } from "./styles";
+import { StyledCompanyLogo, StyledErrorImage, StyledFooter } from "./styles";
 
 interface ErrorPageProps {
   logo?: string;
@@ -24,7 +24,7 @@ function ErrorPage(props: ErrorPageProps) {
     logo = selsaLogo,
     logoAlt = "Sistemas Enlinea",
     heading = "¡Ups! Algo salió mal...",
-    description = "No estás registrado(a) o las atribuciones utilizadas no corresponden con las registradas.",
+    description = "La compañía donde trabajas NO tiene los privilegios requeridos para acceder al portal.Confirma que estés usando la url adecuada",
     image = errorImage,
     imageAlt = "Ha surgido un error. Revisa la descripción",
     nameButton = "Regresar",
@@ -66,12 +66,26 @@ function ErrorPage(props: ErrorPageProps) {
         </Stack>
 
         <Stack gap="24px" direction="column" alignItems="center">
-          <Text type="title" size="medium" textAlign="center">
+          <Text type="title" size="medium" textAlign="center" appearance="gray">
             {description}
           </Text>
-          <Button onClick={onClick}>{nameButton}</Button>
+          <Button
+            onClick={() =>
+              onClick
+                ? onClick()
+                : window.open("https://www.google.com", "_blank")
+            }
+          >
+            {nameButton}
+          </Button>
         </Stack>
       </Grid>
+
+      <StyledFooter>
+        <Text appearance="gray" textAlign="center" size="medium">
+          © 2024 Inube
+        </Text>
+      </StyledFooter>
     </Stack>
   );
 }

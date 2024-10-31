@@ -17,7 +17,7 @@ Default.args = {
   logoAlt: "Sistemas Enlinea",
   heading: "¡Ups! Algo salió mal...",
   description:
-    "No estás registrado(a) o las atribuciones utilizadas no corresponden con las registradas.",
+    "La compañía donde trabajas NO tiene los privilegios requeridos para acceder al portal.Confirma que estés usando la url adecuada",
   image: errorImage,
   imageAlt: "Ha surgido un error. Revisa la descripción",
 };
