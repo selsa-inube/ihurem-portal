@@ -8,9 +8,10 @@ import { useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 
 import { AppPage } from "@components/layout/AppPage";
-import { AppProvider } from "./context/AppContext";
+import { AppProvider } from "@context/AppContext";
+import { enviroment } from "@config/environment";
+
 import { GlobalStyles } from "./styles/global";
-import { enviroment } from "./config/environment";
 
 function LogOut() {
   localStorage.clear();
