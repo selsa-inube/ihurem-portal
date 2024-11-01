@@ -23,9 +23,8 @@ const renderLogo = (imgUrl: string) => {
 };
 
 function AppPage() {
-  const { logoUrl } = useAppContext();
+  const { user, logoUrl } = useAppContext();
   const isTablet = useMediaQuery("(max-width: 944px)");
-
   return (
     <StyledAppPage>
       <Grid templateRows="auto 1fr" height="100vh" justifyContent="unset">
@@ -33,8 +32,9 @@ function AppPage() {
           portalId="portal"
           navigation={nav}
           logoURL={renderLogo(logoUrl)}
-          userName="Usuario"
+          userName={user.username}
           userMenu={userMenu}
+          client={user.company}
         />
         <StyledContainer>
           <Grid

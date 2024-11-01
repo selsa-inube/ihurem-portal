@@ -40,7 +40,7 @@ const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     auth0User
       ? {
           username: auth0User.name ?? "",
-          id: "abc123",
+          id: auth0User.nickname,
           company: "Company Name",
         }
       : null,
@@ -53,8 +53,6 @@ const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     boardOrientation:
       (localStorage.getItem("boardOrientation") as "vertical" | "horizontal") ??
       "vertical",
-    showPinnedOnly:
-      JSON.parse(localStorage.getItem("showPinnedOnly") ?? "false") === true,
   });
 
   const updatePreferences = (newPreferences: Partial<Preferences>) => {
@@ -65,10 +63,6 @@ const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     if (user) {
       localStorage.setItem("logoUrl", logoUrl);
       localStorage.setItem("boardOrientation", preferences.boardOrientation);
-      localStorage.setItem(
-        "showPinnedOnly",
-        JSON.stringify(preferences.showPinnedOnly),
-      );
     }
   }, [logoUrl, preferences, user]);
 
