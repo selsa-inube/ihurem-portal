@@ -4,7 +4,7 @@ import { Header } from "@inubekit/header";
 import { Nav } from "@inubekit/nav";
 import { useMediaQuery } from "@inubekit/hooks";
 
-import { nav, userMenu } from "@config/nav";
+import { nav, userMenu, actions } from "@config/nav";
 import { useAppContext } from "@context/AppContext";
 import {
   StyledAppPage,
@@ -42,11 +42,7 @@ function AppPage() {
             alignContent="unset"
           >
             {!isTablet && (
-              <Nav
-                navigation={nav}
-                logoutPath="/logout"
-                logoutTitle="Cerrar sesión"
-              />
+              <Nav navigation={nav} actions={actions} collapse={true} />
             )}
             <StyledMain>
               <Outlet />

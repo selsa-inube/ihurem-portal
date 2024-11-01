@@ -1,10 +1,10 @@
 import { INav } from "@components/layout/AppPage/types";
 import {
   MdLogout,
-  MdOutlineCheck,
-  MdOutlineMoving,
-  MdOutlineStart,
-  MdOutlineThumbUp,
+  MdOutlinePersonOff,
+  MdAttachFile,
+  MdBeachAccess,
+  MdOutlinePersonalInjury,
 } from "react-icons/md";
 
 const nav: INav = {
@@ -13,29 +13,29 @@ const nav: INav = {
     administrate: {
       name: "",
       links: {
-        startProcess: {
-          id: "startProcess",
-          label: "Iniciar procesos",
-          icon: <MdOutlineStart />,
-          path: "/start-process",
+        vacations: {
+          id: "vacations",
+          label: "Vacaciones",
+          icon: <MdBeachAccess />,
+          path: "/vacations",
         },
-        confirmInitiated: {
-          id: "confirmInitiated",
-          label: "Confirmar ",
-          icon: <MdOutlineThumbUp />,
-          path: "/confirm-initiated",
+        disability: {
+          id: "disability",
+          label: "Incapacidades",
+          icon: <MdOutlinePersonalInjury />,
+          path: "/disability",
         },
-        validateProgress: {
-          id: "validateProgress",
-          label: "Validar progreso",
-          icon: <MdOutlineMoving />,
-          path: "/validate-progress",
+        certificates: {
+          id: "certificates",
+          label: "Certificados",
+          icon: <MdAttachFile />,
+          path: "/certificates",
         },
-        finished: {
-          id: "finished",
-          label: "Finalizados",
-          icon: <MdOutlineCheck />,
-          path: "/finished",
+        absences: {
+          id: "absences",
+          label: "Ausencias",
+          icon: <MdOutlinePersonOff />,
+          path: "/absences",
         },
       },
     },
@@ -58,4 +58,15 @@ const userMenu = [
   },
 ];
 
-export { nav, userMenu };
+const actions = [
+  {
+    id: "logout",
+    label: "Cerrar sesión",
+    icon: <MdLogout />,
+    action: () => {
+      console.log("logout");
+    },
+  },
+];
+
+export { nav, userMenu, actions };
