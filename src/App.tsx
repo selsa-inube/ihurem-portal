@@ -10,6 +10,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { AppPage } from "@components/layout/AppPage";
 import { AppProvider } from "@context/AppContext";
 import { enviroment } from "@config/environment";
+import { Login } from "@pages/login";
 
 import { GlobalStyles } from "./styles/global";
 
@@ -24,6 +25,7 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="/" element={<AppPage />}></Route>
+      <Route path="/welcome" element={<Login />} />
       <Route path="logout" element={<LogOut />} />
     </>,
   ),

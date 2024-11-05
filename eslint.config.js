@@ -33,6 +33,7 @@ export default tseslint.config({
     ...reactHooks.configs.recommended.rules,
     ...react.configs.recommended.rules,
     ...react.configs["jsx-runtime"].rules,
+    "@typescript-eslint/consistent-indexed-object-style": "off",
     "react-refresh/only-export-components": [
       "warn",
       { allowConstantExport: true },
