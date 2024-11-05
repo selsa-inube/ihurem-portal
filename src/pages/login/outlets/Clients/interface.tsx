@@ -42,6 +42,7 @@ function ClientsUI({ handleSubmit }: ClientsUIProps) {
               size="medium"
               textAlign="center"
               appearance="gray"
+              parentHover
             >
               ¿Aún no estás registrado/a?
             </Text>
@@ -50,6 +51,7 @@ function ClientsUI({ handleSubmit }: ClientsUIProps) {
               size="medium"
               textAlign="center"
               appearance="primary"
+              parentHover
             >
               ¡Regístrate!
             </Text>
