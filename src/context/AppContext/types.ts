@@ -3,6 +3,13 @@ export interface IPreferences {
   showPinnedOnly: boolean;
 }
 
+export interface IClient {
+  id: string;
+  name: string;
+  sigla: string;
+  logo: string;
+}
+
 export interface IAppContextType {
   user: { username: string; id: string; company: string } | null;
   setUser: React.Dispatch<
@@ -16,4 +23,5 @@ export interface IAppContextType {
   updatePreferences: (newPreferences: Partial<IPreferences>) => void;
   logoUrl: string;
   setLogoUrl: React.Dispatch<React.SetStateAction<string>>;
+  handleClientChange: (client: IClient) => void;
 }

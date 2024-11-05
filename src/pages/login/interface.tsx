@@ -4,6 +4,8 @@ import { Grid } from "@inubekit/grid";
 import { Stack } from "@inubekit/stack";
 import { Text } from "@inubekit/text";
 
+import selsaLogo from "@assets/images/team-success-5-66 1.png";
+
 import { StyledWelcomeContainer, StyledOutletContainer } from "./styles";
 
 function LoginUI() {
@@ -30,6 +32,11 @@ function LoginUI() {
             <Text as="h1" type="headline" size="large">
               Portal de empleados
             </Text>
+            <img
+              src={selsaLogo}
+              alt="Logo de Selsa"
+              style={{ width: "278px", maxWidth: "281px", marginTop: "16px" }}
+            />
           </Stack>
         </Stack>
       </StyledWelcomeContainer>

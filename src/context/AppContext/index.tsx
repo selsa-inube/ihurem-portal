@@ -57,6 +57,7 @@ const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         updatePreferences,
         logoUrl,
         setLogoUrl,
+        handleClientChange: () => {},
       }}
     >
       {children}
