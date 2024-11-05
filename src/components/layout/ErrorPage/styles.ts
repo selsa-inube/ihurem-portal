@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { inube } from "@inubekit/foundations";
+import { spacing } from "@design/tokens/spacing/spacing.ts";
 
 const StyledCompanyLogo = styled.img`
   max-width: 300px;
@@ -20,7 +21,7 @@ const StyledFooter = styled.footer`
   width: 100%;
   justify-content: center;
   position: absolute;
-  padding: 16px 0px;
+  padding: ${spacing.s200} ${spacing.s0};
   background-color: ${({ theme }) =>
     theme?.palette?.neutral?.N10 || inube.palette.neutral.N10};
 `;
