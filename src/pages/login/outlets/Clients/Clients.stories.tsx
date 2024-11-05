@@ -17,7 +17,7 @@ const story = {
   ],
 };
 
-const Default = () => <Clients clients={[]} />;
+const Default = () => <Clients />;
 
 export { Default };
 export default story;

@@ -1,22 +1,11 @@
-import React from "react";
 import { Button } from "@inubekit/button";
 import { Text } from "@inubekit/text";
 import { Stack } from "@inubekit/stack";
 
-import { IClient } from "@context/AppContext/types";
-
 import selsaLogo from "@assets/images/logo-inube.png";
-
-import { IClientState } from "./types";
 import { StyledClients } from "./styles";
 
 interface ClientsUIProps {
-  clients: IClient[];
-  search: string;
-  client: IClientState;
-  handleSearchChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handleClientChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  filterClients: (clients: IClient[]) => IClient[];
   handleSubmit: (event?: Event) => void;
 }
 
