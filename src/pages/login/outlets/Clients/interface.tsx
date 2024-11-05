@@ -1,15 +1,21 @@
 import { Button } from "@inubekit/button";
 import { Text } from "@inubekit/text";
 import { Stack } from "@inubekit/stack";
+import { useAuth0 } from "@auth0/auth0-react";
 
 import selsaLogo from "@assets/images/logo-inube.png";
 import { StyledClients } from "./styles";
 
-interface ClientsUIProps {
-  handleSubmit: (event?: Event) => void;
-}
+function ClientsUI() {
+  const { loginWithRedirect } = useAuth0();
+  const handleLoginClick = async () => {
+    try {
+      await loginWithRedirect();
+    } catch (error) {
+      console.error("Error al intentar iniciar sesión:", error);
+    }
+  };
 
-function ClientsUI({ handleSubmit }: ClientsUIProps) {
   return (
     <StyledClients>
       <Stack direction="column">
@@ -35,7 +41,7 @@ function ClientsUI({ handleSubmit }: ClientsUIProps) {
           </Text>
         </Stack>
         <Stack gap="24px" direction="column" alignItems="center">
-          <Button onClick={handleSubmit}>Inicia sesión</Button>
+          <Button onClick={handleLoginClick}>Inicia sesión</Button>
           <Stack gap="12px">
             <Text
               type="body"

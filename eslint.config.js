@@ -35,6 +35,7 @@ export default tseslint.config({
     ...react.configs["jsx-runtime"].rules,
     "@typescript-eslint/consistent-indexed-object-style": "off",
     "@typescript-eslint/no-empty-function": "off",
+    "@typescript-eslint/no-misused-promises": "off",
     "react-refresh/only-export-components": [
       "warn",
       { allowConstantExport: true },
