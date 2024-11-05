@@ -1,7 +1,6 @@
 import React from "react";
 import { Button } from "@inubekit/button";
 import { Text } from "@inubekit/text";
-import { Input } from "@inubekit/input";
 import { Stack } from "@inubekit/stack";
 
 import { IClient } from "@context/AppContext/types";
@@ -38,20 +37,16 @@ function ClientsUI({ handleSubmit }: ClientsUIProps) {
           />
 
           <Text type="headline" size="large" textAlign="center">
-            Registrarse
+            Acceder
           </Text>
 
-          <Input
-            id="cédula"
-            label="Cédula"
-            placeholder="No. de cédula"
-            required={false}
-            size="compact"
-            status="pending"
-          />
+          <Text size="large" textAlign="center">
+            Con el <strong> portal de empleados </strong>puedes gestionar tus
+            solicitudes de forma autónoma.
+          </Text>
         </Stack>
         <Stack gap="24px" direction="column" alignItems="center">
-          <Button onClick={handleSubmit}>Regístrate</Button>
+          <Button onClick={handleSubmit}>Inicia sesión</Button>
           <Stack gap="12px">
             <Text
               type="body"
@@ -59,7 +54,7 @@ function ClientsUI({ handleSubmit }: ClientsUIProps) {
               textAlign="center"
               appearance="gray"
             >
-              ¿Ya te registraste?
+              ¿Aún no estás registrado/a?
             </Text>
             <Text
               type="body"
@@ -67,7 +62,7 @@ function ClientsUI({ handleSubmit }: ClientsUIProps) {
               textAlign="center"
               appearance="primary"
             >
-              Inicia sesión
+              ¡Regístrate!
             </Text>
           </Stack>
         </Stack>
