@@ -32,9 +32,9 @@ function AppPage() {
           portalId="portal"
           navigation={nav}
           logoURL={renderLogo(logoUrl)}
-          userName={user.username}
+          userName={user?.username}
           userMenu={userMenu}
-          client={user.company}
+          client={user?.company}
         />
         <StyledContainer>
           <Grid
