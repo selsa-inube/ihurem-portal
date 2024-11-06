@@ -13,7 +13,6 @@ function ClientsUI() {
     try {
       await loginWithRedirect({
         authorizationParams: {
-          screen_hint: "login",
           connection: "google-oauth2",
         },
       });
