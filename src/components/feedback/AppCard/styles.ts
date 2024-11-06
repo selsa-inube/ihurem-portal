@@ -1,11 +1,14 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { inube } from "@inubekit/foundations";
+import { spacing } from "@design/tokens/spacing/spacing";
 
 const StyledAppCard = styled(Link)`
   box-sizing: border-box;
-  padding: 12px 24px;
+  padding: ${spacing.s150} ${spacing.s300};
   height: 174px;
+  overflow: auto;
+  max-height: 174px;
   width: 313px;
   display: flex;
   flex-direction: column;
@@ -29,14 +32,25 @@ const StyledAppCard = styled(Link)`
     box-shadow: none;
   }
 
+  &::-webkit-scrollbar {
+    width: 8px;
+    border-radius: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: ${({ theme }) =>
+      theme?.palette?.neutral?.N30 || inube.palette.neutral.N30};
+    border-radius: 8px;
+  }
+
   @media (max-width: 400px) {
-    padding: 16px;
+    padding: ${spacing.s200};
     width: 100%;
     min-height: 100px;
-    gap: 8px;
+    gap: ${spacing.s100};
 
     div {
-      gap: 4px;
+      gap: ${spacing.s050};
     }
   }
 `;

@@ -2,6 +2,8 @@ import { Stack } from "@inubekit/stack";
 import { Text } from "@inubekit/text";
 import { Icon } from "@inubekit/icon";
 import { Divider } from "@inubekit/divider";
+import { spacing } from "@design/tokens/spacing/spacing";
+
 import { StyledAppCard } from "./styles";
 
 interface AppCardProps {
@@ -23,7 +25,7 @@ function AppCard(props: AppCardProps) {
         </Text>
         <Icon icon={icon} appearance="dark" size="24px" cursorHover />
       </Stack>
-      <Stack padding="12px 0px">
+      <Stack padding={`${spacing.s150} ${spacing.s0}`}>
         <Divider dashed />
       </Stack>
       <Stack direction="column" gap="12px">
