@@ -8,13 +8,11 @@ export interface IClients {
   clients: IClient[];
 }
 
-const clients: IClient[] = [];
-
 function LoginRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Login />}>
-        <Route path="/" element={<Clients clients={clients} />} />
+        <Route path="/" element={<Clients />} />
         <Route path="loading-app" element={<LoadingApp />} />
       </Route>
     </Routes>

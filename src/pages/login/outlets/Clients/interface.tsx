@@ -8,9 +8,15 @@ import { StyledClients } from "./styles";
 
 function ClientsUI() {
   const { loginWithRedirect } = useAuth0();
+
   const handleLoginClick = async () => {
     try {
-      await loginWithRedirect();
+      await loginWithRedirect({
+        authorizationParams: {
+          screen_hint: "login",
+          connection: "google-oauth2",
+        },
+      });
     } catch (error) {
       console.error("Error al intentar iniciar sesión:", error);
     }
