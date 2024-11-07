@@ -21,7 +21,7 @@ const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     auth0User
       ? {
           username: auth0User.name ?? "",
-          id: auth0User.nickname,
+          id: auth0User.nickname ?? "",
           company: "Company Name",
         }
       : null,
@@ -34,6 +34,7 @@ const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     boardOrientation:
       (localStorage.getItem("boardOrientation") as "vertical" | "horizontal") ??
       "vertical",
+    showPinnedOnly: false,
   });
 
   const updatePreferences = (newPreferences: Partial<IPreferences>) => {
@@ -56,6 +57,7 @@ const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         updatePreferences,
         logoUrl,
         setLogoUrl,
+        handleClientChange: () => {},
       }}
     >
       {children}

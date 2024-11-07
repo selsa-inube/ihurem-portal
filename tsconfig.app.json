@@ -28,6 +28,7 @@
       "@config/*": ["config/*"],
       "@assets/*": ["assets/*"],
       "@context/*": ["context/*"],
+      "@pages/*": ["pages/*"],
       "@design/*": ["design/*"]
     }
   },
