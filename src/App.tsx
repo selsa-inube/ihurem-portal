@@ -4,6 +4,7 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from "react-router-dom";
+import { useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 
 import { AppPage } from "@components/layout/AppPage";
@@ -23,17 +24,23 @@ function LogOut() {
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/" element={<AppPage />} />
+      <Route path="/" element={<AppPage />}></Route>
       <Route path="/welcome/*" element={<LoginRoutes />} />
-      <Route path="/logout" element={<LogOut />} />
+      <Route path="logout" element={<LogOut />} />
     </>,
   ),
 );
 
 function App() {
-  const { isLoading } = useAuth0();
+  const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
 
-  if (isLoading) {
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      void loginWithRedirect();
+    }
+  }, [isLoading, isAuthenticated, loginWithRedirect]);
+
+  if (!isAuthenticated) {
     return null;
   }
 
