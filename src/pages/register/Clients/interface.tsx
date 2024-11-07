@@ -2,27 +2,15 @@ import { Button } from "@inubekit/button";
 import { Text } from "@inubekit/text";
 import { Stack } from "@inubekit/stack";
 import { Input } from "@inubekit/input";
-import { useAuth0 } from "@auth0/auth0-react";
 import { useNavigate } from "react-router-dom";
 
 import selsaLogo from "@assets/images/logoInube.png";
 import { StyledClients } from "./styles";
 
 function ClientsUI() {
-  const { loginWithRedirect } = useAuth0();
   const navigate = useNavigate();
 
-  const handleLoginClick = async () => {
-    try {
-      await loginWithRedirect({
-        authorizationParams: {
-          connection: "google-oauth2",
-        },
-      });
-    } catch (error) {
-      console.error("Error al intentar iniciar sesión:", error);
-    }
-  };
+  const handleLoginClick = async () => {};
 
   const handleSignInClick = () => {
     navigate("/welcome");
