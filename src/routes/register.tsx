@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import { Client } from "@pages/register/outlets/Clients";
+import { Client } from "@src/pages/register/Clients";
 import { LoadingApp } from "@pages/login/outlets/LoadingApp";
 import { Login } from "@pages/login";
 import { IClient } from "@context/AppContext/types";
