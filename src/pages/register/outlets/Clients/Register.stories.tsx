@@ -1,10 +1,10 @@
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
-import { Clients } from ".";
+import { Client } from ".";
 
-const story = {
-  components: [Clients],
-  title: "layouts/login/outlets",
+const storyRegister = {
+  components: [Client],
+  title: "register",
   parameters: {
     layout: "fullscreen",
   },
@@ -17,7 +17,7 @@ const story = {
   ],
 };
 
-const Default = () => <Clients />;
+const DefaultRegister = () => <Client />;
 
-export { Default };
-export default story;
+export { DefaultRegister };
+export default storyRegister;

@@ -1,10 +1,9 @@
-import React from "react";
 import { BrowserRouter } from "react-router-dom";
-import { Clients } from ".";
+import { LoadingApp } from "./index";
 
 const story = {
-  components: [Clients],
-  title: "layouts/login/outlets",
+  components: [LoadingApp],
+  title: "layouts/login/outlets/loading-app",
   parameters: {
     layout: "fullscreen",
   },
@@ -17,7 +16,8 @@ const story = {
   ],
 };
 
-const Default = () => <Clients />;
+const Default = () => <LoadingApp />;
+
+export default story;
 
 export { Default };
-export default story;

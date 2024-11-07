@@ -11,6 +11,7 @@ import { AppPage } from "@components/layout/AppPage";
 import { AppProvider } from "@context/AppContext";
 import { enviroment } from "@config/environment";
 import { LoginRoutes } from "./routes/login";
+import { RegisterRoutes } from "./routes/register";
 
 import { GlobalStyles } from "./styles/global";
 
@@ -26,6 +27,7 @@ const router = createBrowserRouter(
     <>
       <Route path="/" element={<AppPage />} />
       <Route path="/welcome/*" element={<LoginRoutes />} />
+      <Route path="/signin/*" element={<RegisterRoutes />} />
       <Route path="logout" element={<LogOut />} />
     </>,
   ),

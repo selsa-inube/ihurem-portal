@@ -1,15 +1,16 @@
 import { Button } from "@inubekit/button";
 import { Text } from "@inubekit/text";
 import { Stack } from "@inubekit/stack";
+import { Input } from "@inubekit/input";
 import { useAuth0 } from "@auth0/auth0-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // Importar useNavigate
 
 import selsaLogo from "@assets/images/logoInube.png";
 import { StyledClients } from "./styles";
 
 function ClientsUI() {
   const { loginWithRedirect } = useAuth0();
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Usar el hook para la navegación
 
   const handleLoginClick = async () => {
     try {
@@ -23,8 +24,8 @@ function ClientsUI() {
     }
   };
 
-  const handleRegisterClick = () => {
-    navigate("/signin");
+  const handleSignInClick = () => {
+    navigate("/welcome");
   };
 
   return (
@@ -43,16 +44,18 @@ function ClientsUI() {
           />
 
           <Text type="headline" size="large" textAlign="center">
-            Acceder
+            Registrarse
           </Text>
 
-          <Text size="large" textAlign="center">
-            Con el <strong> portal de empleados </strong>puedes gestionar tus
-            solicitudes de forma autónoma.
-          </Text>
+          <Input
+            id="id"
+            label="Cédula"
+            placeholder="No. de cédula"
+            size="compact"
+          />
         </Stack>
         <Stack gap="24px" direction="column" alignItems="center">
-          <Button onClick={handleLoginClick}>Inicia sesión</Button>
+          <Button onClick={handleLoginClick}>Registrarse</Button>
           <Stack gap="12px">
             <Text
               type="body"
@@ -60,7 +63,7 @@ function ClientsUI() {
               textAlign="center"
               appearance="gray"
             >
-              ¿Aún no estás registrado/a?
+              ¿Ya te registraste?
             </Text>
             <Text
               type="body"
@@ -68,9 +71,9 @@ function ClientsUI() {
               textAlign="center"
               appearance="primary"
               parentHover
-              onClick={handleRegisterClick}
+              onClick={handleSignInClick}
             >
-              ¡Regístrate!
+              Inicia sesión
             </Text>
           </Stack>
         </Stack>
