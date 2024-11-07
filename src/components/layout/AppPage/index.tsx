@@ -32,14 +32,15 @@ function AppPage() {
           portalId="portal"
           navigation={nav}
           logoURL={renderLogo(logoUrl)}
-          userName={user.username}
+          userName={user?.username}
           userMenu={userMenu}
-          client={user.company}
+          client={user?.company}
         />
         <StyledContainer>
           <Grid
             templateColumns={!isTablet ? "auto 1fr" : "1fr"}
             alignContent="unset"
+            height={"95vh"}
           >
             {!isTablet && (
               <Nav navigation={nav} actions={actions} collapse={true} />
