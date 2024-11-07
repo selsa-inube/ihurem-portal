@@ -33,13 +33,13 @@ const StyledAppCard = styled(Link)`
   }
 
   &::-webkit-scrollbar {
-    width: 8px;
+    width: 5px;
     border-radius: 8px;
   }
 
   &::-webkit-scrollbar-thumb {
     background-color: ${({ theme }) =>
-      theme?.palette?.neutral?.N30 || inube.palette.neutral.N30};
+      theme?.palette?.neutral?.N30 || inube.palette.neutral.N0};
     border-radius: 8px;
   }
 
