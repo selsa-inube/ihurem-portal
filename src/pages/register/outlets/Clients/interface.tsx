@@ -3,14 +3,14 @@ import { Text } from "@inubekit/text";
 import { Stack } from "@inubekit/stack";
 import { Input } from "@inubekit/input";
 import { useAuth0 } from "@auth0/auth0-react";
-import { useNavigate } from "react-router-dom"; // Importar useNavigate
+import { useNavigate } from "react-router-dom";
 
 import selsaLogo from "@assets/images/logoInube.png";
 import { StyledClients } from "./styles";
 
 function ClientsUI() {
   const { loginWithRedirect } = useAuth0();
-  const navigate = useNavigate(); // Usar el hook para la navegación
+  const navigate = useNavigate();
 
   const handleLoginClick = async () => {
     try {
