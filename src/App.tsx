@@ -24,7 +24,7 @@ function LogOut() {
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/" element={<AppPage />}></Route>
+      <Route path="/" element={<AppPage />} />
       <Route path="/welcome/*" element={<LoginRoutes />} />
       <Route path="logout" element={<LogOut />} />
     </>,
@@ -33,14 +33,15 @@ const router = createBrowserRouter(
 
 function App() {
   const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
+  const location = window.location.pathname;
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
+    if (!isLoading && !isAuthenticated && location !== "/welcome") {
       void loginWithRedirect();
     }
-  }, [isLoading, isAuthenticated, loginWithRedirect]);
+  }, [isLoading, isAuthenticated, loginWithRedirect, location]);
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated && location !== "/welcome") {
     return null;
   }
 
