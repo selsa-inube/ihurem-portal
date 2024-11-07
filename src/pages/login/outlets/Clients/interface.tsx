@@ -3,7 +3,7 @@ import { Text } from "@inubekit/text";
 import { Stack } from "@inubekit/stack";
 import { useAuth0 } from "@auth0/auth0-react";
 
-import selsaLogo from "@assets/images/logo-inube.png";
+import selsaLogo from "@assets/images/logoInube.png";
 import { StyledClients } from "./styles";
 
 function ClientsUI() {
