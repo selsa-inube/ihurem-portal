@@ -8,11 +8,14 @@ import { useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 
 import { AppPage } from "@components/layout/AppPage";
+import { ErrorPage } from "@components/layout/ErrorPage";
 import { AppProvider } from "@context/AppContext";
 import { enviroment } from "@config/environment";
 import { LoginRoutes } from "./routes/login";
+import { RegisterRoutes } from "./routes/register";
 
 import { GlobalStyles } from "./styles/global";
+import { pathStart } from "@config/nav.tsx";
 
 function LogOut() {
   localStorage.clear();
@@ -24,8 +27,9 @@ function LogOut() {
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/" element={<AppPage />} />
+      <Route path="/" element={<AppPage />} errorElement={<ErrorPage />} />
       <Route path="/welcome/*" element={<LoginRoutes />} />
+      <Route path="/signin/*" element={<RegisterRoutes />} />
       <Route path="logout" element={<LogOut />} />
     </>,
   ),
@@ -36,12 +40,12 @@ function App() {
   const location = window.location.pathname;
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated && location !== "/welcome") {
+    if (!isLoading && !isAuthenticated && !pathStart.includes(location)) {
       void loginWithRedirect();
     }
   }, [isLoading, isAuthenticated, loginWithRedirect, location]);
 
-  if (!isAuthenticated && location !== "/welcome") {
+  if (!isAuthenticated && !pathStart.includes(location)) {
     return null;
   }
 

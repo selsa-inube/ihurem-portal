@@ -69,4 +69,6 @@ const actions = [
   },
 ];
 
-export { nav, userMenu, actions };
+const pathStart = ["/welcome", "/signin"];
+
+export { nav, userMenu, actions, pathStart };
