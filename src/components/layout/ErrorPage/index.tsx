@@ -8,6 +8,7 @@ import selsaLogo from "@assets/images/logoInube.png";
 import errorImage from "@assets/images/img-team-building-68.png";
 
 import { StyledCompanyLogo, StyledErrorImage, StyledFooter } from "./styles";
+import { enviroment } from "@config/environment.ts";
 
 interface ErrorPageProps {
   logo?: string;
@@ -25,7 +26,7 @@ function ErrorPage(props: ErrorPageProps) {
     logo = selsaLogo,
     logoAlt = "Sistemas Enlinea",
     heading = "¡Ups! Algo salió mal...",
-    description = "La compañía donde trabajas NO tiene los privilegios requeridos para acceder al portal.Confirma que estés usando la url adecuada",
+    description = "",
     image = errorImage,
     imageAlt = "Ha surgido un error. Revisa la descripción",
     nameButton = "Regresar",
@@ -104,7 +105,7 @@ function ErrorPage(props: ErrorPageProps) {
               onClick={() =>
                 onClick
                   ? onClick()
-                  : window.open("https://www.google.com", "_blank")
+                  : window.open(enviroment.REDIRECT_URI, "_self")
               }
             >
               {nameButton}

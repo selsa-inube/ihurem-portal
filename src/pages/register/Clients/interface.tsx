@@ -40,6 +40,8 @@ function ClientsUI() {
             label="Cédula"
             placeholder="No. de cédula"
             size="compact"
+            type="number"
+            iconAfter=""
           />
         </Stack>
         <Stack gap="24px" direction="column" alignItems="center">
