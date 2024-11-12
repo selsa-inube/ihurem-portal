@@ -44,12 +44,11 @@ export default tseslint.config({
     "no-nested-ternary": "warn",
     "no-var": "warn",
     "prefer-const": "warn",
-    // Soluciones para los errores específicos
-    "@typescript-eslint/no-floating-promises": "warn", // Cambia a "off" si quieres ignorar este error
-    "@typescript-eslint/no-unsafe-assignment": "warn", // Cambia a "off" si quieres ignorarlo
+    "@typescript-eslint/no-floating-promises": "warn",
+    "@typescript-eslint/no-unsafe-assignment": "warn",
     "@typescript-eslint/no-unsafe-member-access": "warn",
     "@typescript-eslint/no-unsafe-argument": "warn",
-    "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }], // Ignora variables sin uso que inician con "_"
-    "@typescript-eslint/only-throw-error": "warn", // Cambia a "off" si quieres ignorar este error
+    "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+    "@typescript-eslint/only-throw-error": "warn",
   },
 });
