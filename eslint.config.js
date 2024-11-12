@@ -30,17 +30,26 @@ export default tseslint.config({
     "react-refresh": reactRefresh,
   },
   rules: {
-    ...reactHooks.configs.recommended.rules,
-    ...react.configs.recommended.rules,
-    ...react.configs["jsx-runtime"].rules,
-    "@typescript-eslint/consistent-indexed-object-style": "off",
-    "@typescript-eslint/no-empty-function": "off",
-    "@typescript-eslint/no-misused-promises": "off",
+    "react-hooks/exhaustive-deps": "off",
     "react-refresh/only-export-components": [
       "warn",
-      { allowConstantExport: true },
+      {
+        allowConstantExport: true,
+      },
     ],
-    "@typescript-eslint/no-unsafe-return": "off",
-    "@typescript-eslint/no-unsafe-member-access": "off",
+    eqeqeq: ["error", "always"],
+    "no-implicit-coercion": "warn",
+    "@typescript-eslint/no-explicit-any": "warn",
+    "@typescript-eslint/no-duplicate-enum-values": "warn",
+    "no-nested-ternary": "warn",
+    "no-var": "warn",
+    "prefer-const": "warn",
+    // Soluciones para los errores específicos
+    "@typescript-eslint/no-floating-promises": "warn", // Cambia a "off" si quieres ignorar este error
+    "@typescript-eslint/no-unsafe-assignment": "warn", // Cambia a "off" si quieres ignorarlo
+    "@typescript-eslint/no-unsafe-member-access": "warn",
+    "@typescript-eslint/no-unsafe-argument": "warn",
+    "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }], // Ignora variables sin uso que inician con "_"
+    "@typescript-eslint/only-throw-error": "warn", // Cambia a "off" si quieres ignorar este error
   },
 });

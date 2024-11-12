@@ -1,7 +1,7 @@
 import { Stack } from "@inubekit/stack";
 import { Text } from "@inubekit/text";
 import { Button } from "@inubekit/button";
-import { useMediaQueries } from "@inubekit/hooks"; // Asegúrate de tener este hook disponible
+import { useMediaQueries } from "@inubekit/hooks";
 
 import { spacing } from "@design/tokens/spacing/spacing.ts";
 import selsaLogo from "@assets/images/logoInube.png";

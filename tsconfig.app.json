@@ -29,7 +29,10 @@
       "@assets/*": ["assets/*"],
       "@context/*": ["context/*"],
       "@pages/*": ["pages/*"],
-      "@design/*": ["design/*"]
+      "@design/*": ["design/*"],
+      "@ptypes/*": ["types/*"],
+      "@utils/*": ["utils/*"],
+      "@services/*": ["services/*"]
     }
   },
   "include": ["src", ".storybook/**/*.ts"]

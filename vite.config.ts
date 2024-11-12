@@ -14,11 +14,14 @@ export default defineConfig({
     alias: {
       "@src": path.resolve(__dirname, "./src"),
       "@components": path.resolve(__dirname, "./src/components"),
+      "@ptypes": path.resolve(__dirname, "./src/types"),
       "@config": path.resolve(__dirname, "./src/config"),
       "@assets": path.resolve(__dirname, "./src/assets"),
       "@context": path.resolve(__dirname, "./src/context"),
       "@pages": path.resolve(__dirname, "./src/pages"),
       "@design": path.resolve(__dirname, "./src/design"),
+      "@utils": path.resolve(__dirname, "./src/utils"),
+      "@services": path.resolve(__dirname, "./src/services"),
     },
   },
 });
