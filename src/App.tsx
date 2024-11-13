@@ -39,7 +39,7 @@ function FirstPage() {
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/*" element={<FirstPage />} errorElement={<ErrorPage />} />
+      <Route path="/" element={<FirstPage />} errorElement={<ErrorPage />} />
       <Route path="/" element={<AppPage />} />
       <Route path="welcome/*" element={<LoginRoutes />} />
       <Route path="logout" element={<LogOut />} />
@@ -47,17 +47,11 @@ const router = createBrowserRouter(
   ),
 );
 
+const url = new URL(window.location.href);
+const params = new URLSearchParams(url.search);
+const portalCode = params.get("portal");
+
 function App() {
-  const url = new URL(window.location.href);
-  const params = new URLSearchParams(url.search);
-  const portalCode = params.get("portal");
-
-  const isValidPortalCode = portalCode && portalCode.length > 0;
-
-  if (!isValidPortalCode) {
-    return <ErrorPage />;
-  }
-
   const { portalData, hasError: portalError } = usePortalData();
   const { businessManagersData, hasError: businessError } = useBusinessManagers(
     portalData,
