@@ -64,6 +64,10 @@ function App() {
 
   const hasError = portalError || businessError || authError;
 
+  if (!portalCode?.includes("employee_portal")) {
+    return <ErrorPage />;
+  }
+
   if (isLoading) {
     return null;
   }

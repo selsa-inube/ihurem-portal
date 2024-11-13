@@ -20,14 +20,13 @@ const staffPortalByBusinessManager = async (): Promise<
       const options: RequestInit = {
         method: "GET",
         headers: {
-          "X-Action": "SearchAllEmployeePortalsByBusinessManager",
           "Content-type": "application/json; charset=UTF-8",
         },
         signal: controller.signal,
       };
 
       const res = await fetch(
-        `${enviroment.IVITE_ISAAS_QUERY_PROCESS_SERVICE}/staff-portals-by-business-manager`,
+        `${enviroment.IVITE_ISAAS_QUERY_PROCESS_SERVICE}/employee-portals-by-business-managers`,
         options,
       );
 
