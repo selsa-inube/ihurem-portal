@@ -10,6 +10,7 @@ import { AppPage } from "@components/layout/AppPage";
 import { AppProvider } from "@context/AppContext";
 import { enviroment } from "@config/environment";
 import { ErrorPage } from "@components/layout/ErrorPage";
+
 import { Login } from "@pages/login";
 import { LoginRoutes } from "./routes/login";
 import { usePortalData } from "./hooks/usePortalData";
@@ -46,11 +47,17 @@ const router = createBrowserRouter(
   ),
 );
 
-const url = new URL(window.location.href);
-const params = new URLSearchParams(url.search);
-const portalCode = params.get("portal");
-
 function App() {
+  const url = new URL(window.location.href);
+  const params = new URLSearchParams(url.search);
+  const portalCode = params.get("portal");
+
+  const isValidPortalCode = portalCode && portalCode.length > 0;
+
+  if (!isValidPortalCode) {
+    return <ErrorPage />;
+  }
+
   const { portalData, hasError: portalError } = usePortalData();
   const { businessManagersData, hasError: businessError } = useBusinessManagers(
     portalData,
@@ -63,10 +70,6 @@ function App() {
   } = useAuthRedirect(portalData, businessManagersData, portalCode);
 
   const hasError = portalError || businessError || authError;
-
-  if (!portalCode?.includes("employee_portal")) {
-    return <ErrorPage />;
-  }
 
   if (isLoading) {
     return null;
@@ -87,4 +90,5 @@ function App() {
     </AppProvider>
   );
 }
+
 export default App;
