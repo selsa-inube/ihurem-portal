@@ -32,7 +32,7 @@ function AppPage() {
           portalId="portal"
           navigation={nav}
           logoURL={renderLogo(logoUrl)}
-          userName={user?.username}
+          userName={user?.username ?? "Nombre de usuario"}
           userMenu={userMenu}
           client={user?.company}
         />

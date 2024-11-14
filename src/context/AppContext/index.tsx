@@ -17,16 +17,17 @@ const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     username: string;
     id: string;
     company: string;
+    urlImgPerfil: string;
   } | null>(
     auth0User
       ? {
           username: auth0User.name ?? "",
           id: auth0User.nickname ?? "",
           company: "Company Name",
+          urlImgPerfil: auth0User.picture ?? "",
         }
       : null,
   );
-
   const initialLogo = localStorage.getItem("logoUrl") ?? selsaLogo;
   const [logoUrl, setLogoUrl] = useState<string>(initialLogo);
 
@@ -57,7 +58,9 @@ const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         updatePreferences,
         logoUrl,
         setLogoUrl,
-        handleClientChange: () => {},
+        handleClientChange: () => {
+          console.log("handleClientChange");
+        },
       }}
     >
       {children}

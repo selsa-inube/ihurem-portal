@@ -11,12 +11,18 @@ export interface IClient {
 }
 
 export interface IAppContextType {
-  user: { username: string; id: string; company: string } | null;
+  user: {
+    username: string;
+    id: string;
+    company: string;
+    urlImgPerfil: string;
+  } | null;
   setUser: React.Dispatch<
     React.SetStateAction<{
       username: string;
       id: string;
       company: string;
+      urlImgPerfil: string;
     } | null>
   >;
   preferences: IPreferences;

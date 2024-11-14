@@ -44,11 +44,12 @@ export default tseslint.config({
     "no-nested-ternary": "warn",
     "no-var": "warn",
     "prefer-const": "warn",
-    "@typescript-eslint/no-floating-promises": "warn",
+    "@typescript-eslint/no-floating-promises": "off",
     "@typescript-eslint/no-unsafe-assignment": "warn",
     "@typescript-eslint/no-unsafe-member-access": "warn",
     "@typescript-eslint/no-unsafe-argument": "warn",
     "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
     "@typescript-eslint/only-throw-error": "warn",
+    "@typescript-eslint/non-nullable-type-assertion-style": "off",
   },
 });

@@ -7,18 +7,17 @@ import {
 import { useAuth0 } from "@auth0/auth0-react";
 
 import { AppPage } from "@components/layout/AppPage";
-import { AppProvider } from "@context/AppContext";
+import { AppProvider, useAppContext } from "@context/AppContext";
 import { enviroment } from "@config/environment";
 import { ErrorPage } from "@components/layout/ErrorPage";
 
-import { Login } from "@pages/login";
 import { LoginRoutes } from "./routes/login";
 import { usePortalData } from "./hooks/usePortalData";
-import { useBusinessManagers } from "./hooks/useBusinessManagers";
-import { useAppContext } from "@context/AppContext";
-import { useAuthRedirect } from "./hooks/useAuthRedirect";
+import { pathStart } from "@config/nav.tsx";
 
 import { GlobalStyles } from "./styles/global";
+import { useEffect } from "react";
+import { decrypt } from "@utils/encrypt";
 
 function LogOut() {
   const { logout } = useAuth0();
@@ -28,52 +27,49 @@ function LogOut() {
 }
 
 function FirstPage() {
-  const { businessUnitSigla } = useAppContext();
-  return businessUnitSigla && businessUnitSigla.length === 0 ? (
-    <Login />
+  const { user } = useAppContext();
+  const portalCode = localStorage.getItem("portalCode");
+  return (portalCode && portalCode.length === 0) || !user ? (
+    <LoginRoutes />
   ) : (
-    <ErrorPage />
+    <AppPage />
   );
 }
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/" element={<FirstPage />} errorElement={<ErrorPage />} />
-      <Route path="/" element={<AppPage />} />
       <Route path="welcome/*" element={<LoginRoutes />} />
+      <Route path="/*" element={<FirstPage />} errorElement={<ErrorPage />} />
       <Route path="logout" element={<LogOut />} />
     </>,
   ),
 );
 
-const url = new URL(window.location.href);
-const params = new URLSearchParams(url.search);
-const portalCode = params.get("portal");
-
 function App() {
-  const { portalData, hasError: portalError } = usePortalData();
-  const { businessManagersData, hasError: businessError } = useBusinessManagers(
-    portalData,
-    portalCode,
-  );
-  const {
-    hasError: authError,
-    isLoading,
-    isAuthenticated,
-  } = useAuthRedirect(portalData, businessManagersData, portalCode);
-
-  const hasError = portalError || businessError || authError;
-
-  if (isLoading) {
-    return null;
+  const url = new URL(window.location.href);
+  const params = new URLSearchParams(url.search);
+  const portalCode = params.get("portal")
+    ? params.get("portal")
+    : decrypt(localStorage.getItem("portalCode") as string);
+  const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
+  const location = window.location.pathname;
+  if (!portalCode) {
+    return <ErrorPage />;
   }
+  const { portalData, hasError: portalError } = usePortalData(portalCode);
 
-  if (hasError && !isAuthenticated) {
+  if (portalError) {
     return <ErrorPage />;
   }
 
-  if (!isAuthenticated) {
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated && !pathStart.includes(location)) {
+      loginWithRedirect();
+    }
+  }, [isLoading, isAuthenticated, loginWithRedirect, location]);
+
+  if (!isAuthenticated && !pathStart.includes(location)) {
     return null;
   }
 

@@ -6,14 +6,17 @@ import {
 import { IStaffPortalByBusinessManager } from "@ptypes/staffPortalBusiness.types";
 import { mapStaffPortalByBusinessManagerApiToEntities } from "./mappers";
 
-const staffPortalByBusinessManager = async (): Promise<
-  IStaffPortalByBusinessManager[]
-> => {
+const staffPortalByBusinessManager = async (
+  codeParame: string,
+): Promise<IStaffPortalByBusinessManager> => {
   const maxRetries = maxRetriesServices;
   const fetchTimeout = fetchTimeoutServices;
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
+      const queryParams = new URLSearchParams({
+        portalCode: codeParame,
+      });
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), fetchTimeout);
 
@@ -21,19 +24,20 @@ const staffPortalByBusinessManager = async (): Promise<
         method: "GET",
         headers: {
           "Content-type": "application/json; charset=UTF-8",
+          "X-Action": "SearchAllEmployeePortalsByBusinessManager",
         },
         signal: controller.signal,
       };
 
       const res = await fetch(
-        `${enviroment.IVITE_ISAAS_QUERY_PROCESS_SERVICE}/employee-portals-by-business-managers`,
+        `${enviroment.IVITE_ISAAS_QUERY_PROCESS_SERVICE}/employee-portals-by-business-managers?${queryParams.toString()}`,
         options,
       );
 
       clearTimeout(timeoutId);
 
       if (res.status === 204) {
-        return [];
+        return {} as IStaffPortalByBusinessManager;
       }
 
       const data = await res.json();
@@ -50,7 +54,7 @@ const staffPortalByBusinessManager = async (): Promise<
         ? mapStaffPortalByBusinessManagerApiToEntities(data)
         : [];
 
-      return normalizedStaffPortal;
+      return normalizedStaffPortal[0];
     } catch (error) {
       if (attempt === maxRetries) {
         throw new Error(
@@ -60,7 +64,7 @@ const staffPortalByBusinessManager = async (): Promise<
     }
   }
 
-  return [];
+  return {} as IStaffPortalByBusinessManager;
 };
 
 export { staffPortalByBusinessManager };

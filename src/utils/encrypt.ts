@@ -9,6 +9,7 @@ export const encrypt = (data: string) => {
 };
 
 export const decrypt = (data: string) => {
+  if (!data) return "";
   const bytes = CryptoJS.AES.decrypt(data, secretKey, { iv: iv });
   return bytes.toString(CryptoJS.enc.Utf8);
 };
