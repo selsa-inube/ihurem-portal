@@ -1,4 +1,5 @@
 import { MdOutlineVisibility, MdDeleteOutline } from "react-icons/md";
+
 import { IHolidaysTable } from "./types";
 
 export const columns = [

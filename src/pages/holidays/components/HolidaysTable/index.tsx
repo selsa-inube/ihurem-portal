@@ -26,7 +26,7 @@ import { usePagination } from "./usePagination";
 
 interface HolidaysTableProps {
   data: IHolidaysTable[];
-  loading?: boolean; // New prop with default false
+  loading?: boolean;
 }
 
 function HolidaysTable({ data, loading = false }: HolidaysTableProps) {
