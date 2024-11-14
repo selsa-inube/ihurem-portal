@@ -59,6 +59,7 @@ function App() {
       localStorage.getItem("portalCode") as string,
     );
 
+    // Validación del parámetro portal
     if (!portalFromUrl || portalFromUrl !== "ihurem") {
       setIsPortalValid(false);
       setIsError(true);
