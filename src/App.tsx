@@ -21,7 +21,7 @@ function LogOut() {
   const { logout } = useAuth0();
   localStorage.clear();
   logout({ logoutParams: { returnTo: enviroment.REDIRECT_URI } });
-  return null;
+  return <AppPage />;
 }
 
 function FirstPage() {
