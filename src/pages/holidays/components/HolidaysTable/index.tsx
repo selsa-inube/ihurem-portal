@@ -11,7 +11,6 @@ import {
   Tbody,
   Td,
   Tfoot,
-  Th,
   Thead,
   Tr,
 } from "@inubekit/table";
@@ -21,6 +20,7 @@ import { Text } from "@inubekit/text";
 import { SkeletonLine } from "@inubekit/skeleton";
 
 import { IHolidaysTable } from "./types";
+import { StyledTd, StyledTh } from "./styles";
 import { columns, headers } from "./tableConfig";
 import { usePagination } from "./usePagination";
 
@@ -115,7 +115,7 @@ function HolidaysTable({ data, loading = false }: HolidaysTableProps) {
         : "text";
 
     return (
-      <Td
+      <StyledTd
         key={headerKey}
         appearance={rowIndex % 2 === 1 ? "dark" : "light"}
         type={cellType}
@@ -123,7 +123,7 @@ function HolidaysTable({ data, loading = false }: HolidaysTableProps) {
         style={{ padding: "16px 2px" }}
       >
         {renderCellContent(headerKey, cellData)}
-      </Td>
+      </StyledTd>
     );
   };
 
@@ -180,14 +180,14 @@ function HolidaysTable({ data, loading = false }: HolidaysTableProps) {
       <Thead>
         <Tr border="bottom">
           {visibleHeaders.map((header, index) => (
-            <Th
+            <StyledTh
               key={index}
               action={header.action}
               align="center"
               style={header.style}
             >
               <b>{header.label}</b>
-            </Th>
+            </StyledTh>
           ))}
         </Tr>
       </Thead>
