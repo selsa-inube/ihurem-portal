@@ -24,7 +24,6 @@ function LogOut() {
 
 function FirstPage() {
   const { user } = useAppContext();
-  console.log("Datos del contexto:", { user });
   const portalCode = localStorage.getItem("portalCode");
   return (portalCode && portalCode.length === 0) || !user ? (
     <ErrorPage />
