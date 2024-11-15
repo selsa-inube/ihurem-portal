@@ -31,4 +31,6 @@ export interface IAppContextType {
   setLogoUrl: React.Dispatch<React.SetStateAction<string>>;
   handleClientChange: (client: IClient) => void;
   businessUnitSigla?: string;
+  serviceData: any;
+  setServiceData: React.Dispatch<React.SetStateAction<any>>;
 }

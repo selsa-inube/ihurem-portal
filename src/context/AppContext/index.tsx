@@ -38,6 +38,8 @@ const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     showPinnedOnly: false,
   });
 
+  const [serviceData, setServiceData] = useState<any>(null); // Estado para guardar los datos del servicio
+
   const updatePreferences = (newPreferences: Partial<IPreferences>) => {
     setPreferences((prev) => ({ ...prev, ...newPreferences }));
   };
@@ -61,6 +63,8 @@ const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         handleClientChange: () => {
           console.log("handleClientChange");
         },
+        serviceData,
+        setServiceData,
       }}
     >
       {children}

@@ -13,8 +13,7 @@ import { LoginRoutes } from "./routes/login";
 import { usePortalData } from "./hooks/usePortalData";
 import { pathStart } from "@config/nav.tsx";
 import { GlobalStyles } from "./styles/global";
-import { useEffect, useState } from "react";
-import { decrypt } from "@utils/encrypt";
+import { useEffect } from "react";
 
 function LogOut() {
   const { logout } = useAuth0();
@@ -50,34 +49,10 @@ function App() {
   const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
   const location = window.location.pathname;
 
-  const [isError, setIsError] = useState(false);
-  const [isPortalValid, setIsPortalValid] = useState(true);
+  const portalCode = params.get("portal");
+  const { hasError } = usePortalData(portalCode ?? "");
 
-  useEffect(() => {
-    const portalFromUrl = params.get("portal");
-    const portalFromLocalStorage = decrypt(
-      localStorage.getItem("portalCode") as string,
-    );
-
-    // Validación del parámetro portal
-    if (!portalFromUrl || portalFromUrl !== "ihurem") {
-      setIsPortalValid(false);
-      setIsError(true);
-      return;
-    }
-
-    if (portalFromLocalStorage && portalFromLocalStorage !== "ihurem") {
-      setIsPortalValid(false);
-      setIsError(true);
-      return;
-    }
-
-    setIsError(false);
-  }, [params]);
-
-  const { hasError: portalError } = usePortalData(params.get("portal") ?? "");
-
-  const shouldShowErrorPage = isError || portalError || !isPortalValid;
+  const shouldShowErrorPage = hasError;
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated && !pathStart.includes(location)) {
