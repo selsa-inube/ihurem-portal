@@ -4,16 +4,18 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from "react-router-dom";
+import { useEffect, useState } from "react";
+
 import { useAuth0 } from "@auth0/auth0-react";
 import { AppPage } from "@components/layout/AppPage";
 import { AppProvider, useAppContext } from "@context/AppContext";
 import { enviroment } from "@config/environment";
 import { ErrorPage } from "@components/layout/ErrorPage";
+
 import { LoginRoutes } from "./routes/login";
 import { usePortalData } from "./hooks/usePortalData";
-import { pathStart } from "@config/nav.tsx";
+
 import { GlobalStyles } from "./styles/global";
-import { useEffect } from "react";
 
 function LogOut() {
   const { logout } = useAuth0();
@@ -46,26 +48,28 @@ const router = createBrowserRouter(
 function App() {
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
+  const [isReady, setIsReady] = useState(false);
   const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
-  const location = window.location.pathname;
 
   const portalCode = params.get("portal");
   const { hasError } = usePortalData(portalCode ?? "");
 
-  const shouldShowErrorPage = hasError;
+  const shouldShowErrorPage = hasError || !portalCode;
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated && !pathStart.includes(location)) {
+    if (!isLoading && !isAuthenticated) {
       loginWithRedirect();
+    } else {
+      setIsReady(true);
     }
-  }, [isLoading, isAuthenticated, loginWithRedirect, location]);
+  }, [isLoading, isAuthenticated, loginWithRedirect]);
+
+  if (isLoading || !isReady) {
+    return null;
+  }
 
   if (shouldShowErrorPage) {
     return <ErrorPage />;
-  }
-
-  if (!isAuthenticated && !pathStart.includes(location)) {
-    return null;
   }
 
   return (

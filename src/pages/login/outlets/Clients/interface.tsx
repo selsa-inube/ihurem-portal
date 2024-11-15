@@ -9,16 +9,21 @@ import { StyledClients } from "./styles";
 function ClientsUI() {
   const { loginWithRedirect } = useAuth0();
 
-  const handleLoginClick = async () => {
-    try {
-      await loginWithRedirect({
-        authorizationParams: {
-          connection: "google-oauth2",
-        },
-      });
-    } catch (error) {
+  const handleLoginClick = () => {
+    const portalCode = new URLSearchParams(window.location.search).get(
+      "portal",
+    );
+
+    loginWithRedirect({
+      authorizationParams: {
+        connection: "google-oauth2",
+      },
+      appState: {
+        returnTo: portalCode ? `/?portal=${portalCode}` : "/",
+      },
+    }).catch((error) => {
       console.error("Error al intentar iniciar sesión:", error);
-    }
+    });
   };
 
   return (
@@ -46,7 +51,7 @@ function ClientsUI() {
           </Text>
         </Stack>
         <Stack gap="24px" direction="column" alignItems="center">
-          <Button onClick={handleLoginClick}>Inicia sesión</Button>
+          <Button onClick={() => handleLoginClick()}>Inicia sesión</Button>
           <Stack gap="12px">
             <Text
               type="body"
