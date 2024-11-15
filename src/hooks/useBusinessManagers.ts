@@ -3,7 +3,7 @@ import { businessManagers } from "@src/services/staffPortal/getBusinessManager";
 import {
   IBusinessManagers,
   IStaffPortalByBusinessManager,
-} from "@ptypes/staffPortalBusiness.types";
+} from "@src/types/employeePortalBusiness.types";
 
 export const useBusinessManagers = (
   portalPublicCode: IStaffPortalByBusinessManager[],

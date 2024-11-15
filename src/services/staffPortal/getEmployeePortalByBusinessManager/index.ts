@@ -3,7 +3,7 @@ import {
   fetchTimeoutServices,
   maxRetriesServices,
 } from "@config/environment";
-import { IStaffPortalByBusinessManager } from "@ptypes/staffPortalBusiness.types";
+import { IStaffPortalByBusinessManager } from "@src/types/employeePortalBusiness.types";
 import { mapStaffPortalByBusinessManagerApiToEntities } from "./mappers";
 
 const staffPortalByBusinessManager = async (

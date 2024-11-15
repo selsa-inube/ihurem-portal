@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { encrypt } from "@utils/encrypt";
-import { staffPortalByBusinessManager } from "@src/services/staffPortal/getStaffPortalByBusinessManager";
+import { staffPortalByBusinessManager } from "@src/services/staffPortal/getEmployeePortalByBusinessManager";
 
 export const usePortalData = (codeParame: string) => {
   const [portalData, setPortalData] = useState({});

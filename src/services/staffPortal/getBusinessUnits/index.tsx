@@ -1,4 +1,4 @@
-import { IBusinessUnitsPortalStaff } from "@ptypes/staffPortalBusiness.types";
+import { IBusinessUnitsPortalStaff } from "@src/types/employeePortalBusiness.types";
 import {
   enviroment,
   fetchTimeoutServices,

@@ -1,4 +1,4 @@
-import { IBusinessManagers } from "@ptypes/staffPortalBusiness.types";
+import { IBusinessManagers } from "@src/types/employeePortalBusiness.types";
 import {
   enviroment,
   fetchTimeoutServices,
