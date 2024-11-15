@@ -49,12 +49,12 @@ function HolidaysTable({ data, loading = false }: HolidaysTableProps) {
   const determineVisibleHeaders = () => {
     if (mediaQueries["(max-width: 542px)"]) {
       return headers
-        .filter((header) => ["date", "status"].includes(header.key))
+        .filter((header) => ["date", "status", "days"].includes(header.key))
         .concat({
           label: "Acciones",
           key: "mobileActions",
           action: true,
-          style: { width: "70px" },
+          style: { width: "50px" },
         });
     } else if (mediaQueries["(max-width: 1024px)"]) {
       return headers.filter((header) =>
@@ -90,6 +90,7 @@ function HolidaysTable({ data, loading = false }: HolidaysTableProps) {
           key={headerKey}
           appearance={rowIndex % 2 === 1 ? "dark" : "light"}
           align="center"
+          type="custom"
         >
           {loading ? (
             <SkeletonLine width="100%" animated={true} />
@@ -126,6 +127,7 @@ function HolidaysTable({ data, loading = false }: HolidaysTableProps) {
             : "text"
         }
         align="center"
+        style={{ padding: "16px 2px" }}
       >
         {renderCellContent(headerKey, cellData)}
       </Td>
@@ -172,11 +174,7 @@ function HolidaysTable({ data, loading = false }: HolidaysTableProps) {
         />
       );
     }
-    return (
-      <Text size="small" textAlign="center">
-        {cellData?.value}
-      </Text>
-    );
+    return cellData?.value;
   };
 
   return (
@@ -204,9 +202,7 @@ function HolidaysTable({ data, loading = false }: HolidaysTableProps) {
         {data.length === 0 ? (
           <Tr border="bottom">
             <Td colSpan={visibleHeaders.length} align="center">
-              <Text size="medium" textAlign="center">
-                No tiene solicitudes en trámite.
-              </Text>
+              <Text size="medium">No tiene solicitudes en trámite.</Text>
             </Td>
           </Tr>
         ) : (
