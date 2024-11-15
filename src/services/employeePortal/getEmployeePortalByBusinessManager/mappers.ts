@@ -1,9 +1,9 @@
-import { IStaffPortalByBusinessManager } from "@src/types/employeePortalBusiness.types";
+import { IEmployeePortalByBusinessManager } from "@src/types/employeePortalBusiness.types";
 
-const mapStaffPortalByBusinessManagerApiToEntity = (
+const mapEmployeePortalByBusinessManagerApiToEntity = (
   resend: Record<string, string | number | object>,
-): IStaffPortalByBusinessManager => {
-  const buildResend: IStaffPortalByBusinessManager = {
+): IEmployeePortalByBusinessManager => {
+  const buildResend: IEmployeePortalByBusinessManager = {
     abbreviatedName:
       typeof resend.abbreviatedName === "object"
         ? JSON.stringify(resend.abbreviatedName)
@@ -20,11 +20,11 @@ const mapStaffPortalByBusinessManagerApiToEntity = (
       typeof resend.publicCode === "object"
         ? JSON.stringify(resend.publicCode)
         : String(resend.publicCode),
-    staffPortalCatalogId:
+    employeePortalCatalogId:
       typeof resend.staffPortalCatalogId === "object"
         ? JSON.stringify(resend.staffPortalCatalogId)
         : String(resend.staffPortalCatalogId),
-    staffPortalId:
+    employeePortalId:
       typeof resend.staffPortalId === "object"
         ? JSON.stringify(resend.staffPortalId)
         : String(resend.staffPortalId),
@@ -35,12 +35,14 @@ const mapStaffPortalByBusinessManagerApiToEntity = (
   };
   return buildResend;
 };
-const mapStaffPortalByBusinessManagerApiToEntities = (
+
+const mapEmployeePortalByBusinessManagerApiToEntities = (
   resend: Record<string, string | number | object>[],
-): IStaffPortalByBusinessManager[] => {
-  return resend.map(mapStaffPortalByBusinessManagerApiToEntity);
+): IEmployeePortalByBusinessManager[] => {
+  return resend.map(mapEmployeePortalByBusinessManagerApiToEntity);
 };
+
 export {
-  mapStaffPortalByBusinessManagerApiToEntities,
-  mapStaffPortalByBusinessManagerApiToEntity,
+  mapEmployeePortalByBusinessManagerApiToEntities,
+  mapEmployeePortalByBusinessManagerApiToEntity,
 };

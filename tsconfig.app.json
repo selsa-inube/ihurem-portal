@@ -32,7 +32,10 @@
       "@design/*": ["design/*"],
       "@ptypes/*": ["types/*"],
       "@utils/*": ["utils/*"],
-      "@services/*": ["services/*"]
+      "@services/*": ["services/*"],
+      "@routes/*": ["routes/*"],
+      "@hooks/*": ["hooks/*"],
+      "@styles/*": ["styles/*"]
     }
   },
   "include": ["src", ".storybook/**/*.ts"]

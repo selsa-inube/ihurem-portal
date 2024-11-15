@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { encrypt } from "@utils/encrypt";
-import { staffPortalByBusinessManager } from "@src/services/staffPortal/getEmployeePortalByBusinessManager";
+import { employeePortalByBusinessManager } from "@src/services/employeePortal/getEmployeePortalByBusinessManager";
 
 export const usePortalData = (codeParame: string) => {
   const [portalData, setPortalData] = useState({});
@@ -9,14 +9,18 @@ export const usePortalData = (codeParame: string) => {
   useEffect(() => {
     const fetchPortalData = async () => {
       try {
-        const staffPortalData = await staffPortalByBusinessManager(codeParame);
-        if (!staffPortalData || Object.keys(staffPortalData).length === 0) {
+        const employeePortalData =
+          await employeePortalByBusinessManager(codeParame);
+        if (
+          !employeePortalData ||
+          Object.keys(employeePortalData).length === 0
+        ) {
           setHasError(true);
           return;
         }
         const encryptedParamValue = encrypt(codeParame);
         localStorage.setItem("portalCode", encryptedParamValue);
-        setPortalData(staffPortalData);
+        setPortalData(employeePortalData);
       } catch (error) {
         console.error(error);
         setHasError(true);

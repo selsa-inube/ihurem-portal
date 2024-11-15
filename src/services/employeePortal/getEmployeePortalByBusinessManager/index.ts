@@ -3,12 +3,12 @@ import {
   fetchTimeoutServices,
   maxRetriesServices,
 } from "@config/environment";
-import { IStaffPortalByBusinessManager } from "@src/types/employeePortalBusiness.types";
-import { mapStaffPortalByBusinessManagerApiToEntities } from "./mappers";
+import { IEmployeePortalByBusinessManager } from "@src/types/employeePortalBusiness.types";
+import { mapEmployeePortalByBusinessManagerApiToEntities } from "./mappers";
 
-const staffPortalByBusinessManager = async (
+const employeePortalByBusinessManager = async (
   codeParame: string,
-): Promise<IStaffPortalByBusinessManager> => {
+): Promise<IEmployeePortalByBusinessManager> => {
   const maxRetries = maxRetriesServices;
   const fetchTimeout = fetchTimeoutServices;
 
@@ -37,7 +37,7 @@ const staffPortalByBusinessManager = async (
       clearTimeout(timeoutId);
 
       if (res.status === 204) {
-        return {} as IStaffPortalByBusinessManager;
+        return {} as IEmployeePortalByBusinessManager;
       }
 
       const data = await res.json();
@@ -50,11 +50,11 @@ const staffPortalByBusinessManager = async (
         };
       }
 
-      const normalizedStaffPortal = Array.isArray(data)
-        ? mapStaffPortalByBusinessManagerApiToEntities(data)
+      const normalizedEmployeePortal = Array.isArray(data)
+        ? mapEmployeePortalByBusinessManagerApiToEntities(data)
         : [];
 
-      return normalizedStaffPortal[0];
+      return normalizedEmployeePortal[0];
     } catch (error) {
       if (attempt === maxRetries) {
         throw new Error(
@@ -64,7 +64,7 @@ const staffPortalByBusinessManager = async (
     }
   }
 
-  return {} as IStaffPortalByBusinessManager;
+  return {} as IEmployeePortalByBusinessManager;
 };
 
-export { staffPortalByBusinessManager };
+export { employeePortalByBusinessManager };

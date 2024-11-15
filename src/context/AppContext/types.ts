@@ -10,6 +10,17 @@ export interface IClient {
   logo: string;
 }
 
+export interface IProvisionedPortal {
+  status: string;
+  lastUpdated: string;
+  resources: {
+    id: string;
+    name: string;
+    type: string;
+    url: string;
+  }[];
+}
+
 export interface IAppContextType {
   user: {
     username: string;
@@ -31,6 +42,8 @@ export interface IAppContextType {
   setLogoUrl: React.Dispatch<React.SetStateAction<string>>;
   handleClientChange: (client: IClient) => void;
   businessUnitSigla?: string;
-  serviceData: any;
-  setServiceData: React.Dispatch<React.SetStateAction<any>>;
+  provisionedPortal: IProvisionedPortal | null;
+  setProvisionedPortal: React.Dispatch<
+    React.SetStateAction<IProvisionedPortal | null>
+  >;
 }

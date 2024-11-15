@@ -5,8 +5,7 @@ const AUTH_REDIRECT_URI: string = import.meta.env
 const maxRetriesServices = 5;
 const fetchTimeoutServices = 3000;
 
-const secretKeyPortalId =
-  "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef";
+const secretKeyPortalId = import.meta.env.VITE_SECRET_KEY_PORTAL_ID as string;
 
 interface Environment {
   CLIENT_ID: string;

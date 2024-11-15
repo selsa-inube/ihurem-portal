@@ -12,10 +12,10 @@ import { AppProvider, useAppContext } from "@context/AppContext";
 import { enviroment } from "@config/environment";
 import { ErrorPage } from "@components/layout/ErrorPage";
 
-import { LoginRoutes } from "./routes/login";
-import { usePortalData } from "./hooks/usePortalData";
+import { LoginRoutes } from "@routes/login";
+import { usePortalData } from "@hooks/usePortalData";
 
-import { GlobalStyles } from "./styles/global";
+import { GlobalStyles } from "@styles/global";
 
 function LogOut() {
   const { logout } = useAuth0();
@@ -25,10 +25,8 @@ function LogOut() {
 }
 
 function FirstPage() {
-  const { user } = useAppContext();
-  console.log("Datos del contexto:", { user });
-  const portalCode = localStorage.getItem("portalCode");
-  return (portalCode && portalCode.length === 0) || !user ? (
+  const { businessUnitSigla } = useAppContext();
+  return businessUnitSigla && businessUnitSigla.length === 0 ? (
     <ErrorPage />
   ) : (
     <AppPage />

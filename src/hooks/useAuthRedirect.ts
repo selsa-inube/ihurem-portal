@@ -3,12 +3,12 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 import {
   IBusinessManagers,
-  IStaffPortalByBusinessManager,
+  IEmployeePortalByBusinessManager,
 } from "@src/types/employeePortalBusiness.types";
 import { encrypt } from "@utils/encrypt";
 
 export const useAuthRedirect = (
-  portalPublicCode: IStaffPortalByBusinessManager[],
+  portalPublicCode: IEmployeePortalByBusinessManager[],
   businessManagersData: IBusinessManagers,
   portalCode: string | null,
 ) => {
@@ -20,7 +20,7 @@ export const useAuthRedirect = (
     if (hasRedirected) return;
 
     const portalPublicCodeFiltered = portalPublicCode.filter(
-      (data) => data.staffPortalId === portalCode,
+      (data) => data.employeePortalId === portalCode,
     );
 
     if (portalPublicCode.length > 0) {
