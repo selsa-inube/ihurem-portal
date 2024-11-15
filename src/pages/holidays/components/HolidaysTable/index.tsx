@@ -109,23 +109,16 @@ function HolidaysTable({ data, loading = false }: HolidaysTableProps) {
       );
     }
 
-    const validTypes: ("text" | "toggle" | "icon" | "custom")[] = [
-      "text",
-      "toggle",
-      "icon",
-      "custom",
-    ];
-    const cellType = cellData?.type;
+    const cellType =
+      headerKey === "details" || headerKey === "delete" || loading
+        ? "custom"
+        : "text";
 
     return (
       <Td
         key={headerKey}
         appearance={rowIndex % 2 === 1 ? "dark" : "light"}
-        type={
-          validTypes.includes(cellType as "text" | "toggle" | "icon" | "custom")
-            ? (cellType as "text" | "toggle" | "icon" | "custom")
-            : "text"
-        }
+        type={cellType}
         align="center"
         style={{ padding: "16px 2px" }}
       >
@@ -201,7 +194,7 @@ function HolidaysTable({ data, loading = false }: HolidaysTableProps) {
       <Tbody>
         {data.length === 0 ? (
           <Tr border="bottom">
-            <Td colSpan={visibleHeaders.length} align="center">
+            <Td colSpan={visibleHeaders.length} align="center" type="custom">
               <Text size="medium">No tiene solicitudes en trámite.</Text>
             </Td>
           </Tr>
