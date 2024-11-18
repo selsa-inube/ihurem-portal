@@ -5,6 +5,7 @@ import { useMediaQuery } from "@inubekit/hooks";
 
 import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
+import { spacing } from "@design/tokens/spacing/spacing";
 
 import { StyledHolidaysContainer } from "./styles";
 import { HolidaysTable } from "./components/HolidaysTable";
@@ -29,7 +30,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
     >
       <StyledHolidaysContainer $isMobile={isMobile}>
         <Stack
-          gap="12px"
+          gap={spacing.s150}
           justifyContent="end"
           width="100%"
           direction={isMobile ? "column" : "row"}

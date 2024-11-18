@@ -1,12 +1,14 @@
 import styled from "styled-components";
 
+import { spacing } from "@design/tokens/spacing/spacing";
+
 const StyledAppMenu = styled.div`
   box-sizing: border-box;
   width: 100%;
-  padding: "32px 64px";
+  padding: ${spacing.s400} ${spacing.s800};
 
   @media (max-width: 490px) {
-    padding: "16px";
+    padding: ${spacing.s200};
   }
 `;
 
