@@ -16,6 +16,8 @@ import { LoginRoutes } from "@routes/login";
 import { usePortalData } from "@hooks/usePortalData";
 
 import { GlobalStyles } from "@styles/global";
+import { pathStart } from "./config/nav";
+import { decrypt } from "./utils/encrypt";
 
 function LogOut() {
   localStorage.clear();
@@ -24,9 +26,10 @@ function LogOut() {
   return null;
 }
 function FirstPage() {
-  const { businessUnitSigla } = useAppContext();
-  return businessUnitSigla && businessUnitSigla.length === 0 ? (
-    <ErrorPage />
+  const { user } = useAppContext();
+  const portalCode = localStorage.getItem("portalCode");
+  return (portalCode && portalCode.length === 0) || !user ? (
+    <LoginRoutes />
   ) : (
     <AppPage />
   );
@@ -37,7 +40,6 @@ const router = createBrowserRouter(
     <>
       <Route path="welcome/*" element={<LoginRoutes />} />
       <Route path="/*" element={<FirstPage />} errorElement={<ErrorPage />} />
-      <Route path="/" element={<AppPage />}></Route>
       <Route path="logout" element={<LogOut />} />
     </>,
   ),
@@ -46,17 +48,26 @@ const router = createBrowserRouter(
 function App() {
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
-  const portalCode = params.get("portal");
+  const portalCode = params.get("portal")
+    ? params.get("portal")
+    : decrypt(localStorage.getItem("portalCode") as string);
+
+  if (!portalCode) {
+    return <ErrorPage />;
+  }
 
   const [isReady, setIsReady] = useState(false);
   const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
 
   const { hasError } = usePortalData(portalCode ?? "");
 
-  const shouldShowErrorPage = hasError || !portalCode;
-
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
+    if (
+      !isLoading &&
+      !isAuthenticated &&
+      !hasError &&
+      !pathStart.includes(window.location.pathname)
+    ) {
       loginWithRedirect();
     } else {
       setIsReady(true);
@@ -67,7 +78,7 @@ function App() {
     return null;
   }
 
-  if (shouldShowErrorPage) {
+  if (hasError) {
     return <ErrorPage />;
   }
 

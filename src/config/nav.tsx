@@ -69,6 +69,6 @@ const actions = [
   },
 ];
 
-const pathStart = ["/welcome", "/signin"];
+const pathStart = ["/welcome", "/signin", "/"];
 
 export { nav, userMenu, actions, pathStart };
