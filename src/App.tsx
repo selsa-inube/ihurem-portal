@@ -14,6 +14,7 @@ import { ErrorPage } from "@components/layout/ErrorPage";
 
 import { LoginRoutes } from "@routes/login";
 import { usePortalData } from "@hooks/usePortalData";
+import { RegisterRoutes } from "./routes/register";
 
 import { GlobalStyles } from "@styles/global";
 import { pathStart } from "./config/nav";
@@ -41,6 +42,7 @@ const router = createBrowserRouter(
       <Route path="welcome/*" element={<LoginRoutes />} />
       <Route path="/*" element={<FirstPage />} errorElement={<ErrorPage />} />
       <Route path="logout" element={<LogOut />} />
+      <Route path="/signin/*" element={<RegisterRoutes />} />
     </>,
   ),
 );
