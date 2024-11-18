@@ -10,13 +10,30 @@ export interface IClient {
   logo: string;
 }
 
+export interface IProvisionedPortal {
+  status: string;
+  lastUpdated: string;
+  resources: {
+    id: string;
+    name: string;
+    type: string;
+    url: string;
+  }[];
+}
+
 export interface IAppContextType {
-  user: { username: string; id: string; company: string } | null;
+  user: {
+    username: string;
+    id: string;
+    company: string;
+    urlImgPerfil: string;
+  } | null;
   setUser: React.Dispatch<
     React.SetStateAction<{
       username: string;
       id: string;
       company: string;
+      urlImgPerfil: string;
     } | null>
   >;
   preferences: IPreferences;
@@ -24,4 +41,9 @@ export interface IAppContextType {
   logoUrl: string;
   setLogoUrl: React.Dispatch<React.SetStateAction<string>>;
   handleClientChange: (client: IClient) => void;
+  businessUnitSigla?: string;
+  provisionedPortal: IProvisionedPortal | null;
+  setProvisionedPortal: React.Dispatch<
+    React.SetStateAction<IProvisionedPortal | null>
+  >;
 }

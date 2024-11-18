@@ -4,49 +4,84 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from "react-router-dom";
-import { useEffect } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
+import { useEffect, useState } from "react";
 
+import { useAuth0 } from "@auth0/auth0-react";
 import { AppPage } from "@components/layout/AppPage";
-import { ErrorPage } from "@components/layout/ErrorPage";
-import { AppProvider } from "@context/AppContext";
+import { AppProvider, useAppContext } from "@context/AppContext";
 import { enviroment } from "@config/environment";
-import { LoginRoutes } from "./routes/login";
+import { ErrorPage } from "@components/layout/ErrorPage";
+
+import { LoginRoutes } from "@routes/login";
+import { usePortalData } from "@hooks/usePortalData";
 import { RegisterRoutes } from "./routes/register";
 
-import { GlobalStyles } from "./styles/global";
-import { pathStart } from "@config/nav.tsx";
+import { GlobalStyles } from "@styles/global";
+import { pathStart } from "./config/nav";
+import { decrypt } from "./utils/encrypt";
 
 function LogOut() {
   localStorage.clear();
   const { logout } = useAuth0();
-  void logout({ logoutParams: { returnTo: enviroment.REDIRECT_URI } });
-  return <AppPage />;
+  logout({ logoutParams: { returnTo: enviroment.REDIRECT_URI } });
+  return null;
+}
+function FirstPage() {
+  const { user } = useAppContext();
+  const portalCode = localStorage.getItem("portalCode");
+  return (portalCode && portalCode.length === 0) || !user ? (
+    <LoginRoutes />
+  ) : (
+    <AppPage />
+  );
 }
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/" element={<AppPage />} errorElement={<ErrorPage />} />
-      <Route path="/welcome/*" element={<LoginRoutes />} />
-      <Route path="/signin/*" element={<RegisterRoutes />} />
+      <Route path="welcome/*" element={<LoginRoutes />} />
+      <Route path="/*" element={<FirstPage />} errorElement={<ErrorPage />} />
       <Route path="logout" element={<LogOut />} />
+      <Route path="/signin/*" element={<RegisterRoutes />} />
     </>,
   ),
 );
 
 function App() {
+  const url = new URL(window.location.href);
+  const params = new URLSearchParams(url.search);
+  const portalCode = params.get("portal")
+    ? params.get("portal")
+    : decrypt(localStorage.getItem("portalCode") as string);
+
+  if (!portalCode) {
+    return <ErrorPage />;
+  }
+
+  const [isReady, setIsReady] = useState(false);
   const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
-  const location = window.location.pathname;
+
+  const { hasError } = usePortalData(portalCode ?? "");
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated && !pathStart.includes(location)) {
-      void loginWithRedirect();
+    if (
+      !isLoading &&
+      !isAuthenticated &&
+      !hasError &&
+      !pathStart.includes(window.location.pathname)
+    ) {
+      loginWithRedirect();
+    } else {
+      setIsReady(true);
     }
-  }, [isLoading, isAuthenticated, loginWithRedirect, location]);
+  }, [isLoading, isAuthenticated, loginWithRedirect]);
 
-  if (!isAuthenticated && !pathStart.includes(location)) {
+  if (isLoading || !isReady) {
     return null;
+  }
+
+  if (hasError) {
+    return <ErrorPage />;
   }
 
   return (
