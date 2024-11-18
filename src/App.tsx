@@ -21,7 +21,7 @@ function LogOut() {
   localStorage.clear();
   const { logout } = useAuth0();
   logout({ logoutParams: { returnTo: enviroment.REDIRECT_URI } });
-  return <AppPage />;
+  return null;
 }
 function FirstPage() {
   const { businessUnitSigla } = useAppContext();
