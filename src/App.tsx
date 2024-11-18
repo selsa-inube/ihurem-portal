@@ -46,10 +46,11 @@ const router = createBrowserRouter(
 function App() {
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
+  const portalCode = params.get("portal");
+
   const [isReady, setIsReady] = useState(false);
   const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
 
-  const portalCode = params.get("portal");
   const { hasError } = usePortalData(portalCode ?? "");
 
   const shouldShowErrorPage = hasError || !portalCode;
