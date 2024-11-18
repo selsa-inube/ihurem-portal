@@ -18,12 +18,11 @@ import { usePortalData } from "@hooks/usePortalData";
 import { GlobalStyles } from "@styles/global";
 
 function LogOut() {
-  const { logout } = useAuth0();
   localStorage.clear();
+  const { logout } = useAuth0();
   logout({ logoutParams: { returnTo: enviroment.REDIRECT_URI } });
-  return null;
+  return <AppPage />;
 }
-
 function FirstPage() {
   const { businessUnitSigla } = useAppContext();
   return businessUnitSigla && businessUnitSigla.length === 0 ? (
@@ -38,8 +37,8 @@ const router = createBrowserRouter(
     <>
       <Route path="welcome/*" element={<LoginRoutes />} />
       <Route path="/*" element={<FirstPage />} errorElement={<ErrorPage />} />
+      <Route path="/" element={<AppPage />}></Route>
       <Route path="logout" element={<LogOut />} />
-      <Route path="*" element={<ErrorPage />} />
     </>,
   ),
 );
