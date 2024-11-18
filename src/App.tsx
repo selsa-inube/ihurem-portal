@@ -11,11 +11,12 @@ import { AppPage } from "@components/layout/AppPage";
 import { ErrorPage } from "@components/layout/ErrorPage";
 import { AppProvider } from "@context/AppContext";
 import { enviroment } from "@config/environment";
+import { pathStart } from "@config/nav.tsx";
+
+import { HolidaysRoutes } from "./routes/holidays";
 import { LoginRoutes } from "./routes/login";
 import { RegisterRoutes } from "./routes/register";
-
 import { GlobalStyles } from "./styles/global";
-import { pathStart } from "@config/nav.tsx";
 
 function LogOut() {
   localStorage.clear();
@@ -27,7 +28,9 @@ function LogOut() {
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/" element={<AppPage />} errorElement={<ErrorPage />} />
+      <Route path="/" element={<AppPage />} errorElement={<ErrorPage />}>
+        <Route path="holidays/*" element={<HolidaysRoutes />} />
+      </Route>
       <Route path="/welcome/*" element={<LoginRoutes />} />
       <Route path="/signin/*" element={<RegisterRoutes />} />
       <Route path="logout" element={<LogOut />} />

@@ -1,4 +1,3 @@
-import { INav } from "@components/layout/AppPage/types";
 import {
   MdLogout,
   MdOutlinePersonOff,
@@ -7,17 +6,19 @@ import {
   MdOutlinePersonalInjury,
 } from "react-icons/md";
 
+import { INav } from "@components/layout/AppPage/types";
+
 const nav: INav = {
   title: "MENU",
   sections: {
     administrate: {
       name: "",
       links: {
-        vacations: {
-          id: "vacations",
+        holidays: {
+          id: "holidays",
           label: "Vacaciones",
           icon: <MdBeachAccess />,
-          path: "/vacations",
+          path: "/holidays",
         },
         disability: {
           id: "disability",
