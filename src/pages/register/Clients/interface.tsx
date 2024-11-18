@@ -10,7 +10,9 @@ import { StyledClients } from "./styles";
 function ClientsUI() {
   const navigate = useNavigate();
 
-  const handleLoginClick = async () => {};
+  const handleLoginClick = () => {
+    throw new Error("handleLoginClick not implemented");
+  };
 
   const handleSignInClick = () => {
     navigate("/welcome");
@@ -45,7 +47,7 @@ function ClientsUI() {
           />
         </Stack>
         <Stack gap="24px" direction="column" alignItems="center">
-          <Button onClick={handleLoginClick}>Registrarse</Button>
+          <Button onClick={() => handleLoginClick()}>Registrarse</Button>
           <Stack gap="12px">
             <Text
               type="body"

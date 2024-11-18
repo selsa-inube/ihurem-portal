@@ -29,7 +29,13 @@
       "@assets/*": ["assets/*"],
       "@context/*": ["context/*"],
       "@pages/*": ["pages/*"],
-      "@design/*": ["design/*"]
+      "@design/*": ["design/*"],
+      "@ptypes/*": ["types/*"],
+      "@utils/*": ["utils/*"],
+      "@services/*": ["services/*"],
+      "@routes/*": ["routes/*"],
+      "@hooks/*": ["hooks/*"],
+      "@styles/*": ["styles/*"]
     }
   },
   "include": ["src", ".storybook/**/*.ts"]
