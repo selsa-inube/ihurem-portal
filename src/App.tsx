@@ -19,16 +19,9 @@ import { GlobalStyles } from "@styles/global";
 
 function LogOut() {
   const { logout } = useAuth0();
-
-  const currentUrl = window.location.href;
-  localStorage.setItem("lastUrl", currentUrl);
-
   localStorage.clear();
-  logout({
-    logoutParams: { returnTo: `${enviroment.REDIRECT_URI}?redirect=true` },
-  });
-
-  return <AppPage />;
+  logout({ logoutParams: { returnTo: enviroment.REDIRECT_URI } });
+  return null;
 }
 
 function FirstPage() {
@@ -66,12 +59,7 @@ function App() {
     if (!isLoading && !isAuthenticated) {
       loginWithRedirect();
     } else {
-      const lastUrl = localStorage.getItem("lastUrl");
-      if (lastUrl) {
-        window.location.href = lastUrl;
-      } else {
-        setIsReady(true);
-      }
+      setIsReady(true);
     }
   }, [isLoading, isAuthenticated, loginWithRedirect]);
 
