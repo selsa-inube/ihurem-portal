@@ -9,16 +9,15 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 import { AppPage } from "@components/layout/AppPage";
 import { AppProvider, useAppContext } from "@context/AppContext";
+import { decrypt } from "@utils/encrypt";
 import { enviroment } from "@config/environment";
 import { ErrorPage } from "@components/layout/ErrorPage";
-import { LoginRoutes } from "@routes/login";
-import { usePortalData } from "@hooks/usePortalData";
 import { GlobalStyles } from "@styles/global";
-import { HolidaysRoutes } from "./routes/holidays";
-
-import { RegisterRoutes } from "./routes/register";
-import { pathStart } from "./config/nav";
-import { decrypt } from "./utils/encrypt";
+import { HolidaysRoutes } from "@routes/holidays";
+import { LoginRoutes } from "@routes/login";
+import { pathStart } from "@config/nav";
+import { RegisterRoutes } from "@routes/register";
+import { usePortalData } from "@hooks/usePortalData";
 
 function LogOut() {
   localStorage.clear();

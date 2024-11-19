@@ -4,6 +4,7 @@ import { Stack } from "@inubekit/stack";
 import { Text } from "@inubekit/text";
 import { Icon } from "@inubekit/icon";
 import { useMediaQuery } from "@inubekit/hooks";
+import { spacing } from "@design/tokens/spacing/spacing";
 
 interface PageTitleProps {
   title: string;
@@ -20,13 +21,13 @@ function PageTitle(props: PageTitleProps) {
 
   return (
     <>
-      <Stack gap="8px" direction="column">
-        <Stack gap="8px" alignItems="center">
+      <Stack gap={spacing.s100} direction="column">
+        <Stack gap={spacing.s100} alignItems="center">
           <Icon
             appearance="dark"
             cursorHover={true}
             icon={<MdArrowBack />}
-            size="20px"
+            size={spacing.s250}
             onClick={() =>
               navigatePage ? navigate(navigatePage) : navigate(-1)
             }
