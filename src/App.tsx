@@ -14,6 +14,8 @@ import { ErrorPage } from "@components/layout/ErrorPage";
 
 import { LoginRoutes } from "@routes/login";
 import { usePortalData } from "@hooks/usePortalData";
+import { useBusinessManagers } from "@hooks/useBusinessManagers";
+import { IEmployeePortalByBusinessManager } from "@ptypes/employeePortalBusiness.types";
 import { RegisterRoutes } from "./routes/register";
 
 import { GlobalStyles } from "@styles/global";
@@ -60,8 +62,12 @@ function App() {
 
   const [isReady, setIsReady] = useState(false);
   const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
-
   const { hasError } = usePortalData(portalCode ?? "");
+
+  const portalPublicCode: IEmployeePortalByBusinessManager[] = [];
+
+  const { businessManagersData, hasError: hasManagersError } =
+    useBusinessManagers(portalPublicCode, portalCode);
 
   useEffect(() => {
     if (
@@ -80,9 +86,11 @@ function App() {
     return null;
   }
 
-  if (hasError) {
+  if (hasError || hasManagersError) {
     return <ErrorPage />;
   }
+
+  console.log("Business Managers Data:", businessManagersData);
 
   return (
     <AppProvider>
