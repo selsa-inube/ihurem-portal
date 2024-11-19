@@ -22,12 +22,15 @@ import { GlobalStyles } from "@styles/global";
 import { pathStart } from "./config/nav";
 import { decrypt } from "./utils/encrypt";
 
+import { useAuthRedirect } from "@hooks/useAuthRedirect";
+
 function LogOut() {
   localStorage.clear();
   const { logout } = useAuth0();
   logout({ logoutParams: { returnTo: enviroment.REDIRECT_URI } });
   return null;
 }
+
 function FirstPage() {
   const { user } = useAppContext();
   const portalCode = localStorage.getItem("portalCode");
@@ -65,9 +68,10 @@ function App() {
   const { hasError } = usePortalData(portalCode ?? "");
 
   const portalPublicCode: IEmployeePortalByBusinessManager[] = [];
-
   const { businessManagersData, hasError: hasManagersError } =
     useBusinessManagers(portalPublicCode, portalCode);
+
+  useAuthRedirect(portalPublicCode, businessManagersData, portalCode);
 
   useEffect(() => {
     if (
@@ -89,8 +93,6 @@ function App() {
   if (hasError || hasManagersError) {
     return <ErrorPage />;
   }
-
-  console.log("Business Managers Data:", businessManagersData);
 
   return (
     <AppProvider>
