@@ -5,20 +5,19 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 import { useEffect, useState } from "react";
-
 import { useAuth0 } from "@auth0/auth0-react";
+
 import { AppPage } from "@components/layout/AppPage";
 import { AppProvider, useAppContext } from "@context/AppContext";
+import { decrypt } from "@utils/encrypt";
 import { enviroment } from "@config/environment";
 import { ErrorPage } from "@components/layout/ErrorPage";
-
-import { LoginRoutes } from "@routes/login";
-import { usePortalData } from "@hooks/usePortalData";
-import { RegisterRoutes } from "./routes/register";
-
 import { GlobalStyles } from "@styles/global";
-import { pathStart } from "./config/nav";
-import { decrypt } from "./utils/encrypt";
+import { HolidaysRoutes } from "@routes/holidays";
+import { LoginRoutes } from "@routes/login";
+import { pathStart } from "@config/nav";
+import { RegisterRoutes } from "@routes/register";
+import { usePortalData } from "@hooks/usePortalData";
 
 function LogOut() {
   localStorage.clear();
@@ -40,7 +39,9 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="welcome/*" element={<LoginRoutes />} />
-      <Route path="/*" element={<FirstPage />} errorElement={<ErrorPage />} />
+      <Route path="/*" element={<FirstPage />} errorElement={<ErrorPage />}>
+        <Route path="holidays/*" element={<HolidaysRoutes />} />
+      </Route>
       <Route path="logout" element={<LogOut />} />
       <Route path="/signin/*" element={<RegisterRoutes />} />
     </>,
