@@ -21,7 +21,7 @@ const businessUnitsPortalStaff = async (
       const options: RequestInit = {
         method: "GET",
         headers: {
-          "X-Action": "SearchByIdBusinessUnit",
+          "X-Action": "SearchAllBusinessUnit",
           "Content-type": "application/json; charset=UTF-8",
         },
         signal: controller.signal,
