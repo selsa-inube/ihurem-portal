@@ -20,7 +20,6 @@ const mapBusinessManagerApiToEntity = (
     urlLogo: toStringSafe(businessManager.urlLogo),
     customerId: toStringSafe(businessManager.customerId),
   };
-
   return business;
 };
 
