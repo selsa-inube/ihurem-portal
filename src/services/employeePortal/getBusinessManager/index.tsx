@@ -20,7 +20,7 @@ const businessManagers = async (
       const options: RequestInit = {
         method: "GET",
         headers: {
-          "X-Action": " SearchByIdBusinessManager",
+          "X-Action": "SearchByIdBusinessManager",
           "Content-type": "application/json; charset=UTF-8",
         },
         signal: controller.signal,
