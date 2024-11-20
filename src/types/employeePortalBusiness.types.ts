@@ -7,11 +7,11 @@ interface IOptionsByEmployeePortalBusinessManager {
 interface IEmployeePortalByBusinessManager {
   abbreviatedName: string;
   businessManagerId: string;
+  businessUnit: string;
   descriptionUse: string;
-  publicCode: string;
+  portalCode: string;
   employeePortalCatalogId: string;
   employeePortalId: string;
-  url: string;
   optionsByEmployeePortalBusinessManager?: IOptionsByEmployeePortalBusinessManager[];
 }
 
@@ -27,12 +27,36 @@ interface IBusinessManagers {
 }
 
 interface IBusinessUnitsPortalEmployee {
-  publicCode: string;
-  languageId: string;
   abbreviatedName: string;
+  businessManagersByBusinessesUnit?: BusinessManagersByBusinessesUnit[];
+  businessUnit: string;
   descriptionUse: string;
   firstMonthOfFiscalYear: string;
+  languageId: string;
+  publicCode: string;
+  publicCodeTablesByBusinessesUnit?: PublicCodeTablesByBusinessesUnit[];
   urlLogo: string;
+  useCasesByBusinessesUnit: UseCasesByBusinessesUnit[];
+}
+
+export interface BusinessManagersByBusinessesUnit {
+  businessManagerId: string;
+  businessUnit: string;
+}
+
+export interface PublicCodeTablesByBusinessesUnit {
+  algorithmToPublicCode: string;
+  businessTableId: string;
+  businessUnit: string;
+  lengthToPublicCode: number;
+  prefixToPublicCode: string;
+  publicCodeGeneration: string;
+}
+
+export interface UseCasesByBusinessesUnit {
+  businessUnit: string;
+  effectiveDate: string;
+  useCaseId: string;
 }
 
 export type {

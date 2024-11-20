@@ -4,12 +4,11 @@ import {
   fetchTimeoutServices,
   maxRetriesServices,
 } from "@config/environment";
-import { mapBusinessUnitsPortalStaffToEntities } from "./mappers";
+import { mapBusinessUnitsPortalEmployeeApiToEntity } from "./mappers";
 
-const businessUnitsPortalStaff = async (
-  portalPublicCode: string,
-  userAccount: string,
-): Promise<IBusinessUnitsPortalEmployee[]> => {
+const businessUnitsPortalEmployee = async (
+  businessUnit: string,
+): Promise<IBusinessUnitsPortalEmployee> => {
   const maxRetries = maxRetriesServices;
   const fetchTimeout = fetchTimeoutServices;
 
@@ -21,38 +20,34 @@ const businessUnitsPortalStaff = async (
       const options: RequestInit = {
         method: "GET",
         headers: {
-          "X-Action": "SearchAllBusinessUnit",
+          "X-Action": "SearchByIdBusinessUnit",
           "Content-type": "application/json; charset=UTF-8",
         },
         signal: controller.signal,
       };
 
       const res = await fetch(
-        `${enviroment.IPORTAL_STAFF_QUERY_PROCESS_SERVICE}/business-units-portal-staff/${userAccount}/${portalPublicCode}`,
+        `${enviroment.IVITE_ISAAS_QUERY_PROCESS_SERVICE}/businesses-unit/${businessUnit}`,
         options,
       );
 
       clearTimeout(timeoutId);
 
       if (res.status === 204) {
-        return [];
+        return {} as IBusinessUnitsPortalEmployee;
       }
 
       const data = await res.json();
 
       if (!res.ok) {
         throw {
-          message: "Error al obtener los datos del operador",
+          message: "Error al obtener los datos de la unidad de negocio.",
           status: res.status,
           data,
         };
       }
 
-      const normalizedBusineesUnits = Array.isArray(data)
-        ? mapBusinessUnitsPortalStaffToEntities(data)
-        : [];
-
-      return normalizedBusineesUnits;
+      return mapBusinessUnitsPortalEmployeeApiToEntity(data);
     } catch (error) {
       if (attempt === maxRetries) {
         throw new Error(
@@ -62,7 +57,7 @@ const businessUnitsPortalStaff = async (
     }
   }
 
-  return [];
+  return {} as IBusinessUnitsPortalEmployee;
 };
 
-export { businessUnitsPortalStaff };
+export { businessUnitsPortalEmployee };

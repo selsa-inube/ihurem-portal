@@ -52,5 +52,6 @@ export default tseslint.config({
     "@typescript-eslint/only-throw-error": "warn",
     "@typescript-eslint/non-nullable-type-assertion-style": "off",
     "@typescript-eslint/no-empty-function": ["off"],
+    "@typescript-eslint/no-base-to-string": ["warn"],
   },
 });

@@ -2,7 +2,7 @@ const IS_PRODUCTION: boolean = import.meta.env.PROD;
 const AUTH_REDIRECT_URI: string = import.meta.env
   .VITE_AUTH0_REDIRECT_URI as string;
 
-const maxRetriesServices = 5;
+const maxRetriesServices = 1;
 const fetchTimeoutServices = 3000;
 
 const secretKeyPortalId = import.meta.env.VITE_SECRET_KEY_PORTAL_ID as string;

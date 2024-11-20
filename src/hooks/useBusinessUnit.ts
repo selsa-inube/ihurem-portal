@@ -1,28 +1,28 @@
 import { useState, useEffect } from "react";
-import { businessManagers } from "@services/employeePortal/getBusinessManager";
 import {
-  IBusinessManagers,
+  IBusinessUnitsPortalEmployee,
   IEmployeePortalByBusinessManager,
 } from "@ptypes/employeePortalBusiness.types";
+import { businessUnitsPortalEmployee } from "@src/services/employeePortal/getBusinessUnits";
 
-export const useBusinessManagers = (
+export const useBusinessUnit = (
   portalPublicCode: IEmployeePortalByBusinessManager,
 ) => {
-  const [businessManagersData, setBusinessManagersData] =
-    useState<IBusinessManagers>({} as IBusinessManagers);
+  const [businessUnitData, setBusinessUnit] =
+    useState<IBusinessUnitsPortalEmployee>({} as IBusinessUnitsPortalEmployee);
   const [hasError, setHasError] = useState(false);
   useEffect(() => {
     const fetchBusinessManagers = async () => {
       if (!portalPublicCode) return;
       try {
-        const fetchedBusinessManagers = await businessManagers(
-          portalPublicCode.businessManagerId,
+        const fetchBusinessUnit = await businessUnitsPortalEmployee(
+          portalPublicCode.businessUnit,
         );
-        if (!fetchedBusinessManagers) {
+        if (!fetchBusinessUnit) {
           setHasError(true);
           return;
         }
-        setBusinessManagersData(fetchedBusinessManagers);
+        setBusinessUnit(fetchBusinessUnit);
       } catch (error) {
         setHasError(true);
       }
@@ -31,5 +31,5 @@ export const useBusinessManagers = (
     fetchBusinessManagers();
   }, [portalPublicCode]);
 
-  return { businessManagersData, hasError };
+  return { businessUnitData, hasError };
 };

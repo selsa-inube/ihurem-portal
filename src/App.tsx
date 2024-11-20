@@ -6,23 +6,19 @@ import {
 } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-import { useAuth0 } from "@auth0/auth0-react";
 import { AppPage } from "@components/layout/AppPage";
 import { AppProvider, useAppContext } from "@context/AppContext";
+import { decrypt } from "@utils/encrypt";
 import { enviroment } from "@config/environment";
 import { ErrorPage } from "@components/layout/ErrorPage";
-
-import { LoginRoutes } from "@routes/login";
-import { usePortalData } from "@hooks/usePortalData";
-import { useBusinessManagers } from "@hooks/useBusinessManagers";
-import { IEmployeePortalByBusinessManager } from "@ptypes/employeePortalBusiness.types";
-import { RegisterRoutes } from "./routes/register";
-
 import { GlobalStyles } from "@styles/global";
-import { pathStart } from "./config/nav";
-import { decrypt } from "./utils/encrypt";
-
-import { useAuthRedirect } from "@hooks/useAuthRedirect";
+import { LoginRoutes } from "@routes/login";
+import { pathStart } from "@config/nav";
+import { RegisterRoutes } from "@routes/register";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useBusinessManagers } from "@hooks/useBusinessManagers";
+import { useBusinessUnit } from "@hooks/useBusinessUnit";
+import { usePortalData } from "@hooks/usePortalData";
 
 function LogOut() {
   localStorage.clear();
@@ -32,9 +28,10 @@ function LogOut() {
 }
 
 function FirstPage() {
-  const { user } = useAppContext();
-  const portalCode = localStorage.getItem("portalCode");
-  return (portalCode && portalCode.length === 0) || !user ? (
+  const { user, provisionedPortal } = useAppContext();
+  return (provisionedPortal?.portalCode &&
+    provisionedPortal.portalCode.length === 0) ||
+    !user ? (
     <LoginRoutes />
   ) : (
     <AppPage />
@@ -65,13 +62,13 @@ function App() {
 
   const [isReady, setIsReady] = useState(false);
   const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
-  const { hasError } = usePortalData(portalCode ?? "");
+  const { portalData, hasError } = usePortalData(portalCode ?? "");
 
-  const portalPublicCode: IEmployeePortalByBusinessManager[] = [];
   const { businessManagersData, hasError: hasManagersError } =
-    useBusinessManagers(portalPublicCode, portalCode);
+    useBusinessManagers(portalData);
 
-  useAuthRedirect(portalPublicCode, businessManagersData, portalCode);
+  const { businessUnitData, hasError: hasBusinessUnitError } =
+    useBusinessUnit(portalData);
 
   useEffect(() => {
     if (
@@ -90,12 +87,16 @@ function App() {
     return null;
   }
 
-  if (hasError || hasManagersError) {
+  if (hasError || hasManagersError || hasBusinessUnitError) {
     return <ErrorPage />;
   }
 
   return (
-    <AppProvider>
+    <AppProvider
+      dataPortal={portalData}
+      businessManagersData={businessManagersData}
+      businessUnitData={businessUnitData}
+    >
       <GlobalStyles />
       <RouterProvider router={router} />
     </AppProvider>
