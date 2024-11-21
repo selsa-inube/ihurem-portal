@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import selsaLogo from "@assets/images/selsa.png";
 import { useAuth0 } from "@auth0/auth0-react";
-import { IAppContextType, IPreferences, IProvisionedPortal } from "./types";
+import { IAppContextType, IPreferences } from "./types";
 import {
   IBusinessManagers,
   IBusinessUnitsPortalEmployee,

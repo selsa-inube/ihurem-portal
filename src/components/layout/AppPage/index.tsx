@@ -23,8 +23,11 @@ const renderLogo = (imgUrl: string) => {
 };
 
 function AppPage() {
-  const { user, logoUrl } = useAppContext();
+  const { user, logoUrl, businessUnit } = useAppContext();
   const isTablet = useMediaQuery("(max-width: 944px)");
+
+  const businessUnitName = businessUnit?.businessUnit ?? "Unidad de Negocio";
+
   return (
     <StyledAppPage>
       <Grid templateRows="auto 1fr" height="100vh" justifyContent="unset">
@@ -34,7 +37,7 @@ function AppPage() {
           logoURL={renderLogo(logoUrl)}
           userName={user?.username ?? "Nombre de usuario"}
           userMenu={userMenu}
-          client={user?.company}
+          client={businessUnitName}
         />
         <StyledContainer>
           <Grid
