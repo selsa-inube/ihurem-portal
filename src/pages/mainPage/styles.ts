@@ -23,8 +23,8 @@ const StyledMain = styled.main<StyledMainProps>`
   overflow-y: auto;
   padding: ${({ $isTablet }) =>
     $isTablet
-      ? `${spacing.s300} ${spacing.s200} ${spacing.s0}`
-      : `${spacing.s300} ${spacing.s400} ${spacing.s0}`};
+      ? `${spacing.s400} ${spacing.s250} ${spacing.s0}`
+      : `${spacing.s400} ${spacing.s800} ${spacing.s0}`};
 `;
 
 const StyledContentImg = styled(Link)`
