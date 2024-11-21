@@ -1,18 +1,18 @@
 import { Outlet } from "react-router-dom";
-import { Grid } from "@inubekit/grid";
-import { Header } from "@inubekit/header";
-import { useMediaQuery } from "@inubekit/hooks";
-import { Stack } from "@inubekit/stack";
-import { spacing } from "@design/tokens/spacing/spacing.ts";
-import { Text } from "@inubekit/text";
-import { AppCard } from "@components/feedback/AppCard";
 import {
   MdOutlineBeachAccess,
   MdOutlinePersonOff,
   MdOutlineFilePresent,
   MdOutlinePersonalInjury,
 } from "react-icons/md";
+import { Text } from "@inubekit/text";
+import { Grid } from "@inubekit/grid";
+import { Header } from "@inubekit/header";
+import { useMediaQuery } from "@inubekit/hooks";
+import { Stack } from "@inubekit/stack";
 
+import { AppCard } from "@components/feedback/AppCard";
+import { spacing } from "@design/tokens/spacing/spacing.ts";
 import { useAppContext } from "@context/AppContext";
 
 import {
