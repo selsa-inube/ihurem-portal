@@ -13,6 +13,7 @@ import { Stack } from "@inubekit/stack";
 
 import { AppCard } from "@components/feedback/AppCard";
 import { spacing } from "@design/tokens/spacing/spacing.ts";
+import { userMenu } from "@config/nav";
 import { useAppContext } from "@context/AppContext";
 
 import {
@@ -75,6 +76,7 @@ function MainPage() {
           portalId="portal"
           logoURL={renderLogo(logoUrl)}
           userName={user?.username ?? "Nombre de usuario"}
+          userMenu={userMenu}
         />
         <StyledContainer>
           <StyledMain $isTablet={isTablet}>
