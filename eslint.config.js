@@ -51,5 +51,6 @@ export default tseslint.config({
     "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
     "@typescript-eslint/only-throw-error": "warn",
     "@typescript-eslint/non-nullable-type-assertion-style": "off",
+    "@typescript-eslint/no-unsafe-return": "warn",
   },
 });
