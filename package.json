@@ -63,8 +63,11 @@
     "vite": "^5.4.8"
   },
   "lint-staged": {
-    "**/*": [
+    "**/*.{ts,tsx}": [
       "eslint",
+      "prettier --write --ignore-unknown"
+    ],
+    "**/*": [
       "prettier --write --ignore-unknown"
     ]
   },
