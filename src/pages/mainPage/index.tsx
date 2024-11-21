@@ -13,7 +13,6 @@ import {
   MdOutlinePersonalInjury,
 } from "react-icons/md";
 
-import { nav, userMenu } from "@config/nav";
 import { useAppContext } from "@context/AppContext";
 
 import {
@@ -36,6 +35,7 @@ const renderLogo = (imgUrl: string) => {
 function MainPage() {
   const { user, logoUrl } = useAppContext();
   const isTablet = useMediaQuery("(max-width: 944px)");
+  const isMobile = useMediaQuery("(max-width: 690px)");
 
   const cards = [
     {
@@ -73,21 +73,29 @@ function MainPage() {
       <Grid templateRows="auto 1fr" height="100vh" justifyContent="unset">
         <Header
           portalId="portal"
-          navigation={nav}
           logoURL={renderLogo(logoUrl)}
           userName={user?.username ?? "Nombre de usuario"}
-          userMenu={userMenu}
         />
         <StyledContainer>
           <StyledMain $isTablet={isTablet}>
             <Stack gap={spacing.s300} direction="column">
-              <Text size="large" type="headline">
+              <Text size={isMobile ? "medium" : "large"} type="headline">
                 Bienvenido(a), {user?.username ?? "Usuario"}
               </Text>
-              <Text type="title" appearance="gray" size="large">
+              <Text
+                type="title"
+                appearance="gray"
+                size={isMobile ? "medium" : "large"}
+              >
                 Aquí tienes las funcionalidades disponibles.
               </Text>
-              <Stack direction="row" gap="24px" wrap="wrap">
+              <Stack
+                direction={isMobile ? "column" : "row"}
+                gap={isMobile ? spacing.s200 : spacing.s300}
+                wrap="wrap"
+                justifyContent={isMobile ? "center" : "flex-start"}
+                alignItems={isMobile ? "center" : "flex-start"}
+              >
                 {cards.map((card, index) => (
                   <AppCard
                     key={index}

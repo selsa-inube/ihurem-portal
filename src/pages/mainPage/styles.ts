@@ -21,7 +21,10 @@ const StyledMain = styled.main<StyledMainProps>`
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  padding: ${({ $isTablet }) => ($isTablet ? "32px 20px" : "32px 64px 0px")};
+  padding: ${({ $isTablet }) =>
+    $isTablet
+      ? `${spacing.s300} ${spacing.s200} ${spacing.s0}`
+      : `${spacing.s300} ${spacing.s400} ${spacing.s0}`};
 `;
 
 const StyledContentImg = styled(Link)`
