@@ -7,11 +7,21 @@ import React, {
 } from "react";
 import selsaLogo from "@assets/images/selsa.png";
 import { useAuth0 } from "@auth0/auth0-react";
-import { IAppContextType, IPreferences, IProvisionedPortal } from "./types";
+import { IAppContextType, IPreferences } from "./types";
+import {
+  IBusinessManagers,
+  IBusinessUnitsPortalEmployee,
+  IEmployeePortalByBusinessManager,
+} from "@src/types/employeePortalBusiness.types";
 
 const AppContext = createContext<IAppContextType | undefined>(undefined);
 
-const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+const AppProvider: React.FC<{
+  children: ReactNode;
+  dataPortal: IEmployeePortalByBusinessManager;
+  businessManagersData: IBusinessManagers;
+  businessUnitData: IBusinessUnitsPortalEmployee;
+}> = ({ children, dataPortal, businessManagersData, businessUnitData }) => {
   const { user: auth0User } = useAuth0();
   const [user, setUser] = useState<{
     username: string;
@@ -23,7 +33,7 @@ const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       ? {
           username: auth0User.name ?? "",
           id: auth0User.nickname ?? "",
-          company: "Company Name",
+          company: businessUnitData.businessUnit ?? "Company Name",
           urlImgPerfil: auth0User.picture ?? "",
         }
       : null,
@@ -39,7 +49,13 @@ const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   });
 
   const [provisionedPortal, setProvisionedPortal] =
-    useState<IProvisionedPortal | null>(null);
+    useState<IEmployeePortalByBusinessManager | null>(dataPortal);
+
+  const [businessManagers, setBusinessManagers] =
+    useState<IBusinessManagers | null>(businessManagersData);
+
+  const [businessUnit, setBusinessUnit] =
+    useState<IBusinessUnitsPortalEmployee | null>(businessUnitData);
 
   const updatePreferences = (newPreferences: Partial<IPreferences>) => {
     setPreferences((prev) => ({ ...prev, ...newPreferences }));
@@ -66,6 +82,10 @@ const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         },
         provisionedPortal,
         setProvisionedPortal,
+        businessManagers,
+        setBusinessManagers,
+        businessUnit,
+        setBusinessUnit,
       }}
     >
       {children}

@@ -5,7 +5,6 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
 
 import { AppPage } from "@components/layout/AppPage";
 import { AppProvider, useAppContext } from "@context/AppContext";
@@ -17,6 +16,9 @@ import { HolidaysRoutes } from "@routes/holidays";
 import { LoginRoutes } from "@routes/login";
 import { pathStart } from "@config/nav";
 import { RegisterRoutes } from "@routes/register";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useBusinessManagers } from "@hooks/useBusinessManagers";
+import { useBusinessUnit } from "@hooks/useBusinessUnit";
 import { usePortalData } from "@hooks/usePortalData";
 
 function LogOut() {
@@ -25,10 +27,12 @@ function LogOut() {
   logout({ logoutParams: { returnTo: enviroment.REDIRECT_URI } });
   return null;
 }
+
 function FirstPage() {
-  const { user } = useAppContext();
-  const portalCode = localStorage.getItem("portalCode");
-  return (portalCode && portalCode.length === 0) || !user ? (
+  const { user, provisionedPortal } = useAppContext();
+  return (provisionedPortal?.portalCode &&
+    provisionedPortal.portalCode.length === 0) ||
+    !user ? (
     <LoginRoutes />
   ) : (
     <AppPage />
@@ -61,8 +65,13 @@ function App() {
 
   const [isReady, setIsReady] = useState(false);
   const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
+  const { portalData, hasError } = usePortalData(portalCode ?? "");
 
-  const { hasError } = usePortalData(portalCode ?? "");
+  const { businessManagersData, hasError: hasManagersError } =
+    useBusinessManagers(portalData);
+
+  const { businessUnitData, hasError: hasBusinessUnitError } =
+    useBusinessUnit(portalData);
 
   useEffect(() => {
     if (
@@ -81,12 +90,16 @@ function App() {
     return null;
   }
 
-  if (hasError) {
+  if (hasError || hasManagersError || hasBusinessUnitError) {
     return <ErrorPage />;
   }
 
   return (
-    <AppProvider>
+    <AppProvider
+      dataPortal={portalData}
+      businessManagersData={businessManagersData}
+      businessUnitData={businessUnitData}
+    >
       <GlobalStyles />
       <RouterProvider router={router} />
     </AppProvider>
