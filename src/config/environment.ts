@@ -13,7 +13,7 @@ interface Environment {
   AUTH0_DOMAIN: string;
   REDIRECT_URI: string;
   IVITE_ISAAS_QUERY_PROCESS_SERVICE: string;
-  IPORTAL_STAFF_QUERY_PROCESS_SERVICE: string;
+  IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE: string;
 }
 
 const enviroment: Environment = {
@@ -23,8 +23,8 @@ const enviroment: Environment = {
   REDIRECT_URI: IS_PRODUCTION ? AUTH_REDIRECT_URI : window.location.origin,
   IVITE_ISAAS_QUERY_PROCESS_SERVICE: import.meta.env
     .VITE_IVITE_ISAAS_QUERY_PROCESS_SERVICE as string,
-  IPORTAL_STAFF_QUERY_PROCESS_SERVICE: import.meta.env
-    .VITE_IPORTAL_STAFF_QUERY_PROCESS_SERVICE as string,
+  IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE: import.meta.env
+    .VITE_IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE as string,
 };
 
 export {

@@ -9,8 +9,8 @@ const mapEmployeePortalByBusinessManagerApiToEntity = (
     businessUnit: String(resend.businessUnit),
     descriptionUse: String(resend.descriptionUse),
     portalCode: String(resend.portalCode),
-    employeePortalCatalogId: String(resend.staffPortalCatalogId),
-    employeePortalId: String(resend.staffPortalId),
+    employeePortalCatalogId: String(resend.employeePortalCatalogId),
+    employeePortalId: String(resend.employeePortalId),
   };
   return buildResend;
 };
