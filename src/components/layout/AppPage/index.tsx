@@ -6,6 +6,7 @@ import { useMediaQuery } from "@inubekit/hooks";
 
 import { nav, userMenu, actions } from "@config/nav";
 import { useAppContext } from "@context/AppContext";
+
 import {
   StyledAppPage,
   StyledContainer,
@@ -48,7 +49,7 @@ function AppPage() {
             {!isTablet && (
               <Nav navigation={nav} actions={actions} collapse={true} />
             )}
-            <StyledMain>
+            <StyledMain $isTablet={isTablet}>
               <Outlet />
             </StyledMain>
           </Grid>
