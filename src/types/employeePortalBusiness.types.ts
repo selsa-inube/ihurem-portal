@@ -1,3 +1,58 @@
+interface IEmployee {
+  employeeId: string;
+  names: string;
+  surnames: string;
+  biologicalSex: string;
+  birthDay: string;
+  identificationDocumentNumber: string;
+  identificationType: string;
+  employeeCode: string;
+  residenceAddress: string;
+  postalCode: string;
+  email: string;
+  telephone: string;
+  countryTaxResidence: string;
+  countryOfIdentityDocument: string;
+  residenceCity: string;
+  employeeStatus: string;
+  ubication: string;
+  userAccountId: string;
+  employmentContract: IEmploymentContract[];
+  employeeReference: IEmployeeReference[];
+}
+
+interface IEmploymentContract {
+  contractId: string;
+  contractNumber: string;
+  employeeId: string;
+  contractStatus: string;
+  contractType: string;
+  startDate: string;
+  formalizedStartDate: string;
+  joiningDetter: string;
+  contractDurationInDays?: string; // Opcional
+  deadline?: string; // Opcional
+  positionName: string;
+  jobModality: string;
+  workSchedule: string;
+  professionalRiskDevelName: string;
+  businessName: string;
+  costCenterName: string;
+  proyectNumber?: string; // Opcional
+  branchOfficeName: string;
+  regulatoryFrameworkName?: string; // Opcional
+  remunerationProfileName: string;
+}
+
+interface IEmployeeReference {
+  referenceId: string;
+  employeeId: string;
+  referenceName: string;
+  referencePhoneNumber: string;
+  referenceAddress: string;
+  referenceType: string;
+}
+
 interface IOptionsByEmployeePortalBusinessManager {
   optionEmployeeId: string;
   employeePortalCatalogId: string;
@@ -39,12 +94,12 @@ interface IBusinessUnitsPortalEmployee {
   useCasesByBusinessesUnit: UseCasesByBusinessesUnit[];
 }
 
-export interface BusinessManagersByBusinessesUnit {
+interface BusinessManagersByBusinessesUnit {
   businessManagerId: string;
   businessUnit: string;
 }
 
-export interface PublicCodeTablesByBusinessesUnit {
+interface PublicCodeTablesByBusinessesUnit {
   algorithmToPublicCode: string;
   businessTableId: string;
   businessUnit: string;
@@ -53,14 +108,21 @@ export interface PublicCodeTablesByBusinessesUnit {
   publicCodeGeneration: string;
 }
 
-export interface UseCasesByBusinessesUnit {
+interface UseCasesByBusinessesUnit {
   businessUnit: string;
   effectiveDate: string;
   useCaseId: string;
 }
 
 export type {
+  IEmployee,
+  IEmploymentContract,
+  IEmployeeReference,
+  IOptionsByEmployeePortalBusinessManager,
   IEmployeePortalByBusinessManager,
   IBusinessManagers,
   IBusinessUnitsPortalEmployee,
+  BusinessManagersByBusinessesUnit,
+  PublicCodeTablesByBusinessesUnit,
+  UseCasesByBusinessesUnit,
 };

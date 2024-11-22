@@ -11,6 +11,7 @@ import { AppProvider, useAppContext } from "@context/AppContext";
 import { decrypt } from "@utils/encrypt";
 import { enviroment } from "@config/environment";
 import { ErrorPage } from "@components/layout/ErrorPage";
+import { useEmployeeByNickname } from "@hooks/useEmployeeByNickname";
 import { GlobalStyles } from "@styles/global";
 import { HolidaysRoutes } from "@routes/holidays";
 import { LoginRoutes } from "@routes/login";
