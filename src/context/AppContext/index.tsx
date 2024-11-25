@@ -22,20 +22,14 @@ const AppProvider: React.FC<{
   dataPortal: IEmployeePortalByBusinessManager;
   businessManagersData: IBusinessManagers;
   businessUnitData: IBusinessUnitsPortalEmployee;
-  employeeData: IEmployee[];
-}> = ({
-  children,
-  dataPortal,
-  businessManagersData,
-  businessUnitData,
-  employeeData,
-}) => {
+}> = ({ children, dataPortal, businessManagersData, businessUnitData }) => {
   const { user: auth0User } = useAuth0();
   const [user, setUser] = useState<{
     username: string;
     id: string;
     company: string;
     urlImgPerfil: string;
+    nickname: string;
   } | null>(
     auth0User
       ? {
@@ -43,6 +37,7 @@ const AppProvider: React.FC<{
           id: auth0User.nickname ?? "",
           company: businessUnitData.businessUnit ?? "Company Name",
           urlImgPerfil: auth0User.picture ?? "",
+          nickname: auth0User.nickname ?? "",
         }
       : null,
   );
@@ -65,7 +60,7 @@ const AppProvider: React.FC<{
   const [businessUnit, setBusinessUnit] =
     useState<IBusinessUnitsPortalEmployee | null>(businessUnitData);
 
-  const [employees, setEmployees] = useState<IEmployee[]>(employeeData);
+  const [employees, setEmployees] = useState<IEmployee>({} as IEmployee);
 
   const updatePreferences = (newPreferences: Partial<IPreferences>) => {
     setPreferences((prev) => ({ ...prev, ...newPreferences }));

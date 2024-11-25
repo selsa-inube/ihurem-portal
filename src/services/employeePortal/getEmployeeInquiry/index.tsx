@@ -25,7 +25,7 @@ const employeeByNickname = async (nickname: string): Promise<IEmployee> => {
       };
 
       const res = await fetch(
-        `${enviroment.IVITE_ISAAS_QUERY_PROCESS_SERVICE}/employee/${nickname}`,
+        `${enviroment.IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE}/employee/${nickname}`,
         options,
       );
 
@@ -43,7 +43,6 @@ const employeeByNickname = async (nickname: string): Promise<IEmployee> => {
           data,
         };
       }
-
       return mapEmployeeApiToEntity(data);
     } catch (error) {
       if (attempt === maxRetries) {
