@@ -6,7 +6,7 @@ import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config({
-  ignores: ["dist"],
+  ignores: [".storybook/preview-head.html", "dist"],
   extends: [
     js.configs.recommended,
     ...tseslint.configs.recommendedTypeChecked,
@@ -51,5 +51,7 @@ export default tseslint.config({
     "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
     "@typescript-eslint/only-throw-error": "warn",
     "@typescript-eslint/non-nullable-type-assertion-style": "off",
+    "@typescript-eslint/no-empty-function": ["off"],
+    "@typescript-eslint/no-base-to-string": ["warn"],
   },
 });

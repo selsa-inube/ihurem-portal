@@ -1,9 +1,13 @@
 import { useState, useEffect } from "react";
 import { encrypt } from "@utils/encrypt";
 import { employeePortalByBusinessManager } from "@src/services/employeePortal/getEmployeePortalByBusinessManager";
+import { IEmployeePortalByBusinessManager } from "@src/types/employeePortalBusiness.types";
 
 export const usePortalData = (codeParame: string) => {
-  const [portalData, setPortalData] = useState({});
+  const [portalData, setPortalData] =
+    useState<IEmployeePortalByBusinessManager>(
+      {} as IEmployeePortalByBusinessManager,
+    );
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {

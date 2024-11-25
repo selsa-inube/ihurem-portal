@@ -1,3 +1,9 @@
+import {
+  IBusinessManagers,
+  IBusinessUnitsPortalEmployee,
+  IEmployeePortalByBusinessManager,
+} from "@src/types/employeePortalBusiness.types";
+
 export interface IPreferences {
   boardOrientation: "vertical" | "horizontal";
   showPinnedOnly: boolean;
@@ -42,8 +48,16 @@ export interface IAppContextType {
   setLogoUrl: React.Dispatch<React.SetStateAction<string>>;
   handleClientChange: (client: IClient) => void;
   businessUnitSigla?: string;
-  provisionedPortal: IProvisionedPortal | null;
+  provisionedPortal: IEmployeePortalByBusinessManager | null;
   setProvisionedPortal: React.Dispatch<
-    React.SetStateAction<IProvisionedPortal | null>
+    React.SetStateAction<IEmployeePortalByBusinessManager | null>
+  >;
+  businessManagers: IBusinessManagers | null;
+  setBusinessManagers: React.Dispatch<
+    React.SetStateAction<IBusinessManagers | null>
+  >;
+  businessUnit: IBusinessUnitsPortalEmployee | null;
+  setBusinessUnit: React.Dispatch<
+    React.SetStateAction<IBusinessUnitsPortalEmployee | null>
   >;
 }
