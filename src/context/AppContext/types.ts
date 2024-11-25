@@ -2,6 +2,7 @@ import {
   IBusinessManagers,
   IBusinessUnitsPortalEmployee,
   IEmployeePortalByBusinessManager,
+  IEmployee,
 } from "@src/types/employeePortalBusiness.types";
 
 export interface IPreferences {
@@ -60,4 +61,6 @@ export interface IAppContextType {
   setBusinessUnit: React.Dispatch<
     React.SetStateAction<IBusinessUnitsPortalEmployee | null>
   >;
+  employees: IEmployee[]; // Nuevo
+  setEmployees: React.Dispatch<React.SetStateAction<IEmployee[]>>;
 }
