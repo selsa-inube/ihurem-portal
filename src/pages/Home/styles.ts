@@ -1,8 +1,20 @@
 import styled from "styled-components";
 import { inube } from "@inubekit/foundations";
 import { Link } from "react-router-dom";
-
 import { spacing } from "@design/tokens/spacing/spacing";
+
+interface Theme {
+  palette: {
+    neutral: {
+      N10: string;
+      N30: string;
+    };
+  };
+}
+
+interface StyledFooterProps {
+  theme?: Theme;
+}
 
 interface StyledMainProps {
   $isTablet: boolean;
@@ -36,13 +48,15 @@ const StyledLogo = styled.img`
   max-width: 100px;
 `;
 
-const StyledFooter = styled.footer`
+const StyledFooter = styled.footer<StyledFooterProps>`
   margin-top: auto;
   display: flex;
   justify-content: center;
   padding: ${spacing.s200} ${spacing.s300};
-  background-color: ${({ theme }) =>
-    theme?.palette?.neutral?.N10 || inube.palette.neutral.N10};
+  background-color: ${({ theme }) => {
+    const neutralN10 = theme?.palette?.neutral?.N10;
+    return neutralN10 ? neutralN10 : inube.palette.neutral.N10;
+  }};
 `;
 
 export {

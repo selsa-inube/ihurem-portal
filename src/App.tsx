@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 
 import { AppPage } from "@components/layout/AppPage";
-import { MainPage } from "@pages/mainPage";
+import { Home } from "@src/pages/Home";
 import { AppProvider, useAppContext } from "@context/AppContext";
 import { decrypt } from "@utils/encrypt";
 import { enviroment } from "@config/environment";
@@ -40,7 +40,7 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="welcome/*" element={<LoginRoutes />} />
-      <Route path="main" element={<MainPage />} />
+      <Route path="home" element={<Home />} />
       <Route path="/*" element={<FirstPage />} errorElement={<ErrorPage />}>
         <Route path="holidays/*" element={<HolidaysRoutes />} />
       </Route>

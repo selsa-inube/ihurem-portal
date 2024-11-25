@@ -1,20 +1,15 @@
 import { Outlet } from "react-router-dom";
-import {
-  MdOutlineBeachAccess,
-  MdOutlinePersonOff,
-  MdOutlineFilePresent,
-  MdOutlinePersonalInjury,
-} from "react-icons/md";
 import { Text } from "@inubekit/text";
 import { Grid } from "@inubekit/grid";
 import { Header } from "@inubekit/header";
-import { useMediaQuery } from "@inubekit/hooks";
 import { Stack } from "@inubekit/stack";
+import { useMediaQueries } from "@inubekit/hooks";
 
 import { AppCard } from "@components/feedback/AppCard";
 import { spacing } from "@design/tokens/spacing/spacing.ts";
 import { userMenu } from "@config/nav";
 import { useAppContext } from "@context/AppContext";
+import { cards } from "./home.config";
 
 import {
   StyledAppPage,
@@ -33,41 +28,15 @@ const renderLogo = (imgUrl: string) => {
   );
 };
 
-function MainPage() {
+function Home() {
   const { user, logoUrl } = useAppContext();
-  const isTablet = useMediaQuery("(max-width: 944px)");
-  const isMobile = useMediaQuery("(max-width: 690px)");
+  const mediaQueries = useMediaQueries([
+    "(max-width: 944px)",
+    "(max-width: 690px)",
+  ]);
 
-  const cards = [
-    {
-      title: "Vacaciones",
-      complement: ["Solicita y organiza tus días libres fácilmente."],
-      description: "Gestión de tus días de descanso.",
-      icon: <MdOutlineBeachAccess />,
-      url: "/holidays",
-    },
-    {
-      title: "Ausencias",
-      complement: ["Consulta tus ausencias registradas."],
-      description: "Historial de tus ausencias laborales.",
-      icon: <MdOutlinePersonOff />,
-      url: "/ausencias",
-    },
-    {
-      title: "Certificaciones",
-      complement: ["Obtén tus certificaciones oficiales."],
-      description: "Documentos oficiales disponibles.",
-      icon: <MdOutlineFilePresent />,
-      url: "/certificaciones",
-    },
-    {
-      title: "Incapacidades",
-      complement: ["Registra y consulta tus incapacidades."],
-      description: "Gestión de permisos médicos.",
-      icon: <MdOutlinePersonalInjury />,
-      url: "/incapacidades",
-    },
-  ];
+  const isTablet = mediaQueries["(max-width: 944px)"];
+  const isMobile = mediaQueries["(max-width: 690px)"];
 
   return (
     <StyledAppPage>
@@ -123,4 +92,4 @@ function MainPage() {
   );
 }
 
-export { MainPage };
+export { Home };
