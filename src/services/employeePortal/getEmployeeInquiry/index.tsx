@@ -46,8 +46,6 @@ const employeeByNickname = async (nickname: string): Promise<IEmployee> => {
 
       return mapEmployeeApiToEntity(data);
     } catch (error) {
-      console.error(`Intento ${attempt} fallido:`, error);
-
       if (attempt === maxRetries) {
         throw new Error(
           "Todos los intentos fallaron. No se pudieron obtener los datos del empleado.",
