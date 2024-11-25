@@ -30,17 +30,17 @@ interface IEmploymentContract {
   startDate: string;
   formalizedStartDate: string;
   joiningDetter: string;
-  contractDurationInDays?: string; // Opcional
-  deadline?: string; // Opcional
+  contractDurationInDays?: string;
+  deadline?: string;
   positionName: string;
   jobModality: string;
   workSchedule: string;
   professionalRiskDevelName: string;
   businessName: string;
   costCenterName: string;
-  proyectNumber?: string; // Opcional
+  proyectNumber?: string;
   branchOfficeName: string;
-  regulatoryFrameworkName?: string; // Opcional
+  regulatoryFrameworkName?: string;
   remunerationProfileName: string;
 }
 
