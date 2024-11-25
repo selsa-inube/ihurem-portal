@@ -22,8 +22,8 @@ export const useEmployeeByNickname = (nickname: string) => {
         } else {
           setEmployee(result);
         }
-      } catch (error) {
-        setError("Error al obtener los datos del empleado");
+      } catch (error: any) {
+        setError(error.message || "Error al obtener los datos del empleado");
       } finally {
         setLoading(false);
       }

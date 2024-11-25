@@ -5,7 +5,6 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 import { useEffect, useState } from "react";
-
 import { AppPage } from "@components/layout/AppPage";
 import { AppProvider, useAppContext } from "@context/AppContext";
 import { decrypt } from "@utils/encrypt";
@@ -56,16 +55,16 @@ const router = createBrowserRouter(
 function App() {
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
-  const portalCode = params.get("portal")
-    ? params.get("portal")
-    : decrypt(localStorage.getItem("portalCode") as string);
+  const portalCode =
+    params.get("portal") ??
+    decrypt(localStorage.getItem("portalCode") as string);
 
   if (!portalCode) {
     return <ErrorPage />;
   }
 
   const [isReady, setIsReady] = useState(false);
-  const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
+  const { loginWithRedirect, isAuthenticated, isLoading, user } = useAuth0();
   const { portalData, hasError } = usePortalData(portalCode ?? "");
 
   const { businessManagersData, hasError: hasManagersError } =
@@ -73,6 +72,12 @@ function App() {
 
   const { businessUnitData, hasError: hasBusinessUnitError } =
     useBusinessUnit(portalData);
+
+  const {
+    employee,
+    loading: employeeLoading,
+    error: employeeError,
+  } = useEmployeeByNickname(user?.nickname ?? "");
 
   useEffect(() => {
     if (
@@ -87,11 +92,17 @@ function App() {
     }
   }, [isLoading, isAuthenticated, loginWithRedirect]);
 
-  if (isLoading || !isReady) {
+  if (isLoading || !isReady || employeeLoading) {
     return null;
   }
 
-  if (hasError || hasManagersError || hasBusinessUnitError) {
+  if (
+    hasError ||
+    hasManagersError ||
+    hasBusinessUnitError ||
+    employeeError ||
+    !employee
+  ) {
     return <ErrorPage />;
   }
 
@@ -100,6 +111,7 @@ function App() {
       dataPortal={portalData}
       businessManagersData={businessManagersData}
       businessUnitData={businessUnitData}
+      employeeData={employee}
     >
       <GlobalStyles />
       <RouterProvider router={router} />

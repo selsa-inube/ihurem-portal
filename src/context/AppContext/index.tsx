@@ -12,6 +12,7 @@ import {
   IBusinessManagers,
   IBusinessUnitsPortalEmployee,
   IEmployeePortalByBusinessManager,
+  IEmployee,
 } from "@src/types/employeePortalBusiness.types";
 
 const AppContext = createContext<IAppContextType | undefined>(undefined);
@@ -21,6 +22,7 @@ const AppProvider: React.FC<{
   dataPortal: IEmployeePortalByBusinessManager;
   businessManagersData: IBusinessManagers;
   businessUnitData: IBusinessUnitsPortalEmployee;
+  employeeData: IEmployee;
 }> = ({ children, dataPortal, businessManagersData, businessUnitData }) => {
   const { user: auth0User } = useAuth0();
   const [user, setUser] = useState<{

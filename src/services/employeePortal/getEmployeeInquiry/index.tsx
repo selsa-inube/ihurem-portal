@@ -34,8 +34,7 @@ const employeeByNickname = async (nickname: string): Promise<IEmployee> => {
       if (res.status === 204) {
         return {} as IEmployee;
       }
-
-      const data = await res.json();
+      const data = await res.json().catch(() => null);
 
       if (!res.ok) {
         throw {
@@ -47,6 +46,8 @@ const employeeByNickname = async (nickname: string): Promise<IEmployee> => {
 
       return mapEmployeeApiToEntity(data);
     } catch (error) {
+      console.error(`Intento ${attempt} fallido:`, error);
+
       if (attempt === maxRetries) {
         throw new Error(
           "Todos los intentos fallaron. No se pudieron obtener los datos del empleado.",
