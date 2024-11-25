@@ -111,7 +111,7 @@ function App() {
       dataPortal={portalData}
       businessManagersData={businessManagersData}
       businessUnitData={businessUnitData}
-      employeeData={employee}
+      employeeData={[employee]}
     >
       <GlobalStyles />
       <RouterProvider router={router} />

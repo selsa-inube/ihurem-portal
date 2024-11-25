@@ -61,6 +61,6 @@ export interface IAppContextType {
   setBusinessUnit: React.Dispatch<
     React.SetStateAction<IBusinessUnitsPortalEmployee | null>
   >;
-  employees: IEmployee[]; // Nuevo
+  employees: IEmployee[];
   setEmployees: React.Dispatch<React.SetStateAction<IEmployee[]>>;
 }
