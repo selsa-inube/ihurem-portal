@@ -7,6 +7,7 @@ import {
 import { useEffect, useState } from "react";
 
 import { AppPage } from "@components/layout/AppPage";
+import { Home } from "@src/pages/Home";
 import { AppProvider, useAppContext } from "@context/AppContext";
 import { decrypt } from "@utils/encrypt";
 import { enviroment } from "@config/environment";
@@ -25,25 +26,26 @@ function LogOut() {
   localStorage.clear();
   const { logout } = useAuth0();
   logout({ logoutParams: { returnTo: enviroment.REDIRECT_URI } });
-  return null;
+  return <Home />;
 }
 
 function FirstPage() {
-  const { user, provisionedPortal } = useAppContext();
-  return (provisionedPortal?.portalCode &&
-    provisionedPortal.portalCode.length === 0) ||
-    !user ? (
-    <LoginRoutes />
-  ) : (
-    <AppPage />
-  );
+  const { user } = useAppContext();
+  const portalCode = localStorage.getItem("portalCode");
+
+  if (!user || !portalCode || portalCode.length === 0) {
+    return <LoginRoutes />;
+  }
+
+  return <Home />;
 }
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="welcome/*" element={<LoginRoutes />} />
-      <Route path="/*" element={<FirstPage />} errorElement={<ErrorPage />}>
+      <Route path="/*" element={<FirstPage />} errorElement={<ErrorPage />} />
+      <Route path="/*" element={<AppPage />}>
         <Route path="holidays/*" element={<HolidaysRoutes />} />
       </Route>
       <Route path="logout" element={<LogOut />} />

@@ -23,7 +23,7 @@ function AppCard(props: AppCardProps) {
         <Text type="title" size="medium" weight="bold">
           {title}
         </Text>
-        <Icon icon={icon} appearance="dark" size="24px" cursorHover />
+        <Icon icon={icon} appearance="dark" size="22px" cursorHover />
       </Stack>
       <Stack padding={`${spacing.s150} ${spacing.s0}`}>
         <Divider dashed />
