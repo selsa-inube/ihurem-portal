@@ -31,12 +31,10 @@ function FirstPage() {
   const { user } = useAppContext();
   const portalCode = localStorage.getItem("portalCode");
 
-  // Si el portalCode está vacío o no hay usuario, redirige a LoginRoutes.
   if (!user || !portalCode || portalCode.length === 0) {
     return <LoginRoutes />;
   }
 
-  // Si el usuario está autenticado, muestra la página de inicio Home directamente.
   return <Home />;
 }
 
@@ -71,7 +69,6 @@ function App() {
   const { hasError } = usePortalData(portalCode ?? "");
 
   useEffect(() => {
-    // Si el usuario no está autenticado, redirige a login.
     if (
       !isLoading &&
       !isAuthenticated &&
