@@ -24,24 +24,28 @@ function LogOut() {
   localStorage.clear();
   const { logout } = useAuth0();
   logout({ logoutParams: { returnTo: enviroment.REDIRECT_URI } });
-  return null;
+  return <Home />;
 }
+
 function FirstPage() {
   const { user } = useAppContext();
   const portalCode = localStorage.getItem("portalCode");
-  return (portalCode && portalCode.length === 0) || !user ? (
-    <LoginRoutes />
-  ) : (
-    <AppPage />
-  );
+
+  // Si el portalCode está vacío o no hay usuario, redirige a LoginRoutes.
+  if (!user || !portalCode || portalCode.length === 0) {
+    return <LoginRoutes />;
+  }
+
+  // Si el usuario está autenticado, muestra la página de inicio Home directamente.
+  return <Home />;
 }
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="welcome/*" element={<LoginRoutes />} />
-      <Route path="home" element={<Home />} />
-      <Route path="/*" element={<FirstPage />} errorElement={<ErrorPage />}>
+      <Route path="/*" element={<FirstPage />} errorElement={<ErrorPage />} />
+      <Route path="/*" element={<AppPage />}>
         <Route path="holidays/*" element={<HolidaysRoutes />} />
       </Route>
       <Route path="logout" element={<LogOut />} />
@@ -67,6 +71,7 @@ function App() {
   const { hasError } = usePortalData(portalCode ?? "");
 
   useEffect(() => {
+    // Si el usuario no está autenticado, redirige a login.
     if (
       !isLoading &&
       !isAuthenticated &&
