@@ -56,7 +56,7 @@ function FirstPage() {
     !user ? (
     <LoginRoutes />
   ) : (
-    <AppPage />
+    <Home />
   );
 }
 
@@ -77,9 +77,9 @@ const router = createBrowserRouter(
 function App() {
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
-  const portalCode =
-    params.get("portal") ??
-    decrypt(localStorage.getItem("portalCode") as string);
+  const portalCode = params.get("portal")
+    ? params.get("portal")
+    : decrypt(localStorage.getItem("portalCode") as string);
 
   if (!portalCode) {
     return <ErrorPage />;
