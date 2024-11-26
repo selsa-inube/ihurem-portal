@@ -1,14 +1,9 @@
-import { IBusinessManagers } from "@ptypes/employeePortalBusiness.types";
-import {
-  environment,
-  fetchTimeoutServices,
-  maxRetriesServices,
-} from "@config/environment";
-import { mapBusinessManagerApiToEntity } from "./mappers";
+import { fetchTimeoutServices, maxRetriesServices } from "@config/environment";
+import { IHolidaysInProcess } from "@src/types/holidays.types";
 
-const businessManagers = async (
-  businessManagerId: string,
-): Promise<IBusinessManagers> => {
+import { mapHolidaysInProcessApiToEntities } from "./mappers";
+
+const getHolidaysRequestInProcess = async (): Promise<IHolidaysInProcess[]> => {
   const maxRetries = maxRetriesServices;
   const fetchTimeout = fetchTimeoutServices;
 
@@ -20,44 +15,48 @@ const businessManagers = async (
       const options: RequestInit = {
         method: "GET",
         headers: {
-          "X-Action": "SearchByIdBusinessManager",
           "Content-type": "application/json; charset=UTF-8",
         },
         signal: controller.signal,
       };
 
       const res = await fetch(
-        `${environment.IVITE_ISAAS_QUERY_PROCESS_SERVICE}/business-managers/${businessManagerId}`,
+        `http://localhost:3001/ihurem-query-process-service/api/vacation-history`,
         options,
       );
 
       clearTimeout(timeoutId);
 
       if (res.status === 204) {
-        return {} as IBusinessManagers;
+        return [];
       }
 
       const data = await res.json();
 
       if (!res.ok) {
         throw {
-          message: "Error al obtener los datos del operador",
+          message: "Error al obtener el historial de vacaciones",
           status: res.status,
           data,
         };
       }
 
-      return mapBusinessManagerApiToEntity(data);
+      const normalizedHolidaysInProcess = Array.isArray(data)
+        ? mapHolidaysInProcessApiToEntities(data)
+        : [];
+
+      return normalizedHolidaysInProcess;
     } catch (error) {
       if (attempt === maxRetries) {
+        console.error("Error al obtener las solicitudes de vacaciones:", error);
         throw new Error(
-          "Todos los intentos fallaron. No se pudieron obtener los datos del operador.",
+          "Todos los intentos fallaron. No se pudo obtener el historial de vacaciones.",
         );
       }
     }
   }
 
-  return {} as IBusinessManagers;
+  return [];
 };
 
-export { businessManagers };
+export { getHolidaysRequestInProcess };
