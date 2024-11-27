@@ -1,11 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { pageLength } from "./tableConfig";
 import { ICertificationsTable } from "./types";
 
 export const usePagination = (initialData: ICertificationsTable[]) => {
   const [currentPage, setCurrentPage] = useState(0);
-  const [data] = useState<ICertificationsTable[]>(initialData);
+  const [data, setData] = useState<ICertificationsTable[]>(initialData);
+
+  useEffect(() => {
+    setData(initialData);
+    setCurrentPage(0);
+  }, [initialData]);
 
   const totalRecords = data.length;
   const totalPages = Math.ceil(totalRecords / pageLength);
