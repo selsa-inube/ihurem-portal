@@ -1,10 +1,7 @@
-import { MdVpnKey } from "react-icons/md";
-
 const certificationsNavConfig = [
   {
     id: 1,
     label: "Certificaciones",
-    icon: <MdVpnKey />,
     crumbs: [
       {
         path: "/",
@@ -19,7 +16,7 @@ const certificationsNavConfig = [
         isActive: true,
       },
     ],
-    url: "/certifications",
+    url: "/",
   },
 ];
 

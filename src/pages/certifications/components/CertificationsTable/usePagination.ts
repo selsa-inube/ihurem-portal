@@ -5,7 +5,7 @@ import { ICertificationsTable } from "./types";
 
 export const usePagination = (initialData: ICertificationsTable[]) => {
   const [currentPage, setCurrentPage] = useState(0);
-  const [data] = useState(initialData);
+  const [data] = useState<ICertificationsTable[]>(initialData);
 
   const totalRecords = data.length;
   const totalPages = Math.ceil(totalRecords / pageLength);

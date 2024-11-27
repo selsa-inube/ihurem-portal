@@ -1,23 +1,25 @@
 import { Button } from "@inubekit/button";
 import { Stack } from "@inubekit/stack";
-import { MdOutlineAdd } from "react-icons/md";
 import { useMediaQuery } from "@inubekit/hooks";
+import { MdOutlineAdd } from "react-icons/md";
 
 import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
 import { spacing } from "@design/tokens/spacing/spacing";
+
 import { StyledCertificationsContainer } from "./styles";
 import { CertificationsTable } from "./components/CertificationsTable";
 import { generateData } from "./components/CertificationsTable/tableConfig";
 
 interface CertificationsOptionsUIProps {
   appName: string;
-  appDescription?: string;
   appRoute: IRoute[];
+  navigatePage: string;
+  appDescription?: string;
 }
 
 function CertificationsOptionsUI(props: CertificationsOptionsUIProps) {
-  const { appName, appDescription, appRoute } = props;
+  const { appName, appRoute, navigatePage, appDescription } = props;
 
   const isMobile = useMediaQuery("(max-width: 768px)");
 
@@ -27,6 +29,7 @@ function CertificationsOptionsUI(props: CertificationsOptionsUIProps) {
         appName={appName}
         appDescription={appDescription}
         appRoute={appRoute}
+        navigatePage={navigatePage}
       >
         <StyledCertificationsContainer $isMobile={isMobile}>
           <Stack
