@@ -6,6 +6,7 @@ function CertificationsOptions() {
     <CertificationsOptionsUI
       appName={certificationsNavConfig[0].label}
       appRoute={certificationsNavConfig[0].crumbs}
+      navigatePage={certificationsNavConfig[0].url}
     />
   );
 }
