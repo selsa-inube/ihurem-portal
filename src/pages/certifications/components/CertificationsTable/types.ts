@@ -7,7 +7,6 @@ export interface ICertificationsTable {
   type?: CertificationsTableField<string>;
   mobileActions?: CertificationsTableField<JSX.Element>;
 }
-
 interface CertificationsTableField<T> {
   value: T;
 }
