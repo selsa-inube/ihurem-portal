@@ -9,11 +9,12 @@ interface AppMenuProps {
   appName: string;
   appRoute: IRoute[];
   children: React.ReactNode;
+  navigatePage: string;
   appDescription?: string;
 }
 
 function AppMenu(props: AppMenuProps) {
-  const { appName, appRoute, children, appDescription } = props;
+  const { appName, appRoute, children, navigatePage, appDescription } = props;
 
   return (
     <StyledAppMenu>
@@ -22,7 +23,7 @@ function AppMenu(props: AppMenuProps) {
         <PageTitle
           title={appName}
           description={appDescription}
-          navigatePage="/"
+          navigatePage={navigatePage}
         />
       </Stack>
       {children}

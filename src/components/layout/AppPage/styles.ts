@@ -19,7 +19,6 @@ const StyledMain = styled.main<StyledMainProps>`
   box-sizing: border-box;
   height: calc(100vh - 54px);
   overflow-y: auto;
-  padding: ${({ $isTablet }) => ($isTablet ? "32px 20px" : "32px 64px")};
 `;
 
 const StyledContentImg = styled(Link)`

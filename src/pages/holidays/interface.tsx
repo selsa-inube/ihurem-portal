@@ -15,12 +15,13 @@ import { generateData as pendingHolidaysData } from "./components/PendingVacatio
 
 interface HolidaysOptionsUIProps {
   appName: string;
-  appDescription?: string;
   appRoute: IRoute[];
+  navigatePage: string;
+  appDescription?: string;
 }
 
 function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
-  const { appName, appDescription, appRoute } = props;
+  const { appName, appRoute, navigatePage, appDescription } = props;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -34,6 +35,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
         appName={appName}
         appDescription={appDescription}
         appRoute={appRoute}
+        navigatePage={navigatePage}
       >
         <StyledHolidaysContainer $isMobile={isMobile}>
           <Stack
@@ -53,6 +55,8 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
             <Button
               spacing="wide"
               variant="filled"
+              type="link"
+              path="/holidays/request-enjoyment"
               iconBefore={<MdOutlineAirplanemodeActive />}
               fullwidth={isMobile}
             >
