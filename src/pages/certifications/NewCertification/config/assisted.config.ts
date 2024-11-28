@@ -13,4 +13,10 @@ export const newCCertificationApplication: IAssistedStep[] = [
     name: "Requisitos",
     description: "Revisa los requisitos para el disfrute de vacaciones.",
   },
+  {
+    id: 3,
+    number: 3,
+    name: "Verificación",
+    description: "Verifica la información proporcionada.",
+  },
 ];
