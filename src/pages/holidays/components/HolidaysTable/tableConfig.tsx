@@ -1,5 +1,3 @@
-import { MdOutlineVisibility, MdDeleteOutline } from "react-icons/md";
-
 import { IHolidaysTable } from "./types";
 
 export const columns = [
@@ -37,32 +35,3 @@ export const headers: {
 
 export const pageLength = 5;
 export const caption = "Tabla de Ejemplo";
-
-export const generateData = () => {
-  const rows = 2;
-  const data: IHolidaysTable[] = [];
-  for (let i = 0; i < rows; i++) {
-    data.push({
-      description: {
-        value: i % 2 === 0 ? "Disfrute de vacaciones" : "Pago de vacaciones",
-      },
-      date: { value: "18/Ene/2024" },
-      days: { value: i % 2 === 0 ? 2 : 7 },
-      status: {
-        value:
-          i % 2 === 0 ? "En trámite de aprobación" : "En trámite de validación",
-      },
-      details: {
-        value: <MdOutlineVisibility />,
-        type: "icon",
-        onClick: () => console.log(`View details clicked for row ${i}`),
-      },
-      delete: {
-        value: <MdDeleteOutline />,
-        type: "icon",
-        onClick: () => console.log(`Delete clicked for row ${i}`),
-      },
-    });
-  }
-  return data;
-};

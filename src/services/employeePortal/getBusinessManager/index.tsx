@@ -1,6 +1,6 @@
 import { IBusinessManagers } from "@ptypes/employeePortalBusiness.types";
 import {
-  enviroment,
+  environment,
   fetchTimeoutServices,
   maxRetriesServices,
 } from "@config/environment";
@@ -27,7 +27,7 @@ const businessManagers = async (
       };
 
       const res = await fetch(
-        `${enviroment.IVITE_ISAAS_QUERY_PROCESS_SERVICE}/business-managers/${businessManagerId}`,
+        `${environment.IVITE_ISAAS_QUERY_PROCESS_SERVICE}/business-managers/${businessManagerId}`,
         options,
       );
 
