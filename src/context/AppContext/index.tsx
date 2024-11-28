@@ -12,6 +12,7 @@ import {
   IBusinessManagers,
   IBusinessUnitsPortalEmployee,
   IEmployeePortalByBusinessManager,
+  IEmployee,
 } from "@src/types/employeePortalBusiness.types";
 
 const AppContext = createContext<IAppContextType | undefined>(undefined);
@@ -28,6 +29,7 @@ const AppProvider: React.FC<{
     id: string;
     company: string;
     urlImgPerfil: string;
+    nickname: string;
   } | null>(
     auth0User
       ? {
@@ -35,6 +37,7 @@ const AppProvider: React.FC<{
           id: auth0User.nickname ?? "",
           company: businessUnitData.businessUnit ?? "Company Name",
           urlImgPerfil: auth0User.picture ?? "",
+          nickname: auth0User.nickname ?? "",
         }
       : null,
   );
@@ -56,6 +59,8 @@ const AppProvider: React.FC<{
 
   const [businessUnit, setBusinessUnit] =
     useState<IBusinessUnitsPortalEmployee | null>(businessUnitData);
+
+  const [employees, setEmployees] = useState<IEmployee>({} as IEmployee);
 
   const updatePreferences = (newPreferences: Partial<IPreferences>) => {
     setPreferences((prev) => ({ ...prev, ...newPreferences }));
@@ -86,6 +91,8 @@ const AppProvider: React.FC<{
         setBusinessManagers,
         businessUnit,
         setBusinessUnit,
+        employees,
+        setEmployees,
       }}
     >
       {children}

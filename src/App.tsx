@@ -5,13 +5,13 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 import { useEffect, useState } from "react";
-
 import { AppPage } from "@components/layout/AppPage";
 import { Home } from "@src/pages/Home";
 import { AppProvider, useAppContext } from "@context/AppContext";
 import { decrypt } from "@utils/encrypt";
 import { environment } from "@config/environment";
 import { ErrorPage } from "@components/layout/ErrorPage";
+import { useEmployeeByNickname } from "@src/hooks/useEmployeeInquiry";
 import { GlobalStyles } from "@styles/global";
 import { HolidaysRoutes } from "@routes/holidays";
 import { LoginRoutes } from "@routes/login";
@@ -30,14 +30,34 @@ function LogOut() {
 }
 
 function FirstPage() {
-  const { user } = useAppContext();
-  const portalCode = localStorage.getItem("portalCode");
+  const { user, provisionedPortal, setEmployees } = useAppContext();
 
-  if (!user || !portalCode || portalCode.length === 0) {
-    return <LoginRoutes />;
+  const {
+    employee,
+    loading: employeeLoading,
+    error: employeeError,
+  } = useEmployeeByNickname(user?.nickname ?? "");
+
+  useEffect(() => {
+    if (employee && !employeeLoading && !employeeError) {
+      setEmployees(employee);
+    }
+  }, [employee, employeeLoading, employeeError, setEmployees]);
+
+  if (employeeLoading) {
+    return null;
+  }
+  if (employeeError) {
+    return <LogOut />;
   }
 
-  return <Home />;
+  return (provisionedPortal?.portalCode &&
+    provisionedPortal.portalCode.length === 0) ||
+    !user ? (
+    <LoginRoutes />
+  ) : (
+    <Home />
+  );
 }
 
 const router = createBrowserRouter(
