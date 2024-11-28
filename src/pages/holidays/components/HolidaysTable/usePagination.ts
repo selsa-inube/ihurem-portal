@@ -1,11 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { pageLength } from "./tableConfig";
 import { IHolidaysTable } from "./types";
 
 export const usePagination = (initialData: IHolidaysTable[]) => {
   const [currentPage, setCurrentPage] = useState(0);
-  const [data] = useState(initialData);
+  const [data, setData] = useState<IHolidaysTable[]>(initialData);
+
+  useEffect(() => {
+    setData(initialData);
+    setCurrentPage(0);
+  }, [initialData]);
 
   const totalRecords = data.length;
   const totalPages = Math.ceil(totalRecords / pageLength);

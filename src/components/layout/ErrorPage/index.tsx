@@ -8,7 +8,7 @@ import selsaLogo from "@assets/images/logoInube.png";
 import errorImage from "@assets/images/img-team-building-68.png";
 
 import { StyledCompanyLogo, StyledErrorImage, StyledFooter } from "./styles";
-import { enviroment } from "@config/environment.ts";
+import { environment } from "@config/environment.ts";
 
 interface ErrorPageProps {
   logo?: string;
@@ -105,7 +105,7 @@ function ErrorPage(props: ErrorPageProps) {
               onClick={() =>
                 onClick
                   ? onClick()
-                  : window.open(enviroment.REDIRECT_URI, "_self")
+                  : window.open(environment.REDIRECT_URI, "_self")
               }
             >
               {nameButton}
