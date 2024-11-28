@@ -17,10 +17,10 @@ import { IHolidaysTable } from "./components/HolidaysTable/types";
 interface HolidaysOptionsUIProps {
   appName: string;
   appRoute: IRoute[];
+  navigatePage: string;
   tableData: IHolidaysTable[];
   isLoading: boolean;
   appDescription?: string;
-  navigatePage: string;
 }
 
 function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
@@ -64,6 +64,8 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
             <Button
               spacing="wide"
               variant="filled"
+              type="link"
+              path="/holidays/request-enjoyment"
               iconBefore={<MdOutlineAirplanemodeActive />}
               fullwidth={isMobile}
             >
