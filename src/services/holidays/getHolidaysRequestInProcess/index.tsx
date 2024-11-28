@@ -1,4 +1,8 @@
-import { fetchTimeoutServices, maxRetriesServices } from "@config/environment";
+import {
+  fetchTimeoutServices,
+  maxRetriesServices,
+  environment,
+} from "@config/environment";
 import { IHolidaysInProcess } from "@src/types/holidays.types";
 
 import { mapHolidaysInProcessApiToEntities } from "./mappers";
@@ -21,7 +25,7 @@ const getHolidaysRequestInProcess = async (): Promise<IHolidaysInProcess[]> => {
       };
 
       const res = await fetch(
-        `http://localhost:3001/ihurem-query-process-service/api/vacation-history`,
+        `${environment.IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE}/vacation-history`,
         options,
       );
 
