@@ -17,13 +17,21 @@ import { IHolidaysTable } from "./components/HolidaysTable/types";
 interface HolidaysOptionsUIProps {
   appName: string;
   appRoute: IRoute[];
+  navigatePage: string;
   tableData: IHolidaysTable[];
   isLoading: boolean;
   appDescription?: string;
 }
 
 function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
-  const { appName, appRoute, tableData, isLoading, appDescription } = props;
+  const {
+    appName,
+    appRoute,
+    navigatePage,
+    tableData,
+    isLoading,
+    appDescription,
+  } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isMobile = useMediaQuery("(max-width: 768px)");
 
@@ -36,6 +44,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
         appName={appName}
         appDescription={appDescription}
         appRoute={appRoute}
+        navigatePage={navigatePage}
       >
         <StyledHolidaysContainer $isMobile={isMobile}>
           <Stack
@@ -55,6 +64,8 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
             <Button
               spacing="wide"
               variant="filled"
+              type="link"
+              path="/holidays/request-enjoyment"
               iconBefore={<MdOutlineAirplanemodeActive />}
               fullwidth={isMobile}
             >

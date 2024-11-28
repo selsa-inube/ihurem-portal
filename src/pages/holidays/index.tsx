@@ -33,6 +33,7 @@ function HolidaysOptions() {
     <HolidaysOptionsUI
       appName={holidaysNavConfig[0].label}
       appRoute={holidaysNavConfig[0].crumbs}
+      navigatePage={holidaysNavConfig[0].url}
       tableData={tableData}
       isLoading={isLoading}
     />
