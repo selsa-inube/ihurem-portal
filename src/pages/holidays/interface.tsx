@@ -1,28 +1,37 @@
 import { useState } from "react";
+import { MdOutlineAirplanemodeActive, MdOutlinePayments } from "react-icons/md";
 import { Button } from "@inubekit/button";
 import { Stack } from "@inubekit/stack";
-import { MdOutlineAirplanemodeActive, MdOutlinePayments } from "react-icons/md";
 import { useMediaQuery } from "@inubekit/hooks";
 
 import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
 import { spacing } from "@design/tokens/spacing/spacing";
+
 import { StyledHolidaysContainer } from "./styles";
 import { HolidaysTable } from "./components/HolidaysTable";
 import { PendingHolidaysModal } from "./modals/PendingHolidaysModal";
-import { generateData } from "./components/HolidaysTable/tableConfig";
 import { generateData as pendingHolidaysData } from "./components/PendingVacationDaysTable/tableConfig";
+import { IHolidaysTable } from "./components/HolidaysTable/types";
 
 interface HolidaysOptionsUIProps {
   appName: string;
   appRoute: IRoute[];
   navigatePage: string;
+  tableData: IHolidaysTable[];
+  isLoading: boolean;
   appDescription?: string;
 }
 
 function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
-  const { appName, appRoute, navigatePage, appDescription } = props;
-
+  const {
+    appName,
+    appRoute,
+    navigatePage,
+    tableData,
+    isLoading,
+    appDescription,
+  } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isMobile = useMediaQuery("(max-width: 768px)");
 
@@ -71,7 +80,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
               Solicitar pago
             </Button>
           </Stack>
-          <HolidaysTable data={generateData()} />
+          <HolidaysTable data={tableData} loading={isLoading} />
         </StyledHolidaysContainer>
       </AppMenu>
       {isModalOpen && (

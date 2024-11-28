@@ -1,5 +1,5 @@
 import {
-  enviroment,
+  environment,
   fetchTimeoutServices,
   maxRetriesServices,
 } from "@config/environment";
@@ -30,7 +30,7 @@ const employeePortalByBusinessManager = async (
       };
 
       const res = await fetch(
-        `${enviroment.IVITE_ISAAS_QUERY_PROCESS_SERVICE}/employee-portals-by-business-managers?${queryParams.toString()}`,
+        `${environment.IVITE_ISAAS_QUERY_PROCESS_SERVICE}/employee-portals-by-business-managers?${queryParams.toString()}`,
         options,
       );
 

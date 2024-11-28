@@ -10,7 +10,7 @@ import { AppPage } from "@components/layout/AppPage";
 import { Home } from "@src/pages/Home";
 import { AppProvider, useAppContext } from "@context/AppContext";
 import { decrypt } from "@utils/encrypt";
-import { enviroment } from "@config/environment";
+import { environment } from "@config/environment";
 import { ErrorPage } from "@components/layout/ErrorPage";
 import { GlobalStyles } from "@styles/global";
 import { HolidaysRoutes } from "@routes/holidays";
@@ -25,7 +25,7 @@ import { usePortalData } from "@hooks/usePortalData";
 function LogOut() {
   localStorage.clear();
   const { logout } = useAuth0();
-  logout({ logoutParams: { returnTo: enviroment.REDIRECT_URI } });
+  logout({ logoutParams: { returnTo: environment.REDIRECT_URI } });
   return <Home />;
 }
 
