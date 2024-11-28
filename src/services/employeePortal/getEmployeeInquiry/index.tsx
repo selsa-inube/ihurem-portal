@@ -1,14 +1,12 @@
-import { IBusinessUnitsPortalEmployee } from "@ptypes/employeePortalBusiness.types";
+import { IEmployee } from "@ptypes/employeePortalBusiness.types";
 import {
-  environment,
+  enviroment,
   fetchTimeoutServices,
   maxRetriesServices,
 } from "@config/environment";
-import { mapBusinessUnitsPortalEmployeeApiToEntity } from "./mappers";
+import { mapEmployeeApiToEntity } from "./mappers";
 
-const businessUnitsPortalEmployee = async (
-  businessUnit: string,
-): Promise<IBusinessUnitsPortalEmployee> => {
+const employeeByNickname = async (nickname: string): Promise<IEmployee> => {
   const maxRetries = maxRetriesServices;
   const fetchTimeout = fetchTimeoutServices;
 
@@ -20,44 +18,42 @@ const businessUnitsPortalEmployee = async (
       const options: RequestInit = {
         method: "GET",
         headers: {
-          "X-Action": "SearchByIdBusinessUnit",
+          "X-Action": "SearchByNickname",
           "Content-type": "application/json; charset=UTF-8",
         },
         signal: controller.signal,
       };
 
       const res = await fetch(
-        `${environment.IVITE_ISAAS_QUERY_PROCESS_SERVICE}/businesses-unit/${businessUnit}`,
+        `${enviroment.IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE}/employee/${nickname}`,
         options,
       );
 
       clearTimeout(timeoutId);
 
       if (res.status === 204) {
-        return {} as IBusinessUnitsPortalEmployee;
+        return {} as IEmployee;
       }
-
-      const data = await res.json();
+      const data = await res.json().catch(() => null);
 
       if (!res.ok) {
         throw {
-          message: "Error al obtener los datos de la unidad de negocio.",
+          message: "Error al obtener los datos del empleado.",
           status: res.status,
           data,
         };
       }
-
-      return mapBusinessUnitsPortalEmployeeApiToEntity(data);
+      return mapEmployeeApiToEntity(data);
     } catch (error) {
       if (attempt === maxRetries) {
         throw new Error(
-          "Todos los intentos fallaron. No se pudieron obtener los datos del operador.",
+          "Todos los intentos fallaron. No se pudieron obtener los datos del empleado.",
         );
       }
     }
   }
 
-  return {} as IBusinessUnitsPortalEmployee;
+  return {} as IEmployee;
 };
 
-export { businessUnitsPortalEmployee };
+export { employeeByNickname };

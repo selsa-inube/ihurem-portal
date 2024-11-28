@@ -29,7 +29,8 @@ interface HolidaysTableProps {
   loading?: boolean;
 }
 
-function HolidaysTable({ data, loading = false }: HolidaysTableProps) {
+function HolidaysTable(props: HolidaysTableProps) {
+  const { data, loading = false } = props;
   const {
     totalRecords,
     handleStartPage,
@@ -43,11 +44,11 @@ function HolidaysTable({ data, loading = false }: HolidaysTableProps) {
 
   const mediaQueries = useMediaQueries([
     "(max-width: 1024px)",
-    "(max-width: 542px)",
+    "(max-width: 587px)",
   ]);
 
   const determineVisibleHeaders = () => {
-    if (mediaQueries["(max-width: 542px)"]) {
+    if (mediaQueries["(max-width: 587px)"]) {
       return headers
         .filter((header) => ["date", "status", "days"].includes(header.key))
         .concat({
@@ -65,7 +66,7 @@ function HolidaysTable({ data, loading = false }: HolidaysTableProps) {
   };
 
   const visibleHeaders = determineVisibleHeaders();
-  const visibleColumns = mediaQueries["(max-width: 542px)"]
+  const visibleColumns = mediaQueries["(max-width: 587px)"]
     ? columns.slice(1, 3)
     : mediaQueries["(max-width: 1024px)"]
       ? columns.slice(0, 3)
@@ -83,7 +84,7 @@ function HolidaysTable({ data, loading = false }: HolidaysTableProps) {
     rowIndex: number,
   ) => {
     const isMobileAction =
-      headerKey === "mobileActions" && mediaQueries["(max-width: 542px)"];
+      headerKey === "mobileActions" && mediaQueries["(max-width: 587px)"];
     if (isMobileAction) {
       return (
         <Td
