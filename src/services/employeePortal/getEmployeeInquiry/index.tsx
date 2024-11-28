@@ -1,6 +1,6 @@
 import { IEmployee } from "@ptypes/employeePortalBusiness.types";
 import {
-  enviroment,
+  environment,
   fetchTimeoutServices,
   maxRetriesServices,
 } from "@config/environment";
@@ -25,7 +25,7 @@ const employeeByNickname = async (nickname: string): Promise<IEmployee> => {
       };
 
       const res = await fetch(
-        `${enviroment.IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE}/employee/${nickname}`,
+        `${environment.IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE}/employee/${nickname}`,
         options,
       );
 
