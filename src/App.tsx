@@ -14,6 +14,7 @@ import { ErrorPage } from "@components/layout/ErrorPage";
 import { useEmployeeByNickname } from "@src/hooks/useEmployeeInquiry";
 import { GlobalStyles } from "@styles/global";
 import { HolidaysRoutes } from "@routes/holidays";
+import { CertificationsRoutes } from "@routes/certifications";
 import { LoginRoutes } from "@routes/login";
 import { pathStart } from "@config/nav";
 import { RegisterRoutes } from "@routes/register";
@@ -67,6 +68,7 @@ const router = createBrowserRouter(
       <Route path="/*" element={<FirstPage />} errorElement={<ErrorPage />} />
       <Route path="/*" element={<AppPage />}>
         <Route path="holidays/*" element={<HolidaysRoutes />} />
+        <Route path="certifications/*" element={<CertificationsRoutes />} />
       </Route>
       <Route path="logout" element={<LogOut />} />
       <Route path="/signin/*" element={<RegisterRoutes />} />
