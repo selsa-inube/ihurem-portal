@@ -1,3 +1,6 @@
+import { useState } from "react";
+
+import { newCCertificationApplication } from "./config/assisted.config";
 import { certificationsNavConfig } from "../config/nav.config";
 import { NewCertificationUI } from "./interface";
 
