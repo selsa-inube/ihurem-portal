@@ -4,7 +4,7 @@ import { newCCertificationApplication } from "./config/assisted.config";
 import { certificationsNavConfig } from "../config/nav.config";
 import { NewCertificationUI } from "./interface";
 
-function RequestEnjoyment() {
+function RequestNewCertification() {
   return (
     <NewCertificationUI
       appName={certificationsNavConfig[1].label}
@@ -14,4 +14,4 @@ function RequestEnjoyment() {
   );
 }
 
-export { RequestEnjoyment };
+export { RequestNewCertification };
