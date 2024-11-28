@@ -1,13 +1,13 @@
 import { Route, Routes } from "react-router-dom";
 
 import { CertificationsOptions } from "@pages/certifications";
-import { RequestEnjoyment } from "@src/pages/certifications/NewCertification";
+import { RequestNewCertification } from "@src/pages/certifications/NewCertification";
 
 function CertificationsRoutes() {
   return (
     <Routes>
       <Route path="/" element={<CertificationsOptions />} />
-      <Route path="/new-certification" element={<RequestEnjoyment />} />
+      <Route path="/new-certification" element={<RequestNewCertification />} />
     </Routes>
   );
 }
