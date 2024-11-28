@@ -48,9 +48,6 @@ function FirstPage() {
   if (employeeLoading) {
     return null;
   }
-  if (employeeError) {
-    return <LogOut />;
-  }
 
   return (provisionedPortal?.portalCode &&
     provisionedPortal.portalCode.length === 0) ||
