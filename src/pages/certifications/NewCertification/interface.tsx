@@ -1,6 +1,6 @@
 import { Stack } from "@inubekit/stack";
-import { Assisted, IAssistedStep } from "@inubekit/assisted";
 import { useMediaQuery } from "@inubekit/hooks";
+import { Assisted, IAssistedStep } from "@inubekit/assisted";
 
 import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
