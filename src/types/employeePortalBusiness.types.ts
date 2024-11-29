@@ -113,6 +113,13 @@ interface UseCasesByBusinessesUnit {
   effectiveDate: string;
   useCaseId: string;
 }
+interface IEmployeeOptions {
+  abbreviatedName: string;
+  descriptionUse: string;
+  optionCode: string;
+  optionEmployeeId: string;
+  parentOptionId: string;
+}
 
 export type {
   IEmployee,
@@ -125,4 +132,5 @@ export type {
   BusinessManagersByBusinessesUnit,
   PublicCodeTablesByBusinessesUnit,
   UseCasesByBusinessesUnit,
+  IEmployeeOptions,
 };
