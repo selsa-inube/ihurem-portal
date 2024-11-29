@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { AppPage } from "@components/layout/AppPage";
-import { Home } from "@src/pages/Home";
+import { Home } from "@src/pages/home";
 import { AppProvider, useAppContext } from "@context/AppContext";
 import { decrypt } from "@utils/encrypt";
 import { environment } from "@config/environment";
