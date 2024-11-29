@@ -4,7 +4,7 @@ import { newCCertificationApplication } from "./config/assisted.config";
 import { certificationsNavConfig } from "../config/nav.config";
 import { NewCertificationUI } from "./interface";
 
-function RequestNewCertification() {
+function NewCertification() {
   const [currentStep, setCurrentStep] = useState(1);
 
   const handleNextStep = () => {
@@ -37,4 +37,4 @@ function RequestNewCertification() {
   );
 }
 
-export { RequestNewCertification };
+export { NewCertification };

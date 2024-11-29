@@ -27,10 +27,10 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
   const {
     appName,
     appRoute,
+    navigatePage,
     tableData,
     isLoading,
     appDescription,
-    navigatePage,
   } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isMobile = useMediaQuery("(max-width: 768px)");
