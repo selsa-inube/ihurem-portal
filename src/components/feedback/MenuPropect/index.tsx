@@ -8,16 +8,17 @@ import { IOptions } from "./types";
 interface MenuPropectProps {
   options: IOptions[];
   onMouseLeave: () => void;
+  onClose: () => void;
 }
 
 export const MenuPropect = (props: MenuPropectProps) => {
-  const { options, onMouseLeave } = props;
+  const { options, onMouseLeave, onClose } = props;
 
   return (
     <StyledMenu onMouseLeave={onMouseLeave}>
       <Stack direction="column">
         <Stack justifyContent="end" padding=" 0px 10px">
-          <StyledCloseIcon>
+          <StyledCloseIcon onClick={onClose}>
             <Icon
               icon={<MdClose />}
               appearance="dark"

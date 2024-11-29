@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   MdOutlineVisibility,
   MdDeleteOutline,
@@ -18,11 +19,12 @@ import { Icon } from "@inubekit/icon";
 import { useMediaQueries } from "@inubekit/hooks";
 import { Text } from "@inubekit/text";
 import { SkeletonLine } from "@inubekit/skeleton";
-
 import { ICertificationsTable } from "./types";
 import { StyledTd, StyledTh } from "./styles";
 import { columns, headers } from "./tableConfig";
 import { usePagination } from "./usePagination";
+
+import { MenuPropect } from "@components/feedback/MenuPropect";
 
 interface CertificationsTableProps {
   data: ICertificationsTable[];
@@ -48,6 +50,9 @@ function CertificationsTable({
     "(max-width: 1024px)",
     "(max-width: 542px)",
   ]);
+
+  const [menuVisible, setMenuVisible] = useState<boolean>(false);
+  const [currentRowIndex, setCurrentRowIndex] = useState<number | null>(null);
 
   const determineVisibleHeaders = () => {
     if (mediaQueries["(max-width: 542px)"]) {
@@ -87,6 +92,7 @@ function CertificationsTable({
   ) => {
     const isMobileAction =
       headerKey === "mobileActions" && mediaQueries["(max-width: 542px)"];
+
     if (isMobileAction) {
       return (
         <Td
@@ -104,7 +110,10 @@ function CertificationsTable({
               variant="filled"
               shape="circle"
               size="20px"
-              onClick={() => console.log("Actions clicked")}
+              onClick={() => {
+                setMenuVisible(!menuVisible);
+                setCurrentRowIndex(rowIndex);
+              }}
               cursorHover
             />
           )}
@@ -173,6 +182,25 @@ function CertificationsTable({
     return cellData?.value;
   };
 
+  const closeMenu = () => {
+    setMenuVisible(false);
+  };
+
+  const menuOptions = [
+    {
+      title: "Ver detalles",
+      icon: <MdOutlineVisibility />,
+      onClick: () => console.log("Ver detalles"),
+      visible: true,
+    },
+    {
+      title: "Eliminar",
+      icon: <MdDeleteOutline />,
+      onClick: () => console.log("Eliminar"),
+      visible: true,
+    },
+  ];
+
   return (
     <Table>
       <Colgroup>
@@ -227,6 +255,13 @@ function CertificationsTable({
             </Td>
           </Tr>
         </Tfoot>
+      )}
+      {menuVisible && currentRowIndex !== null && (
+        <MenuPropect
+          options={menuOptions}
+          onMouseLeave={closeMenu}
+          onClose={closeMenu}
+        />
       )}
     </Table>
   );
