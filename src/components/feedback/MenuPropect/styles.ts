@@ -9,8 +9,10 @@ const StyledMenu = styled.div`
     0px 8px 12px 6px #091e4221;
   padding: ${spacing.s075} ${spacing.s0};
   position: absolute;
+  margin-right: 30px;
   right: 1px;
   width: 162px;
+  z-index: 1000;
 `;
 
 const StyledContainerLabel = styled.div`
