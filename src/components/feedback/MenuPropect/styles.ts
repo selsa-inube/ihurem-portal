@@ -12,14 +12,12 @@ const StyledMenu = styled.div`
   margin-right: 30px;
   right: 1px;
   width: 162px;
-  z-index: 1000;
 `;
 
 const StyledContainerLabel = styled.div`
   display: flex;
   flex-direction: row;
   box-sizing: border-box;
-  display: flex;
   align-items: center;
   height: 30px;
   margin: 0px;
