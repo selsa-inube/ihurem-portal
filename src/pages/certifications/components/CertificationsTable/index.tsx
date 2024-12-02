@@ -1,8 +1,4 @@
-import {
-  MdOutlineVisibility,
-  MdDeleteOutline,
-  MdMoreVert,
-} from "react-icons/md";
+import { MdOutlineVisibility, MdDeleteOutline } from "react-icons/md";
 import {
   Col,
   Colgroup,
@@ -18,11 +14,11 @@ import { Icon } from "@inubekit/icon";
 import { useMediaQueries } from "@inubekit/hooks";
 import { Text } from "@inubekit/text";
 import { SkeletonLine } from "@inubekit/skeleton";
-
 import { ICertificationsTable } from "./types";
 import { StyledTd, StyledTh } from "./styles";
 import { columns, headers } from "./tableConfig";
 import { usePagination } from "./usePagination";
+import { Detail } from "./Detail";
 
 interface CertificationsTableProps {
   data: ICertificationsTable[];
@@ -87,6 +83,7 @@ function CertificationsTable({
   ) => {
     const isMobileAction =
       headerKey === "mobileActions" && mediaQueries["(max-width: 542px)"];
+
     if (isMobileAction) {
       return (
         <Td
@@ -98,14 +95,10 @@ function CertificationsTable({
           {loading ? (
             <SkeletonLine width="100%" animated={true} />
           ) : (
-            <Icon
-              icon={<MdMoreVert />}
-              appearance="primary"
-              variant="filled"
-              shape="circle"
-              size="20px"
-              onClick={() => console.log("Actions clicked")}
-              cursorHover
+            <Detail
+              onClickDetails={cellData?.onClick}
+              onClickEdit={cellData?.onClick}
+              onClickEliminate={cellData?.onClick}
             />
           )}
         </Td>
