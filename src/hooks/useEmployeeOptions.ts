@@ -4,7 +4,7 @@ import { IEmployeeOptions } from "@ptypes/employeePortalBusiness.types";
 
 export const useEmployeeOptions = (employeeId: string) => {
   const [data, setData] = useState<IEmployeeOptions[] | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -14,6 +14,9 @@ export const useEmployeeOptions = (employeeId: string) => {
 
       try {
         const options = await getEmployeeOptions(employeeId);
+        if (options.length === 0) {
+          setError("No existen opciones para el empleado");
+        }
         setData(options);
       } catch (err) {
         setError("Error al obtener las opciones del empleado");

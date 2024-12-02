@@ -26,7 +26,7 @@ const getEmployeeOptions = async (
         signal: controller.signal,
       };
 
-      const url = `${environment.BASE_URL}/catalog-of-options-for-employee-portals/${employeeId}`;
+      const url = `${environment.IVITE_ISAAS_QUERY_PROCESS_SERVICE}/catalog-of-options-for-employee-portals`;
 
       const res = await fetch(url, options);
 

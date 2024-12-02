@@ -58,11 +58,11 @@ function FirstPage() {
   }, [employeeOptions]);
 
   if (employeeLoading || optionsLoading) {
-    return;
+    return null;
   }
 
   if (employeeError || optionsError) {
-    return;
+    return <LogOut />;
   }
 
   return (provisionedPortal?.portalCode &&
