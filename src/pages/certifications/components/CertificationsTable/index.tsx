@@ -1,9 +1,4 @@
-import { useState } from "react";
-import {
-  MdOutlineVisibility,
-  MdDeleteOutline,
-  MdMoreVert,
-} from "react-icons/md";
+import { MdOutlineVisibility, MdDeleteOutline } from "react-icons/md";
 import {
   Col,
   Colgroup,
@@ -23,8 +18,7 @@ import { ICertificationsTable } from "./types";
 import { StyledTd, StyledTh } from "./styles";
 import { columns, headers } from "./tableConfig";
 import { usePagination } from "./usePagination";
-
-import { MenuPropect } from "@components/feedback/MenuPropect";
+import { Detail } from "./Detail";
 
 interface CertificationsTableProps {
   data: ICertificationsTable[];
@@ -50,9 +44,6 @@ function CertificationsTable({
     "(max-width: 1024px)",
     "(max-width: 542px)",
   ]);
-
-  const [menuVisible, setMenuVisible] = useState<boolean>(false);
-  const [currentRowIndex, setCurrentRowIndex] = useState<number | null>(null);
 
   const determineVisibleHeaders = () => {
     if (mediaQueries["(max-width: 542px)"]) {
@@ -104,17 +95,10 @@ function CertificationsTable({
           {loading ? (
             <SkeletonLine width="100%" animated={true} />
           ) : (
-            <Icon
-              icon={<MdMoreVert />}
-              appearance="primary"
-              variant="filled"
-              shape="circle"
-              size="20px"
-              onClick={() => {
-                setMenuVisible(!menuVisible);
-                setCurrentRowIndex(rowIndex);
-              }}
-              cursorHover
+            <Detail
+              onClickDetails={cellData?.onClick}
+              onClickEdit={cellData?.onClick}
+              onClickEliminate={cellData?.onClick}
             />
           )}
         </Td>
@@ -182,25 +166,6 @@ function CertificationsTable({
     return cellData?.value;
   };
 
-  const closeMenu = () => {
-    setMenuVisible(false);
-  };
-
-  const menuOptions = [
-    {
-      title: "Ver detalles",
-      icon: <MdOutlineVisibility />,
-      onClick: () => console.log("Ver detalles"),
-      visible: true,
-    },
-    {
-      title: "Eliminar",
-      icon: <MdDeleteOutline />,
-      onClick: () => console.log("Eliminar"),
-      visible: true,
-    },
-  ];
-
   return (
     <Table>
       <Colgroup>
@@ -255,13 +220,6 @@ function CertificationsTable({
             </Td>
           </Tr>
         </Tfoot>
-      )}
-      {menuVisible && currentRowIndex !== null && (
-        <MenuPropect
-          options={menuOptions}
-          onMouseLeave={closeMenu}
-          onClose={closeMenu}
-        />
       )}
     </Table>
   );
