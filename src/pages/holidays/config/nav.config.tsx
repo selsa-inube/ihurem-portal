@@ -41,7 +41,7 @@ const holidaysNavConfig = [
         isActive: true,
       },
     ],
-    url: "/holidays",
+    url: "/",
   },
 ];
 
