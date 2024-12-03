@@ -25,7 +25,7 @@ export const cards = [
     complement: ["Obtén tus certificaciones oficiales."],
     description: "Documentos oficiales disponibles.",
     icon: <MdOutlineFilePresent />,
-    url: "/certificaciones",
+    url: "/certifications",
   },
   {
     title: "Incapacidades",
