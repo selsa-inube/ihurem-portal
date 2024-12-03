@@ -42,6 +42,8 @@ function CertificationsOptionsUI(props: CertificationsOptionsUIProps) {
               spacing="wide"
               variant="filled"
               iconBefore={<MdOutlineAdd />}
+              type="link"
+              path="/certifications/new-certification"
               fullwidth={isMobile}
             >
               Nueva certificación
