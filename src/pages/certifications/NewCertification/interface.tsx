@@ -1,4 +1,5 @@
 import { useMediaQuery } from "@inubekit/hooks";
+import { Text } from "@inubekit/text";
 import { Stack } from "@inubekit/stack";
 import { Button } from "@inubekit/button";
 import { Select } from "@inubekit/select";
@@ -158,7 +159,20 @@ function NewCertificationUI(props: NewCertificationUIProps) {
         </Stack>
 
         {currentStep === 2 && <></>}
-        {currentStep === 3 && <></>}
+        {currentStep === 3 && (
+          <StyledCertificationsContainer $isMobile={isMobile}>
+            <form onSubmit={formik.handleSubmit}>
+              <Stack direction="column" gap={spacing.s300}>
+                <Stack
+                  direction={isMobile ? "column" : "row"}
+                  gap={spacing.s300}
+                >
+                  <Text></Text>
+                </Stack>
+              </Stack>
+            </form>
+          </StyledCertificationsContainer>
+        )}
       </Stack>
     </AppMenu>
   );
