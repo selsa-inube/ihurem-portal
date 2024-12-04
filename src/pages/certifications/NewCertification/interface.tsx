@@ -122,7 +122,7 @@ function NewCertificationUI(props: NewCertificationUIProps) {
                       onBlur={formik.handleBlur}
                     />
                   </Stack>
-                  <Stack width="49%">
+                  <Stack width={isMobile ? "100%" : "49%"}>
                     <Select
                       size="compact"
                       fullwidth={true}
