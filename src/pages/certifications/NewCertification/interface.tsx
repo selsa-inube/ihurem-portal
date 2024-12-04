@@ -48,6 +48,7 @@ function NewCertificationUI(props: NewCertificationUIProps) {
   const validationSchema = Yup.object({
     certification: Yup.string().required("Este campo es obligatorio"),
     addressee: Yup.string()
+      .matches(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/, "Solo se permiten letras")
       .min(3, "Debe tener al menos 3 caracteres")
       .required("Este campo es obligatorio"),
     contract: Yup.string().required("Este campo es obligatorio"),
