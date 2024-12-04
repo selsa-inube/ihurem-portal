@@ -205,9 +205,9 @@ function NewCertificationUI(props: NewCertificationUIProps) {
                       alignItems="center"
                     >
                       <Text type="label" weight="bold" appearance="dark">
-                        Tipo de certificación:
+                        Tipo de solicitud:
                       </Text>
-                      <Text type="body" appearance="dark">
+                      <Text type="body" appearance="gray" size="medium">
                         {formik.values.certification || "Sin especificar"}
                       </Text>
                     </Stack>
@@ -222,7 +222,7 @@ function NewCertificationUI(props: NewCertificationUIProps) {
                       <Text type="label" weight="bold" appearance="dark">
                         Destinatario:
                       </Text>
-                      <Text type="body" appearance="dark">
+                      <Text type="body" appearance="gray" size="medium">
                         {formik.values.addressee || "Sin especificar"}
                       </Text>
                     </Stack>
@@ -238,7 +238,7 @@ function NewCertificationUI(props: NewCertificationUIProps) {
                     <Text type="label" weight="bold" appearance="dark">
                       Contrato:
                     </Text>
-                    <Text type="body" appearance="dark">
+                    <Text type="body" appearance="gray" size="medium">
                       {formik.values.contract || "Sin especificar"}
                     </Text>
                   </Stack>
