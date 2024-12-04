@@ -139,20 +139,26 @@ function NewCertificationUI(props: NewCertificationUIProps) {
               </form>
             </StyledCertificationsContainer>
           )}
-          <Stack justifyContent="end">
-            <Button
-              children="Siguiente"
-              appearance={formik.isValid && formik.dirty ? "primary" : "gray"}
-              path="/privilege"
-              type="button"
-              spacing="wide"
-              fullwidth={false}
-              onClick={handleNextStep}
-              cursorHover={formik.isValid && formik.dirty}
-              disabled={!formik.isValid || !formik.dirty}
-            />
-          </Stack>
+
+          {currentStep === 1 && (
+            <Stack justifyContent="end">
+              <Button
+                children="Siguiente"
+                appearance={formik.isValid && formik.dirty ? "primary" : "gray"}
+                path="/privilege"
+                type="button"
+                spacing="wide"
+                fullwidth={false}
+                onClick={handleNextStep}
+                cursorHover={formik.isValid && formik.dirty}
+                disabled={!formik.isValid || !formik.dirty}
+              />
+            </Stack>
+          )}
         </Stack>
+
+        {currentStep === 2 && <></>}
+        {currentStep === 3 && <></>}
       </Stack>
     </AppMenu>
   );
