@@ -244,7 +244,7 @@ function NewCertificationUI(props: NewCertificationUIProps) {
                   </Stack>
                 </StyledValueText>
               </Stack>
-              <Stack justifyContent="end">
+              <Stack justifyContent="end" padding="10px 0px">
                 <Button
                   children="Regresar a este paso"
                   iconBefore={<MdOutlineArrowBack />}

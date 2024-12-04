@@ -43,7 +43,7 @@ export const contractOptions = [
   {
     id: "1",
     label: "Contrato por obra o labor",
-    value: "contrato por-obra o labor",
+    value: "contrato por obra o labor",
   },
   {
     id: "2",

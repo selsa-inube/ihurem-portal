@@ -29,7 +29,7 @@ function NewCertification() {
       navigatePage={certificationsNavConfig[1].url}
       steps={newCCertificationApplication}
       currentStep={currentStep}
-      setCurrentStep={setCurrentStep} // Asegúrate de pasar setCurrentStep aquí
+      setCurrentStep={setCurrentStep}
       handleNextStep={handleNextStep}
       handlePreviousStep={handlePreviousStep}
       handleFinishAssisted={handleFinishAssisted}

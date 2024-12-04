@@ -23,13 +23,20 @@ const StyledCertificationsContainer = styled.div<StyledCertificationsContainerPr
 
 const StyledValueText = styled.div`
   background-color: #fafbfc;
+  justify-content: center;
+  align-items: center;
   border-radius: 8px;
   display: flex;
   padding: ${spacing.s075} ${spacing.s200};
-  width: fit-content;
   width: 100%;
   max-width: 502px;
   height: 32px;
+  box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+    width: 100%;
+  }
 `;
 
 export { StyledCertificationsContainer, StyledValueText };
