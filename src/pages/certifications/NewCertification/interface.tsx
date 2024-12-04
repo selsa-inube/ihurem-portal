@@ -4,7 +4,10 @@ import { Stack } from "@inubekit/stack";
 import { Button } from "@inubekit/button";
 import { Select } from "@inubekit/select";
 import { Input } from "@inubekit/input";
+import { Icon } from "@inubekit/icon";
+import { Divider } from "@inubekit/divider";
 import { Assisted, IAssistedStep } from "@inubekit/assisted";
+import { MdKeyboardArrowUp, MdOutlineArrowBack } from "react-icons/md";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
@@ -16,7 +19,7 @@ import {
   contractOptions,
 } from "./config/assisted.config";
 
-import { StyledCertificationsContainer } from "../styles";
+import { StyledCertificationsContainer, StyledValueText } from "../styles";
 
 interface NewCertificationUIProps {
   appName: string;
@@ -24,6 +27,7 @@ interface NewCertificationUIProps {
   navigatePage: string;
   steps: IAssistedStep[];
   currentStep: number;
+  setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
   handleNextStep: () => void;
   handlePreviousStep: () => void;
   handleFinishAssisted: () => void;
@@ -37,6 +41,7 @@ function NewCertificationUI(props: NewCertificationUIProps) {
     navigatePage,
     steps,
     currentStep,
+    setCurrentStep,
     handleNextStep,
     handlePreviousStep,
     handleFinishAssisted,
@@ -162,13 +167,98 @@ function NewCertificationUI(props: NewCertificationUIProps) {
         {currentStep === 3 && (
           <StyledCertificationsContainer $isMobile={isMobile}>
             <form onSubmit={formik.handleSubmit}>
-              <Stack direction="column" gap={spacing.s300}>
+              <Stack direction="column" gap={spacing.s200}>
+                <Stack
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Text type="label" appearance="dark" weight="bold">
+                    Información general
+                  </Text>
+                  <Icon
+                    appearance="dark"
+                    icon={<MdKeyboardArrowUp />}
+                    cursorHover={true}
+                    parentHover={false}
+                    variant="empty"
+                    spacing="narrow"
+                    shape="rectangle"
+                    size="20px"
+                    onClick={() => {
+                      console.log("Sección contraída o expandida");
+                    }}
+                  />
+                </Stack>
+                <Divider dashed />
+
                 <Stack
                   direction={isMobile ? "column" : "row"}
-                  gap={spacing.s300}
+                  justifyContent="space-between"
+                  gap={spacing.s250}
                 >
-                  <Text></Text>
+                  <StyledValueText>
+                    <Stack
+                      justifyContent="space-between"
+                      width="100%"
+                      height="32px"
+                      alignItems="center"
+                    >
+                      <Text type="label" weight="bold" appearance="dark">
+                        Tipo de certificación:
+                      </Text>
+                      <Text type="body" appearance="dark">
+                        {formik.values.certification || "Sin especificar"}
+                      </Text>
+                    </Stack>
+                  </StyledValueText>
+                  <StyledValueText>
+                    <Stack
+                      justifyContent="space-between"
+                      width="100%"
+                      height="32px"
+                      alignItems="center"
+                    >
+                      <Text type="label" weight="bold" appearance="dark">
+                        Destinatario:
+                      </Text>
+                      <Text type="body" appearance="dark">
+                        {formik.values.addressee || "Sin especificar"}
+                      </Text>
+                    </Stack>
+                  </StyledValueText>
                 </Stack>
+                <StyledValueText>
+                  <Stack
+                    justifyContent="space-between"
+                    width="100%"
+                    height="32px"
+                    alignItems="center"
+                  >
+                    <Text type="label" weight="bold" appearance="dark">
+                      Contrato:
+                    </Text>
+                    <Text type="body" appearance="dark">
+                      {formik.values.contract || "Sin especificar"}
+                    </Text>
+                  </Stack>
+                </StyledValueText>
+              </Stack>
+              <Stack justifyContent="end">
+                <Button
+                  children="Regresar a este paso"
+                  iconBefore={<MdOutlineArrowBack />}
+                  appearance="dark"
+                  path="/privilege"
+                  type="button"
+                  spacing="wide"
+                  variant="none"
+                  fullwidth={false}
+                  onClick={() => {
+                    handlePreviousStep();
+                    setCurrentStep(1);
+                  }}
+                />
               </Stack>
             </form>
           </StyledCertificationsContainer>

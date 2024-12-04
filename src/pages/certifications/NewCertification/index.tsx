@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import { newCCertificationApplication } from "./config/assisted.config";
 import { certificationsNavConfig } from "../config/nav.config";
 import { NewCertificationUI } from "./interface";
@@ -30,6 +29,7 @@ function NewCertification() {
       navigatePage={certificationsNavConfig[1].url}
       steps={newCCertificationApplication}
       currentStep={currentStep}
+      setCurrentStep={setCurrentStep} // Asegúrate de pasar setCurrentStep aquí
       handleNextStep={handleNextStep}
       handlePreviousStep={handlePreviousStep}
       handleFinishAssisted={handleFinishAssisted}

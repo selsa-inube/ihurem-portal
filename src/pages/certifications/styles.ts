@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { inube } from "@inubekit/foundations";
-
 import { spacing } from "@design/tokens/spacing/spacing";
 
 interface StyledCertificationsContainerProps {
@@ -22,4 +21,15 @@ const StyledCertificationsContainer = styled.div<StyledCertificationsContainerPr
     $isMobile ? `${spacing.s300} ${spacing.s150}` : spacing.s300};
 `;
 
-export { StyledCertificationsContainer };
+const StyledValueText = styled.div`
+  background-color: #fafbfc;
+  border-radius: 8px;
+  display: flex;
+  padding: ${spacing.s075} ${spacing.s200};
+  width: fit-content;
+  width: 100%;
+  max-width: 502px;
+  height: 32px;
+`;
+
+export { StyledCertificationsContainer, StyledValueText };
