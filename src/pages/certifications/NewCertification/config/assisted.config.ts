@@ -20,3 +20,41 @@ export const newCCertificationApplication: IAssistedStep[] = [
     description: "Verifica la información proporcionada.",
   },
 ];
+
+// src/config/certificationConfig.ts
+
+export const certificationOptions = [
+  {
+    id: "1",
+    label: "Certificado de servidor",
+    value: "certificado-de-servidor",
+  },
+  {
+    id: "2",
+    label: "Certificado de pertenencia a empresa",
+    value: "certificado-de-pertenencia-a-empresa",
+  },
+  {
+    id: "3",
+    label: "Certificado de representante",
+    value: "certificado-de-representante",
+  },
+];
+
+export const contractOptions = [
+  {
+    id: "1",
+    label: "Contrato por obra o labor",
+    value: "contrato-por-obra-o-labor.",
+  },
+  {
+    id: "2",
+    label: "Contrato de trabajo a término fijo",
+    value: "contrato-de-trabajo-a-término-fijo.",
+  },
+  {
+    id: "3",
+    label: "Contrato de trabajo a término indefinido",
+    value: "contrato-de-trabajo-a-término-indefinido.",
+  },
+];

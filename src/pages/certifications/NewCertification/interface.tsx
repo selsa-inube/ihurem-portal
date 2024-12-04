@@ -10,6 +10,10 @@ import * as Yup from "yup";
 import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
 import { spacing } from "@design/tokens/spacing/spacing";
+import {
+  certificationOptions,
+  contractOptions,
+} from "./config/assisted.config";
 
 import { StyledCertificationsContainer } from "../styles";
 
@@ -40,42 +44,6 @@ function NewCertificationUI(props: NewCertificationUIProps) {
 
   const isTablet = useMediaQuery("(max-width: 1100px)");
   const isMobile = useMediaQuery("(max-width: 768px)");
-
-  const certificationOptions = [
-    {
-      id: "1",
-      label: "Certificado de servidor",
-      value: "certificado-de-servidor",
-    },
-    {
-      id: "2",
-      label: "Certificado de pertenencia a empresa",
-      value: "certificado-de-pertenencia-a-empresa",
-    },
-    {
-      id: "3",
-      label: "Certificado de representante",
-      value: "certificado-de-representante",
-    },
-  ];
-
-  const contractOptions = [
-    {
-      id: "1",
-      label: "Contrato por obra o labor",
-      value: "contrato-por-obra-o-labor.",
-    },
-    {
-      id: "2",
-      label: "Contrato de trabajo a término fijo",
-      value: "contrato-de-trabajo-a-término-fijo.",
-    },
-    {
-      id: "3",
-      label: "Contrato de trabajo a término indefinido",
-      value: "contrato-de-trabajo-a-término-indefinido.",
-    },
-  ];
 
   const validationSchema = Yup.object({
     certification: Yup.string().required("Este campo es obligatorio"),
