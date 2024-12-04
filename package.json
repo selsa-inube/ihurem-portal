@@ -24,14 +24,17 @@
     "@inubekit/hooks": "^1.2.0",
     "@inubekit/input": "^1.6.3",
     "@inubekit/nav": "^5.3.1",
+    "@inubekit/select": "^6.35.0",
     "@inubekit/skeleton": "^2.11.1",
     "@inubekit/table": "^5.38.0",
     "crypto-js": "^4.2.0",
+    "formik": "^2.4.6",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.28.0",
     "styled-components": "^6.1.13",
-    "vite-tsconfig-paths": "^5.0.1"
+    "vite-tsconfig-paths": "^5.0.1",
+    "yup": "^1.5.0"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^1.9.0",

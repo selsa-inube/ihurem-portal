@@ -1,10 +1,17 @@
-import { Stack } from "@inubekit/stack";
 import { useMediaQuery } from "@inubekit/hooks";
+import { Stack } from "@inubekit/stack";
+import { Button } from "@inubekit/button";
+import { Select } from "@inubekit/select";
+import { Input } from "@inubekit/input";
 import { Assisted, IAssistedStep } from "@inubekit/assisted";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
 import { spacing } from "@design/tokens/spacing/spacing";
+
+import { StyledCertificationsContainer } from "../styles";
 
 interface NewCertificationUIProps {
   appName: string;
@@ -32,6 +39,63 @@ function NewCertificationUI(props: NewCertificationUIProps) {
   } = props;
 
   const isTablet = useMediaQuery("(max-width: 1100px)");
+  const isMobile = useMediaQuery("(max-width: 768px)");
+
+  const certificationOptions = [
+    {
+      id: "1",
+      label: "Certificado de servidor",
+      value: "certificado-de-servidor",
+    },
+    {
+      id: "2",
+      label: "Certificado de pertenencia a empresa",
+      value: "certificado-de-pertenencia-a-empresa",
+    },
+    {
+      id: "3",
+      label: "Certificado de representante",
+      value: "certificado-de-representante",
+    },
+  ];
+
+  const contractOptions = [
+    {
+      id: "1",
+      label: "Contrato por obra o labor",
+      value: "contrato-por-obra-o-labor.",
+    },
+    {
+      id: "2",
+      label: "Contrato de trabajo a término fijo",
+      value: "contrato-de-trabajo-a-término-fijo.",
+    },
+    {
+      id: "3",
+      label: "Contrato de trabajo a término indefinido",
+      value: "contrato-de-trabajo-a-término-indefinido.",
+    },
+  ];
+
+  const validationSchema = Yup.object({
+    certification: Yup.string().required("Este campo es obligatorio"),
+    addressee: Yup.string()
+      .min(3, "Debe tener al menos 3 caracteres")
+      .required("Este campo es obligatorio"),
+    contract: Yup.string().required("Este campo es obligatorio"),
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      certification: "",
+      addressee: "",
+      contract: "",
+    },
+    validationSchema,
+    onSubmit: (values) => {
+      console.log("Formulario enviado:", values);
+    },
+  });
 
   return (
     <AppMenu
@@ -56,9 +120,69 @@ function NewCertificationUI(props: NewCertificationUIProps) {
           }}
         />
         <Stack direction="column" gap={spacing.s500}>
-          {currentStep === 1 && <></>}
-          {currentStep === 2 && <></>}
-          {currentStep === 3 && <></>}
+          {currentStep === 1 && (
+            <StyledCertificationsContainer $isMobile={isMobile}>
+              <form onSubmit={formik.handleSubmit}>
+                <Stack direction="column" gap={spacing.s300}>
+                  <Stack
+                    direction={isMobile ? "column" : "row"}
+                    gap={spacing.s300}
+                  >
+                    <Select
+                      name="certification"
+                      size="compact"
+                      label="Tipo de certificación"
+                      fullwidth={true}
+                      options={certificationOptions}
+                      placeholder="Selecciona una opción"
+                      value={formik.values.certification}
+                      onChange={(name, value) => {
+                        formik.setFieldValue(name, value);
+                      }}
+                    />
+                    <Input
+                      size="compact"
+                      fullwidth={true}
+                      id="addressee"
+                      label="Destinatario"
+                      name="addressee"
+                      placeholder="Ej: A quien interese"
+                      value={formik.values.addressee}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                    />
+                  </Stack>
+                  <Stack width="49%">
+                    <Select
+                      size="compact"
+                      fullwidth={true}
+                      name="contract"
+                      label="Contrato"
+                      options={contractOptions}
+                      value={formik.values.contract}
+                      placeholder="Selecciona una opción"
+                      onChange={(name, value) => {
+                        formik.setFieldValue(name, value);
+                      }}
+                    />
+                  </Stack>
+                </Stack>
+              </form>
+            </StyledCertificationsContainer>
+          )}
+          <Stack justifyContent="end">
+            <Button
+              children="Siguiente"
+              appearance={formik.isValid && formik.dirty ? "primary" : "gray"}
+              path="/privilege"
+              type="button"
+              spacing="wide"
+              fullwidth={false}
+              onClick={handleNextStep}
+              cursorHover={formik.isValid && formik.dirty}
+              disabled={!formik.isValid || !formik.dirty}
+            />
+          </Stack>
         </Stack>
       </Stack>
     </AppMenu>
