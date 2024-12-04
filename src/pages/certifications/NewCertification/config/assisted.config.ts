@@ -21,8 +21,6 @@ export const newCCertificationApplication: IAssistedStep[] = [
   },
 ];
 
-// src/config/certificationConfig.ts
-
 export const certificationOptions = [
   {
     id: "1",
