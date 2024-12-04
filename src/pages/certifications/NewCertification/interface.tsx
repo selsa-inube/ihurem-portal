@@ -1,3 +1,5 @@
+import { MdKeyboardArrowUp, MdOutlineArrowBack } from "react-icons/md";
+import { Assisted, IAssistedStep } from "@inubekit/assisted";
 import { useMediaQuery } from "@inubekit/hooks";
 import { Text } from "@inubekit/text";
 import { Stack } from "@inubekit/stack";
@@ -6,14 +8,13 @@ import { Select } from "@inubekit/select";
 import { Input } from "@inubekit/input";
 import { Icon } from "@inubekit/icon";
 import { Divider } from "@inubekit/divider";
-import { Assisted, IAssistedStep } from "@inubekit/assisted";
-import { MdKeyboardArrowUp, MdOutlineArrowBack } from "react-icons/md";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
 import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
 import { spacing } from "@design/tokens/spacing/spacing";
+
 import {
   certificationOptions,
   contractOptions,
