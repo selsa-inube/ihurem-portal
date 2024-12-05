@@ -108,7 +108,7 @@ function NewCertificationUI(props: NewCertificationUIProps) {
                       name="certification"
                       size="compact"
                       label="Tipo de certificación"
-                      fullwidth={true}
+                      fullwidth
                       options={certificationOptions}
                       placeholder="Selecciona una opción"
                       value={formik.values.certification}
@@ -118,7 +118,7 @@ function NewCertificationUI(props: NewCertificationUIProps) {
                     />
                     <Input
                       size="compact"
-                      fullwidth={true}
+                      fullwidth
                       id="addressee"
                       label="Destinatario"
                       name="addressee"
@@ -128,10 +128,10 @@ function NewCertificationUI(props: NewCertificationUIProps) {
                       onBlur={formik.handleBlur}
                     />
                   </Stack>
-                  <Stack width={isMobile ? "100%" : "49%"}>
+                  <Stack width={isMobile ? "100%" : "49%"} gap={spacing.s300}>
                     <Select
                       size="compact"
-                      fullwidth={true}
+                      fullwidth
                       name="contract"
                       label="Contrato"
                       options={contractOptions}
@@ -148,11 +148,10 @@ function NewCertificationUI(props: NewCertificationUIProps) {
           )}
 
           {currentStep === 1 && (
-            <Stack justifyContent="end">
+            <Stack justifyContent="end" gap={spacing.s300}>
               <Button
                 children="Siguiente"
                 appearance={formik.isValid && formik.dirty ? "primary" : "gray"}
-                path="/privilege"
                 type="button"
                 spacing="wide"
                 fullwidth={false}
@@ -173,6 +172,7 @@ function NewCertificationUI(props: NewCertificationUIProps) {
                   direction="row"
                   justifyContent="space-between"
                   alignItems="center"
+                  gap={spacing.s300}
                 >
                   <Text type="label" appearance="dark" weight="bold">
                     Información general
@@ -180,7 +180,7 @@ function NewCertificationUI(props: NewCertificationUIProps) {
                   <Icon
                     appearance="dark"
                     icon={<MdKeyboardArrowUp />}
-                    cursorHover={true}
+                    cursorHover
                     parentHover={false}
                     variant="empty"
                     spacing="narrow"
@@ -204,6 +204,7 @@ function NewCertificationUI(props: NewCertificationUIProps) {
                       width="100%"
                       height="32px"
                       alignItems="center"
+                      gap={spacing.s200}
                     >
                       <Text type="label" weight="bold" appearance="dark">
                         Tipo de solicitud:
@@ -219,6 +220,7 @@ function NewCertificationUI(props: NewCertificationUIProps) {
                       width="100%"
                       height="32px"
                       alignItems="center"
+                      gap={spacing.s200}
                     >
                       <Text type="label" weight="bold" appearance="dark">
                         Destinatario:
@@ -235,6 +237,7 @@ function NewCertificationUI(props: NewCertificationUIProps) {
                     width="100%"
                     height="32px"
                     alignItems="center"
+                    gap={spacing.s200}
                   >
                     <Text type="label" weight="bold" appearance="dark">
                       Contrato:
@@ -245,12 +248,11 @@ function NewCertificationUI(props: NewCertificationUIProps) {
                   </Stack>
                 </StyledValueText>
               </Stack>
-              <Stack justifyContent="end" padding="10px 0px">
+              <Stack justifyContent="end" padding={`10px 0`} gap={spacing.s300}>
                 <Button
                   children="Regresar a este paso"
                   iconBefore={<MdOutlineArrowBack />}
                   appearance="dark"
-                  path="/privilege"
                   type="button"
                   spacing="wide"
                   variant="none"

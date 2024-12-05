@@ -25,12 +25,12 @@ const StyledValueText = styled.div`
   background-color: #fafbfc;
   justify-content: center;
   align-items: center;
-  border-radius: 8px;
+  border-radius: ${spacing.s100};
   display: flex;
   padding: ${spacing.s075} ${spacing.s200};
   width: 100%;
   max-width: 502px;
-  height: 32px;
+  height: ${spacing.s400};
   box-sizing: border-box;
 
   @media (max-width: 768px) {
