@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
 import {
   Route,
   RouterProvider,
   createBrowserRouter,
   createRoutesFromElements,
 } from "react-router-dom";
+import { useEffect, useState } from "react";
+
 import { AppPage } from "@components/layout/AppPage";
 import { Home } from "@src/pages/home";
 import { AppProvider, useAppContext } from "@context/AppContext";
@@ -33,6 +34,7 @@ function LogOut() {
 
 function FirstPage() {
   const { user, provisionedPortal, setEmployees } = useAppContext();
+  const [showIncidence, setShowIncidence] = useState(false);
 
   const {
     employee,
@@ -40,9 +42,11 @@ function FirstPage() {
     error: employeeError,
   } = useEmployeeByNickname(user?.nickname ?? "");
 
-  const { loading: optionsLoading, error: optionsError } = useEmployeeOptions(
-    user?.nickname ?? "",
-  );
+  const {
+    data: employeeOptions,
+    loading: optionsLoading,
+    error: optionsError,
+  } = useEmployeeOptions(user?.nickname ?? "");
 
   useEffect(() => {
     if (employee && !employeeLoading && !employeeError) {
@@ -50,12 +54,26 @@ function FirstPage() {
     }
   }, [employee, employeeLoading, employeeError, setEmployees]);
 
+  useEffect(() => {
+    if (employeeOptions && !optionsLoading && !optionsError) {
+      if (!employeeOptions || employeeOptions.length === 0) {
+        setShowIncidence(true);
+      } else {
+        setShowIncidence(false);
+      }
+    }
+  }, [employeeOptions, optionsLoading, optionsError]);
+
   if (employeeLoading || optionsLoading) {
     return null;
   }
 
   if (employeeError || optionsError) {
     return <LogOut />;
+  }
+
+  if (showIncidence) {
+    return <div>Incidencia: No hay opciones disponibles para el empleado.</div>;
   }
 
   return (provisionedPortal?.portalCode &&

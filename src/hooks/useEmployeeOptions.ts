@@ -13,15 +13,17 @@ export const useEmployeeOptions = (employeeId: string) => {
       setError(null);
 
       try {
-        const options = await getEmployeeOptions(employeeId);
+        const options = await getEmployeeOptions();
         if (options.length === 0) {
           setError("No existen opciones para el empleado");
         }
         setData(options);
       } catch (err) {
-        setError("Error al obtener las opciones del empleado");
-      } finally {
-        setLoading(false);
+        const errorMessage =
+          err instanceof Error
+            ? err.message
+            : "Error al obtener las opciones del empleado";
+        setError(errorMessage);
       }
     };
 
