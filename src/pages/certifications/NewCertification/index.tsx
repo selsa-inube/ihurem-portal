@@ -1,14 +1,32 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { FormikProps } from "formik";
 
 import { newCCertificationApplication } from "./config/assisted.config";
 import { certificationsNavConfig } from "../config/nav.config";
 import { NewCertificationUI } from "./interface";
+import { IGeneralInformationEntry } from "./forms/GeneralInformationForm/types";
 
 function NewCertification() {
   const [currentStep, setCurrentStep] = useState(1);
 
+  const [formValues, setFormValues] = useState<IGeneralInformationEntry>({
+    id: "",
+    certification: "",
+    addressee: "",
+    contract: "",
+  });
+
+  const generalInformationRef =
+    useRef<FormikProps<IGeneralInformationEntry>>(null);
+
+  const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
+
   const handleNextStep = () => {
     if (currentStep < newCCertificationApplication.length) {
+      if (generalInformationRef.current) {
+        setFormValues(generalInformationRef.current.values);
+        setIsCurrentFormValid(generalInformationRef.current.isValid);
+      }
       setCurrentStep(currentStep + 1);
     }
   };
@@ -33,6 +51,10 @@ function NewCertification() {
       handleNextStep={handleNextStep}
       handlePreviousStep={handlePreviousStep}
       handleFinishAssisted={handleFinishAssisted}
+      setIsCurrentFormValid={setIsCurrentFormValid}
+      isCurrentFormValid={isCurrentFormValid}
+      generalInformationRef={generalInformationRef}
+      initialGeneralInformationValues={formValues}
     />
   );
 }
