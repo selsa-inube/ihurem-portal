@@ -9,6 +9,7 @@ import { spacing } from "@design/tokens/spacing/spacing";
 
 import { GeneralInformationForm } from "./forms/GeneralInformationForm";
 import { IGeneralInformationEntry } from "./forms/GeneralInformationForm/types";
+import { VerificationForm } from "./forms/VerificationForm";
 
 interface RequestEnjoymentUIProps {
   appName: string;
@@ -18,32 +19,30 @@ interface RequestEnjoymentUIProps {
   currentStep: number;
   generalInformationRef: React.RefObject<FormikProps<IGeneralInformationEntry>>;
   isCurrentFormValid: boolean;
+  setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
   setIsCurrentFormValid: React.Dispatch<React.SetStateAction<boolean>>;
   handleNextStep: () => void;
   handlePreviousStep: () => void;
   handleFinishAssisted: () => void;
 }
 
-function RequestEnjoymentUI(
-  props: RequestEnjoymentUIProps & {
-    initialGeneralInformationValues: IGeneralInformationEntry;
-  },
-) {
-  const {
-    appName,
-    appRoute,
-    navigatePage,
-    steps,
-    currentStep,
-    generalInformationRef,
-    initialGeneralInformationValues,
-    isCurrentFormValid,
-    setIsCurrentFormValid,
-    handleNextStep,
-    handlePreviousStep,
-    handleFinishAssisted,
-  } = props;
-
+function RequestEnjoymentUI({
+  appName,
+  appRoute,
+  navigatePage,
+  steps,
+  currentStep,
+  generalInformationRef,
+  initialGeneralInformationValues,
+  isCurrentFormValid,
+  setCurrentStep,
+  setIsCurrentFormValid,
+  handleNextStep,
+  handlePreviousStep,
+  handleFinishAssisted,
+}: RequestEnjoymentUIProps & {
+  initialGeneralInformationValues: IGeneralInformationEntry;
+}) {
   const isTablet = useMediaQuery("(max-width: 1100px)");
 
   return (
@@ -73,8 +72,17 @@ function RequestEnjoymentUI(
               handleNextStep={handleNextStep}
             />
           )}
-          {currentStep === 2 && <></>}
-          {currentStep === 3 && <></>}
+          {currentStep === 3 && (
+            <VerificationForm
+              updatedData={{
+                personalInformation: {
+                  isValid: isCurrentFormValid,
+                  values: initialGeneralInformationValues,
+                },
+              }}
+              handleStepChange={(stepId) => setCurrentStep(stepId)}
+            />
+          )}
         </Stack>
       </Stack>
     </AppMenu>

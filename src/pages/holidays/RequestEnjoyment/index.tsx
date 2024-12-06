@@ -50,6 +50,7 @@ function RequestEnjoyment() {
       handlePreviousStep={handlePreviousStep}
       handleFinishAssisted={handleFinishAssisted}
       setIsCurrentFormValid={setIsCurrentFormValid}
+      setCurrentStep={setCurrentStep}
       isCurrentFormValid={isCurrentFormValid}
       generalInformationRef={generalInformationRef}
       initialGeneralInformationValues={formValues}
