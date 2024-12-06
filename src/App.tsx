@@ -1,10 +1,10 @@
+import { useEffect, useState } from "react";
 import {
   Route,
   RouterProvider,
   createBrowserRouter,
   createRoutesFromElements,
 } from "react-router-dom";
-import { useEffect, useState } from "react";
 import { AppPage } from "@components/layout/AppPage";
 import { Home } from "@src/pages/home";
 import { AppProvider, useAppContext } from "@context/AppContext";
@@ -22,6 +22,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useBusinessManagers } from "@hooks/useBusinessManagers";
 import { useBusinessUnit } from "@hooks/useBusinessUnit";
 import { usePortalData } from "@hooks/usePortalData";
+import { useEmployeeOptions } from "@hooks/useEmployeeOptions";
 
 function LogOut() {
   localStorage.clear();
@@ -39,17 +40,21 @@ function FirstPage() {
     error: employeeError,
   } = useEmployeeByNickname(user?.nickname ?? "");
 
+  const { loading: optionsLoading, error: optionsError } = useEmployeeOptions(
+    user?.nickname ?? "",
+  );
+
   useEffect(() => {
     if (employee && !employeeLoading && !employeeError) {
       setEmployees(employee);
     }
   }, [employee, employeeLoading, employeeError, setEmployees]);
 
-  if (employeeLoading) {
+  if (employeeLoading || optionsLoading) {
     return null;
   }
 
-  if (employeeError) {
+  if (employeeError || optionsError) {
     return <LogOut />;
   }
 
