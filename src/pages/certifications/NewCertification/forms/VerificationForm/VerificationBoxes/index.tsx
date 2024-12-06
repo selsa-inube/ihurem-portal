@@ -1,5 +1,4 @@
 import { Grid } from "@inubekit/grid";
-import { Stack } from "@inubekit/stack";
 
 import { BoxAttribute } from "@components/cards/BoxAttribute";
 import { spacing } from "@design/tokens/spacing/spacing";
@@ -19,15 +18,9 @@ const renderPersonalInfoVerification = (
       width="100%"
     >
       <BoxAttribute label="Días de disfrute:" value={values.certification} />
-      <BoxAttribute label="Fecha de inicio:" value={values.addressee} />
+      <BoxAttribute label="Destinatario:" value={values.addressee} />
+      <BoxAttribute label="Contrato:" value={values.contract} />
     </Grid>
-    <Stack width="100%">
-      <BoxAttribute
-        label="Observaciones:"
-        value={values.contract}
-        direction="column"
-      />
-    </Stack>
   </>
 );
 

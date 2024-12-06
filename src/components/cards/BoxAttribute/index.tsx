@@ -49,12 +49,7 @@ function BoxAttribute(props: BoxAttributeProps) {
         autoRows="auto"
       >
         {label && (
-          <Text
-            type="label"
-            size={isMobile || downloadable ? "small" : "medium"}
-            appearance="dark"
-            weight="bold"
-          >
+          <Text type="label" size="medium" appearance="dark" weight="bold">
             {label}
           </Text>
         )}
