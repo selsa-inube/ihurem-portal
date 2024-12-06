@@ -1,14 +1,30 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { FormikProps } from "formik";
 
+import { IGeneralInformationEntry } from "./forms/GeneralInformationForm/types";
+import { RequestEnjoymentUI } from "./interface";
 import { requestEnjoymentSteps } from "./config/assisted.config";
 import { holidaysNavConfig } from "../config/nav.config";
-import { RequestEnjoymentUI } from "./interface";
 
 function RequestEnjoyment() {
   const [currentStep, setCurrentStep] = useState(1);
+  const [formValues, setFormValues] = useState<IGeneralInformationEntry>({
+    id: "",
+    daysOff: "",
+    startDate: "",
+    observations: "",
+  });
+  const generalInformationRef =
+    useRef<FormikProps<IGeneralInformationEntry>>(null);
+
+  const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
 
   const handleNextStep = () => {
     if (currentStep < requestEnjoymentSteps.length) {
+      if (generalInformationRef.current) {
+        setFormValues(generalInformationRef.current.values);
+        setIsCurrentFormValid(generalInformationRef.current.isValid);
+      }
       setCurrentStep(currentStep + 1);
     }
   };
@@ -33,6 +49,11 @@ function RequestEnjoyment() {
       handleNextStep={handleNextStep}
       handlePreviousStep={handlePreviousStep}
       handleFinishAssisted={handleFinishAssisted}
+      setIsCurrentFormValid={setIsCurrentFormValid}
+      setCurrentStep={setCurrentStep}
+      isCurrentFormValid={isCurrentFormValid}
+      generalInformationRef={generalInformationRef}
+      initialGeneralInformationValues={formValues}
     />
   );
 }
