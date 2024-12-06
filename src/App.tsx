@@ -40,23 +40,15 @@ function FirstPage() {
     error: employeeError,
   } = useEmployeeByNickname(user?.nickname ?? "");
 
-  const {
-    data: employeeOptions,
-    loading: optionsLoading,
-    error: optionsError,
-  } = useEmployeeOptions(user?.nickname ?? "");
+  const { loading: optionsLoading, error: optionsError } = useEmployeeOptions(
+    user?.nickname ?? "",
+  );
 
   useEffect(() => {
     if (employee && !employeeLoading && !employeeError) {
       setEmployees(employee);
     }
   }, [employee, employeeLoading, employeeError, setEmployees]);
-
-  useEffect(() => {
-    if (employeeOptions) {
-      console.log("Opciones del empleado:", employeeOptions);
-    }
-  }, [employeeOptions]);
 
   if (employeeLoading || optionsLoading) {
     return null;

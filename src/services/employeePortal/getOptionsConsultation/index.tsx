@@ -6,9 +6,7 @@ import {
 } from "@config/environment";
 import { mapEmployeeOptionsApiToEntity } from "./mappers";
 
-const getEmployeeOptions = async (
-  employeeId: string,
-): Promise<IEmployeeOptions[]> => {
+const getEmployeeOptions = async (): Promise<IEmployeeOptions[]> => {
   const maxRetries = maxRetriesServices;
   const fetchTimeout = fetchTimeoutServices;
 
@@ -26,7 +24,7 @@ const getEmployeeOptions = async (
         signal: controller.signal,
       };
 
-      const url = `${environment.IVITE_ISAAS_QUERY_PROCESS_SERVICE}/catalog-of-options-for-employee-portals?employeeId=${employeeId}`;
+      const url = `${environment.IVITE_ISAAS_QUERY_PROCESS_SERVICE}/catalog-of-options-for-employee-portals/`;
 
       const res = await fetch(url, options);
 
