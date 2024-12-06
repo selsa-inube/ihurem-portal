@@ -36,6 +36,7 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
               size="compact"
               label="Tipo de certificación"
               fullwidth={true}
+              required
               options={certificationOptions}
               placeholder="Selecciona una opción"
               value={formik.values.certification}
@@ -47,6 +48,7 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
               size="compact"
               fullwidth={true}
               id="addressee"
+              required
               label="Destinatario"
               name="addressee"
               placeholder="Ej: A quien interese"
@@ -60,6 +62,7 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
               size="compact"
               fullwidth={true}
               name="contract"
+              required
               label="Contrato"
               options={contractOptions}
               value={formik.values.contract}
