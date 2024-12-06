@@ -1,19 +1,10 @@
 import styled from "styled-components";
 import { inube } from "@inubekit/foundations";
-
 import { spacing } from "@design/tokens/spacing/spacing";
-
-interface Theme {
-  palette: {
-    neutral: {
-      N30: string;
-    };
-  };
-}
 
 interface StyledCertificationsContainerProps {
   $isMobile: boolean;
-  theme?: Theme;
+  theme?: typeof inube;
 }
 
 const StyledCertificationsContainer = styled.div<StyledCertificationsContainerProps>`
@@ -30,4 +21,22 @@ const StyledCertificationsContainer = styled.div<StyledCertificationsContainerPr
     $isMobile ? `${spacing.s300} ${spacing.s150}` : spacing.s300};
 `;
 
-export { StyledCertificationsContainer };
+const StyledValueText = styled.div`
+  background-color: #fafbfc;
+  justify-content: center;
+  align-items: center;
+  border-radius: ${spacing.s100};
+  display: flex;
+  padding: ${spacing.s075} ${spacing.s200};
+  width: 100%;
+  max-width: 502px;
+  height: ${spacing.s400};
+  box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+    width: 100%;
+  }
+`;
+
+export { StyledCertificationsContainer, StyledValueText };

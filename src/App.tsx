@@ -48,7 +48,6 @@ function FirstPage() {
   if (employeeLoading) {
     return null;
   }
-
   if (employeeError) {
     return <LogOut />;
   }
