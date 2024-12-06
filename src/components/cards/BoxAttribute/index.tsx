@@ -52,6 +52,7 @@ function BoxAttribute(props: BoxAttributeProps) {
           <Text
             type="label"
             size={isMobile || downloadable ? "small" : "medium"}
+            weight="bold"
             appearance="dark"
           >
             {label}
