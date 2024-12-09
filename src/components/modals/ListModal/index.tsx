@@ -27,7 +27,7 @@ export interface IListModalProps {
 }
 
 export const ListModal = (props: IListModalProps) => {
-  const { title, portalId, handleClose, onSubmit, buttonLabel } = props;
+  const { title, portalId, handleClose, buttonLabel } = props;
 
   const node = document.getElementById(portalId ?? "portal");
   if (!node) {
