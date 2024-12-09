@@ -1,19 +1,19 @@
 import { useState } from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { Button } from "@inubekit/button";
-import { ListModal, IListModalProps } from "../index";
+import { RequestComponentDetail, IRequestComponentDetailProps } from "../index";
 import { parameters, props } from "./props";
 
-const meta: Meta<typeof ListModal> = {
-  title: "components/modals/ListModal",
-  component: ListModal,
+const meta: Meta<typeof RequestComponentDetail> = {
+  title: "components/modals/RequestComponentDetail",
+  component: RequestComponentDetail,
   parameters,
   argTypes: props,
 };
 
-type Story = StoryObj<typeof ListModal>;
+type Story = StoryObj<typeof RequestComponentDetail>;
 
-export const Default: Story = (args: IListModalProps) => {
+export const Default: Story = (args: IRequestComponentDetailProps) => {
   const [showModal, setShowModal] = useState(false);
 
   return (
@@ -21,7 +21,10 @@ export const Default: Story = (args: IListModalProps) => {
       <Button onClick={() => setShowModal(true)}>Abrir Modal</Button>
 
       {showModal && (
-        <ListModal {...args} handleClose={() => setShowModal(false)} />
+        <RequestComponentDetail
+          {...args}
+          handleClose={() => setShowModal(false)}
+        />
       )}
     </>
   );

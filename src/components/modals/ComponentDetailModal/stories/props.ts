@@ -2,7 +2,7 @@ import { ArgTypes } from "@storybook/react";
 export const parameters = {
   docs: {
     description: {
-      component: "Modal to display an unordered list of information.",
+      component: "Modal to show some details",
     },
   },
 };
