@@ -17,34 +17,17 @@ import {
   StyledContainerTitle,
 } from "./styles";
 
-export interface IOptionButtons {
-  label: string;
-  variant: "filled" | "outlined" | "none";
-  icon?: React.ReactNode;
-  fullwidth?: boolean;
-  onClick?: () => void;
-}
-
 export interface IListModalProps {
   title: string;
   handleClose: () => void;
   onSubmit?: () => void;
   buttonLabel: string;
   portalId?: string;
-  content?: JSX.Element | JSX.Element[] | string;
-  optionButtons?: IOptionButtons;
+  modalContent: { label: string; value: string }[];
 }
 
 export const ListModal = (props: IListModalProps) => {
-  const {
-    title,
-    portalId,
-    content,
-    optionButtons,
-    handleClose,
-    onSubmit,
-    buttonLabel,
-  } = props;
+  const { title, portalId, handleClose, onSubmit, buttonLabel } = props;
 
   const node = document.getElementById(portalId ?? "portal");
   if (!node) {
@@ -74,33 +57,73 @@ export const ListModal = (props: IListModalProps) => {
             </Stack>
           </StyledContainerClose>
         </StyledContainerTitle>
+
         <Divider />
         <StyledContainerContent $smallScreen={isMobile}>
-          {typeof content === "string" ? (
-            <Stack>
-              <Text>{content}</Text>
-              <Text>{content}</Text>
+          <Stack gap={spacing.s250} direction="column">
+            <Stack direction="row" justifyContent="space-between">
+              <Text type="label" size="medium" weight="bold">
+                Número:
+              </Text>
+              <Text type="body" size="medium" appearance="gray">
+                1234
+              </Text>
             </Stack>
-          ) : (
-            <StyledContainerContent $smallScreen={isMobile}>
-              {content}
-            </StyledContainerContent>
-          )}
+            <Stack direction="row" justifyContent="space-between">
+              <Text type="label" size="medium" weight="bold">
+                Tipo:
+              </Text>
+              <Text type="body" size="medium" appearance="gray">
+                Disfrute de vacaciones
+              </Text>
+            </Stack>
+            <Stack direction="row" justifyContent="space-between">
+              <Text type="label" size="medium" weight="bold">
+                Fecha:
+              </Text>
+              <Text type="body" size="medium" appearance="gray">
+                22/Oct/2024
+              </Text>
+            </Stack>
+            <Stack direction="row" justifyContent="space-between">
+              <Text type="label" size="medium" weight="bold">
+                Estado:
+              </Text>
+              <Text type="body" size="medium" appearance="gray">
+                En trámite de aprobación
+              </Text>
+            </Stack>
+            <Stack direction="row" justifyContent="space-between">
+              <Text type="label" size="medium" weight="bold">
+                Días de disfrute:
+              </Text>
+              <Text type="body" size="medium" appearance="gray">
+                2
+              </Text>
+            </Stack>
+            <Stack direction="row" justifyContent="space-between">
+              <Text type="label" size="medium" weight="bold">
+                Destinatario:
+              </Text>
+              <Text type="body" size="medium" appearance="gray">
+                A quien interese
+              </Text>
+            </Stack>
+            <Stack direction="row" justifyContent="space-between">
+              <Text type="label" size="medium" weight="bold">
+                Contrato:
+              </Text>
+              <Text type="body" size="medium" appearance="gray">
+                Indefinido - 02/sep/2024
+              </Text>
+            </Stack>
+          </Stack>
         </StyledContainerContent>
-        {optionButtons && (
-          <Button
-            children="Button"
-            appearance="primary"
-            path="/privilege"
-            type="button"
-            spacing="wide"
-            variant="filled"
-            fullwidth={false}
-            onClick={() => console.log("clicked from Default-story")}
-          />
-        )}
-        <Stack justifyContent="flex-end" margin="s200 s0">
-          <Button onClick={onSubmit ?? handleClose}>{buttonLabel}</Button>
+
+        <Stack justifyContent="flex-end" gap={spacing.s100}>
+          <Button onClick={handleClose} fullwidth={isMobile}>
+            {buttonLabel}
+          </Button>
         </Stack>
       </StyledModal>
     </Blanket>,

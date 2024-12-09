@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { Button } from "@inubekit/button";
-import { Text } from "@inubekit/text";
-
-import { IListModalProps, ListModal } from "../index";
+import { ListModal, IListModalProps } from "../index";
 import { parameters, props } from "./props";
 
 const meta: Meta<typeof ListModal> = {
@@ -20,7 +18,7 @@ export const Default: Story = (args: IListModalProps) => {
 
   return (
     <>
-      <Button onClick={() => setShowModal(true)}>Modal List</Button>
+      <Button onClick={() => setShowModal(true)}>Abrir Modal</Button>
 
       {showModal && (
         <ListModal {...args} handleClose={() => setShowModal(false)} />
@@ -29,11 +27,21 @@ export const Default: Story = (args: IListModalProps) => {
   );
 };
 
+const modalContent = [
+  { label: "Número", value: "1234" },
+  { label: "Tipo", value: "Disfrute de vacaciones" },
+  { label: "Fecha", value: "22/Oct/2024" },
+  { label: "Estado", value: "En trámite de aprobación" },
+  { label: "Días de disfrute", value: "2" },
+  { label: "Destinatario", value: "A quien interese" },
+  { label: "Contrato", value: "Indefinido - 02/sep/2024" },
+];
+
 Default.args = {
-  title: "Title",
+  title: "Detalles",
   portalId: "portal",
-  content: <Text>Contenido dentro del modal</Text>,
-  buttonLabel: "Close",
+  buttonLabel: "Cerrar",
+  modalContent,
 };
 
 export default meta;

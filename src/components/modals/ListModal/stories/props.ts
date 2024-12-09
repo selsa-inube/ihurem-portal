@@ -1,3 +1,4 @@
+import { ArgTypes } from "@storybook/react";
 export const parameters = {
   docs: {
     description: {
@@ -6,15 +7,34 @@ export const parameters = {
   },
 };
 
-export const props = {
+export const props: ArgTypes = {
   title: {
-    description: "main title of the modal",
+    control: {
+      type: "text",
+    },
+    description: "El título que aparecerá en el modal",
+    defaultValue: "Detalles de la Solicitud",
+  },
+  buttonLabel: {
+    control: {
+      type: "text",
+    },
+    description: "El texto que aparecerá en el botón del modal",
+    defaultValue: "Cerrar",
   },
   portalId: {
-    description: "name of the html element where the modal is rendered",
+    control: {
+      type: "text",
+    },
+    description: "El ID del contenedor del portal donde se renderiza el modal",
+    defaultValue: "portal",
   },
-  content: {
-    description:
-      "element to be rendered in the modal, usually a list of information. ",
+  handleClose: {
+    action: "handleClose",
+    description: "Función para cerrar el modal",
+  },
+  onSubmit: {
+    action: "onSubmit",
+    description: "Función para enviar datos desde el modal",
   },
 };
