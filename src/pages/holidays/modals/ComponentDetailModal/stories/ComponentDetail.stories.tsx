@@ -2,7 +2,7 @@ import { Meta, StoryObj } from "@storybook/react";
 
 import { parameters, props } from "./props";
 
-import { RequestComponentDetailProps } from "../types";
+import { RequestComponentDetailProps } from "../index";
 import RequestComponentDetail from "../index";
 
 const meta: Meta<typeof RequestComponentDetail> = {

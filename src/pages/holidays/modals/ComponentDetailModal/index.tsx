@@ -10,7 +10,15 @@ import { Divider } from "@inubekit/divider";
 
 import { spacing } from "@design/tokens/spacing/spacing";
 
-import { RequestComponentDetailProps } from "./types";
+import { ModalContent } from "./types";
+
+export interface RequestComponentDetailProps {
+  title: string;
+  buttonLabel: string;
+  modalContent: ModalContent[];
+  portalId?: string;
+  handleClose: () => void;
+}
 
 import {
   StyledContainerClose,
@@ -21,10 +29,10 @@ import {
 
 function RequestComponentDetail({
   title,
-  handleClose,
   buttonLabel,
   modalContent,
   portalId = "portal",
+  handleClose,
 }: RequestComponentDetailProps) {
   const node = document.getElementById(portalId);
   if (!node) {
