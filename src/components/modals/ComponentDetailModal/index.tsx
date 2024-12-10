@@ -15,9 +15,10 @@ import { ModalContent } from "./types";
 export interface RequestComponentDetailProps {
   title: string;
   buttonLabel: string;
-  modalContent: ModalContent[];
+  modalContent: string | ModalContent[];
   portalId?: string;
   handleClose: () => void;
+  filterCriteria?: (item: ModalContent) => boolean;
 }
 
 import {
@@ -33,6 +34,7 @@ function RequestComponentDetail({
   modalContent,
   portalId = "portal",
   handleClose,
+  filterCriteria,
 }: RequestComponentDetailProps) {
   const node = document.getElementById(portalId);
   if (!node) {
@@ -43,16 +45,21 @@ function RequestComponentDetail({
 
   const isMobile = useMediaQuery("(max-width: 700px)");
 
-  const modalTitle = title;
-  const modalButtonLabel = buttonLabel;
-  const contentItems = modalContent;
+  const filteredContent = Array.isArray(modalContent)
+    ? modalContent.filter((item) => {
+        if (filterCriteria) {
+          return filterCriteria(item);
+        }
+        return true;
+      })
+    : modalContent;
 
   return createPortal(
     <Blanket>
       <StyledModal $smallScreen={isMobile}>
         <StyledContainerTitle>
           <Text type="headline" size="small">
-            {modalTitle}
+            {title}
           </Text>
           <StyledContainerClose onClick={handleClose}>
             <Stack alignItems="center" gap={spacing.s100}>
@@ -70,22 +77,32 @@ function RequestComponentDetail({
         <Divider />
         <StyledContainerContent>
           <Stack gap={spacing.s250} direction="column">
-            {contentItems.map((item, index) => (
-              <Stack direction="row" justifyContent="space-between" key={index}>
-                <Text type="label" size="medium" weight="bold">
-                  {item.label}:
-                </Text>
-                <Text type="body" size="medium" appearance="gray">
-                  {item.value}
-                </Text>
-              </Stack>
-            ))}
+            {Array.isArray(filteredContent) ? (
+              filteredContent.map((item, index) => (
+                <Stack
+                  direction="row"
+                  justifyContent="space-between"
+                  key={index}
+                >
+                  <Text type="label" size="medium" weight="bold">
+                    {item.label}:
+                  </Text>
+                  <Text type="body" size="medium" appearance="gray">
+                    {item.value}
+                  </Text>
+                </Stack>
+              ))
+            ) : (
+              <Text type="body" size="medium" appearance="gray">
+                {filteredContent}
+              </Text>
+            )}
           </Stack>
         </StyledContainerContent>
 
         <Stack justifyContent="flex-end" gap={spacing.s100}>
           <Button onClick={handleClose} fullwidth={isMobile}>
-            {modalButtonLabel}
+            {buttonLabel}
           </Button>
         </Stack>
       </StyledModal>
