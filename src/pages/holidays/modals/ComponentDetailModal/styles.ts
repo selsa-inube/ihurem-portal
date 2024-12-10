@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { inube } from "@inubekit/foundations";
+
 import { spacing } from "@design/tokens/spacing/spacing";
 
 interface IStyledModal {
@@ -12,23 +13,18 @@ export const StyledModal = styled.div<IStyledModal>`
   display: flex;
   flex-direction: column;
   max-height: ${({ $smallScreen }) => ($smallScreen ? "auto" : "526px")};
-  width: ${({ $smallScreen }) => ($smallScreen ? "335px" : "450px")};
-  background-color: ${({ theme }) =>
-    theme?.palette?.neutral?.N30 || inube.palette.neutral.N30};
-  padding: ${({ $smallScreen }) =>
-    $smallScreen ? spacing.s200 : spacing.s300};
+  width: ${({ $smallScreen }) => ($smallScreen ? "300px" : "450px")};
+  background-color: ${inube.palette.neutral.N0};
+  padding: ${spacing.s300};
   gap: ${spacing.s300};
   border-radius: ${spacing.s100};
 `;
 
-export const StyledContainerContent = styled.div<IStyledModal>`
+export const StyledContainerContent = styled.div`
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  padding-top: 4px;
-  padding-right: 4px;
-  padding-bottom: 4px;
-  padding-left: 4px;
+  padding: 4px;
 `;
 
 export const StyledContainerClose = styled.div`
@@ -37,7 +33,7 @@ export const StyledContainerClose = styled.div`
 
 export const StyledContainerTitle = styled.div`
   display: flex;
-  margin: 0px;
-  padding: 0px;
+  margin: 0;
+  padding: 0;
   justify-content: space-between;
 `;

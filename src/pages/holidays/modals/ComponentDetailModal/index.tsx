@@ -10,6 +10,8 @@ import { Divider } from "@inubekit/divider";
 
 import { spacing } from "@design/tokens/spacing/spacing";
 
+import { RequestComponentDetailProps } from "./types";
+
 import {
   StyledContainerClose,
   StyledContainerContent,
@@ -17,26 +19,13 @@ import {
   StyledContainerTitle,
 } from "./styles";
 
-export interface IModalContent {
-  label: string;
-  value: string;
-}
-
-export interface IRequestComponentDetailProps {
-  title: string;
-  handleClose: () => void;
-  buttonLabel: string;
-  modalContent: IModalContent[];
-  portalId?: string;
-}
-
-export const RequestComponentDetail = ({
+function RequestComponentDetail({
   title,
   handleClose,
   buttonLabel,
   modalContent,
   portalId = "portal",
-}: IRequestComponentDetailProps) => {
+}: RequestComponentDetailProps) {
   const node = document.getElementById(portalId);
   if (!node) {
     throw new Error(
@@ -46,12 +35,16 @@ export const RequestComponentDetail = ({
 
   const isMobile = useMediaQuery("(max-width: 700px)");
 
+  const modalTitle = title;
+  const modalButtonLabel = buttonLabel;
+  const contentItems = modalContent;
+
   return createPortal(
     <Blanket>
       <StyledModal $smallScreen={isMobile}>
         <StyledContainerTitle>
           <Text type="headline" size="small">
-            {title}
+            {modalTitle}
           </Text>
           <StyledContainerClose onClick={handleClose}>
             <Stack alignItems="center" gap={spacing.s100}>
@@ -67,9 +60,9 @@ export const RequestComponentDetail = ({
         </StyledContainerTitle>
 
         <Divider />
-        <StyledContainerContent $smallScreen={isMobile}>
+        <StyledContainerContent>
           <Stack gap={spacing.s250} direction="column">
-            {modalContent.map((item, index) => (
+            {contentItems.map((item, index) => (
               <Stack direction="row" justifyContent="space-between" key={index}>
                 <Text type="label" size="medium" weight="bold">
                   {item.label}:
@@ -84,11 +77,13 @@ export const RequestComponentDetail = ({
 
         <Stack justifyContent="flex-end" gap={spacing.s100}>
           <Button onClick={handleClose} fullwidth={isMobile}>
-            {buttonLabel}
+            {modalButtonLabel}
           </Button>
         </Stack>
       </StyledModal>
     </Blanket>,
     node,
   );
-};
+}
+
+export default RequestComponentDetail;

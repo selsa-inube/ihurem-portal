@@ -1,8 +1,9 @@
-import { useState } from "react";
 import { Meta, StoryObj } from "@storybook/react";
-import { Button } from "@inubekit/button";
-import { RequestComponentDetail, IRequestComponentDetailProps } from "../index";
+
 import { parameters, props } from "./props";
+
+import { RequestComponentDetailProps } from "../types";
+import RequestComponentDetail from "../index";
 
 const meta: Meta<typeof RequestComponentDetail> = {
   title: "components/modals/RequestComponentDetail",
@@ -13,22 +14,9 @@ const meta: Meta<typeof RequestComponentDetail> = {
 
 type Story = StoryObj<typeof RequestComponentDetail>;
 
-export const Default: Story = (args: IRequestComponentDetailProps) => {
-  const [showModal, setShowModal] = useState(false);
-
-  return (
-    <>
-      <Button onClick={() => setShowModal(true)}>Abrir Modal</Button>
-
-      {showModal && (
-        <RequestComponentDetail
-          {...args}
-          handleClose={() => setShowModal(false)}
-        />
-      )}
-    </>
-  );
-};
+export const Default: Story = (args: RequestComponentDetailProps) => (
+  <RequestComponentDetail {...args} />
+);
 
 const modalContent = [
   { label: "Número", value: "1234" },

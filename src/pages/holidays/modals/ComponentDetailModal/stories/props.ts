@@ -1,8 +1,10 @@
 import { ArgTypes } from "@storybook/react";
+
 export const parameters = {
   docs: {
     description: {
-      component: "Modal to show some details",
+      component:
+        "Modal utilizado para mostrar información adicional o detalles específicos.",
     },
   },
 };
@@ -12,29 +14,30 @@ export const props: ArgTypes = {
     control: {
       type: "text",
     },
-    description: "El título que aparecerá en el modal",
+    description: "Título que se mostrará en la cabecera del modal.",
     defaultValue: "Detalles de la Solicitud",
   },
   buttonLabel: {
     control: {
       type: "text",
     },
-    description: "El texto que aparecerá en el botón del modal",
+    description: "Texto que aparecerá en el botón ubicado en el modal.",
     defaultValue: "Cerrar",
   },
   portalId: {
     control: {
       type: "text",
     },
-    description: "El ID del contenedor del portal donde se renderiza el modal",
+    description:
+      "ID del elemento contenedor donde se renderiza el modal mediante un portal.",
     defaultValue: "portal",
   },
   handleClose: {
     action: "handleClose",
-    description: "Función para cerrar el modal",
+    description: "Función que se ejecuta para cerrar el modal.",
   },
   onSubmit: {
     action: "onSubmit",
-    description: "Función para enviar datos desde el modal",
+    description: "Función que se ejecuta al enviar los datos del modal.",
   },
 };
