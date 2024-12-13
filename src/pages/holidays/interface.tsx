@@ -74,6 +74,8 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
             <Button
               spacing="wide"
               variant="filled"
+              type="link"
+              path="/holidays/request-payment"
               iconBefore={<MdOutlinePayments />}
               fullwidth={isMobile}
             >
