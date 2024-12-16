@@ -11,7 +11,13 @@ import { Divider } from "@inubekit/divider";
 import { spacing } from "@design/tokens/spacing/spacing";
 
 import { ModalContent } from "./types";
-import { StyledBoxAttribute } from "./styles";
+import {
+  StyledContainerClose,
+  StyledContainerContent,
+  StyledModal,
+  StyledContainerTitle,
+  StyledBoxAttribute,
+} from "./styles";
 
 export interface RequestComponentDetailProps {
   title: string;
@@ -21,13 +27,6 @@ export interface RequestComponentDetailProps {
   handleClose: () => void;
   filterCriteria?: (item: ModalContent) => boolean;
 }
-
-import {
-  StyledContainerClose,
-  StyledContainerContent,
-  StyledModal,
-  StyledContainerTitle,
-} from "./styles";
 
 function RequestComponentDetail(props: RequestComponentDetailProps) {
   const {
