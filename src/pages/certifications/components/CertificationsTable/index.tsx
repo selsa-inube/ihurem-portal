@@ -188,6 +188,12 @@ function CertificationsTable({
     { label: "Contrato", value: "Indefinido - 02/sep/2024" },
   ];
 
+  const filteredModalContent = mediaQueries["(max-width: 1024px)"]
+    ? modalContent
+    : modalContent.filter(
+        (item) => item.label === "Destinatario" || item.label === "Contrato",
+      );
+
   return (
     <>
       <Table>
@@ -252,9 +258,9 @@ function CertificationsTable({
 
       {isModalOpen && modalData && (
         <RequestComponentDetail
-          title="Detalles de la solicitud"
+          title="Detalles"
           buttonLabel="Cerrar"
-          modalContent={modalContent}
+          modalContent={filteredModalContent}
           handleClose={closeModal}
         />
       )}

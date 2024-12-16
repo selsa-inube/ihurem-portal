@@ -29,14 +29,16 @@ import {
   StyledContainerTitle,
 } from "./styles";
 
-function RequestComponentDetail({
-  title,
-  buttonLabel,
-  modalContent,
-  portalId = "portal",
-  handleClose,
-  filterCriteria,
-}: RequestComponentDetailProps) {
+function RequestComponentDetail(props: RequestComponentDetailProps) {
+  const {
+    title,
+    buttonLabel,
+    modalContent,
+    portalId = "portal",
+    handleClose,
+    filterCriteria,
+  } = props;
+
   const node = document.getElementById(portalId);
   if (!node) {
     throw new Error(
