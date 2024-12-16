@@ -6,10 +6,6 @@ interface IStyledModal {
   $smallScreen: boolean;
   theme: typeof inube;
 }
-interface IStyledBoxAttribute {
-  $smallScreen: boolean;
-  theme: typeof inube;
-}
 
 export const StyledModal = styled.div<IStyledModal>`
   overflow: auto;
@@ -41,7 +37,7 @@ export const StyledContainerTitle = styled.div`
   justify-content: space-between;
 `;
 
-export const StyledBoxAttribute = styled.div<IStyledBoxAttribute>`
+export const StyledBoxAttribute = styled.div<IStyledModal>`
   align-items: center;
   border-radius: 8px;
   padding: ${({ $smallScreen }) =>
