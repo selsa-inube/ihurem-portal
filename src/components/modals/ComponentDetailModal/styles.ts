@@ -1,9 +1,12 @@
 import styled from "styled-components";
 import { inube } from "@inubekit/foundations";
-
 import { spacing } from "@design/tokens/spacing/spacing";
 
 interface IStyledModal {
+  $smallScreen: boolean;
+  theme: typeof inube;
+}
+interface IStyledBoxAttribute {
   $smallScreen: boolean;
   theme: typeof inube;
 }
@@ -36,4 +39,14 @@ export const StyledContainerTitle = styled.div`
   margin: 0;
   padding: 0;
   justify-content: space-between;
+`;
+
+export const StyledBoxAttribute = styled.div<IStyledBoxAttribute>`
+  align-items: center;
+  border-radius: 8px;
+  padding: ${({ $smallScreen }) =>
+    $smallScreen ? spacing.s100 : `${spacing.s075} ${spacing.s150}`};
+  background-color: ${({ theme }) =>
+    theme?.palette?.neutral?.N10 || inube.palette.neutral.N10};
+  width: auto;
 `;

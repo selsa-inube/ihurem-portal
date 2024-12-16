@@ -11,6 +11,7 @@ import { Divider } from "@inubekit/divider";
 import { spacing } from "@design/tokens/spacing/spacing";
 
 import { ModalContent } from "./types";
+import { StyledBoxAttribute } from "./styles";
 
 export interface RequestComponentDetailProps {
   title: string;
@@ -78,20 +79,25 @@ function RequestComponentDetail({
         <StyledContainerContent>
           <Stack gap={spacing.s250} direction="column">
             {Array.isArray(filteredContent) ? (
-              filteredContent.map((item, index) => (
-                <Stack
-                  direction="row"
-                  justifyContent="space-between"
-                  key={index}
-                >
-                  <Text type="label" size="medium" weight="bold">
-                    {item.label}:
-                  </Text>
-                  <Text type="body" size="medium" appearance="gray">
-                    {item.value}
-                  </Text>
-                </Stack>
-              ))
+              filteredContent.map((item, index) => {
+                const isLongContent = item.value.length > 30;
+
+                return (
+                  <StyledBoxAttribute key={index} $smallScreen={isMobile}>
+                    <Stack
+                      direction={isLongContent || isMobile ? "column" : "row"}
+                      justifyContent="space-between"
+                    >
+                      <Text type="label" size="medium" weight="bold">
+                        {item.label}:
+                      </Text>
+                      <Text type="body" size="medium" appearance="gray">
+                        {item.value}
+                      </Text>
+                    </Stack>
+                  </StyledBoxAttribute>
+                );
+              })
             ) : (
               <Text type="body" size="medium" appearance="gray">
                 {filteredContent}

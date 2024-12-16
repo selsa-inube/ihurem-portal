@@ -19,6 +19,8 @@ import { StyledTd, StyledTh } from "./styles";
 import { columns, headers } from "./tableConfig";
 import { usePagination } from "./usePagination";
 import { Detail } from "./Detail";
+import { useState } from "react";
+import RequestComponentDetail from "@components/modals/ComponentDetailModal";
 
 interface CertificationsTableProps {
   data: ICertificationsTable[];
@@ -29,6 +31,9 @@ function CertificationsTable({
   data,
   loading = false,
 }: CertificationsTableProps) {
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [modalData, setModalData] = useState<any>(null);
+
   const {
     totalRecords,
     handleStartPage,
@@ -72,13 +77,11 @@ function CertificationsTable({
 
   const renderTableCell = (
     headerKey: string,
-    cellData:
-      | {
-          type?: string;
-          value?: string | number | JSX.Element;
-          onClick?: () => void;
-        }
-      | undefined,
+    cellData: {
+      type?: string;
+      value?: string | number | JSX.Element;
+      onClick?: () => void;
+    },
     rowIndex: number,
   ) => {
     const isMobileAction =
@@ -146,7 +149,7 @@ function CertificationsTable({
       const iconProps = {
         appearance: appearanceValue,
         size: "16px",
-        onClick: cellData.onClick,
+        onClick: () => handleDetailsClick(cellData),
         cursorHover: true,
       };
 
@@ -166,62 +169,96 @@ function CertificationsTable({
     return cellData?.value;
   };
 
+  const handleDetailsClick = (cellData: any) => {
+    setModalData(cellData);
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
+  const modalContent = [
+    { label: "Número", value: "1234" },
+    { label: "Tipo", value: "Disfrute de vacaciones" },
+    { label: "Fecha", value: "22/Oct/2024" },
+    { label: "Estado", value: "En trámite de aprobación" },
+    { label: "Días de disfrute", value: "2" },
+    { label: "Destinatario", value: "A quien interese" },
+    { label: "Contrato", value: "Indefinido - 02/sep/2024" },
+  ];
+
   return (
-    <Table>
-      <Colgroup>
-        {visibleColumns.map((col, index) => (
-          <Col key={index} span={col.span} style={col.style} />
-        ))}
-      </Colgroup>
-      <Thead>
-        <Tr border="bottom">
-          {visibleHeaders.map((header, index) => (
-            <StyledTh
-              key={index}
-              action={header.action}
-              align="center"
-              style={header.style}
-            >
-              <b>{header.label}</b>
-            </StyledTh>
+    <>
+      <Table>
+        <Colgroup>
+          {visibleColumns.map((col, index) => (
+            <Col key={index} span={col.span} style={col.style} />
           ))}
-        </Tr>
-      </Thead>
-      <Tbody>
-        {data.length === 0 ? (
+        </Colgroup>
+        <Thead>
           <Tr border="bottom">
-            <Td colSpan={visibleHeaders.length} align="center" type="custom">
-              <Text size="medium">No tiene solicitudes en trámite.</Text>
-            </Td>
+            {visibleHeaders.map((header, index) => (
+              <StyledTh
+                key={index}
+                action={header.action}
+                align="center"
+                style={header.style}
+              >
+                <b>{header.label}</b>
+              </StyledTh>
+            ))}
           </Tr>
-        ) : (
-          currentData.map((row: ICertificationsTable, rowIndex: number) => (
-            <Tr key={rowIndex} border="bottom">
-              {visibleHeaders.map((header) =>
-                renderTableCell(header.key, row[header.key], rowIndex),
-              )}
+        </Thead>
+        <Tbody>
+          {data.length === 0 ? (
+            <Tr border="bottom">
+              <Td colSpan={visibleHeaders.length} align="center" type="custom">
+                <Text size="medium">No tiene solicitudes en trámite.</Text>
+              </Td>
             </Tr>
-          ))
+          ) : (
+            currentData.map((row: ICertificationsTable, rowIndex: number) => (
+              <Tr key={rowIndex} border="bottom">
+                {visibleHeaders.map((header) => {
+                  const cellData = row[header.key];
+                  if (cellData !== undefined) {
+                    return renderTableCell(header.key, cellData, rowIndex);
+                  }
+                  return null;
+                })}
+              </Tr>
+            ))
+          )}
+        </Tbody>
+        {data.length > 0 && (
+          <Tfoot>
+            <Tr border="bottom">
+              <Td colSpan={visibleHeaders.length} type="custom" align="center">
+                <Pagination
+                  firstEntryInPage={firstEntryInPage}
+                  lastEntryInPage={lastEntryInPage}
+                  totalRecords={totalRecords}
+                  handleStartPage={handleStartPage}
+                  handlePrevPage={handlePrevPage}
+                  handleNextPage={handleNextPage}
+                  handleEndPage={handleEndPage}
+                />
+              </Td>
+            </Tr>
+          </Tfoot>
         )}
-      </Tbody>
-      {data.length > 0 && (
-        <Tfoot>
-          <Tr border="bottom">
-            <Td colSpan={visibleHeaders.length} type="custom" align="center">
-              <Pagination
-                firstEntryInPage={firstEntryInPage}
-                lastEntryInPage={lastEntryInPage}
-                totalRecords={totalRecords}
-                handleStartPage={handleStartPage}
-                handlePrevPage={handlePrevPage}
-                handleNextPage={handleNextPage}
-                handleEndPage={handleEndPage}
-              />
-            </Td>
-          </Tr>
-        </Tfoot>
+      </Table>
+
+      {isModalOpen && modalData && (
+        <RequestComponentDetail
+          title="Detalles de la solicitud"
+          buttonLabel="Cerrar"
+          modalContent={modalContent}
+          handleClose={closeModal}
+        />
       )}
-    </Table>
+    </>
   );
 }
 
