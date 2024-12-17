@@ -72,6 +72,7 @@ function RequestEnjoymentUI({
               handleNextStep={handleNextStep}
             />
           )}
+          {currentStep === 2 && <></>}
           {currentStep === 3 && (
             <VerificationForm
               updatedData={{

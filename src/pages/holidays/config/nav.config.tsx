@@ -41,7 +41,32 @@ const holidaysNavConfig = [
         isActive: true,
       },
     ],
-    url: "/",
+    url: "/holidays",
+  },
+  {
+    id: 3,
+    label: "Solicitar pago",
+    crumbs: [
+      {
+        path: "/",
+        label: "Inicio",
+        id: "/",
+        isActive: false,
+      },
+      {
+        path: "/holidays",
+        label: "Vacaciones",
+        id: "/holidays",
+        isActive: false,
+      },
+      {
+        path: "/holidays/request-payment",
+        label: "Solicitar pago",
+        id: "/holidays/request-payment",
+        isActive: true,
+      },
+    ],
+    url: "/holidays",
   },
 ];
 
