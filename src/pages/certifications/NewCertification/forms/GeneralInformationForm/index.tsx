@@ -4,6 +4,7 @@ import { forwardRef, useEffect, useImperativeHandle } from "react";
 
 import { validationMessages } from "@src/validations/validationMessages";
 import { validationRules } from "@src/validations/validationRules";
+import { generalInformationRequiredFields } from "./config/formConfig";
 
 import { GeneralInformationFormUI } from "./interface";
 import { IGeneralInformationEntry } from "./types";
@@ -15,6 +16,9 @@ const createValidationSchema = () =>
     ),
     addressee: validationRules.addressee.required(validationMessages.required),
     contract: validationRules.contract.required(validationMessages.required),
+    observations: generalInformationRequiredFields.observations
+      ? validationRules.observations.required(validationMessages.required)
+      : validationRules.observations,
   });
 
 const validationSchema = createValidationSchema();

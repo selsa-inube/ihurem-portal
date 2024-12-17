@@ -3,6 +3,7 @@ interface IGeneralInformationEntry {
   certification: string;
   addressee: string;
   contract: string;
+  observations: string;
 }
 
 export type { IGeneralInformationEntry };
