@@ -25,7 +25,7 @@ const renderPersonalInfoVerification = (
         value={formatDate(values.startDate)}
       />
     </Grid>
-    <Stack width="100%">
+    <Stack width="100%" direction="column">
       <BoxAttribute
         label="Observaciones:"
         value={values.observations}
