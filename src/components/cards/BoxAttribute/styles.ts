@@ -1,9 +1,11 @@
 import styled from "styled-components";
+import { inube } from "@inubekit/foundations";
 
 import { spacing } from "@design/tokens/spacing/spacing";
 
 interface IStyledBoxAttribute {
   $smallScreen?: boolean;
+  theme?: typeof inube;
 }
 
 const StyledBoxAttribute = styled.div<IStyledBoxAttribute>`
@@ -12,6 +14,8 @@ const StyledBoxAttribute = styled.div<IStyledBoxAttribute>`
   border-radius: 8px;
   padding: ${({ $smallScreen }) =>
     $smallScreen ? spacing.s100 : `${spacing.s075} ${spacing.s150}`};
+  background-color: ${({ theme }) =>
+    theme?.palette?.neutral?.N10 || inube.palette.neutral.N10};
   width: auto;
 `;
 
