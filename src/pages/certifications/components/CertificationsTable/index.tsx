@@ -86,7 +86,6 @@ function CertificationsTable({
   ) => {
     const isMobileAction =
       headerKey === "mobileActions" && mediaQueries["(max-width: 542px)"];
-
     if (isMobileAction) {
       return (
         <Td
@@ -99,7 +98,7 @@ function CertificationsTable({
             <SkeletonLine width="100%" animated={true} />
           ) : (
             <Detail
-              onClickDetails={cellData?.onClick}
+              onClickDetails={() => handleDetailsClick(cellData)}
               onClickEdit={cellData?.onClick}
               onClickEliminate={cellData?.onClick}
             />
@@ -228,10 +227,11 @@ function CertificationsTable({
               <Tr key={rowIndex} border="bottom">
                 {visibleHeaders.map((header) => {
                   const cellData = row[header.key];
-                  if (cellData !== undefined) {
-                    return renderTableCell(header.key, cellData, rowIndex);
-                  }
-                  return null;
+                  return renderTableCell(
+                    header.key,
+                    cellData ?? { value: "" },
+                    rowIndex,
+                  );
                 })}
               </Tr>
             ))
