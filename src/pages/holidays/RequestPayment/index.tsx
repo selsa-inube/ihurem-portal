@@ -30,6 +30,7 @@ function RequestPayment() {
       navigatePage={holidaysNavConfig[2].url}
       steps={requestPaymentSteps}
       currentStep={currentStep}
+      setCurrentStep={setCurrentStep}
       handleNextStep={handleNextStep}
       handlePreviousStep={handlePreviousStep}
       handleFinishAssisted={handleFinishAssisted}

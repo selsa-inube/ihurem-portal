@@ -6,12 +6,15 @@ import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
 import { spacing } from "@design/tokens/spacing/spacing";
 
+import { VerificationForm } from "./forms/VerificationForm";
+
 interface RequestPaymentUIProps {
   appName: string;
   appRoute: IRoute[];
   navigatePage: string;
   steps: IAssistedStep[];
   currentStep: number;
+  setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
   handleNextStep: () => void;
   handlePreviousStep: () => void;
   handleFinishAssisted: () => void;
@@ -24,6 +27,7 @@ function RequestPaymentUI(props: RequestPaymentUIProps) {
     navigatePage,
     steps,
     currentStep,
+    setCurrentStep,
     handleNextStep,
     handlePreviousStep,
     handleFinishAssisted,
@@ -51,7 +55,11 @@ function RequestPaymentUI(props: RequestPaymentUIProps) {
         <Stack direction="column" gap={spacing.s500}>
           {currentStep === 1 && <></>}
           {currentStep === 2 && <></>}
-          {currentStep === 3 && <></>}
+          {currentStep === 3 && (
+            <VerificationForm
+              handleStepChange={(stepId) => setCurrentStep(stepId)}
+            />
+          )}
         </Stack>
       </Stack>
     </AppMenu>
