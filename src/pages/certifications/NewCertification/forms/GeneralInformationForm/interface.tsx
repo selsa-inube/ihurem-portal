@@ -9,13 +9,11 @@ import { Input } from "@inubekit/input";
 import { isRequired } from "@utils/forms/forms";
 import { getFieldState } from "@utils/forms/forms";
 import { spacing } from "@design/tokens/spacing/spacing";
-import {
-  certificationOptions,
-  contractOptions,
-} from "@pages/certifications/NewCertification/config/assisted.config";
+import { certificationOptions } from "@pages/certifications/NewCertification/config/assisted.config";
 
 import { StyledContainer } from "./styles";
 import { IGeneralInformationEntry } from "./types";
+import { useAppContext } from "@src/context/AppContext";
 
 interface GeneralInformationFormUIProps {
   formik: FormikProps<IGeneralInformationEntry>;
@@ -30,6 +28,14 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
     props;
 
   const isMobile = useMediaQuery("(max-width: 700px)");
+  const { employees } = useAppContext();
+
+  const employmentContracts = employees?.employmentContract || [];
+  const hasMultipleContracts = employmentContracts.length > 1;
+  const hasAnyContract = employmentContracts.length > 0;
+
+  console.log("empleado contracts:", employmentContracts);
+
   return (
     <form onSubmit={formik.handleSubmit}>
       <Stack direction="column" gap={spacing.s300}>
@@ -47,6 +53,7 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
               onChange={(name, value) => {
                 formik.setFieldValue(name, value);
               }}
+              disabled={hasAnyContract && !hasMultipleContracts}
             />
             <Input
               size="compact"
@@ -59,6 +66,7 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
               value={formik.values.addressee}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
+              disabled={hasAnyContract && !hasMultipleContracts}
             />
           </Stack>
           <Stack width={isMobile ? "100%" : "49%"}>
@@ -68,12 +76,28 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
               name="contract"
               required
               label="Contrato"
-              options={contractOptions}
+              options={
+                employmentContracts.length > 0
+                  ? employmentContracts.map((contract: any) => ({
+                      id: contract.id,
+                      value: contract.id,
+                      label: contract.name,
+                    }))
+                  : [
+                      {
+                        id: "",
+                        value: "",
+                        label: "No hay contratos disponibles",
+                      },
+                    ]
+              }
               value={formik.values.contract}
               placeholder="Selecciona una opción"
               onChange={(name, value) => {
+                console.log("Contrato seleccionado:", name, value);
                 formik.setFieldValue(name, value);
               }}
+              disabled={hasAnyContract && !hasMultipleContracts}
             />
           </Stack>
           <Stack>
