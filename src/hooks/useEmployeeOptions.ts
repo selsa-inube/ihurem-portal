@@ -18,6 +18,7 @@ export const useEmployeeOptions = (employeeId: string) => {
           setError("No existen opciones para el empleado");
         }
         setData(options);
+        setLoading(false);
       } catch (err) {
         const errorMessage =
           err instanceof Error
