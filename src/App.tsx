@@ -68,6 +68,10 @@ function FirstPage() {
     return null;
   }
 
+  if (employeeError || optionsError) {
+    return <LogOut />;
+  }
+
   if (showIncidence) {
     return <div>Incidencia: No hay opciones disponibles para el empleado.</div>;
   }
