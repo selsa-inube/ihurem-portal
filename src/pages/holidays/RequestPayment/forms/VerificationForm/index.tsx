@@ -8,12 +8,16 @@ import { spacing } from "@design/tokens/spacing/spacing";
 
 import { requestPaymentSteps } from "../../config/assisted.config";
 import { VerificationBoxes } from "./VerificationBoxes";
-
+import { IFormsUpdateData } from "../../types";
 interface VerificationFormProps {
+  updatedData: IFormsUpdateData;
   handleStepChange: (stepId: number) => void;
 }
 
-function VerificationForm({ handleStepChange }: VerificationFormProps) {
+function VerificationForm({
+  updatedData,
+  handleStepChange,
+}: VerificationFormProps) {
   const isTablet = useMediaQuery("(max-width: 1224px)");
 
   return (
@@ -30,6 +34,7 @@ function VerificationForm({ handleStepChange }: VerificationFormProps) {
             >
               <VerificationBoxes
                 isTablet={isTablet}
+                updatedData={updatedData}
                 stepKey={Number(step.id)}
               />
 

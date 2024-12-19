@@ -4,15 +4,31 @@ import { Grid } from "@inubekit/grid";
 import { BoxAttribute } from "@components/cards/BoxAttribute";
 import { spacing } from "@design/tokens/spacing/spacing";
 
-const renderPersonalInfoVerification = () => (
-  <Stack width="100%" direction="column" gap={spacing.s200}>
-    <BoxAttribute label="Fecha de inicio:" value="2" />
-    <BoxAttribute
-      label="Observaciones:"
-      value="Me gustaría que uno de los asesores se contactaran vía telefónica, si es posible, ya que me quedan ciertas dudas que no se solucionan mediante la pagina. Agradecería una llamada al numero celular 312 3202874."
-      direction="column"
-    />
-  </Stack>
+import { IFormsUpdateData } from "../../../types";
+import { IGeneralInformationEntry } from "../../GeneralInformationForm/types";
+
+const renderPersonalInfoVerification = (
+  values: IGeneralInformationEntry,
+  isTablet: boolean,
+) => (
+  <>
+    <Grid
+      templateColumns={`repeat(${isTablet ? 1 : 2}, 1fr)`}
+      autoRows="auto"
+      gap={spacing.s100}
+      width="100%"
+    >
+      <BoxAttribute label="Días hábiles a pagar:" value={values.daysToPay} />
+      <BoxAttribute label="Contrato:" value={values.contract} />
+    </Grid>
+    <Stack width="100%" direction="column">
+      <BoxAttribute
+        label="Observaciones:"
+        value={values.observations}
+        direction="column"
+      />
+    </Stack>
+  </>
 );
 
 const renderRequerimentsVerification = (isTablet: boolean) => (
@@ -29,14 +45,23 @@ const renderRequerimentsVerification = (isTablet: boolean) => (
 );
 
 interface VerificationBoxesProps {
+  updatedData: IFormsUpdateData;
   stepKey: number;
   isTablet: boolean;
 }
 
-function VerificationBoxes({ isTablet, stepKey }: VerificationBoxesProps) {
+function VerificationBoxes({
+  updatedData,
+  isTablet,
+  stepKey,
+}: VerificationBoxesProps) {
   return (
     <>
-      {stepKey === 1 && renderPersonalInfoVerification()}
+      {stepKey === 1 &&
+        renderPersonalInfoVerification(
+          updatedData.personalInformation.values,
+          isTablet,
+        )}
       {stepKey === 2 && renderRequerimentsVerification(isTablet)}
     </>
   );

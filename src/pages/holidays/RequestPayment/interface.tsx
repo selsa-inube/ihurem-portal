@@ -1,3 +1,4 @@
+import { FormikProps } from "formik";
 import { Stack } from "@inubekit/stack";
 import { Assisted, IAssistedStep } from "@inubekit/assisted";
 import { useMediaQuery } from "@inubekit/hooks";
@@ -6,6 +7,8 @@ import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
 import { spacing } from "@design/tokens/spacing/spacing";
 
+import { GeneralInformationForm } from "./forms/GeneralInformationForm";
+import { IGeneralInformationEntry } from "./forms/GeneralInformationForm/types";
 import { VerificationForm } from "./forms/VerificationForm";
 
 interface RequestPaymentUIProps {
@@ -14,7 +17,11 @@ interface RequestPaymentUIProps {
   navigatePage: string;
   steps: IAssistedStep[];
   currentStep: number;
+  generalInformationRef: React.RefObject<FormikProps<IGeneralInformationEntry>>;
+  initialGeneralInformationValues: IGeneralInformationEntry;
+  isCurrentFormValid: boolean;
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
+  setIsCurrentFormValid: React.Dispatch<React.SetStateAction<boolean>>;
   handleNextStep: () => void;
   handlePreviousStep: () => void;
   handleFinishAssisted: () => void;
@@ -27,7 +34,11 @@ function RequestPaymentUI(props: RequestPaymentUIProps) {
     navigatePage,
     steps,
     currentStep,
+    generalInformationRef,
+    initialGeneralInformationValues,
+    isCurrentFormValid,
     setCurrentStep,
+    setIsCurrentFormValid,
     handleNextStep,
     handlePreviousStep,
     handleFinishAssisted,
@@ -44,7 +55,7 @@ function RequestPaymentUI(props: RequestPaymentUIProps) {
           onNextClick={handleNextStep}
           onBackClick={handlePreviousStep}
           onSubmitClick={handleFinishAssisted}
-          disableNext={false}
+          disableNext={!isCurrentFormValid}
           size={isTablet ? "small" : "large"}
           controls={{
             goBackText: "Anterior",
@@ -53,10 +64,24 @@ function RequestPaymentUI(props: RequestPaymentUIProps) {
           }}
         />
         <Stack direction="column" gap={spacing.s500}>
-          {currentStep === 1 && <></>}
+          {currentStep === 1 && (
+            <GeneralInformationForm
+              ref={generalInformationRef}
+              initialValues={initialGeneralInformationValues}
+              withNextButton={true}
+              onFormValid={setIsCurrentFormValid}
+              handleNextStep={handleNextStep}
+            />
+          )}
           {currentStep === 2 && <></>}
           {currentStep === 3 && (
             <VerificationForm
+              updatedData={{
+                personalInformation: {
+                  isValid: isCurrentFormValid,
+                  values: initialGeneralInformationValues,
+                },
+              }}
               handleStepChange={(stepId) => setCurrentStep(stepId)}
             />
           )}
