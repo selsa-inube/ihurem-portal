@@ -41,7 +41,7 @@ function FirstPage() {
 
   useEffect(() => {
     if (employee && !employeeLoading && !employeeError) {
-      setEmployees(employee);
+      setEmployees(Array.isArray(employee) ? employee : [employee]);
     }
   }, [employee, employeeLoading, employeeError, setEmployees]);
 
