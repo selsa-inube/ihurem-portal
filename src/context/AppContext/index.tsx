@@ -60,7 +60,7 @@ const AppProvider: React.FC<{
   const [businessUnit, setBusinessUnit] =
     useState<IBusinessUnitsPortalEmployee | null>(businessUnitData);
 
-  const [employees, setEmployees] = useState<IEmployee>({} as IEmployee);
+  const [employees, setEmployees] = useState<IEmployee[]>([] as IEmployee[]);
 
   const updatePreferences = (newPreferences: Partial<IPreferences>) => {
     setPreferences((prev) => ({ ...prev, ...newPreferences }));

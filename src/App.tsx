@@ -41,15 +41,12 @@ function FirstPage() {
 
   useEffect(() => {
     if (employee && !employeeLoading && !employeeError) {
-      setEmployees(employee);
+      setEmployees([employee]);
     }
   }, [employee, employeeLoading, employeeError, setEmployees]);
 
   if (employeeLoading) {
     return null;
-  }
-  if (employeeError) {
-    return <LogOut />;
   }
 
   return (provisionedPortal?.portalCode &&

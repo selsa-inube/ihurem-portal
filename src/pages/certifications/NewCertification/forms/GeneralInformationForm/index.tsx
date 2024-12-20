@@ -1,7 +1,11 @@
 import { FormikProps, useFormik } from "formik";
 import { object } from "yup";
-import { forwardRef, useEffect, useImperativeHandle } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import { IOption } from "@inubekit/select";
 
+import { useAppContext } from "@context/AppContext";
+import { IEmploymentContract } from "@src/types/employeePortalBusiness.types";
+import { formatDate } from "@src/utils/date";
 import { validationMessages } from "@src/validations/validationMessages";
 import { validationRules } from "@src/validations/validationRules";
 import { generalInformationRequiredFields } from "./config/formConfig";
@@ -47,6 +51,24 @@ const GeneralInformationForm = forwardRef<
     },
     ref,
   ) => {
+    const { employees } = useAppContext();
+    const [contractOptions, setContractOptions] = useState<IOption[]>([]);
+
+    useEffect(() => {
+      const options: IOption[] = employees[0].employmentContract.map(
+        (contract: IEmploymentContract) => ({
+          id: contract.contractId,
+          label: `${contract.contractType} - ${formatDate(contract.startDate)}`,
+          value: `${contract.contractType} - ${formatDate(contract.startDate)}`,
+        }),
+      );
+      setContractOptions(options);
+
+      if (options.length === 1) {
+        formik.setFieldValue("contract", options[0].value);
+      }
+    }, [employees]);
+
     const formik = useFormik({
       initialValues,
       validationSchema,
@@ -72,6 +94,7 @@ const GeneralInformationForm = forwardRef<
         withNextButton={withNextButton}
         validationSchema={validationSchema}
         handleNextStep={handleNextStep}
+        contractOptions={contractOptions}
       />
     );
   },

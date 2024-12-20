@@ -1,6 +1,6 @@
 const generalInformationRequiredFields = {
-  daysOff: true,
-  startDate: true,
+  certification: true,
+  contract: true,
   observations: true,
 };
 

@@ -2,7 +2,7 @@ import { FormikProps } from "formik";
 import { useMediaQuery } from "@inubekit/hooks";
 import { Stack } from "@inubekit/stack";
 import { Button } from "@inubekit/button";
-import { Select } from "@inubekit/select";
+import { Select, IOption } from "@inubekit/select";
 import { Textarea } from "@inubekit/textarea";
 import { Input } from "@inubekit/input";
 
@@ -13,10 +13,14 @@ import { certificationOptions } from "@pages/certifications/NewCertification/con
 
 import { StyledContainer } from "./styles";
 import { IGeneralInformationEntry } from "./types";
-import { useAppContext } from "@src/context/AppContext";
+
+function getDisabledState(loading: boolean | undefined, isValid: boolean) {
+  return loading ? true : !isValid;
+}
 
 interface GeneralInformationFormUIProps {
   formik: FormikProps<IGeneralInformationEntry>;
+  contractOptions: IOption[];
   loading?: boolean;
   withNextButton?: boolean;
   handleNextStep: () => void;
@@ -24,17 +28,16 @@ interface GeneralInformationFormUIProps {
 }
 
 const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
-  const { formik, loading, withNextButton, validationSchema, handleNextStep } =
-    props;
+  const {
+    formik,
+    loading,
+    withNextButton,
+    validationSchema,
+    handleNextStep,
+    contractOptions,
+  } = props;
 
   const isMobile = useMediaQuery("(max-width: 700px)");
-  const { employees } = useAppContext();
-
-  const employmentContracts = employees?.employmentContract || [];
-  const hasMultipleContracts = employmentContracts.length > 1;
-  const hasAnyContract = employmentContracts.length > 0;
-
-  console.log("empleado contracts:", employmentContracts);
 
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -53,7 +56,7 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
               onChange={(name, value) => {
                 formik.setFieldValue(name, value);
               }}
-              disabled={hasAnyContract && !hasMultipleContracts}
+              disabled={loading}
             />
             <Input
               size="compact"
@@ -66,7 +69,7 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
               value={formik.values.addressee}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              disabled={hasAnyContract && !hasMultipleContracts}
+              disabled={loading}
             />
           </Stack>
           <Stack width={isMobile ? "100%" : "49%"}>
@@ -76,28 +79,17 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
               name="contract"
               required
               label="Contrato"
-              options={
-                employmentContracts.length > 0
-                  ? employmentContracts.map((contract: any) => ({
-                      id: contract.id,
-                      value: contract.id,
-                      label: contract.name,
-                    }))
-                  : [
-                      {
-                        id: "",
-                        value: "",
-                        label: "No hay contratos disponibles",
-                      },
-                    ]
-              }
+              options={contractOptions}
               value={formik.values.contract}
               placeholder="Selecciona una opción"
               onChange={(name, value) => {
                 console.log("Contrato seleccionado:", name, value);
                 formik.setFieldValue(name, value);
               }}
-              disabled={hasAnyContract && !hasMultipleContracts}
+              disabled={getDisabledState(
+                loading,
+                contractOptions.length !== 1 || !formik.values.contract,
+              )}
             />
           </Stack>
           <Stack>
@@ -123,7 +115,7 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
             <Button
               fullwidth={isMobile}
               onClick={handleNextStep}
-              disabled={loading ?? !formik.isValid}
+              disabled={getDisabledState(loading, formik.isValid)}
             >
               Siguiente
             </Button>
