@@ -64,6 +64,10 @@ function FirstPage() {
     return null;
   }
 
+  if (employeeError || optionsError) {
+    return <LogOut />;
+  }
+
   return (provisionedPortal?.portalCode &&
     provisionedPortal.portalCode.length === 0) ||
     !user ? (
