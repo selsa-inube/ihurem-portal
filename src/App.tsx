@@ -33,8 +33,8 @@ function LogOut() {
 }
 
 function FirstPage() {
-  const { user, provisionedPortal, setEmployees } = useAppContext();
-  const [showIncidence, setShowIncidence] = useState(false);
+  const { user, provisionedPortal, setEmployees, setEmployeeOptions } =
+    useAppContext();
 
   const {
     employee,
@@ -56,24 +56,12 @@ function FirstPage() {
 
   useEffect(() => {
     if (employeeOptions && !optionsLoading && !optionsError) {
-      if (!employeeOptions || employeeOptions.length === 0) {
-        setShowIncidence(true);
-      } else {
-        setShowIncidence(false);
-      }
+      setEmployeeOptions(employeeOptions);
     }
   }, [employeeOptions, optionsLoading, optionsError]);
 
   if (employeeLoading || optionsLoading) {
     return null;
-  }
-
-  if (employeeError || optionsError) {
-    return <LogOut />;
-  }
-
-  if (showIncidence) {
-    return <div>Incidencia: No hay opciones disponibles para el empleado.</div>;
   }
 
   return (provisionedPortal?.portalCode &&

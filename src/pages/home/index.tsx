@@ -75,11 +75,11 @@ function Home() {
                     employeeOption && (
                       <AppCard
                         key={index}
-                        title={card.title}
+                        title={`${employeeOption.abbreviatedName}`}
                         complement={card.complement}
-                        description={`Código de opción: ${employeeOption.optionCode}`}
+                        description={card.description}
                         icon={card.icon}
-                        url={`/options/${employeeOption.optionEmployeeId}`}
+                        url={`${employeeOption.optionEmployeeId}`}
                       />
                     )
                   );
