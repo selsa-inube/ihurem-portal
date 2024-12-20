@@ -118,7 +118,6 @@ interface IEmployeeOptions {
   descriptionUse: string;
   optionCode: string;
   optionEmployeeId: string;
-  parentOptionId: string;
 }
 
 export type {

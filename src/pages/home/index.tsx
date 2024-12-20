@@ -9,7 +9,7 @@ import { AppCard } from "@components/feedback/AppCard";
 import { spacing } from "@design/tokens/spacing/spacing.ts";
 import { userMenu } from "@config/nav";
 import { useAppContext } from "@context/AppContext";
-import { cards } from "./home.config";
+import { cards } from "@config/home.config";
 
 import {
   StyledAppPage,
@@ -29,7 +29,7 @@ const renderLogo = (imgUrl: string) => {
 };
 
 function Home() {
-  const { user, logoUrl } = useAppContext();
+  const { user, logoUrl, employeeOptions } = useAppContext();
   const mediaQueries = useMediaQueries([
     "(max-width: 944px)",
     "(max-width: 690px)",
@@ -67,16 +67,23 @@ function Home() {
                 justifyContent={isMobile ? "center" : "flex-start"}
                 alignItems={isMobile ? "center" : "flex-start"}
               >
-                {cards.map((card, index) => (
-                  <AppCard
-                    key={index}
-                    title={card.title}
-                    complement={card.complement}
-                    description={card.description}
-                    icon={card.icon}
-                    url={card.url}
-                  />
-                ))}
+                {cards.map((card, index) => {
+                  const employeeOption = employeeOptions.find(
+                    (option) => option.abbreviatedName === card.title,
+                  );
+                  return (
+                    employeeOption && (
+                      <AppCard
+                        key={index}
+                        title={card.title}
+                        complement={card.complement}
+                        description={`Código de opción: ${employeeOption.optionCode}`}
+                        icon={card.icon}
+                        url={`/options/${employeeOption.optionEmployeeId}`}
+                      />
+                    )
+                  );
+                })}
               </Stack>
             </Stack>
             <Outlet />
