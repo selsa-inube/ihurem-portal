@@ -13,6 +13,7 @@ import { getFieldState } from "@utils/forms/forms";
 
 import { IGeneralInformationEntry } from "./types";
 import { StyledContainer } from "./styles";
+import { useState } from "react";
 
 function getDisabledState(loading: boolean | undefined, isValid: boolean) {
   return loading ? true : !isValid;
@@ -38,6 +39,20 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
   } = props;
 
   const isMobile = useMediaQuery("(max-width: 700px)");
+
+  const [contract, setContract] = useState(formik.values.contract);
+
+  const handleContractChange = (name: string, value: string) => {
+    formik.setFieldValue(name, value);
+    formik.setFieldValue(
+      "contractDesc",
+      contractOptions.find((option) => option.value === value)?.label,
+    );
+    console.log(
+      contractOptions.find((option) => option.value === value)?.label,
+    );
+    setContract(value);
+  };
 
   return (
     <form>
@@ -68,7 +83,7 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
                 id="contract"
                 options={contractOptions}
                 placeholder="Selecciona un contrato"
-                value={formik.values.contract}
+                value={contract}
                 message={formik.errors.contract}
                 disabled={getDisabledState(
                   loading,
@@ -77,9 +92,7 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
                 size="compact"
                 fullwidth
                 onBlur={formik.handleBlur}
-                onChange={(name, value) => {
-                  formik.setFieldValue(name, value);
-                }}
+                onChange={handleContractChange}
                 required={isRequired(validationSchema, "contract")}
               />
             </Stack>
