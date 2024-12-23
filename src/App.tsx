@@ -31,27 +31,7 @@ function LogOut() {
 }
 
 function FirstPage() {
-  const { user, provisionedPortal, setEmployees } = useAppContext();
-
-  const {
-    employee,
-    loading: employeeLoading,
-    error: employeeError,
-  } = useEmployeeByNickname(user?.nickname ?? "");
-
-  useEffect(() => {
-    if (employee && !employeeLoading && !employeeError) {
-      setEmployees(employee);
-    }
-  }, [employee, employeeLoading, employeeError, setEmployees]);
-
-  if (employeeLoading) {
-    return null;
-  }
-
-  if (employeeError) {
-    return <LogOut />;
-  }
+  const { user, provisionedPortal } = useAppContext();
 
   return (provisionedPortal?.portalCode &&
     provisionedPortal.portalCode.length === 0) ||
@@ -89,7 +69,7 @@ function App() {
   }
 
   const [isReady, setIsReady] = useState(false);
-  const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
+  const { loginWithRedirect, isAuthenticated, isLoading, user } = useAuth0();
   const { portalData, hasError } = usePortalData(portalCode ?? "");
 
   const { businessManagersData, hasError: hasManagersError } =
@@ -97,6 +77,12 @@ function App() {
 
   const { businessUnitData, hasError: hasBusinessUnitError } =
     useBusinessUnit(portalData);
+
+  const {
+    employee,
+    loading: employeeLoading,
+    error: employeeError,
+  } = useEmployeeByNickname(user?.nickname ?? "");
 
   useEffect(() => {
     if (
@@ -111,11 +97,11 @@ function App() {
     }
   }, [isLoading, isAuthenticated, loginWithRedirect]);
 
-  if (isLoading || !isReady) {
-    return null;
+  if (isLoading || !isReady || employeeLoading) {
+    return <div>Cargando....</div>;
   }
 
-  if (hasError || hasManagersError || hasBusinessUnitError) {
+  if (hasError || hasManagersError || hasBusinessUnitError || employeeError) {
     return <ErrorPage />;
   }
 
@@ -124,6 +110,7 @@ function App() {
       dataPortal={portalData}
       businessManagersData={businessManagersData}
       businessUnitData={businessUnitData}
+      employee={employee}
     >
       <GlobalStyles />
       <RouterProvider router={router} />
