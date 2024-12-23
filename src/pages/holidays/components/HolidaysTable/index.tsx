@@ -1,4 +1,5 @@
 import { MdOutlineVisibility, MdDeleteOutline } from "react-icons/md";
+import { useState } from "react";
 import {
   Col,
   Colgroup,
@@ -14,13 +15,13 @@ import { Icon } from "@inubekit/icon";
 import { useMediaQueries } from "@inubekit/hooks";
 import { Text } from "@inubekit/text";
 import { SkeletonLine } from "@inubekit/skeleton";
+
+import RequestComponentDetail from "@components/modals/ComponentDetailModal";
 import { IHolidaysTable } from "./types";
 import { StyledTd, StyledTh } from "./styles";
 import { columns, headers } from "./tableConfig";
 import { usePagination } from "./usePagination";
 import { Detail } from "./Detail";
-import { useState } from "react";
-import RequestComponentDetail from "@components/modals/ComponentDetailModal";
 
 interface HolidaysTableProps {
   data: IHolidaysTable[];
