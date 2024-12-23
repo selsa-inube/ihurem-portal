@@ -66,6 +66,8 @@ const AppProvider: React.FC<{
     setPreferences((prev) => ({ ...prev, ...newPreferences }));
   };
 
+  const [employeeOptions, setEmployeeOptions] = useState<any[]>([]);
+
   useEffect(() => {
     if (user) {
       localStorage.setItem("logoUrl", logoUrl);
@@ -93,6 +95,8 @@ const AppProvider: React.FC<{
         setBusinessUnit,
         employees,
         setEmployees,
+        employeeOptions,
+        setEmployeeOptions,
       }}
     >
       {children}

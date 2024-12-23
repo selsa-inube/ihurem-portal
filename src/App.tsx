@@ -5,6 +5,7 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 import { useEffect, useState } from "react";
+
 import { AppPage } from "@components/layout/AppPage";
 import { Home } from "@src/pages/home";
 import { AppProvider, useAppContext } from "@context/AppContext";
@@ -22,6 +23,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useBusinessManagers } from "@hooks/useBusinessManagers";
 import { useBusinessUnit } from "@hooks/useBusinessUnit";
 import { usePortalData } from "@hooks/usePortalData";
+import { useEmployeeOptions } from "@hooks/useEmployeeOptions";
 
 function LogOut() {
   localStorage.clear();
@@ -31,7 +33,8 @@ function LogOut() {
 }
 
 function FirstPage() {
-  const { user, provisionedPortal, setEmployees } = useAppContext();
+  const { user, provisionedPortal, setEmployees, setEmployeeOptions } =
+    useAppContext();
 
   const {
     employee,
@@ -39,17 +42,29 @@ function FirstPage() {
     error: employeeError,
   } = useEmployeeByNickname(user?.nickname ?? "");
 
+  const {
+    data: employeeOptions,
+    loading: optionsLoading,
+    error: optionsError,
+  } = useEmployeeOptions(user?.nickname ?? "");
+
   useEffect(() => {
     if (employee && !employeeLoading && !employeeError) {
       setEmployees(employee);
     }
   }, [employee, employeeLoading, employeeError, setEmployees]);
 
-  if (employeeLoading) {
+  useEffect(() => {
+    if (employeeOptions && !optionsLoading && !optionsError) {
+      setEmployeeOptions(employeeOptions);
+    }
+  }, [employeeOptions, optionsLoading, optionsError]);
+
+  if (employeeLoading || optionsLoading) {
     return null;
   }
 
-  if (employeeError) {
+  if (employeeError || optionsError) {
     return <LogOut />;
   }
 
