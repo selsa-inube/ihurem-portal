@@ -1,13 +1,20 @@
 import { Stack } from "@inubekit/stack";
 import { Text } from "@inubekit/text";
 import { Button } from "@inubekit/button";
+import { Tag } from "@inubekit/tag";
 import { useMediaQueries } from "@inubekit/hooks";
 
 import { spacing } from "@design/tokens/spacing/spacing.ts";
 import selsaLogo from "@assets/images/logoInube.png";
 import errorImage from "@assets/images/img-team-building-68.png";
 
-import { StyledCompanyLogo, StyledErrorImage, StyledFooter } from "./styles";
+import {
+  StyledCompanyLogo,
+  StyledErrorImage,
+  StyledFooter,
+  StyledCertificationsContainer,
+  VerticalDivider,
+} from "./styles";
 import { environment } from "@config/environment.ts";
 
 interface ErrorPageProps {
@@ -26,7 +33,6 @@ function ErrorPage(props: ErrorPageProps) {
     logo = selsaLogo,
     logoAlt = "Sistemas Enlinea",
     heading = "¡Ups! Algo salió mal...",
-    description = "",
     image = errorImage,
     imageAlt = "Ha surgido un error. Revisa la descripción",
     nameButton = "Regresar",
@@ -75,6 +81,11 @@ function ErrorPage(props: ErrorPageProps) {
             >
               {heading}
             </Text>
+            <Tag
+              appearance="gray"
+              label="Código de error: 000"
+              weight="strong"
+            />
             <StyledErrorImage
               src={image}
               alt={imageAlt}
@@ -82,37 +93,55 @@ function ErrorPage(props: ErrorPageProps) {
               height={queriesMatches ? "160px" : "240px"}
             />
           </Stack>
-
-          <Stack
-            gap="24px"
-            direction="column"
-            alignItems="center"
-            justifyContent="center"
-            width="80%"
-          >
-            <Text
-              type="title"
-              size={queriesMatches ? "small" : "large"}
-              textAlign="center"
-              appearance="gray"
-            >
-              {description}
-            </Text>
-            <Button
-              appearance="primary"
-              spacing="wide"
-              variant="filled"
-              onClick={() =>
-                onClick
-                  ? onClick()
-                  : window.open(environment.REDIRECT_URI, "_self")
-              }
-            >
-              {nameButton}
-            </Button>
-          </Stack>
         </Stack>
+
+        <StyledCertificationsContainer $isMobile={queriesMatches}>
+          <Stack
+            direction={queriesMatches ? "column" : "row"}
+            gap={spacing.s400}
+            justifyContent="space-between"
+            width="100%"
+          >
+            <Stack direction="column" gap={spacing.s300} width="50%">
+              <Text type="headline" size="medium" weight="bold">
+                ¿Qué salió mal?
+              </Text>
+              <Text type="title" size="medium" appearance="gray">
+                • La compañía donde trabajas NO tiene los privilegios requeridos
+                para acceder al portal.
+                <br />• No estás registrado(a) o las atribuciones utilizadas no
+                corresponden con las registradas.
+              </Text>
+            </Stack>
+
+            <VerticalDivider $isVertical={!queriesMatches} />
+
+            <Stack direction="column" gap={spacing.s300} width="50%">
+              <Text type="headline" size="medium" weight="bold">
+                ¿Cómo solucionarlo?
+              </Text>
+              <Text type="title" size="medium" appearance="gray">
+                • Confirma que estés usando la URL adecuada.
+              </Text>
+              <Stack justifyContent="center">
+                <Button
+                  appearance="primary"
+                  spacing="wide"
+                  variant="filled"
+                  onClick={() =>
+                    onClick
+                      ? onClick()
+                      : window.open(environment.REDIRECT_URI, "_self")
+                  }
+                >
+                  {nameButton}
+                </Button>
+              </Stack>
+            </Stack>
+          </Stack>
+        </StyledCertificationsContainer>
       </Stack>
+
       <StyledFooter>
         <Text appearance="gray" textAlign="center" size="small">
           © 2024 Inube
