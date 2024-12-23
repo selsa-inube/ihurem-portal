@@ -13,7 +13,6 @@ import { getFieldState } from "@utils/forms/forms";
 
 import { IGeneralInformationEntry } from "./types";
 import { StyledContainer } from "./styles";
-import { useState } from "react";
 
 function getDisabledState(loading: boolean | undefined, isValid: boolean) {
   return loading ? true : !isValid;
