@@ -29,6 +29,7 @@
     "@inubekit/nav": "^5.3.1",
     "@inubekit/skeleton": "^2.11.1",
     "@inubekit/table": "^5.38.0",
+    "@inubekit/tag": "^3.42.2",
     "@inubekit/textarea": "^2.45.0",
     "crypto-js": "^4.2.0",
     "formik": "^2.4.6",
