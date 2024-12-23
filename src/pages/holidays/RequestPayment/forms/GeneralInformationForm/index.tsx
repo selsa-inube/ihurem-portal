@@ -5,7 +5,6 @@ import { IOption } from "@inubekit/select";
 
 import { useAppContext } from "@context/AppContext";
 import { IEmploymentContract } from "@src/types/employeePortalBusiness.types";
-import { formatDate } from "@src/utils/date";
 import { validationMessages } from "@src/validations/validationMessages";
 import { validationRules } from "@src/validations/validationRules";
 
@@ -72,7 +71,6 @@ const GeneralInformationForm = forwardRef<
         },
       );
       setContractOptions(options);
-
       if (options.length === 1) {
         formik.setFieldValue("contractDesc", options[0].label);
         formik.setFieldValue("contract", options[0].value);

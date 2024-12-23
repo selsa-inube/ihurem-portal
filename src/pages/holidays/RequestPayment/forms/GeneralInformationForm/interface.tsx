@@ -40,18 +40,12 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
 
   const isMobile = useMediaQuery("(max-width: 700px)");
 
-  const [contract, setContract] = useState(formik.values.contract);
-
   const handleContractChange = (name: string, value: string) => {
     formik.setFieldValue(name, value);
     formik.setFieldValue(
       "contractDesc",
       contractOptions.find((option) => option.value === value)?.label,
     );
-    console.log(
-      contractOptions.find((option) => option.value === value)?.label,
-    );
-    setContract(value);
   };
 
   return (
@@ -83,7 +77,7 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
                 id="contract"
                 options={contractOptions}
                 placeholder="Selecciona un contrato"
-                value={contract}
+                value={formik.values.contract}
                 message={formik.errors.contract}
                 disabled={getDisabledState(
                   loading,
