@@ -1,8 +1,4 @@
-import {
-  MdOutlineVisibility,
-  MdDeleteOutline,
-  MdMoreVert,
-} from "react-icons/md";
+import { MdOutlineVisibility, MdDeleteOutline } from "react-icons/md";
 import {
   Col,
   Colgroup,
@@ -18,19 +14,23 @@ import { Icon } from "@inubekit/icon";
 import { useMediaQueries } from "@inubekit/hooks";
 import { Text } from "@inubekit/text";
 import { SkeletonLine } from "@inubekit/skeleton";
-
 import { IHolidaysTable } from "./types";
 import { StyledTd, StyledTh } from "./styles";
 import { columns, headers } from "./tableConfig";
 import { usePagination } from "./usePagination";
+import { Detail } from "./Detail";
+import { useState } from "react";
+import RequestComponentDetail from "@components/modals/ComponentDetailModal";
 
 interface HolidaysTableProps {
   data: IHolidaysTable[];
   loading?: boolean;
 }
 
-function HolidaysTable(props: HolidaysTableProps) {
-  const { data, loading = false } = props;
+function HolidaysTable({ data, loading = false }: HolidaysTableProps) {
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [modalData, setModalData] = useState<any>(null);
+
   const {
     totalRecords,
     handleStartPage,
@@ -44,11 +44,11 @@ function HolidaysTable(props: HolidaysTableProps) {
 
   const mediaQueries = useMediaQueries([
     "(max-width: 1024px)",
-    "(max-width: 587px)",
+    "(max-width: 542px)",
   ]);
 
   const determineVisibleHeaders = () => {
-    if (mediaQueries["(max-width: 587px)"]) {
+    if (mediaQueries["(max-width: 542px)"]) {
       return headers
         .filter((header) => ["date", "status", "days"].includes(header.key))
         .concat({
@@ -66,7 +66,7 @@ function HolidaysTable(props: HolidaysTableProps) {
   };
 
   const visibleHeaders = determineVisibleHeaders();
-  const visibleColumns = mediaQueries["(max-width: 587px)"]
+  const visibleColumns = mediaQueries["(max-width: 542px)"]
     ? columns.slice(1, 3)
     : mediaQueries["(max-width: 1024px)"]
       ? columns.slice(0, 3)
@@ -74,17 +74,15 @@ function HolidaysTable(props: HolidaysTableProps) {
 
   const renderTableCell = (
     headerKey: string,
-    cellData:
-      | {
-          type?: string;
-          value?: string | number | JSX.Element;
-          onClick?: () => void;
-        }
-      | undefined,
+    cellData: {
+      type?: string;
+      value?: string | number | JSX.Element;
+      onClick?: () => void;
+    },
     rowIndex: number,
   ) => {
     const isMobileAction =
-      headerKey === "mobileActions" && mediaQueries["(max-width: 587px)"];
+      headerKey === "mobileActions" && mediaQueries["(max-width: 542px)"];
     if (isMobileAction) {
       return (
         <Td
@@ -96,14 +94,10 @@ function HolidaysTable(props: HolidaysTableProps) {
           {loading ? (
             <SkeletonLine width="100%" animated={true} />
           ) : (
-            <Icon
-              icon={<MdMoreVert />}
-              appearance="primary"
-              variant="filled"
-              shape="circle"
-              size="20px"
-              onClick={() => console.log("Actions clicked")}
-              cursorHover
+            <Detail
+              onClickDetails={() => handleDetailsClick(cellData)}
+              onClickEdit={cellData?.onClick}
+              onClickEliminate={cellData?.onClick}
             />
           )}
         </Td>
@@ -151,7 +145,7 @@ function HolidaysTable(props: HolidaysTableProps) {
       const iconProps = {
         appearance: appearanceValue,
         size: "16px",
-        onClick: cellData.onClick,
+        onClick: () => handleDetailsClick(cellData),
         cursorHover: true,
       };
 
@@ -171,62 +165,108 @@ function HolidaysTable(props: HolidaysTableProps) {
     return cellData?.value;
   };
 
+  const handleDetailsClick = (cellData: any) => {
+    setModalData(cellData);
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
+  const modalContent = [
+    { label: "Descripción", value: "Disfrute de vacaciones" },
+    { label: "Fecha", value: "18/Enr/2024" },
+    { label: "Días de disfrute", value: "2" },
+    { label: "Estado", value: "En trámite de aprobación" },
+    { label: "Fecha de inicio", value: "30 /Oct/2024" },
+    {
+      label: "Observaciones",
+      value:
+        "Me gustaría que uno de los asesores se contactaran vía telefónica, si es posible, ya que me quedan ciertas dudas que no se solucionan mediante la pagina. Agradecería una llamada al numero celular 312 3202874.",
+    },
+  ];
+
+  const filteredModalContent = mediaQueries["(max-width: 1024px)"]
+    ? modalContent
+    : modalContent.filter(
+        (item) =>
+          item.label === "Días de disfrute" ||
+          item.label === "Fecha de inicio" ||
+          item.label === "Observaciones",
+      );
   return (
-    <Table>
-      <Colgroup>
-        {visibleColumns.map((col, index) => (
-          <Col key={index} span={col.span} style={col.style} />
-        ))}
-      </Colgroup>
-      <Thead>
-        <Tr border="bottom">
-          {visibleHeaders.map((header, index) => (
-            <StyledTh
-              key={index}
-              action={header.action}
-              align="center"
-              style={header.style}
-            >
-              <b>{header.label}</b>
-            </StyledTh>
+    <>
+      <Table>
+        <Colgroup>
+          {visibleColumns.map((col, index) => (
+            <Col key={index} span={col.span} style={col.style} />
           ))}
-        </Tr>
-      </Thead>
-      <Tbody>
-        {data.length === 0 ? (
+        </Colgroup>
+        <Thead>
           <Tr border="bottom">
-            <Td colSpan={visibleHeaders.length} align="center" type="custom">
-              <Text size="medium">No tiene solicitudes en trámite.</Text>
-            </Td>
+            {visibleHeaders.map((header, index) => (
+              <StyledTh
+                key={index}
+                action={header.action}
+                align="center"
+                style={header.style}
+              >
+                <b>{header.label}</b>
+              </StyledTh>
+            ))}
           </Tr>
-        ) : (
-          currentData.map((row: IHolidaysTable, rowIndex: number) => (
-            <Tr key={rowIndex} border="bottom">
-              {visibleHeaders.map((header) =>
-                renderTableCell(header.key, row[header.key], rowIndex),
-              )}
+        </Thead>
+        <Tbody>
+          {data.length === 0 ? (
+            <Tr border="bottom">
+              <Td colSpan={visibleHeaders.length} align="center" type="custom">
+                <Text size="medium">No tiene solicitudes en trámite.</Text>
+              </Td>
             </Tr>
-          ))
+          ) : (
+            currentData.map((row: IHolidaysTable, rowIndex: number) => (
+              <Tr key={rowIndex} border="bottom">
+                {visibleHeaders.map((header) => {
+                  const cellData = row[header.key];
+                  return renderTableCell(
+                    header.key,
+                    cellData ?? { value: "" },
+                    rowIndex,
+                  );
+                })}
+              </Tr>
+            ))
+          )}
+        </Tbody>
+        {data.length > 0 && (
+          <Tfoot>
+            <Tr border="bottom">
+              <Td colSpan={visibleHeaders.length} type="custom" align="center">
+                <Pagination
+                  firstEntryInPage={firstEntryInPage}
+                  lastEntryInPage={lastEntryInPage}
+                  totalRecords={totalRecords}
+                  handleStartPage={handleStartPage}
+                  handlePrevPage={handlePrevPage}
+                  handleNextPage={handleNextPage}
+                  handleEndPage={handleEndPage}
+                />
+              </Td>
+            </Tr>
+          </Tfoot>
         )}
-      </Tbody>
-      {data.length > 0 && (
-        <Tfoot>
-          <Tr border="bottom">
-            <Td colSpan={visibleHeaders.length} type="custom" align="center">
-              <Pagination
-                firstEntryInPage={firstEntryInPage}
-                lastEntryInPage={lastEntryInPage}
-                totalRecords={totalRecords}
-                handleStartPage={handleStartPage}
-                handlePrevPage={handlePrevPage}
-                handleNextPage={handleNextPage}
-                handleEndPage={handleEndPage}
-              />
-            </Td>
-          </Tr>
-        </Tfoot>
+      </Table>
+
+      {isModalOpen && modalData && (
+        <RequestComponentDetail
+          title="Detalles"
+          buttonLabel="Cerrar"
+          modalContent={filteredModalContent}
+          handleClose={closeModal}
+        />
       )}
-    </Table>
+    </>
   );
 }
 
