@@ -14,6 +14,8 @@ interface Theme {
 interface VerticalDividerProps {
   $isVertical: boolean;
   theme?: typeof inube;
+  height?: string;
+  color?: string;
 }
 
 const StyledCompanyLogo = styled.img`
@@ -55,10 +57,12 @@ const StyledCertificationsContainer = styled.div<StyledCertificationsContainerPr
 `;
 
 const VerticalDivider = styled.div<VerticalDividerProps>`
-  width: 1px;
-  height: 100%;
-  background-color: ${({ theme }) =>
-    theme?.palette?.neutral?.N40 || inube.palette.neutral.N40};
+  width: 0;
+  height: ${({ height }) => height ?? "100%"};
+  border-left: 1px dashed
+    ${({ color, theme }) =>
+      color ?? theme?.palette?.neutral?.N40 ?? inube.palette.neutral.N40};
+  margin: 0 auto;
 `;
 
 export {
