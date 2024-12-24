@@ -4,6 +4,7 @@ import {
   fetchTimeoutServices,
   maxRetriesServices,
 } from "@config/environment";
+import { mapEmployeeApiToEntity } from "./mappers";
 
 const employeeByNickname = async (nickname: string): Promise<IEmployee> => {
   const maxRetries = maxRetriesServices;
@@ -40,8 +41,11 @@ const employeeByNickname = async (nickname: string): Promise<IEmployee> => {
           `Error al obtener los datos del empleado. Status: ${res.status}, Detalles: ${JSON.stringify(data)}`,
         );
       }
+      const normalizedEmployee = Array.isArray(data)
+        ? mapEmployeeApiToEntity(data[0])
+        : ({} as IEmployee);
 
-      return data;
+      return normalizedEmployee;
     } catch (error) {
       if (attempt === maxRetries) {
         throw new Error(

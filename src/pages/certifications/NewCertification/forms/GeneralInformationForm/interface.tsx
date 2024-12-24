@@ -39,6 +39,14 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
 
   const isMobile = useMediaQuery("(max-width: 700px)");
 
+  const handleContractChange = (name: string, value: string) => {
+    formik.setFieldValue(name, value);
+    formik.setFieldValue(
+      "contractDesc",
+      contractOptions.find((option) => option.value === value)?.label,
+    );
+  };
+
   return (
     <form onSubmit={formik.handleSubmit}>
       <Stack direction="column" gap={spacing.s300}>
@@ -74,22 +82,22 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
           </Stack>
           <Stack width={isMobile ? "100%" : "49%"}>
             <Select
-              size="compact"
-              fullwidth={true}
-              name="contract"
-              required
               label="Contrato"
+              name="contract"
+              id="contract"
               options={contractOptions}
+              placeholder="Selecciona un contrato"
               value={formik.values.contract}
-              placeholder="Selecciona una opción"
-              onChange={(name, value) => {
-                console.log("Contrato seleccionado:", name, value);
-                formik.setFieldValue(name, value);
-              }}
+              message={formik.errors.contract}
               disabled={getDisabledState(
                 loading,
                 contractOptions.length !== 1 || !formik.values.contract,
               )}
+              size="compact"
+              fullwidth
+              onBlur={formik.handleBlur}
+              onChange={handleContractChange}
+              required={isRequired(validationSchema, "contract")}
             />
           </Stack>
           <Stack>

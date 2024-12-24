@@ -5,13 +5,14 @@ import { IOption } from "@inubekit/select";
 
 import { useAppContext } from "@context/AppContext";
 import { IEmploymentContract } from "@src/types/employeePortalBusiness.types";
-import { formatDate } from "@src/utils/date";
+
 import { validationMessages } from "@src/validations/validationMessages";
 import { validationRules } from "@src/validations/validationRules";
 import { generalInformationRequiredFields } from "./config/formConfig";
 
 import { GeneralInformationFormUI } from "./interface";
 import { IGeneralInformationEntry } from "./types";
+import { HolidaysActionTypes } from "@src/types/holidays.types";
 
 const createValidationSchema = () =>
   object().shape({
@@ -44,9 +45,9 @@ const GeneralInformationForm = forwardRef<
     {
       initialValues,
       onFormValid,
-      onSubmit,
+      onSubmit = () => {},
       handleNextStep,
-      loading,
+      loading = false,
       withNextButton = false,
     },
     ref,
@@ -55,16 +56,23 @@ const GeneralInformationForm = forwardRef<
     const [contractOptions, setContractOptions] = useState<IOption[]>([]);
 
     useEffect(() => {
-      const options: IOption[] = employees[0].employmentContract.map(
-        (contract: IEmploymentContract) => ({
-          id: contract.contractId,
-          label: `${contract.contractType} - ${formatDate(contract.startDate)}`,
-          value: `${contract.contractType} - ${formatDate(contract.startDate)}`,
-        }),
+      if (!employees.employmentContract) return;
+      const options: IOption[] = employees.employmentContract.map(
+        (contract: IEmploymentContract) => {
+          const contractTypeLabel =
+            HolidaysActionTypes[
+              contract.contractType as unknown as keyof typeof HolidaysActionTypes
+            ] || contract.contractType;
+          return {
+            id: contract.contractNumber,
+            label: `${contractTypeLabel} - ${contract.contractNumber}`,
+            value: contract.contractNumber,
+          };
+        },
       );
       setContractOptions(options);
-
       if (options.length === 1) {
+        formik.setFieldValue("contractDesc", options[0].label);
         formik.setFieldValue("contract", options[0].value);
       }
     }, [employees]);
@@ -73,7 +81,7 @@ const GeneralInformationForm = forwardRef<
       initialValues,
       validationSchema,
       validateOnBlur: false,
-      onSubmit: onSubmit ?? (() => true),
+      onSubmit,
     });
 
     useImperativeHandle(ref, () => formik);
@@ -81,8 +89,7 @@ const GeneralInformationForm = forwardRef<
     useEffect(() => {
       if (onFormValid) {
         formik.validateForm().then((errors) => {
-          const isFormValid = Object.keys(errors).length === 0;
-          onFormValid(isFormValid);
+          onFormValid(Object.keys(errors).length === 0);
         });
       }
     }, [formik.values, onFormValid]);
