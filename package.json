@@ -15,6 +15,7 @@
   "dependencies": {
     "@auth0/auth0-react": "^2.2.4",
     "@inubekit/assisted": "^7.10.0",
+    "@inubekit/blanket": "^2.25.0",
     "@inubekit/breadcrumbs": "^2.34.0",
     "@inubekit/button": "^4.44.1",
     "@inubekit/date": "^2.39.1",
