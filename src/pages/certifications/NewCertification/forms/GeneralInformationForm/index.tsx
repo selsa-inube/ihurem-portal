@@ -12,7 +12,7 @@ import { generalInformationRequiredFields } from "./config/formConfig";
 
 import { GeneralInformationFormUI } from "./interface";
 import { IGeneralInformationEntry } from "./types";
-import { HolidaysActionTypes } from "@src/types/holidays.types";
+import { ContractActionTypes } from "@src/types/contract.types";
 
 const createValidationSchema = () =>
   object().shape({
@@ -60,8 +60,8 @@ const GeneralInformationForm = forwardRef<
       const options: IOption[] = employees.employmentContract.map(
         (contract: IEmploymentContract) => {
           const contractTypeLabel =
-            HolidaysActionTypes[
-              contract.contractType as unknown as keyof typeof HolidaysActionTypes
+            ContractActionTypes[
+              contract.contractType as unknown as keyof typeof ContractActionTypes
             ] || contract.contractType;
           return {
             id: contract.contractNumber,

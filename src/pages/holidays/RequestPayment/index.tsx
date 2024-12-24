@@ -12,6 +12,7 @@ function RequestPayment() {
     id: "",
     daysToPay: "",
     contract: "",
+    contractDesc: "",
     observations: "",
   });
   const generalInformationRef =
