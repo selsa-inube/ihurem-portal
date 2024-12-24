@@ -80,7 +80,7 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
               disabled={loading}
             />
           </Stack>
-          <Stack width={isMobile ? "100%" : "49%"}>
+          <Stack>
             <Select
               label="Contrato"
               name="contract"
