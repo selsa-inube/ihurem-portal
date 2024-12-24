@@ -1,3 +1,4 @@
+import { Stack } from "@inubekit/stack";
 import { Grid } from "@inubekit/grid";
 
 import { BoxAttribute } from "@components/cards/BoxAttribute";
@@ -20,8 +21,14 @@ const renderPersonalInfoVerification = (
       <BoxAttribute label="Días de disfrute:" value={values.certification} />
       <BoxAttribute label="Destinatario:" value={values.addressee} />
       <BoxAttribute label="Contrato:" value={values.contract} />
-      <BoxAttribute label="observations:" value={values.observations} />
     </Grid>
+    <Stack width="100%" direction="column">
+      <BoxAttribute
+        label="Observaciones:"
+        value={values.observations}
+        direction="column"
+      />
+    </Stack>
   </>
 );
 
