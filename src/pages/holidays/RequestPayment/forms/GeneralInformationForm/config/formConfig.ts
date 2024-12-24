@@ -1,5 +1,5 @@
 const generalInformationRequiredFields = {
-  certification: true,
+  daysToPay: true,
   contract: true,
   observations: true,
 };

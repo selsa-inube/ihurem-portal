@@ -12,6 +12,7 @@ function NewCertification() {
     id: "",
     certification: "",
     addressee: "",
+    observations: "",
     contract: "",
   });
 

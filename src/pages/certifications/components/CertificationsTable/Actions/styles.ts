@@ -13,7 +13,6 @@ interface Theme {
 
 const StyledContainer = styled.div`
   position: absolute;
-  z-index: 99;
 
   figure {
     margin-right: 5px;

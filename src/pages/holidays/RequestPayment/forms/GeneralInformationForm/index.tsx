@@ -1,26 +1,26 @@
+import { useEffect, useState, forwardRef, useImperativeHandle } from "react";
 import { FormikProps, useFormik } from "formik";
-import { object } from "yup";
-import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import { object, string } from "yup";
 import { IOption } from "@inubekit/select";
 
 import { useAppContext } from "@context/AppContext";
 import { IEmploymentContract } from "@src/types/employeePortalBusiness.types";
-
 import { validationMessages } from "@src/validations/validationMessages";
 import { validationRules } from "@src/validations/validationRules";
-import { generalInformationRequiredFields } from "./config/formConfig";
 
+import { generalInformationRequiredFields } from "./config/formConfig";
 import { GeneralInformationFormUI } from "./interface";
 import { IGeneralInformationEntry } from "./types";
-import { ContractActionTypes } from "@src/types/contract.types";
+import { HolidaysActionTypes } from "@src/types/holidays.types";
 
 const createValidationSchema = () =>
   object().shape({
-    certification: validationRules.certification.required(
-      validationMessages.required,
-    ),
-    addressee: validationRules.addressee.required(validationMessages.required),
-    contract: validationRules.contract.required(validationMessages.required),
+    daysToPay: generalInformationRequiredFields.daysToPay
+      ? validationRules.daysOff.required(validationMessages.required)
+      : validationRules.daysOff,
+    contract: generalInformationRequiredFields.contract
+      ? string().required(validationMessages.required)
+      : string(),
     observations: generalInformationRequiredFields.observations
       ? validationRules.observations.required(validationMessages.required)
       : validationRules.observations,
@@ -60,8 +60,8 @@ const GeneralInformationForm = forwardRef<
       const options: IOption[] = employees.employmentContract.map(
         (contract: IEmploymentContract) => {
           const contractTypeLabel =
-            ContractActionTypes[
-              contract.contractType as unknown as keyof typeof ContractActionTypes
+            HolidaysActionTypes[
+              contract.contractType as unknown as keyof typeof HolidaysActionTypes
             ] || contract.contractType;
           return {
             id: contract.contractNumber,

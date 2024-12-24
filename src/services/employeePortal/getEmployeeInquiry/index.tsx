@@ -18,8 +18,7 @@ const employeeByNickname = async (nickname: string): Promise<IEmployee> => {
       const options: RequestInit = {
         method: "GET",
         headers: {
-          "X-Action": "SearchByNickname",
-          "Content-type": "application/json; charset=UTF-8",
+          "Content-Type": "application/json; charset=UTF-8",
         },
         signal: controller.signal,
       };
@@ -34,22 +33,26 @@ const employeeByNickname = async (nickname: string): Promise<IEmployee> => {
       if (res.status === 204) {
         return {} as IEmployee;
       }
-      const data = await res.json().catch(() => null);
+
+      const data = (await res.json()) as IEmployee;
 
       if (!res.ok) {
-        throw {
-          message: "Error al obtener los datos del empleado.",
-          status: res.status,
-          data,
-        };
+        throw new Error(
+          `Error al obtener los datos del empleado. Status: ${res.status}, Detalles: ${JSON.stringify(data)}`,
+        );
       }
-      return mapEmployeeApiToEntity(data);
+      const normalizedEmployee = Array.isArray(data)
+        ? mapEmployeeApiToEntity(data[0])
+        : ({} as IEmployee);
+
+      return normalizedEmployee;
     } catch (error) {
       if (attempt === maxRetries) {
         throw new Error(
           "Todos los intentos fallaron. No se pudieron obtener los datos del empleado.",
         );
       }
+      console.warn(`Intento ${attempt} fallido:`, error);
     }
   }
 

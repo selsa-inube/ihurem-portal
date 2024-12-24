@@ -1,3 +1,5 @@
+import { HolidaysActionTypes } from "./holidays.types";
+
 interface IEmployee {
   employeeId: string;
   names: string;
@@ -26,7 +28,7 @@ interface IEmploymentContract {
   contractNumber: string;
   employeeId: string;
   contractStatus: string;
-  contractType: string;
+  contractType: HolidaysActionTypes;
   startDate: string;
   formalizedStartDate: string;
   joiningDetter: string;
