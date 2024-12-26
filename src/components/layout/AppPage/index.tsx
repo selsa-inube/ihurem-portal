@@ -24,17 +24,34 @@ const renderLogo = (imgUrl: string) => {
 };
 
 function AppPage() {
-  const { user, logoUrl, businessUnit } = useAppContext();
+  const { user, logoUrl, businessUnit, employeeOptions } = useAppContext();
   const isTablet = useMediaQuery("(max-width: 944px)");
 
   const businessUnitName = businessUnit?.businessUnit ?? "Unidad de Negocio";
+
+  const filteredNav = {
+    ...nav,
+    sections: {
+      administrate: {
+        ...nav.sections.administrate,
+        links: Object.fromEntries(
+          Object.entries(nav.sections.administrate.links).filter(([, link]) => {
+            const employeeOption = employeeOptions.find(
+              (option) => option.abbreviatedName === link.label,
+            );
+            return !!employeeOption;
+          }),
+        ),
+      },
+    },
+  };
 
   return (
     <StyledAppPage>
       <Grid templateRows="auto 1fr" height="100vh" justifyContent="unset">
         <Header
           portalId="portal"
-          navigation={nav}
+          navigation={filteredNav}
           logoURL={renderLogo(logoUrl)}
           userName={user?.username ?? "Nombre de usuario"}
           userMenu={userMenu}
@@ -47,7 +64,7 @@ function AppPage() {
             height={"95vh"}
           >
             {!isTablet && (
-              <Nav navigation={nav} actions={actions} collapse={true} />
+              <Nav navigation={filteredNav} actions={actions} collapse={true} />
             )}
             <StyledMain $isTablet={isTablet}>
               <Outlet />
