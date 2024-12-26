@@ -3,17 +3,9 @@ import { inube } from "@inubekit/foundations";
 
 import { spacing } from "@design/tokens/spacing/spacing";
 
-interface Theme {
-  palette: {
-    neutral: {
-      N30: string;
-    };
-  };
-}
-
 interface StyledCertificationsContainerProps {
   $isMobile: boolean;
-  theme?: Theme;
+  theme?: typeof inube;
 }
 
 const StyledCertificationsContainer = styled.div<StyledCertificationsContainerProps>`
