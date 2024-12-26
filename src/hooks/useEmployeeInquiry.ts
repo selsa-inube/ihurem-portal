@@ -3,13 +3,12 @@ import { IEmployee } from "@ptypes/employeePortalBusiness.types";
 import { employeeByNickname } from "@services/employeePortal/getEmployeeInquiry";
 
 export const useEmployeeByNickname = (nickname: string) => {
-  const [employee, setEmployee] = useState<IEmployee | null>(null);
+  const [employee, setEmployee] = useState<IEmployee>({} as IEmployee);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!nickname) return;
-
     const fetchEmployee = async () => {
       setLoading(true);
       setError(null);
@@ -24,7 +23,7 @@ export const useEmployeeByNickname = (nickname: string) => {
         setEmployee(result);
       } catch (error: any) {
         setError(error.message || "Error al obtener los datos del empleado");
-        setEmployee(null);
+        setEmployee({} as IEmployee);
       } finally {
         setLoading(false);
       }

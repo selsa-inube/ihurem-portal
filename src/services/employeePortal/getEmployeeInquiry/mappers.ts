@@ -3,6 +3,7 @@ import {
   IEmploymentContract,
   IEmployeeReference,
 } from "@ptypes/employeePortalBusiness.types";
+import { HolidaysActionTypes } from "@src/types/holidays.types";
 
 const mapEmployeeApiToEntity = (employee: Record<string, any>): IEmployee => {
   return {
@@ -41,7 +42,7 @@ const mapEmploymentContracts = (
     contractNumber: String(contract.contractNumber),
     employeeId: String(contract.employeeId),
     contractStatus: String(contract.contractStatus),
-    contractType: String(contract.contractType),
+    contractType: contract.contractType as HolidaysActionTypes,
     startDate: String(contract.startDate),
     formalizedStartDate: String(contract.formalizedStartDate),
     joiningDetter: String(contract.joiningDetter),
