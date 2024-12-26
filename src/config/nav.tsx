@@ -2,7 +2,6 @@ import {
   MdLogout,
   MdAttachFile,
   MdBeachAccess,
-  MdOutlinePersonOff,
   MdOutlinePersonalInjury,
 } from "react-icons/md";
 
@@ -31,12 +30,6 @@ const nav: INav = {
           label: "Certificaciones",
           icon: <MdAttachFile />,
           path: "/certifications",
-        },
-        absences: {
-          id: "absences",
-          label: "Ausencias",
-          icon: <MdOutlinePersonOff />,
-          path: "/absences",
         },
       },
     },

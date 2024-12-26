@@ -1,6 +1,5 @@
 import {
   MdOutlineBeachAccess,
-  MdOutlinePersonOff,
   MdOutlineFilePresent,
   MdOutlinePersonalInjury,
 } from "react-icons/md";
@@ -14,11 +13,11 @@ export const cards = [
     url: "/holidays",
   },
   {
-    title: "Ausencias",
-    complement: ["Consulta tus ausencias registradas."],
-    description: "Historial de tus ausencias laborales.",
-    icon: <MdOutlinePersonOff />,
-    url: "/ausencias",
+    title: "Incapacidades",
+    complement: ["Registra y consulta tus incapacidades."],
+    description: "Gestión de permisos médicos.",
+    icon: <MdOutlinePersonalInjury />,
+    url: "/incapacidades",
   },
   {
     title: "Certificaciones",
@@ -26,12 +25,5 @@ export const cards = [
     description: "Documentos oficiales disponibles.",
     icon: <MdOutlineFilePresent />,
     url: "/certifications",
-  },
-  {
-    title: "Incapacidades",
-    complement: ["Registra y consulta tus incapacidades."],
-    description: "Gestión de permisos médicos.",
-    icon: <MdOutlinePersonalInjury />,
-    url: "/incapacidades",
   },
 ];
