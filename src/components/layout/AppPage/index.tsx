@@ -15,6 +15,8 @@ import {
   StyledMain,
 } from "./styles";
 
+import { cards } from "@config/home.config";
+
 const renderLogo = (imgUrl: string) => {
   return (
     <StyledContentImg to="/">
@@ -24,10 +26,12 @@ const renderLogo = (imgUrl: string) => {
 };
 
 function AppPage() {
-  const { user, logoUrl, businessUnit, employeeOptions } = useAppContext();
+  const { user, logoUrl, businessUnit } = useAppContext();
   const isTablet = useMediaQuery("(max-width: 944px)");
 
   const businessUnitName = businessUnit?.businessUnit ?? "Unidad de Negocio";
+
+  const availableTitles = cards.map((card) => card.title.trim().toLowerCase());
 
   const filteredNav = {
     ...nav,
@@ -35,12 +39,9 @@ function AppPage() {
       administrate: {
         ...nav.sections.administrate,
         links: Object.fromEntries(
-          Object.entries(nav.sections.administrate.links).filter(([, link]) => {
-            const employeeOption = employeeOptions.find(
-              (option) => option.abbreviatedName === link.label,
-            );
-            return !!employeeOption;
-          }),
+          Object.entries(nav.sections.administrate.links).filter(([_, link]) =>
+            availableTitles.includes(link.label.trim().toLowerCase()),
+          ),
         ),
       },
     },

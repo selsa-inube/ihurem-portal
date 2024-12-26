@@ -13,6 +13,7 @@ import {
   IBusinessUnitsPortalEmployee,
   IEmployeePortalByBusinessManager,
   IEmployee,
+  IEmployeeOptions, // Import the type for employee options
 } from "@src/types/employeePortalBusiness.types";
 
 const AppContext = createContext<IAppContextType | undefined>(undefined);
@@ -22,7 +23,16 @@ const AppProvider: React.FC<{
   dataPortal: IEmployeePortalByBusinessManager;
   businessManagersData: IBusinessManagers;
   businessUnitData: IBusinessUnitsPortalEmployee;
-}> = ({ children, dataPortal, businessManagersData, businessUnitData }) => {
+  employee: IEmployee;
+  employeeOptions?: IEmployeeOptions[] | null;
+}> = ({
+  children,
+  dataPortal,
+  businessManagersData,
+  businessUnitData,
+  employee,
+  employeeOptions,
+}) => {
   const { user: auth0User } = useAuth0();
   const [user, setUser] = useState<{
     username: string;
@@ -60,13 +70,15 @@ const AppProvider: React.FC<{
   const [businessUnit, setBusinessUnit] =
     useState<IBusinessUnitsPortalEmployee | null>(businessUnitData);
 
-  const [employees, setEmployees] = useState<IEmployee>({} as IEmployee);
+  const [employees, setEmployees] = useState<IEmployee>(employee);
 
   const updatePreferences = (newPreferences: Partial<IPreferences>) => {
     setPreferences((prev) => ({ ...prev, ...newPreferences }));
   };
 
-  const [employeeOptions, setEmployeeOptions] = useState<any[]>([]);
+  const [employeeOptionsState, setEmployeeOptions] = useState<
+    IEmployeeOptions[]
+  >(employeeOptions ?? []);
 
   useEffect(() => {
     if (user) {
@@ -95,7 +107,7 @@ const AppProvider: React.FC<{
         setBusinessUnit,
         employees,
         setEmployees,
-        employeeOptions,
+        employeeOptions: employeeOptionsState,
         setEmployeeOptions,
       }}
     >

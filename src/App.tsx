@@ -5,7 +5,6 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 import { useEffect, useState } from "react";
-
 import { AppPage } from "@components/layout/AppPage";
 import { Home } from "@src/pages/home";
 import { AppProvider, useAppContext } from "@context/AppContext";
@@ -33,40 +32,7 @@ function LogOut() {
 }
 
 function FirstPage() {
-  const { user, provisionedPortal, setEmployees, setEmployeeOptions } =
-    useAppContext();
-
-  const {
-    employee,
-    loading: employeeLoading,
-    error: employeeError,
-  } = useEmployeeByNickname(user?.nickname ?? "");
-
-  const {
-    data: employeeOptions,
-    loading: optionsLoading,
-    error: optionsError,
-  } = useEmployeeOptions(user?.nickname ?? "");
-
-  useEffect(() => {
-    if (employee && !employeeLoading && !employeeError) {
-      setEmployees(employee);
-    }
-  }, [employee, employeeLoading, employeeError, setEmployees]);
-
-  useEffect(() => {
-    if (employeeOptions && !optionsLoading && !optionsError) {
-      setEmployeeOptions(employeeOptions);
-    }
-  }, [employeeOptions, optionsLoading, optionsError]);
-
-  if (employeeLoading || optionsLoading) {
-    return null;
-  }
-
-  if (employeeError || optionsError) {
-    return <LogOut />;
-  }
+  const { user, provisionedPortal } = useAppContext();
 
   return (provisionedPortal?.portalCode &&
     provisionedPortal.portalCode.length === 0) ||
@@ -104,7 +70,7 @@ function App() {
   }
 
   const [isReady, setIsReady] = useState(false);
-  const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
+  const { loginWithRedirect, isAuthenticated, isLoading, user } = useAuth0();
   const { portalData, hasError } = usePortalData(portalCode ?? "");
 
   const { businessManagersData, hasError: hasManagersError } =
@@ -112,6 +78,18 @@ function App() {
 
   const { businessUnitData, hasError: hasBusinessUnitError } =
     useBusinessUnit(portalData);
+
+  const {
+    employee,
+    loading: employeeLoading,
+    error: employeeError,
+  } = useEmployeeByNickname(user?.nickname ?? "");
+
+  const {
+    data: employeeOptions,
+    loading: optionsLoading,
+    error: optionsError,
+  } = useEmployeeOptions(user?.nickname ?? "");
 
   useEffect(() => {
     if (
@@ -126,11 +104,17 @@ function App() {
     }
   }, [isLoading, isAuthenticated, loginWithRedirect]);
 
-  if (isLoading || !isReady) {
-    return null;
+  if (isLoading || !isReady || employeeLoading || optionsLoading) {
+    return <div>Cargando....</div>;
   }
 
-  if (hasError || hasManagersError || hasBusinessUnitError) {
+  if (
+    hasError ||
+    hasManagersError ||
+    hasBusinessUnitError ||
+    employeeError ||
+    optionsError
+  ) {
     return <ErrorPage />;
   }
 
@@ -139,6 +123,8 @@ function App() {
       dataPortal={portalData}
       businessManagersData={businessManagersData}
       businessUnitData={businessUnitData}
+      employee={employee}
+      employeeOptions={employeeOptions}
     >
       <GlobalStyles />
       <RouterProvider router={router} />
