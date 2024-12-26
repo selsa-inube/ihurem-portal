@@ -16,6 +16,7 @@ import {
   VerticalDivider,
 } from "./styles";
 import { environment } from "@config/environment.ts";
+import errorCodes from "@config/errorCodes.ts";
 
 interface ErrorPageProps {
   logo?: string;
@@ -26,6 +27,7 @@ interface ErrorPageProps {
   imageAlt?: string;
   nameButton?: string;
   onClick?: () => void;
+  errorCode?: number;
 }
 
 function ErrorPage(props: ErrorPageProps) {
@@ -37,12 +39,18 @@ function ErrorPage(props: ErrorPageProps) {
     imageAlt = "Ha surgido un error. Revisa la descripción",
     nameButton = "Regresar",
     onClick,
+    errorCode = 0,
   } = props;
 
   const mediaQueries = ["(max-width: 600px)"];
   const matches = useMediaQueries(mediaQueries);
-
   const queriesMatches = matches["(max-width: 600px)"];
+
+  const errorDetail = errorCodes[errorCode] || {
+    message: "Error desconocido.",
+    whatWentWrong: "No se proporcionó información sobre el error.",
+    howToFix: "Intenta nuevamente más tarde.",
+  };
 
   return (
     <Stack
@@ -53,7 +61,7 @@ function ErrorPage(props: ErrorPageProps) {
       gap={queriesMatches ? spacing.s150 : spacing.s100}
     >
       <Stack
-        gap={spacing.s800}
+        gap={spacing.s600}
         direction="column"
         alignItems="center"
         width="100%"
@@ -83,9 +91,12 @@ function ErrorPage(props: ErrorPageProps) {
             </Text>
             <Tag
               appearance="gray"
-              label="Código de error: 000"
+              label={`Código de error: ${errorCode}`} // Mostrar el código de error
               weight="strong"
             />
+            <Text type="title" size="medium" appearance="gray">
+              {errorDetail.message}
+            </Text>
             <StyledErrorImage
               src={image}
               alt={imageAlt}
@@ -107,10 +118,7 @@ function ErrorPage(props: ErrorPageProps) {
                 ¿Qué salió mal?
               </Text>
               <Text type="title" size="medium" appearance="gray">
-                • La compañía donde trabajas NO tiene los privilegios requeridos
-                para acceder al portal.
-                <br />• No estás registrado(a) o las atribuciones utilizadas no
-                corresponden con las registradas.
+                {errorDetail.whatWentWrong}
               </Text>
             </Stack>
 
@@ -121,7 +129,7 @@ function ErrorPage(props: ErrorPageProps) {
                 ¿Cómo solucionarlo?
               </Text>
               <Text type="title" size="medium" appearance="gray">
-                • Confirma que estés usando la URL adecuada.
+                {errorDetail.howToFix}
               </Text>
               <Stack justifyContent="center">
                 <Button
