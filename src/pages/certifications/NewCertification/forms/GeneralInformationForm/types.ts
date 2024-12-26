@@ -3,6 +3,7 @@ interface IGeneralInformationEntry {
   certification: string;
   addressee: string;
   contract: string;
+  contractDesc: string;
   observations: string;
 }
 

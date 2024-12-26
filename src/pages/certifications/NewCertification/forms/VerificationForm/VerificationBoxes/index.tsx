@@ -20,7 +20,7 @@ const renderPersonalInfoVerification = (
     >
       <BoxAttribute label="Días de disfrute:" value={values.certification} />
       <BoxAttribute label="Destinatario:" value={values.addressee} />
-      <BoxAttribute label="Contrato:" value={values.contract} />
+      <BoxAttribute label="Contrato:" value={values.contractDesc} />
     </Grid>
     <Stack width="100%" direction="column">
       <BoxAttribute
