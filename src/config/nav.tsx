@@ -1,6 +1,5 @@
 import {
   MdLogout,
-  MdOutlinePersonOff,
   MdAttachFile,
   MdBeachAccess,
   MdOutlinePersonalInjury,
@@ -31,12 +30,6 @@ const nav: INav = {
           label: "Certificados",
           icon: <MdAttachFile />,
           path: "/certifications",
-        },
-        absences: {
-          id: "absences",
-          label: "Ausencias",
-          icon: <MdOutlinePersonOff />,
-          path: "/absences",
         },
       },
     },
