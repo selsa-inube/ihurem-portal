@@ -8,12 +8,12 @@ import { IGeneralInformationEntry } from "./forms/GeneralInformationForm/types";
 
 function NewCertification() {
   const [currentStep, setCurrentStep] = useState(1);
-
   const [formValues, setFormValues] = useState<IGeneralInformationEntry>({
     id: "",
     certification: "",
     addressee: "",
     observations: "",
+    contractDesc: "",
     contract: "",
   });
 
@@ -24,6 +24,10 @@ function NewCertification() {
 
   const handleNextStep = () => {
     if (currentStep < newCCertificationApplication.length) {
+      if (generalInformationRef.current) {
+        setFormValues(generalInformationRef.current.values);
+        setIsCurrentFormValid(generalInformationRef.current.isValid);
+      }
       if (generalInformationRef.current) {
         setFormValues(generalInformationRef.current.values);
         setIsCurrentFormValid(generalInformationRef.current.isValid);
@@ -53,6 +57,7 @@ function NewCertification() {
       handlePreviousStep={handlePreviousStep}
       handleFinishAssisted={handleFinishAssisted}
       setIsCurrentFormValid={setIsCurrentFormValid}
+      setCurrentStep={setCurrentStep}
       isCurrentFormValid={isCurrentFormValid}
       generalInformationRef={generalInformationRef}
       initialGeneralInformationValues={formValues}
