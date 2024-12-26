@@ -13,6 +13,7 @@ function NewCertification() {
     certification: "",
     addressee: "",
     observations: "",
+    contractDesc: "",
     contract: "",
   });
 
@@ -23,6 +24,10 @@ function NewCertification() {
 
   const handleNextStep = () => {
     if (currentStep < newCCertificationApplication.length) {
+      if (generalInformationRef.current) {
+        setFormValues(generalInformationRef.current.values);
+        setIsCurrentFormValid(generalInformationRef.current.isValid);
+      }
       if (generalInformationRef.current) {
         setFormValues(generalInformationRef.current.values);
         setIsCurrentFormValid(generalInformationRef.current.isValid);
