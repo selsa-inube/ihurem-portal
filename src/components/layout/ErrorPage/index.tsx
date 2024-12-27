@@ -15,6 +15,8 @@ import {
   StyledFooter,
   StyledCertificationsContainer,
   VerticalDivider,
+  StyledMainContent,
+  StyledContainer,
 } from "./styles";
 import { environment } from "@config/environment.ts";
 import errorCodes from "@config/errorCodes.tsx";
@@ -61,110 +63,110 @@ function ErrorPage(props: ErrorPageProps) {
   };
 
   return (
-    <Stack
-      padding={
-        queriesMatches ? `${spacing.s500} ${spacing.s250}` : spacing.s1000
-      }
-      justifyContent="center"
-      gap={queriesMatches ? spacing.s150 : spacing.s100}
-    >
-      <Stack
-        gap={spacing.s600}
-        direction="column"
-        alignItems="center"
-        width="100%"
-      >
-        <Stack direction="row" justifyContent="start" width="100%">
-          <StyledCompanyLogo
-            src={logo}
-            alt={logoAlt}
-            width={queriesMatches ? "40px" : "54px"}
-            height={queriesMatches ? "40px" : "54px"}
-          />
-        </Stack>
-
-        <Stack direction="column" alignItems="center" gap={spacing.s350}>
+    <StyledContainer>
+      <StyledMainContent>
+        <Stack
+          justifyContent="center"
+          gap={queriesMatches ? spacing.s150 : spacing.s100}
+        >
           <Stack
+            gap={spacing.s600}
             direction="column"
             alignItems="center"
-            gap={queriesMatches ? spacing.s300 : spacing.s400}
-          >
-            <Text
-              type="headline"
-              textAlign="center"
-              weight="bold"
-              size={queriesMatches ? "small" : "large"}
-            >
-              {heading}
-            </Text>
-            <Tag
-              appearance="gray"
-              label={`Código de error: ${errorCode}`}
-              weight="strong"
-            />
-            <Text type="title" size="medium" appearance="gray">
-              {errorDetail.message}
-            </Text>
-            <StyledErrorImage
-              src={image}
-              alt={imageAlt}
-              width={queriesMatches ? "180px" : "256px"}
-              height={queriesMatches ? "160px" : "240px"}
-            />
-          </Stack>
-        </Stack>
-
-        <StyledCertificationsContainer $isMobile={queriesMatches}>
-          <Stack
-            direction={queriesMatches ? "column" : "row"}
-            gap={spacing.s400}
-            justifyContent="space-between"
             width="100%"
           >
-            <Stack direction="column" gap={spacing.s300} width="100%">
-              <Text type="headline" size="medium" weight="bold">
-                ¿Qué salió mal?
-              </Text>
-              <Text type="title" size="medium" appearance="gray">
-                {errorDetail.whatWentWrong}
-              </Text>
+            <Stack direction="row" justifyContent="start" width="100%">
+              <StyledCompanyLogo
+                src={logo}
+                alt={logoAlt}
+                width={queriesMatches ? "40px" : "54px"}
+                height={queriesMatches ? "40px" : "54px"}
+              />
             </Stack>
 
-            <VerticalDivider $isVertical={!queriesMatches} />
-            {queriesMatches && <Divider dashed />}
-
-            <Stack direction="column" gap={spacing.s300} width="100%">
-              <Text type="headline" size="medium" weight="bold">
-                ¿Cómo solucionarlo?
-              </Text>
-              <Text type="title" size="medium" appearance="gray">
-                {errorDetail.howToFix}
-              </Text>
-              <Stack justifyContent="center">
-                <Button
-                  appearance="primary"
-                  spacing="wide"
-                  variant="filled"
-                  onClick={() =>
-                    onClick
-                      ? onClick()
-                      : window.open(environment.REDIRECT_URI, "_self")
-                  }
+            <Stack direction="column" alignItems="center" gap={spacing.s350}>
+              <Stack
+                direction="column"
+                alignItems="center"
+                gap={queriesMatches ? spacing.s300 : spacing.s400}
+              >
+                <Text
+                  type="headline"
+                  textAlign="center"
+                  weight="bold"
+                  size={queriesMatches ? "small" : "large"}
                 >
-                  {nameButton}
-                </Button>
+                  {heading}
+                </Text>
+                <Tag
+                  appearance="gray"
+                  label={`Código de error: ${errorCode}`}
+                  weight="strong"
+                />
+                <Text type="title" size="medium" appearance="gray">
+                  {errorDetail.message}
+                </Text>
+                <StyledErrorImage
+                  src={image}
+                  alt={imageAlt}
+                  width={queriesMatches ? "180px" : "256px"}
+                  height={queriesMatches ? "160px" : "240px"}
+                />
               </Stack>
             </Stack>
-          </Stack>
-        </StyledCertificationsContainer>
-      </Stack>
 
+            <StyledCertificationsContainer $isMobile={queriesMatches}>
+              <Stack
+                direction={queriesMatches ? "column" : "row"}
+                gap={spacing.s400}
+                justifyContent="space-between"
+                width="100%"
+              >
+                <Stack direction="column" gap={spacing.s300} width="100%">
+                  <Text type="headline" size="medium" weight="bold">
+                    ¿Qué salió mal?
+                  </Text>
+                  <Text type="title" size="medium" appearance="gray">
+                    {errorDetail.whatWentWrong}
+                  </Text>
+                </Stack>
+
+                <VerticalDivider $isVertical={!queriesMatches} />
+                {queriesMatches && <Divider dashed />}
+
+                <Stack direction="column" gap={spacing.s300} width="100%">
+                  <Text type="headline" size="medium" weight="bold">
+                    ¿Cómo solucionarlo?
+                  </Text>
+                  <Text type="title" size="medium" appearance="gray">
+                    {errorDetail.howToFix}
+                  </Text>
+                  <Stack justifyContent="center">
+                    <Button
+                      appearance="primary"
+                      spacing="wide"
+                      variant="filled"
+                      onClick={() =>
+                        onClick
+                          ? onClick()
+                          : window.open(environment.REDIRECT_URI, "_self")
+                      }
+                    >
+                      {nameButton}
+                    </Button>
+                  </Stack>
+                </Stack>
+              </Stack>
+            </StyledCertificationsContainer>
+          </Stack>
+        </Stack>
+      </StyledMainContent>
       <StyledFooter>
         <Text appearance="gray" textAlign="center" size="small">
           © 2024 Inube
         </Text>
       </StyledFooter>
-    </Stack>
+    </StyledContainer>
   );
 }
 

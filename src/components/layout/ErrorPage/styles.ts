@@ -18,6 +18,12 @@ interface VerticalDividerProps {
   color?: string;
 }
 
+const StyledContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+`;
+
 const StyledCompanyLogo = styled.img`
   max-width: 300px;
 
@@ -35,11 +41,9 @@ const StyledErrorImage = styled.img`
 const StyledFooter = styled.footer<Theme>`
   width: 100%;
   justify-content: center;
-  position: absolute;
   padding: ${spacing.s200} ${spacing.s0};
   background-color: ${({ theme }) =>
     theme?.palette?.neutral?.N10 || inube.palette.neutral.N10};
-  bottom: 0;
 `;
 
 const StyledCertificationsContainer = styled.div<StyledCertificationsContainerProps>`
@@ -67,10 +71,20 @@ const VerticalDivider = styled.div<VerticalDividerProps>`
   margin: 0 auto;
 `;
 
+const StyledMainContent = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: ${spacing.s200};
+`;
+
 export {
+  StyledContainer,
   StyledCompanyLogo,
   StyledErrorImage,
   StyledFooter,
   StyledCertificationsContainer,
   VerticalDivider,
+  StyledMainContent,
 };
