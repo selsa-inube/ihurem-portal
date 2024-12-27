@@ -13,7 +13,7 @@ import {
   IBusinessUnitsPortalEmployee,
   IEmployeePortalByBusinessManager,
   IEmployee,
-  IEmployeeOptions, // Import the type for employee options
+  IEmployeeOptions,
 } from "@src/types/employeePortalBusiness.types";
 
 const AppContext = createContext<IAppContextType | undefined>(undefined);

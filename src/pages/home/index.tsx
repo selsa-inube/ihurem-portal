@@ -7,9 +7,8 @@ import { useMediaQueries } from "@inubekit/hooks";
 
 import { AppCard } from "@components/feedback/AppCard";
 import { spacing } from "@design/tokens/spacing/spacing.ts";
-import { userMenu } from "@config/home.config";
+import { userMenu, nav } from "@config/nav.config";
 import { useAppContext } from "@context/AppContext";
-import { cards } from "@config/home.config";
 
 import {
   StyledAppPage,
@@ -67,23 +66,25 @@ function Home() {
                 justifyContent={isMobile ? "center" : "flex-start"}
                 alignItems={isMobile ? "center" : "flex-start"}
               >
-                {cards.map((card, index) => {
-                  const employeeOption = employeeOptions.find(
-                    (option) => option.abbreviatedName === card.title,
-                  );
-                  return (
-                    employeeOption && (
-                      <AppCard
-                        key={index}
-                        title={`${employeeOption.abbreviatedName}`}
-                        complement={card.complement}
-                        description={card.description}
-                        icon={card.icon}
-                        url={card.url}
-                      />
-                    )
-                  );
-                })}
+                {Object.values(nav.sections.administrate.links).map(
+                  (link, index) => {
+                    const employeeOption = employeeOptions.find(
+                      (option) => option.abbreviatedName === link.label,
+                    );
+                    return (
+                      employeeOption && (
+                        <AppCard
+                          key={index}
+                          title={employeeOption.abbreviatedName}
+                          complement={[]}
+                          description={employeeOption.descriptionUse}
+                          icon={link.icon}
+                          url={link.path}
+                        />
+                      )
+                    );
+                  },
+                )}
               </Stack>
             </Stack>
             <Outlet />
