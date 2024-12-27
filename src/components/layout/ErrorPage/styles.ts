@@ -33,13 +33,13 @@ const StyledErrorImage = styled.img`
 `;
 
 const StyledFooter = styled.footer<Theme>`
-  bottom: 0;
   width: 100%;
   justify-content: center;
-  position: fixed;
+  position: absolute;
   padding: ${spacing.s200} ${spacing.s0};
   background-color: ${({ theme }) =>
     theme?.palette?.neutral?.N10 || inube.palette.neutral.N10};
+  bottom: 0;
 `;
 
 const StyledCertificationsContainer = styled.div<StyledCertificationsContainerProps>`

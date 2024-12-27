@@ -121,7 +121,7 @@ function ErrorPage(props: ErrorPageProps) {
             justifyContent="space-between"
             width="100%"
           >
-            <Stack direction="column" gap={spacing.s300} width="50%">
+            <Stack direction="column" gap={spacing.s300} width="100%">
               <Text type="headline" size="medium" weight="bold">
                 ¿Qué salió mal?
               </Text>
@@ -133,7 +133,7 @@ function ErrorPage(props: ErrorPageProps) {
             <VerticalDivider $isVertical={!queriesMatches} />
             {queriesMatches && <Divider dashed />}
 
-            <Stack direction="column" gap={spacing.s300} width="50%">
+            <Stack direction="column" gap={spacing.s300} width="100%">
               <Text type="headline" size="medium" weight="bold">
                 ¿Cómo solucionarlo?
               </Text>
