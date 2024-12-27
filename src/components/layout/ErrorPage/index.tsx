@@ -91,7 +91,7 @@ function ErrorPage(props: ErrorPageProps) {
             </Text>
             <Tag
               appearance="gray"
-              label={`Código de error: ${errorCode}`} // Mostrar el código de error
+              label={`Código de error: ${errorCode}`}
               weight="strong"
             />
             <Text type="title" size="medium" appearance="gray">

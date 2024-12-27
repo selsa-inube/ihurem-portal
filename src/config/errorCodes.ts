@@ -31,7 +31,6 @@ const errorCodes: Record<number, ErrorDetail> = {
     whatWentWrong: "Ocurrió un problema en el servidor.",
     howToFix: "Intenta nuevamente más tarde o contacta al soporte.",
   },
-  // Agregar más códigos de error según sea necesario
 };
 
 export default errorCodes;
