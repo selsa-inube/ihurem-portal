@@ -3,6 +3,7 @@ import { Text } from "@inubekit/text";
 import { Button } from "@inubekit/button";
 import { Tag } from "@inubekit/tag";
 import { useMediaQueries } from "@inubekit/hooks";
+import { Divider } from "@inubekit/divider";
 
 import { spacing } from "@design/tokens/spacing/spacing.ts";
 import selsaLogo from "@assets/images/logoInube.png";
@@ -16,7 +17,7 @@ import {
   VerticalDivider,
 } from "./styles";
 import { environment } from "@config/environment.ts";
-import errorCodes from "@config/errorCodes.ts";
+import errorCodes from "@config/errorCodes.tsx";
 
 interface ErrorPageProps {
   logo?: string;
@@ -47,9 +48,16 @@ function ErrorPage(props: ErrorPageProps) {
   const queriesMatches = matches["(max-width: 600px)"];
 
   const errorDetail = errorCodes[errorCode] || {
-    message: "Error desconocido.",
-    whatWentWrong: "No se proporcionó información sobre el error.",
-    howToFix: "Intenta nuevamente más tarde.",
+    whatWentWrong: (
+      <ul>
+        <li>No se proporcionó información sobre el error.</li>
+      </ul>
+    ),
+    howToFix: (
+      <ul>
+        <li>Intenta nuevamente más tarde.</li>
+      </ul>
+    ),
   };
 
   return (
@@ -123,6 +131,7 @@ function ErrorPage(props: ErrorPageProps) {
             </Stack>
 
             <VerticalDivider $isVertical={!queriesMatches} />
+            {queriesMatches && <Divider dashed />}
 
             <Stack direction="column" gap={spacing.s300} width="50%">
               <Text type="headline" size="medium" weight="bold">

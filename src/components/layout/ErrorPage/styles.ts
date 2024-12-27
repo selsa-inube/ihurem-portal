@@ -36,7 +36,7 @@ const StyledFooter = styled.footer<Theme>`
   bottom: 0;
   width: 100%;
   justify-content: center;
-  position: absolute;
+  position: fixed;
   padding: ${spacing.s200} ${spacing.s0};
   background-color: ${({ theme }) =>
     theme?.palette?.neutral?.N10 || inube.palette.neutral.N10};
@@ -45,6 +45,8 @@ const StyledFooter = styled.footer<Theme>`
 const StyledCertificationsContainer = styled.div<StyledCertificationsContainerProps>`
   display: flex;
   flex-direction: column;
+  width: 1280px;
+  max-width: 100%;
   gap: ${spacing.s250};
   border-radius: ${spacing.s100};
   border: 1px solid
