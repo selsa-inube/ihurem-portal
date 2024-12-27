@@ -14,7 +14,6 @@ export const useEmployeeOptions = (employeeId: string) => {
 
       try {
         const options = await getEmployeeOptions();
-        console.log("Opciones obtenidas:", options);
         if (options.length === 0) {
           setError("No existen opciones para el empleado");
         }

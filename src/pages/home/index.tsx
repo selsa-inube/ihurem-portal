@@ -7,7 +7,7 @@ import { useMediaQueries } from "@inubekit/hooks";
 
 import { AppCard } from "@components/feedback/AppCard";
 import { spacing } from "@design/tokens/spacing/spacing.ts";
-import { userMenu } from "@config/nav";
+import { userMenu } from "@config/home.config";
 import { useAppContext } from "@context/AppContext";
 import { cards } from "@config/home.config";
 

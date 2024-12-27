@@ -16,7 +16,7 @@ import { GlobalStyles } from "@styles/global";
 import { HolidaysRoutes } from "@routes/holidays";
 import { CertificationsRoutes } from "@routes/certifications";
 import { LoginRoutes } from "@routes/login";
-import { pathStart } from "@config/nav";
+import { pathStart } from "@config/home.config";
 import { RegisterRoutes } from "@routes/register";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useBusinessManagers } from "@hooks/useBusinessManagers";

@@ -4,7 +4,7 @@ import { Header } from "@inubekit/header";
 import { Nav } from "@inubekit/nav";
 import { useMediaQuery } from "@inubekit/hooks";
 
-import { nav, userMenu, actions } from "@config/nav";
+import { nav, userMenu, actions } from "@config/home.config";
 import { useAppContext } from "@context/AppContext";
 
 import {
