@@ -73,7 +73,7 @@ function ErrorPage(props: ErrorPageProps) {
             gap={spacing.s600}
             direction="column"
             alignItems="center"
-            width="100%"
+            width="70%"
           >
             <Stack direction="row" justifyContent="start" width="100%">
               <StyledCompanyLogo

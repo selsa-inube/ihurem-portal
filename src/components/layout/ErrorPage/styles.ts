@@ -21,7 +21,7 @@ interface VerticalDividerProps {
 const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: 98vh;
 `;
 
 const StyledCompanyLogo = styled.img`
@@ -44,6 +44,7 @@ const StyledFooter = styled.footer<Theme>`
   padding: ${spacing.s200} ${spacing.s0};
   background-color: ${({ theme }) =>
     theme?.palette?.neutral?.N10 || inube.palette.neutral.N10};
+  margin-top: 30px;
 `;
 
 const StyledCertificationsContainer = styled.div<StyledCertificationsContainerProps>`
@@ -76,7 +77,6 @@ const StyledMainContent = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: ${spacing.s200};
 `;
 
 export {
