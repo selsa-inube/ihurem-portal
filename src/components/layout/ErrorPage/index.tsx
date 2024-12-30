@@ -19,7 +19,7 @@ import {
   StyledContainer,
 } from "./styles";
 import { environment } from "@config/environment.ts";
-import errorCodes from "@config/errorCodes.tsx";
+import { errorCodes } from "@config/errorCodes.tsx";
 
 interface ErrorPageProps {
   logo?: string;
@@ -65,16 +65,8 @@ function ErrorPage(props: ErrorPageProps) {
   return (
     <StyledContainer>
       <StyledMainContent>
-        <Stack
-          justifyContent="center"
-          gap={queriesMatches ? spacing.s150 : spacing.s100}
-        >
-          <Stack
-            gap={spacing.s600}
-            direction="column"
-            alignItems="center"
-            width="70%"
-          >
+        <Stack justifyContent="center">
+          <Stack gap={spacing.s800} direction="column" alignItems="center">
             <Stack direction="row" justifyContent="start" width="100%">
               <StyledCompanyLogo
                 src={logo}
@@ -84,7 +76,7 @@ function ErrorPage(props: ErrorPageProps) {
               />
             </Stack>
 
-            <Stack direction="column" alignItems="center" gap={spacing.s350}>
+            <Stack direction="column" alignItems="center">
               <Stack
                 direction="column"
                 alignItems="center"
@@ -146,6 +138,7 @@ function ErrorPage(props: ErrorPageProps) {
                       appearance="primary"
                       spacing="wide"
                       variant="filled"
+                      fullwidth={queriesMatches}
                       onClick={() =>
                         onClick
                           ? onClick()
@@ -162,7 +155,7 @@ function ErrorPage(props: ErrorPageProps) {
         </Stack>
       </StyledMainContent>
       <StyledFooter>
-        <Text appearance="gray" textAlign="center" size="small">
+        <Text appearance="gray" textAlign="center" size="small" weight="bold">
           © 2024 Inube
         </Text>
       </StyledFooter>

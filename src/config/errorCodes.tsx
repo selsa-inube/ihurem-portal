@@ -82,4 +82,4 @@ const errorCodes: Record<number, ErrorDetail> = {
   },
 };
 
-export default errorCodes;
+export { errorCodes };
