@@ -30,21 +30,21 @@ function AlertCard(props: AlertCardProps) {
             gap="4px"
             justifyContent="space-between"
           >
-            <Text type="title" size="small" weight="bold">
+            <Text type="body" size="large">
               Requisito:
             </Text>
             <Icon icon={icon} appearance="warning" size="20px" />
           </Stack>
           <Divider />
-          <Text type="body" size="small">
+          <Text type="body" size="medium" appearance="gray">
             {requirement}
           </Text>
           <Stack direction="column" gap="4px">
-            <Text type="title" size="small" weight="bold">
+            <Text type="body" size="large">
               Causa de incumplimiento:
             </Text>
             <Divider />
-            <Text type="body" size="small">
+            <Text type="body" size="medium" appearance="gray">
               {cause}
             </Text>
           </Stack>

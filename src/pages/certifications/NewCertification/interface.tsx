@@ -10,8 +10,6 @@ import { spacing } from "@design/tokens/spacing/spacing";
 import { GeneralInformationForm } from "./forms/GeneralInformationForm";
 import { IGeneralInformationEntry } from "./forms/GeneralInformationForm/types";
 import { VerificationForm } from "./forms/VerificationForm";
-import { AlertCard } from "@components/data/NotificationAlert";
-import { MdWarningAmber } from "react-icons/md";
 
 interface RequestEnjoymentUIProps {
   appName: string;
@@ -76,15 +74,6 @@ function NewCertificationUI(
               withNextButton={true}
               onFormValid={setIsCurrentFormValid}
               handleNextStep={handleNextStep}
-            />
-          )}
-
-          {currentStep === 2 && (
-            <AlertCard
-              title="Alerta 1"
-              requirement="Estar al día en las obligaciones."
-              cause="El cliente tiene en mora el crédito de vivienda."
-              icon={<MdWarningAmber />}
             />
           )}
         </Stack>

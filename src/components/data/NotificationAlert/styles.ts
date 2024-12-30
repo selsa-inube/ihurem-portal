@@ -1,11 +1,17 @@
 import styled from "styled-components";
+import { inube } from "@inubekit/foundations";
 import { spacing } from "@design/tokens/spacing/spacing";
 
-const StyledAlertCard = styled.div`
-  border: 1px solid #d1d5db; /* Color del borde */
-  border-radius: 8px; /* Esquinas redondeadas */
+interface IStyledContainer {
+  theme: typeof inube;
+}
+
+const StyledAlertCard = styled.div<IStyledContainer>`
+  border: 1px solid
+    ${({ theme }) =>
+      theme?.palette?.neutral?.N300 || inube.palette.neutral.N300};
+  border-radius: 8px;
   padding: ${spacing.s150};
-  background-color: #ffffff; /* Fondo blanco */
   max-width: 400px;
 `;
 
