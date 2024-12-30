@@ -4,7 +4,7 @@ import { Header } from "@inubekit/header";
 import { Nav } from "@inubekit/nav";
 import { useMediaQuery } from "@inubekit/hooks";
 
-import { nav, userMenu, actions } from "@config/nav";
+import { nav, userMenu, actions } from "@config/nav.config";
 import { useAppContext } from "@context/AppContext";
 
 import {
@@ -24,17 +24,35 @@ const renderLogo = (imgUrl: string) => {
 };
 
 function AppPage() {
-  const { user, logoUrl, businessUnit } = useAppContext();
+  const { user, logoUrl, businessUnit, employeeOptions } = useAppContext();
   const isTablet = useMediaQuery("(max-width: 944px)");
 
   const businessUnitName = businessUnit?.businessUnit ?? "Unidad de Negocio";
+
+  const availableTitles = employeeOptions.map((option) =>
+    option.abbreviatedName.trim().toLowerCase(),
+  );
+
+  const filteredNav = {
+    ...nav,
+    sections: {
+      administrate: {
+        ...nav.sections.administrate,
+        links: Object.fromEntries(
+          Object.entries(nav.sections.administrate.links).filter(([_, link]) =>
+            availableTitles.includes(link.label.trim().toLowerCase()),
+          ),
+        ),
+      },
+    },
+  };
 
   return (
     <StyledAppPage>
       <Grid templateRows="auto 1fr" height="100vh" justifyContent="unset">
         <Header
           portalId="portal"
-          navigation={nav}
+          navigation={filteredNav}
           logoURL={renderLogo(logoUrl)}
           userName={user?.username ?? "Nombre de usuario"}
           userMenu={userMenu}
@@ -47,7 +65,7 @@ function AppPage() {
             height={"95vh"}
           >
             {!isTablet && (
-              <Nav navigation={nav} actions={actions} collapse={true} />
+              <Nav navigation={filteredNav} actions={actions} collapse={true} />
             )}
             <StyledMain $isTablet={isTablet}>
               <Outlet />
