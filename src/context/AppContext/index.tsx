@@ -13,6 +13,7 @@ import {
   IBusinessUnitsPortalEmployee,
   IEmployeePortalByBusinessManager,
   IEmployee,
+  IEmployeeOptions,
 } from "@src/types/employeePortalBusiness.types";
 
 const AppContext = createContext<IAppContextType | undefined>(undefined);
@@ -23,12 +24,14 @@ const AppProvider: React.FC<{
   businessManagersData: IBusinessManagers;
   businessUnitData: IBusinessUnitsPortalEmployee;
   employee: IEmployee;
+  employeeOptions?: IEmployeeOptions[] | null;
 }> = ({
   children,
   dataPortal,
   businessManagersData,
   businessUnitData,
   employee,
+  employeeOptions,
 }) => {
   const { user: auth0User } = useAuth0();
   const [user, setUser] = useState<{
@@ -73,6 +76,10 @@ const AppProvider: React.FC<{
     setPreferences((prev) => ({ ...prev, ...newPreferences }));
   };
 
+  const [employeeOptionsState, setEmployeeOptions] = useState<
+    IEmployeeOptions[]
+  >(employeeOptions ?? []);
+
   useEffect(() => {
     if (user) {
       localStorage.setItem("logoUrl", logoUrl);
@@ -100,6 +107,8 @@ const AppProvider: React.FC<{
         setBusinessUnit,
         employees,
         setEmployees,
+        employeeOptions: employeeOptionsState,
+        setEmployeeOptions,
       }}
     >
       {children}

@@ -28,7 +28,7 @@ const nav: INav = {
         },
         certifications: {
           id: "certifications",
-          label: "Certificados",
+          label: "Certificaciones",
           icon: <MdAttachFile />,
           path: "/certifications",
         },

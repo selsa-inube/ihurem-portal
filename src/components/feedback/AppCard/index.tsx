@@ -10,7 +10,7 @@ interface AppCardProps {
   title: string;
   complement: string[];
   description: string;
-  icon: string | JSX.Element;
+  icon: React.ReactNode;
   url: string;
 }
 

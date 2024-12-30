@@ -16,12 +16,13 @@ import { GlobalStyles } from "@styles/global";
 import { HolidaysRoutes } from "@routes/holidays";
 import { CertificationsRoutes } from "@routes/certifications";
 import { LoginRoutes } from "@routes/login";
-import { pathStart } from "@config/nav";
+import { pathStart } from "@config/nav.config";
 import { RegisterRoutes } from "@routes/register";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useBusinessManagers } from "@hooks/useBusinessManagers";
 import { useBusinessUnit } from "@hooks/useBusinessUnit";
 import { usePortalData } from "@hooks/usePortalData";
+import { useEmployeeOptions } from "@hooks/useEmployeeOptions";
 
 function LogOut() {
   localStorage.clear();
@@ -84,6 +85,12 @@ function App() {
     error: employeeError,
   } = useEmployeeByNickname(user?.nickname ?? "");
 
+  const {
+    data: employeeOptions,
+    loading: optionsLoading,
+    error: optionsError,
+  } = useEmployeeOptions(user?.nickname ?? "");
+
   useEffect(() => {
     if (
       !isLoading &&
@@ -97,11 +104,17 @@ function App() {
     }
   }, [isLoading, isAuthenticated, loginWithRedirect]);
 
-  if (isLoading || !isReady || employeeLoading) {
+  if (isLoading || !isReady || employeeLoading || optionsLoading) {
     return <div>Cargando....</div>;
   }
 
-  if (hasError || hasManagersError || hasBusinessUnitError || employeeError) {
+  if (
+    hasError ||
+    hasManagersError ||
+    hasBusinessUnitError ||
+    employeeError ||
+    optionsError
+  ) {
     return <ErrorPage />;
   }
 
@@ -111,6 +124,7 @@ function App() {
       businessManagersData={businessManagersData}
       businessUnitData={businessUnitData}
       employee={employee}
+      employeeOptions={employeeOptions}
     >
       <GlobalStyles />
       <RouterProvider router={router} />
