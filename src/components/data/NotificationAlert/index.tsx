@@ -2,7 +2,10 @@ import { Stack } from "@inubekit/stack";
 import { Text } from "@inubekit/text";
 import { Icon } from "@inubekit/icon";
 import { Divider } from "@inubekit/divider";
+import { useMediaQuery } from "@inubekit/hooks";
+
 import { spacing } from "@design/tokens/spacing/spacing";
+
 import { StyledAlertCard } from "./styles";
 
 interface AlertCardProps {
@@ -15,6 +18,8 @@ interface AlertCardProps {
 function AlertCard(props: AlertCardProps) {
   const { title, requirement, cause, icon } = props;
 
+  const isMobile = useMediaQuery("(max-width: 450px)");
+
   return (
     <Stack direction="column">
       <Stack>
@@ -22,7 +27,7 @@ function AlertCard(props: AlertCardProps) {
           {title}
         </Text>
       </Stack>
-      <StyledAlertCard>
+      <StyledAlertCard $isMobile={isMobile}>
         <Stack direction="column" gap={spacing.s100} margin={spacing.s150}>
           <Stack
             direction="row"

@@ -9,10 +9,7 @@ interface StyledContainerProps {
 
 const StyledContainer = styled.div<StyledContainerProps>`
   display: flex;
-  flex-direction: ${({ $isMobile }) =>
-    $isMobile
-      ? "column"
-      : "row"}; /* Ajusta la dirección dependiendo del tamaño */
+  flex-direction: ${({ $isMobile }) => ($isMobile ? "column" : "row")};
   gap: ${spacing?.s250 || "16px"};
   border-radius: ${spacing?.s100 || "8px"};
   border: 1px solid
@@ -21,9 +18,8 @@ const StyledContainer = styled.div<StyledContainerProps>`
     $isMobile
       ? `${spacing?.s300 || "24px"} ${spacing?.s150 || "12px"}`
       : spacing?.s300 || "24px"};
-  width: 100%; /* Asegura que el contenedor ocupe todo el ancho disponible */
+  width: 100%;
 
-  /* Asegura que los elementos hijos (AlertCard) se expandan */
   > * {
     flex-grow: 1;
   }

@@ -3,6 +3,7 @@ import { inube } from "@inubekit/foundations";
 import { spacing } from "@design/tokens/spacing/spacing";
 
 interface IStyledContainer {
+  $isMobile: boolean;
   theme: typeof inube;
 }
 
@@ -12,7 +13,6 @@ const StyledAlertCard = styled.div<IStyledContainer>`
       theme?.palette?.neutral?.N300 || inube.palette.neutral.N300};
   border-radius: 8px;
   padding: ${spacing.s150};
-  max-width: 502px;
 `;
 
 export { StyledAlertCard };

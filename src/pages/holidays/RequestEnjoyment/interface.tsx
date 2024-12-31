@@ -73,7 +73,7 @@ function RequestEnjoymentUI({
               handleNextStep={handleNextStep}
             />
           )}
-          {currentStep === 2 && <AlertCardContainer isMobile={isTablet} />}
+          {currentStep === 2 && <AlertCardContainer />}
           {currentStep === 3 && (
             <VerificationForm
               updatedData={{

@@ -1,9 +1,12 @@
 import React from "react";
 import { MdWarning } from "react-icons/md";
+import { useMediaQuery } from "@inubekit/hooks";
 import { AlertCard } from "@components/data/NotificationAlert";
 import { StyledContainer } from "./styles";
 
-const AlertCardContainer: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
+const AlertCardContainer: React.FC = () => {
+  const isMobile = useMediaQuery("(max-width: 700px)");
+
   const alerts = [
     {
       title: "Alerta 1",
