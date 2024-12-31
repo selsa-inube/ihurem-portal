@@ -3,7 +3,7 @@ import { useMediaQuery } from "@inubekit/hooks";
 import { Stack } from "@inubekit/stack";
 import { Button } from "@inubekit/button";
 
-import { AlertCard } from "@components/data/NotificationAlert";
+import { AlertCard } from "@src/components/data/AlertCard";
 
 import { StyledContainer } from "./styles";
 import { alerts } from "./config/alertConfig";
