@@ -73,7 +73,12 @@ function RequestEnjoymentUI({
               handleNextStep={handleNextStep}
             />
           )}
-          {currentStep === 2 && <AlertCardContainer />}
+          {currentStep === 2 && (
+            <AlertCardContainer
+              handlePreviousStep={handlePreviousStep}
+              handleNextStep={handleNextStep}
+            />
+          )}
           {currentStep === 3 && (
             <VerificationForm
               updatedData={{

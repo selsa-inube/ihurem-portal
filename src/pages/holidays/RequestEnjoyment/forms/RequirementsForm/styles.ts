@@ -18,7 +18,6 @@ const StyledContainer = styled.div<StyledContainerProps>`
     $isMobile
       ? `${spacing?.s300 || "24px"} ${spacing?.s150 || "12px"}`
       : spacing?.s300 || "24px"};
-  width: 100%;
 
   > * {
     flex-grow: 1;
