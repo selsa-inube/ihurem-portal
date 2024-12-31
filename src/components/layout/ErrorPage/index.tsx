@@ -66,8 +66,13 @@ function ErrorPage(props: ErrorPageProps) {
     <StyledContainer>
       <StyledMainContent>
         <Stack justifyContent="center">
-          <Stack gap={spacing.s800} direction="column" alignItems="center">
-            <Stack direction="row" justifyContent="start" width="100%">
+          <Stack
+            gap={spacing.s800}
+            direction="column"
+            alignItems="center"
+            width="100%"
+          >
+            <Stack width="90%">
               <StyledCompanyLogo
                 src={logo}
                 alt={logoAlt}

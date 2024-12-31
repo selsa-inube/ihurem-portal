@@ -77,6 +77,7 @@ const StyledMainContent = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  padding: 40px 20px 0px 20px;
 `;
 
 export {
