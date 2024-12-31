@@ -1,10 +1,18 @@
+import { BrowserRouter } from "react-router-dom";
 import { StoryFn, Meta } from "@storybook/react";
 import { MdWarningAmber } from "react-icons/md";
 import { AlertCard, AlertCardProps } from "..";
 
 const meta: Meta<typeof AlertCard> = {
   component: AlertCard,
-  title: "feedback/AlertCard",
+  title: "components/data/AlertCard",
+  decorators: [
+    (Story: StoryFn) => (
+      <BrowserRouter>
+        <Story />
+      </BrowserRouter>
+    ),
+  ],
 };
 
 const Template: StoryFn<AlertCardProps> = (args) => <AlertCard {...args} />;

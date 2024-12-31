@@ -12,7 +12,7 @@ const StyledAlertCard = styled.div<IStyledContainer>`
       theme?.palette?.neutral?.N300 || inube.palette.neutral.N300};
   border-radius: 8px;
   padding: ${spacing.s150};
-  max-width: 400px;
+  max-width: 502px;
 `;
 
 export { StyledAlertCard };
