@@ -1,10 +1,12 @@
+import { MdOutlineInfo } from "react-icons/md";
 import { Stack } from "@inubekit/stack";
 import { Text } from "@inubekit/text";
 import { Icon } from "@inubekit/icon";
 import { Divider } from "@inubekit/divider";
+
 import { spacing } from "@design/tokens/spacing/spacing";
 
-import { StyledAppCard } from "./styles";
+import { StyledAppCard, StyledComplementContainer } from "./styles";
 
 interface AppCardProps {
   title: string;
@@ -28,17 +30,18 @@ function AppCard(props: AppCardProps) {
       <Stack padding={`${spacing.s150} ${spacing.s0}`}>
         <Divider dashed />
       </Stack>
-      <Stack direction="column" gap="12px">
-        <Text type="title" size="small">
-          {description}
-        </Text>
-        <Stack gap="8px" direction="column">
+      <Stack direction="column" gap={spacing.s200}>
+        <Text size="small">{description}</Text>
+        <StyledComplementContainer>
           {complement.map((text, index) => (
-            <Text key={index} type="body" size="small">
-              {text}
-            </Text>
+            <Stack key={index} alignItems="center" gap={spacing.s075}>
+              <Icon icon={<MdOutlineInfo />} appearance="primary" size="12px" />
+              <Text type="label" size="small">
+                • {text}
+              </Text>
+            </Stack>
           ))}
-        </Stack>
+        </StyledComplementContainer>
       </Stack>
     </StyledAppCard>
   );

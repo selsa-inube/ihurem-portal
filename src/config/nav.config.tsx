@@ -2,7 +2,7 @@ import {
   MdLogout,
   MdOutlinePersonOff,
   MdAttachFile,
-  MdBeachAccess,
+  MdOutlineBeachAccess,
   MdOutlinePersonalInjury,
 } from "react-icons/md";
 
@@ -17,7 +17,7 @@ const nav: INav = {
         holidays: {
           id: "holidays",
           label: "Vacaciones",
-          icon: <MdBeachAccess />,
+          icon: <MdOutlineBeachAccess />,
           path: "/holidays",
         },
         disability: {

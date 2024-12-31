@@ -3,11 +3,18 @@ import { Link } from "react-router-dom";
 import { inube } from "@inubekit/foundations";
 import { spacing } from "@design/tokens/spacing/spacing";
 
-const StyledAppCard = styled(Link)`
+interface IStyledComplementContainer {
+  theme: typeof inube;
+}
+
+interface IStyledAppCard {
+  theme: typeof inube;
+}
+
+const StyledAppCard = styled(Link)<IStyledAppCard>`
   box-sizing: border-box;
   padding: ${spacing.s150} ${spacing.s300};
   height: 174px;
-  overflow: auto;
   max-height: 174px;
   width: 313px;
   display: flex;
@@ -15,32 +22,20 @@ const StyledAppCard = styled(Link)`
   border-radius: 8px;
   text-decoration: none;
   color: ${({ theme }) =>
-    theme?.color?.stroke.dark.regular || inube.palette.neutral.N900};
+    theme?.palette?.neutral?.N900 || inube.palette.neutral.N900};
   border: 1px solid
-    ${({ theme }) =>
-      theme?.color?.stroke.dark.regular || inube.palette.neutral.N30};
-  box-shadow: 3px 3px 5px 1px
-    ${({ theme }) =>
-      theme?.color?.surface?.gray?.regular || inube.palette.neutral.N30};
+    ${({ theme }) => theme?.palette?.neutral?.N40 || inube.palette.neutral.N40};
+  box-shadow: 0px 4px 8px 3px
+    ${({ theme }) => theme?.palette?.neutral?.N40 || inube.palette.neutral.N40};
+
   cursor: pointer;
 
   &:hover {
     color: ${({ theme }) =>
-      theme?.color?.surface?.gray?.regular || inube.palette.neutral.N30};
+      theme?.palette?.neutral?.N30 || inube.palette.neutral.N30};
     background-color: ${({ theme }) =>
-      theme?.color?.surface?.gray?.regular || inube.palette.neutral.N30};
+      theme?.palette?.neutral?.N30 || inube.palette.neutral.N30};
     box-shadow: none;
-  }
-
-  &::-webkit-scrollbar {
-    width: 5px;
-    border-radius: 8px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: ${({ theme }) =>
-      theme?.palette?.neutral?.N30 || inube.palette.neutral.N0};
-    border-radius: 8px;
   }
 
   @media (max-width: 400px) {
@@ -55,4 +50,32 @@ const StyledAppCard = styled(Link)`
   }
 `;
 
-export { StyledAppCard };
+const StyledComplementContainer = styled.div<IStyledComplementContainer>`
+  overflow: auto;
+  display: flex;
+  height: 68px;
+  flex-direction: column;
+  width: auto;
+  box-sizing: border-box;
+  align-items: flex-start;
+  border: 1px solid
+    ${({ theme }) => theme?.palette?.neutral?.N30 || inube.palette.neutral.N30};
+  padding: ${spacing.s025} ${spacing.s050};
+  gap: ${spacing.s100};
+  border-radius: ${spacing.s025};
+
+  &::-webkit-scrollbar {
+    width: 3px;
+    border-radius: 8px;
+    background-color: ${({ theme }) =>
+      theme?.palette?.neutral?.N30 || inube.palette.neutral.N30};
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: ${({ theme }) =>
+      theme?.palette?.neutral?.N50 || inube.palette.neutral.N50};
+    border-radius: 8px;
+  }
+`;
+
+export { StyledAppCard, StyledComplementContainer };
