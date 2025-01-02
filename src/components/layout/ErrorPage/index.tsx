@@ -92,9 +92,6 @@ function ErrorPage(props: ErrorPageProps) {
                   label={`Código de error: ${errorCode}`}
                   weight="strong"
                 />
-                <Text type="title" size="medium" appearance="gray">
-                  {errorDetail.message}
-                </Text>
                 <StyledErrorImage
                   src={image}
                   alt={imageAlt}
