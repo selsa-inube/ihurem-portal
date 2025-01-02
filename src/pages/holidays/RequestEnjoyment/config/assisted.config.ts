@@ -10,7 +10,7 @@ export const requestEnjoymentSteps: IAssistedStep[] = [
   {
     id: 2,
     number: 2,
-    name: "Requisitos",
+    name: "Requisitos no cumplidos",
     description: "Revisa los requisitos para el disfrute de vacaciones.",
   },
   {

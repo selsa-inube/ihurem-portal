@@ -3,7 +3,7 @@ import { useMediaQuery } from "@inubekit/hooks";
 import { Button } from "@inubekit/button";
 import { Stack } from "@inubekit/stack";
 
-import { Accordion } from "@components/Accordion";
+import { Accordion } from "@components/data/Accordion";
 import { spacing } from "@design/tokens/spacing/spacing";
 
 import { newCCertificationApplication } from "../../config/assisted.config";
