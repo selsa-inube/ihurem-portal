@@ -50,7 +50,7 @@ const StyledFooter = styled.footer<Theme>`
 const StyledCertificationsContainer = styled.div<StyledCertificationsContainerProps>`
   display: flex;
   flex-direction: column;
-  width: 1280px;
+  width: 1232px;
   max-width: 100%;
   gap: ${spacing.s250};
   border-radius: ${spacing.s100};

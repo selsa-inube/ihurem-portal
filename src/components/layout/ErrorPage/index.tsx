@@ -50,16 +50,8 @@ function ErrorPage(props: ErrorPageProps) {
   const queriesMatches = matches["(max-width: 600px)"];
 
   const errorDetail = errorCodes[errorCode] || {
-    whatWentWrong: (
-      <ul>
-        <li>No se proporcionó información sobre el error.</li>
-      </ul>
-    ),
-    howToFix: (
-      <ul>
-        <li>Intenta nuevamente más tarde.</li>
-      </ul>
-    ),
+    whatWentWrong: <li>No se proporcionó información sobre el error.</li>,
+    howToFix: <li>Intenta nuevamente más tarde.</li>,
   };
 
   return (
