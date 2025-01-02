@@ -1,12 +1,11 @@
 import { Grid } from "@inubekit/grid";
 import { Stack } from "@inubekit/stack";
-
 import { BoxAttribute } from "@components/cards/BoxAttribute";
 import { spacing } from "@design/tokens/spacing/spacing";
 import { formatDate } from "@utils/date";
-
 import { IGeneralInformationEntry } from "../../GeneralInformationForm/types";
 import { IFormsUpdateData } from "../../../types";
+import { alerts } from "@pages/holidays/RequestEnjoyment/forms/RequirementsForm/config/alertConfig";
 
 const renderPersonalInfoVerification = (
   values: IGeneralInformationEntry,
@@ -35,6 +34,25 @@ const renderPersonalInfoVerification = (
   </>
 );
 
+const renderAlerts = (isTablet: boolean) => (
+  <Grid
+    templateColumns={`repeat(${isTablet ? 1 : 2}, 1fr)`}
+    autoRows="auto"
+    gap={spacing.s100}
+    width="100%"
+  >
+    {alerts.map((alert, index) => (
+      <Stack key={index} direction="column" gap={spacing.s050}>
+        <BoxAttribute
+          label={alert.requirement}
+          value={alert.cause}
+          direction="column"
+        />
+      </Stack>
+    ))}
+  </Grid>
+);
+
 interface VerificationBoxesProps {
   updatedData: IFormsUpdateData;
   stepKey: number;
@@ -53,6 +71,7 @@ function VerificationBoxes({
           updatedData.personalInformation.values,
           isTablet,
         )}
+      {stepKey === 2 && renderAlerts(isTablet)}
     </>
   );
 }

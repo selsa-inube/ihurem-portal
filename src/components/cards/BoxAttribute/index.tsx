@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { useMediaQuery } from "@inubekit/hooks";
 import { Stack } from "@inubekit/stack";
 import { Grid } from "@inubekit/grid";
@@ -11,7 +12,7 @@ import { StyledBoxAttribute } from "./styles";
 
 interface BoxAttributeProps {
   label?: string;
-  value?: number | string | IAttribute[];
+  value?: number | string | IAttribute[] | ReactNode;
   withButton?: boolean;
   buttonIcon?: React.JSX.Element;
   buttonValue?: string | number;
