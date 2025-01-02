@@ -8,9 +8,10 @@ interface StyledContainerProps {
 }
 
 const StyledContainer = styled.div<StyledContainerProps>`
-  display: flex;
-  flex-direction: ${({ $isMobile }) => ($isMobile ? "column" : "row")};
-  gap: ${spacing?.s250 || "16px"};
+  display: grid;
+  grid-template-columns: ${({ $isMobile }) =>
+    $isMobile ? "1fr" : "repeat(2, 1fr)"};
+  gap: ${spacing?.s350};
   border-radius: ${spacing?.s100 || "8px"};
   border: 1px solid
     ${({ theme }) => theme?.palette?.neutral?.N30 || inube.palette.neutral.N30};
@@ -20,7 +21,7 @@ const StyledContainer = styled.div<StyledContainerProps>`
       : spacing?.s300 || "24px"};
 
   > * {
-    flex-grow: 1;
+    width: 100%;
   }
 
   textarea {
