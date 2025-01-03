@@ -11,6 +11,7 @@ export const useBusinessUnit = (
   const [businessUnitData, setBusinessUnit] =
     useState<IBusinessUnitsPortalEmployee>({} as IBusinessUnitsPortalEmployee);
   const [hasError, setHasError] = useState(false);
+  const [codeError, setCodeError] = useState<number | undefined>(undefined);
   useEffect(() => {
     const fetchBusinessManagers = async () => {
       if (!portalPublicCode) return;
@@ -26,10 +27,13 @@ export const useBusinessUnit = (
       } catch (error) {
         setHasError(true);
       }
+      if (hasError) {
+        setCodeError(1003);
+      }
     };
 
     fetchBusinessManagers();
   }, [portalPublicCode]);
 
-  return { businessUnitData, hasError };
+  return { businessUnitData, hasError, codeError };
 };

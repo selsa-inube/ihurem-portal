@@ -6,6 +6,7 @@ export const useEmployeeOptions = (employeeId: string) => {
   const [data, setData] = useState<IEmployeeOptions[] | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [codeError, setCodeError] = useState<number | undefined>(undefined);
 
   useEffect(() => {
     const fetchOptions = async () => {
@@ -26,6 +27,9 @@ export const useEmployeeOptions = (employeeId: string) => {
             : "Error al obtener las opciones del empleado";
         setError(errorMessage);
       }
+      if (error) {
+        setCodeError(1005);
+      }
     };
 
     if (employeeId) {
@@ -33,5 +37,5 @@ export const useEmployeeOptions = (employeeId: string) => {
     }
   }, [employeeId]);
 
-  return { data, loading, error };
+  return { data, loading, error, codeError };
 };
