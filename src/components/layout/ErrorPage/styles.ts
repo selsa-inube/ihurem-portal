@@ -80,6 +80,14 @@ const StyledMainContent = styled.div`
   padding: 40px 20px 0px 20px;
 `;
 
+const StyledDiv = styled.div`
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  color: #59667a;
+  font-weight: 400;
+`;
+
 export {
   StyledContainer,
   StyledCompanyLogo,
@@ -88,4 +96,5 @@ export {
   StyledCertificationsContainer,
   VerticalDivider,
   StyledMainContent,
+  StyledDiv,
 };

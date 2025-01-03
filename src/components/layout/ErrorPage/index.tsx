@@ -17,6 +17,7 @@ import {
   VerticalDivider,
   StyledMainContent,
   StyledContainer,
+  StyledDiv,
 } from "./styles";
 import { environment } from "@config/environment.ts";
 import { errorCodes } from "@config/errorCodes.tsx";
@@ -32,6 +33,14 @@ interface ErrorPageProps {
   onClick?: () => void;
   errorCode?: number;
 }
+
+const ListContent = ({ items }: { items: string[] }) => (
+  <ul>
+    {items.map((item, index) => (
+      <li key={index}>{item}</li>
+    ))}
+  </ul>
+);
 
 function ErrorPage(props: ErrorPageProps) {
   const {
@@ -50,8 +59,8 @@ function ErrorPage(props: ErrorPageProps) {
   const queriesMatches = matches["(max-width: 600px)"];
 
   const errorDetail = errorCodes[errorCode] || {
-    whatWentWrong: <li>No se proporcionó información sobre el error.</li>,
-    howToFix: <li>Intenta nuevamente más tarde.</li>,
+    whatWentWrong: ["No se proporcionó información sobre el error."],
+    howToFix: ["Intenta nuevamente más tarde."],
   };
 
   return (
@@ -112,9 +121,9 @@ function ErrorPage(props: ErrorPageProps) {
                   <Text type="headline" size="medium" weight="bold">
                     ¿Qué salió mal?
                   </Text>
-                  <Text type="title" size="medium" appearance="gray">
-                    {errorDetail.whatWentWrong}
-                  </Text>
+                  <StyledDiv>
+                    <ListContent items={errorDetail.whatWentWrong} />
+                  </StyledDiv>
                 </Stack>
 
                 <VerticalDivider $isVertical={!queriesMatches} />
@@ -124,9 +133,9 @@ function ErrorPage(props: ErrorPageProps) {
                   <Text type="headline" size="medium" weight="bold">
                     ¿Cómo solucionarlo?
                   </Text>
-                  <Text type="title" size="medium" appearance="gray">
-                    {errorDetail.howToFix}
-                  </Text>
+                  <StyledDiv>
+                    <ListContent items={errorDetail.howToFix} />
+                  </StyledDiv>
                   <Stack justifyContent="center">
                     <Button
                       appearance="primary"

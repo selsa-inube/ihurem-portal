@@ -1,80 +1,58 @@
 interface ErrorDetail {
-  whatWentWrong: JSX.Element;
-  howToFix: JSX.Element;
+  whatWentWrong: string[];
+  howToFix: string[];
 }
 
 const errorCodes: Record<number, ErrorDetail> = {
   400: {
-    whatWentWrong: (
-      <ul>
-        <li>La solicitud no se pudo procesar debido a datos inválidos.</li>
-        <li>Asegúrate de que los datos enviados sean correctos.</li>
-      </ul>
-    ),
-    howToFix: (
-      <ul>
-        <li>
-          Revisa los datos que enviaste y asegúrate de que sean correctos.
-        </li>
-        <li>Intenta nuevamente con datos válidos.</li>
-      </ul>
-    ),
+    whatWentWrong: [
+      "La solicitud no se pudo procesar debido a datos inválidos.",
+      "Asegúrate de que los datos enviados sean correctos.",
+    ],
+    howToFix: [
+      "Revisa los datos que enviaste y asegúrate de que sean correctos.",
+      "Intenta nuevamente con datos válidos.",
+    ],
   },
   401: {
-    whatWentWrong: (
-      <ul>
-        <li>No tienes permisos para acceder a este recurso.</li>
-        <li>Tu sesión puede haber expirado.</li>
-      </ul>
-    ),
-    howToFix: (
-      <ul>
-        <li>Inicia sesión con una cuenta válida.</li>
-        <li>Si el problema persiste, contacta al soporte.</li>
-      </ul>
-    ),
+    whatWentWrong: [
+      "No tienes permisos para acceder a este recurso.",
+      "Tu sesión puede haber expirado.",
+    ],
+    howToFix: [
+      "Inicia sesión con una cuenta válida.",
+      "Si el problema persiste, contacta al soporte.",
+    ],
   },
   403: {
-    whatWentWrong: (
-      <ul>
-        <li>Acceso denegado a la página solicitada.</li>
-        <li>Puede que no tengas los privilegios necesarios.</li>
-      </ul>
-    ),
-    howToFix: (
-      <ul>
-        <li>Contacta al administrador si crees que esto es un error.</li>
-        <li>Verifica tus permisos de acceso.</li>
-      </ul>
-    ),
+    whatWentWrong: [
+      "Acceso denegado a la página solicitada.",
+      "Puede que no tengas los privilegios necesarios.",
+    ],
+    howToFix: [
+      "Contacta al administrador si crees que esto es un error.",
+      "Verifica tus permisos de acceso.",
+    ],
   },
   404: {
-    whatWentWrong: (
-      <ul>
-        <li>La URL solicitada no se encontró en el servidor.</li>
-        <li>Puede que la página haya sido eliminada o movida.</li>
-      </ul>
-    ),
-    howToFix: (
-      <ul>
-        <li>Verifica la URL o vuelve a la página principal.</li>
-        <li>Usa el menú de navegación para encontrar lo que buscas.</li>
-      </ul>
-    ),
+    whatWentWrong: [
+      "La URL solicitada no se encontró en el servidor.",
+      "Puede que la página haya sido eliminada o movida.",
+    ],
+    howToFix: [
+      "Verifica la URL o vuelve a la página principal.",
+      "Usa el menú de navegación para encontrar lo que buscas.",
+    ],
   },
   500: {
-    whatWentWrong: (
-      <ul>
-        <li>Ocurrió un problema en el servidor.</li>
-        <li>Puede que haya un error temporal en el sistema.</li>
-      </ul>
-    ),
-    howToFix: (
-      <ul>
-        <li>Intenta nuevamente más tarde o contacta al soporte.</li>
-        <li>Proporciona detalles del error si es posible.</li>
-      </ul>
-    ),
+    whatWentWrong: [
+      "Ocurrió un problema en el servidor.",
+      "Puede que haya un error temporal en el sistema.",
+    ],
+    howToFix: [
+      "Intenta nuevamente más tarde o contacta al soporte.",
+      "Proporciona detalles del error si es posible.",
+    ],
   },
 };
 
