@@ -10,7 +10,7 @@ import { StyledAppCard, StyledComplementContainer } from "./styles";
 
 interface AppCardProps {
   title: string;
-  complement: string[];
+  complement?: string[];
   description: string;
   icon: React.ReactNode;
   url: string;
@@ -32,16 +32,22 @@ function AppCard(props: AppCardProps) {
       </Stack>
       <Stack direction="column" gap={spacing.s200}>
         <Text size="small">{description}</Text>
-        <StyledComplementContainer>
-          {complement.map((text, index) => (
-            <Stack key={index} alignItems="center" gap={spacing.s075}>
-              <Icon icon={<MdOutlineInfo />} appearance="primary" size="12px" />
-              <Text type="label" size="small">
-                • {text}
-              </Text>
-            </Stack>
-          ))}
-        </StyledComplementContainer>
+        {complement && complement.length > 0 && (
+          <StyledComplementContainer>
+            {complement.map((text, index) => (
+              <Stack key={index} alignItems="center" gap={spacing.s075}>
+                <Icon
+                  icon={<MdOutlineInfo />}
+                  appearance="primary"
+                  size="12px"
+                />
+                <Text type="label" size="small">
+                  • {text}
+                </Text>
+              </Stack>
+            ))}
+          </StyledComplementContainer>
+        )}
       </Stack>
     </StyledAppCard>
   );

@@ -83,7 +83,7 @@ function Home() {
                             "Complemento: ",
                             "Complemento: ",
                           ]}
-                          description={employeeOption.descriptionUse}
+                          description="Descripción"
                           icon={link.icon}
                           url={link.path}
                         />
