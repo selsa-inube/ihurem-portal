@@ -108,7 +108,13 @@ function App() {
     return <div>Cargando....</div>;
   }
 
-  if (hasError || hasManagersError || hasBusinessUnitError || optionsError) {
+  if (
+    hasError ||
+    hasManagersError ||
+    hasBusinessUnitError ||
+    employeeError ||
+    optionsError
+  ) {
     return <ErrorPage />;
   }
 
