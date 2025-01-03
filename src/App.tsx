@@ -66,29 +66,37 @@ function App() {
     : decrypt(localStorage.getItem("portalCode") as string);
 
   if (!portalCode) {
-    return <ErrorPage />;
+    return <ErrorPage errorCode={1000} />;
   }
 
   const [isReady, setIsReady] = useState(false);
   const { loginWithRedirect, isAuthenticated, isLoading, user } = useAuth0();
   const { portalData, hasError } = usePortalData(portalCode ?? "");
 
-  const { businessManagersData, hasError: hasManagersError } =
-    useBusinessManagers(portalData);
+  const {
+    businessManagersData,
+    hasError: hasManagersError,
+    codeError: BusinessManagersCode,
+  } = useBusinessManagers(portalData);
 
-  const { businessUnitData, hasError: hasBusinessUnitError } =
-    useBusinessUnit(portalData);
+  const {
+    businessUnitData,
+    hasError: hasBusinessUnitError,
+    codeError: BusinessUnit,
+  } = useBusinessUnit(portalData);
 
   const {
     employee,
     loading: employeeLoading,
     error: employeeError,
+    codeError: employeeCode,
   } = useEmployeeByNickname(user?.nickname ?? "");
 
   const {
     data: employeeOptions,
     loading: optionsLoading,
     error: optionsError,
+    codeError: optionsCode,
   } = useEmployeeOptions(user?.nickname ?? "");
 
   useEffect(() => {
@@ -107,7 +115,6 @@ function App() {
   if (isLoading || !isReady || employeeLoading || optionsLoading) {
     return <div>Cargando....</div>;
   }
-
   if (
     hasError ||
     hasManagersError ||
@@ -115,7 +122,17 @@ function App() {
     employeeError ||
     optionsError
   ) {
-    return <ErrorPage />;
+    return (
+      <ErrorPage
+        errorCode={
+          BusinessManagersCode ??
+          BusinessUnit ??
+          employeeCode ??
+          optionsCode ??
+          1001
+        }
+      />
+    );
   }
 
   return (

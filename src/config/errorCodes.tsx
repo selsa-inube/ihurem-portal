@@ -54,6 +54,38 @@ const errorCodes: Record<number, ErrorDetail> = {
       "Proporciona detalles del error si es posible.",
     ],
   },
+  1000: {
+    whatWentWrong: [
+      "El codigo del portal esta vacio",
+      "El codigo del portal de la URL no es valido",
+    ],
+    howToFix: ["Confirma que estés usando la url adecuada."],
+  },
+  1001: {
+    whatWentWrong: [
+      "La compañía donde trabajas NO tiene los privilegios requeridos para acceder al portal.",
+      "No estás registrado(a) o las atribuciones utilizadas no corresponden con las registradas.",
+    ],
+    howToFix: ["Confirma que estés usando la url adecuada."],
+  },
+  1002: {
+    whatWentWrong: ["El codigo del portal no tiene un operador."],
+    howToFix: ["Confirma que estés usando la url adecuada."],
+  },
+  1003: {
+    whatWentWrong: [
+      "No hay una unidad de negocio relacionada con el codigo del portal.",
+    ],
+    howToFix: ["Confirma que estés usando la url adecuada."],
+  },
+  1004: {
+    whatWentWrong: ["El usuario con que accedio no es un empleado."],
+    howToFix: ["Confirma que estés usando la url adecuada."],
+  },
+  1005: {
+    whatWentWrong: ["No se encontraron opciones para el empleado."],
+    howToFix: ["Confirma que estés usando la url adecuada."],
+  },
 };
 
 export { errorCodes };
