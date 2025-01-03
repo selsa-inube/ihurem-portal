@@ -1,11 +1,13 @@
 import { Grid } from "@inubekit/grid";
 import { Stack } from "@inubekit/stack";
+
 import { BoxAttribute } from "@components/cards/BoxAttribute";
 import { spacing } from "@design/tokens/spacing/spacing";
 import { formatDate } from "@utils/date";
+
 import { IGeneralInformationEntry } from "../../GeneralInformationForm/types";
 import { IFormsUpdateData } from "../../../types";
-import { alerts } from "@pages/holidays/RequestEnjoyment/forms/RequirementsForm/config/alertConfig";
+import { alerts } from "../../RequirementsForm/config/alertConfig";
 
 const renderPersonalInfoVerification = (
   values: IGeneralInformationEntry,
