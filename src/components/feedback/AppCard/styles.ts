@@ -39,14 +39,7 @@ const StyledAppCard = styled(Link)<IStyledAppCard>`
   }
 
   @media (max-width: 400px) {
-    padding: ${spacing.s200};
     width: 100%;
-    min-height: 100px;
-    gap: ${spacing.s100};
-
-    div {
-      gap: ${spacing.s050};
-    }
   }
 `;
 
