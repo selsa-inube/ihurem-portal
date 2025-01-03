@@ -11,6 +11,7 @@ export const useBusinessManagers = (
   const [businessManagersData, setBusinessManagersData] =
     useState<IBusinessManagers>({} as IBusinessManagers);
   const [hasError, setHasError] = useState(false);
+  const [codeError, setCodeError] = useState<number | undefined>(undefined);
   useEffect(() => {
     const fetchBusinessManagers = async () => {
       if (!portalPublicCode) return;
@@ -18,6 +19,7 @@ export const useBusinessManagers = (
         const fetchedBusinessManagers = await businessManagers(
           portalPublicCode.businessManagerId,
         );
+
         if (!fetchedBusinessManagers) {
           setHasError(true);
           return;
@@ -26,10 +28,13 @@ export const useBusinessManagers = (
       } catch (error) {
         setHasError(true);
       }
+      if (hasError) {
+        setCodeError(1002);
+      }
     };
 
     fetchBusinessManagers();
   }, [portalPublicCode]);
 
-  return { businessManagersData, hasError };
+  return { businessManagersData, hasError, codeError };
 };

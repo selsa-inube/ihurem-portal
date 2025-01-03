@@ -10,6 +10,7 @@ import { spacing } from "@design/tokens/spacing/spacing";
 import { GeneralInformationForm } from "./forms/GeneralInformationForm";
 import { IGeneralInformationEntry } from "./forms/GeneralInformationForm/types";
 import { VerificationForm } from "./forms/VerificationForm";
+import { AlertCardContainer } from "./forms/RequirementsForm";
 
 interface RequestEnjoymentUIProps {
   appName: string;
@@ -72,7 +73,12 @@ function RequestEnjoymentUI({
               handleNextStep={handleNextStep}
             />
           )}
-          {currentStep === 2 && <></>}
+          {currentStep === 2 && (
+            <AlertCardContainer
+              handlePreviousStep={handlePreviousStep}
+              handleNextStep={handleNextStep}
+            />
+          )}
           {currentStep === 3 && (
             <VerificationForm
               updatedData={{
