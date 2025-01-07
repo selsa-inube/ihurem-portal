@@ -10,7 +10,7 @@ import { spacing } from "@design/tokens/spacing/spacing";
 import { GeneralInformationForm } from "./forms/GeneralInformationForm";
 import { IGeneralInformationEntry } from "./forms/GeneralInformationForm/types";
 import { VerificationForm } from "./forms/VerificationForm";
-import { AlertCardContainer } from "./forms/RequirementsForm";
+import { AlertCardStep } from "./forms/RequirementsForm";
 
 interface RequestEnjoymentUIProps {
   appName: string;
@@ -79,7 +79,7 @@ function NewCertificationUI(
           )}
         </Stack>
         {currentStep === 2 && (
-          <AlertCardContainer
+          <AlertCardStep
             handlePreviousStep={handlePreviousStep}
             handleNextStep={handleNextStep}
           />
