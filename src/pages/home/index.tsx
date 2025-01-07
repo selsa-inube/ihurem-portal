@@ -61,7 +61,7 @@ function Home() {
               </Text>
               <Stack
                 direction={isMobile ? "column" : "row"}
-                gap={isMobile ? spacing.s200 : spacing.s300}
+                gap={isMobile ? spacing.s200 : spacing.s250}
                 wrap="wrap"
                 justifyContent={isMobile ? "center" : "flex-start"}
                 alignItems={isMobile ? "center" : "flex-start"}
@@ -76,8 +76,14 @@ function Home() {
                         <AppCard
                           key={index}
                           title={employeeOption.abbreviatedName}
-                          complement={[]}
-                          description={employeeOption.descriptionUse}
+                          complement={[
+                            "Complemento: ",
+                            "Complemento: ",
+                            "Complemento: ",
+                            "Complemento: ",
+                            "Complemento: ",
+                          ]}
+                          description="Descripción"
                           icon={link.icon}
                           url={link.path}
                         />
