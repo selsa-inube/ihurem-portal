@@ -16,8 +16,8 @@ export interface SendRequestProps {
   buttonText: string;
   portalId?: string;
   secondaryButtonText?: string;
-  onSubmit?: () => void;
   onCloseModal?: () => void;
+  onSubmitButtonClick?: () => void;
   onSecondaryButtonClick?: () => void;
 }
 
@@ -28,8 +28,8 @@ export function SendRequest(props: SendRequestProps) {
     buttonText,
     portalId = "portal",
     secondaryButtonText = "Cancelar",
-    onSubmit,
     onCloseModal,
+    onSubmitButtonClick,
     onSecondaryButtonClick,
   } = props;
 
@@ -70,22 +70,11 @@ export function SendRequest(props: SendRequestProps) {
             type="button"
             variant="outlined"
             appearance="gray"
-            onClick={() => {
-              onSecondaryButtonClick?.();
-              onCloseModal?.();
-            }}
+            onClick={onSecondaryButtonClick}
           >
             {secondaryButtonText}
           </Button>
-          <Button
-            type="button"
-            onClick={() => {
-              onSubmit?.();
-              onCloseModal?.();
-            }}
-          >
-            {buttonText}
-          </Button>
+          <Button onClick={onSubmitButtonClick}>{buttonText}</Button>
         </Stack>
       </StyledModal>
     </Blanket>,

@@ -83,6 +83,8 @@ function RequestPaymentUI(props: RequestPaymentUIProps) {
                 },
               }}
               handleStepChange={(stepId) => setCurrentStep(stepId)}
+              handlePreviousStep={handlePreviousStep}
+              handleSubmit={handleFinishAssisted}
             />
           )}
         </Stack>
