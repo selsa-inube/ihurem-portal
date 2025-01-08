@@ -10,6 +10,7 @@ import { spacing } from "@design/tokens/spacing/spacing";
 import { GeneralInformationForm } from "./forms/GeneralInformationForm";
 import { IGeneralInformationEntry } from "./forms/GeneralInformationForm/types";
 import { VerificationForm } from "./forms/VerificationForm";
+import { AlertCardStep } from "./forms/RequirementsForm";
 
 interface RequestPaymentUIProps {
   appName: string;
@@ -73,7 +74,12 @@ function RequestPaymentUI(props: RequestPaymentUIProps) {
               handleNextStep={handleNextStep}
             />
           )}
-          {currentStep === 2 && <></>}
+          {currentStep === 2 && (
+            <AlertCardStep
+              handlePreviousStep={handlePreviousStep}
+              handleNextStep={handleNextStep}
+            />
+          )}
           {currentStep === 3 && (
             <VerificationForm
               updatedData={{

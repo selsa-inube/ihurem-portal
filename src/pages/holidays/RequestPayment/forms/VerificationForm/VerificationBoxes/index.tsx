@@ -4,6 +4,7 @@ import { Grid } from "@inubekit/grid";
 import { BoxAttribute } from "@components/cards/BoxAttribute";
 import { spacing } from "@design/tokens/spacing/spacing";
 
+import { alerts } from "../../RequirementsForm/config/alertConfig";
 import { IFormsUpdateData } from "../../../types";
 import { IGeneralInformationEntry } from "../../GeneralInformationForm/types";
 
@@ -31,16 +32,22 @@ const renderPersonalInfoVerification = (
   </>
 );
 
-const renderRequerimentsVerification = (isTablet: boolean) => (
+const renderAlerts = (isTablet: boolean) => (
   <Grid
     templateColumns={`repeat(${isTablet ? 1 : 2}, 1fr)`}
     autoRows="auto"
     gap={spacing.s100}
     width="100%"
   >
-    <BoxAttribute label="Supera los días completos:" value="Cumple" />
-    <BoxAttribute label="Periodos completos:" value="No cumple" />
-    <BoxAttribute label="Requisito adicional de ejemplo:" value="Cumple" />
+    {alerts.map((alert, index) => (
+      <Stack key={index} direction="column" gap={spacing.s050}>
+        <BoxAttribute
+          label={alert.requirement}
+          value={alert.cause}
+          direction="column"
+        />
+      </Stack>
+    ))}
   </Grid>
 );
 
@@ -62,7 +69,7 @@ function VerificationBoxes({
           updatedData.personalInformation.values,
           isTablet,
         )}
-      {stepKey === 2 && renderRequerimentsVerification(isTablet)}
+      {stepKey === 2 && renderAlerts(isTablet)}
     </>
   );
 }
