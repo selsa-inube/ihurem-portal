@@ -1,5 +1,5 @@
 import { createPortal } from "react-dom";
-import { MdClear } from "react-icons/md";
+import { MdClear, MdCheckCircle } from "react-icons/md";
 import { Icon } from "@inubekit/icon";
 import { Stack } from "@inubekit/stack";
 import { Text } from "@inubekit/text";
@@ -12,27 +12,25 @@ import { spacing } from "@design/tokens/spacing/spacing";
 
 import { StyledModal, StyledContainerClose } from "./styles";
 
-export interface SendRequestModalProps {
-  descriptionText: string;
+export interface RequestInfoModalProps {
+  requestId: string;
+  staffName: string;
   buttonText?: string;
   title?: string;
   portalId?: string;
-  secondaryButtonText?: string;
   onCloseModal?: () => void;
   onSubmitButtonClick?: () => void;
-  onSecondaryButtonClick?: () => void;
 }
 
-export function SendRequestModal(props: SendRequestModalProps) {
+export function RequestInfoModal(props: RequestInfoModalProps) {
   const {
-    descriptionText,
-    buttonText = "Enviar",
-    title = "Enviar solicitud",
+    requestId,
+    staffName,
+    buttonText = "Entendido",
+    title = "Solicitud",
     portalId = "portal",
-    secondaryButtonText = "Cancelar",
     onCloseModal,
     onSubmitButtonClick,
-    onSecondaryButtonClick,
   } = props;
 
   const isMobile = useMediaQuery("(max-width: 700px)");
@@ -64,17 +62,20 @@ export function SendRequestModal(props: SendRequestModalProps) {
           </StyledContainerClose>
         </Stack>
         <Divider />
-        <Text>{descriptionText}</Text>
-        <Stack justifyContent="end" gap={spacing.s250}>
-          <Button
-            type="button"
-            variant="outlined"
-            appearance="gray"
-            onClick={onSecondaryButtonClick}
-          >
-            {secondaryButtonText}
+        <Stack direction="column" alignItems="center" gap={spacing.s300}>
+          <Icon icon={<MdCheckCircle />} size="68px" appearance="primary" />
+          <Text>
+            Solicitud <b>{requestId}</b>
+          </Text>
+          <Text size="medium">
+            Este proceso será gestionado por {staffName}, puede tardar algún
+            tiempo mientras se gestiona la aprobación.
+          </Text>
+        </Stack>
+        <Stack justifyContent="end">
+          <Button onClick={onSubmitButtonClick} fullwidth={isMobile}>
+            {buttonText}
           </Button>
-          <Button onClick={onSubmitButtonClick}>{buttonText}</Button>
         </Stack>
       </StyledModal>
     </Blanket>,

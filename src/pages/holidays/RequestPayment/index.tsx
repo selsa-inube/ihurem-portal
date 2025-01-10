@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FormikProps } from "formik";
 
-import { SendRequest } from "@components/modals/SendRequestModal";
+import { SendRequestModal } from "@components/modals/SendRequestModal";
 
 import { IGeneralInformationEntry } from "./forms/GeneralInformationForm/types";
 import { holidaysNavConfig } from "../config/nav.config";
@@ -89,11 +89,8 @@ function RequestPayment() {
       />
 
       {modalState.isSendModalVisible && (
-        <SendRequest
-          title="Confirmar Envío"
-          message="¿Realmente deseas enviar la solicitud de pago de vacaciones?"
-          buttonText="Enviar"
-          secondaryButtonText="Cancelar"
+        <SendRequestModal
+          descriptionText="¿Realmente deseas enviar la solicitud de certificación?"
           onCloseModal={handleCloseSendModal}
           onSubmitButtonClick={handleSubmitRequestInfoModal}
           onSecondaryButtonClick={handleSubmitRequestInfoModal}

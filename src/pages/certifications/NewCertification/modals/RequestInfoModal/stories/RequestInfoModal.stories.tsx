@@ -2,16 +2,16 @@ import { useState } from "react";
 import { StoryFn, Meta } from "@storybook/react";
 import { Button } from "@inubekit/button";
 
-import { SendRequestModal, SendRequestModalProps } from "..";
+import { RequestInfoModal, RequestInfoModalProps } from "..";
 import { props } from "./props";
 
-const story: Meta<typeof SendRequestModal> = {
-  component: SendRequestModal,
-  title: "components/modals/SendRequestModal",
+const story: Meta<typeof RequestInfoModal> = {
+  component: RequestInfoModal,
+  title: "modals/RequestInfoModal",
   argTypes: props,
 };
 
-const DefaultTemplate: StoryFn<SendRequestModalProps> = (args) => {
+const DefaultTemplate: StoryFn<RequestInfoModalProps> = (args) => {
   const [showModal, setShowModal] = useState(false);
 
   const handleShowModal = () => {
@@ -22,7 +22,7 @@ const DefaultTemplate: StoryFn<SendRequestModalProps> = (args) => {
     <>
       <Button onClick={handleShowModal}>Open Modal</Button>
       {showModal && (
-        <SendRequestModal {...args} onCloseModal={handleShowModal} />
+        <RequestInfoModal {...args} onCloseModal={handleShowModal} />
       )}
     </>
   );
@@ -30,7 +30,8 @@ const DefaultTemplate: StoryFn<SendRequestModalProps> = (args) => {
 
 export const Default = DefaultTemplate.bind({});
 Default.args = {
-  descriptionText: "Lorem ipsum dolor sit, amet consectetur adipisicing elit.",
+  requestId: "#45678822",
+  staffName: "Nombre Nombre Apellido Apellido",
 };
 
 export default story;

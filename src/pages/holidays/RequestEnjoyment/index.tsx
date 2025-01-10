@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FormikProps } from "formik";
 
-import { SendRequest } from "@components/modals/SendRequestModal";
+import { SendRequestModal } from "@components/modals/SendRequestModal";
 
 import { IGeneralInformationEntry } from "./forms/GeneralInformationForm/types";
 import { RequestEnjoymentUI } from "./interface";
@@ -88,9 +88,9 @@ function RequestEnjoyment() {
         initialGeneralInformationValues={formValues}
       />
       {modalState.isSendModalVisible && (
-        <SendRequest
+        <SendRequestModal
           title="Confirmar Envío"
-          message="¿Realmente deseas enviar la solicitud de disfrute de vacaciones?"
+          descriptionText="¿Realmente deseas enviar la solicitud de disfrute de vacaciones?"
           buttonText="Enviar"
           secondaryButtonText="Cancelar"
           onCloseModal={handleCloseSendModal}
