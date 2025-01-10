@@ -88,6 +88,8 @@ function RequestEnjoymentUI({
                 },
               }}
               handleStepChange={(stepId) => setCurrentStep(stepId)}
+              handlePreviousStep={handlePreviousStep}
+              handleSubmit={handleFinishAssisted}
             />
           )}
         </Stack>
