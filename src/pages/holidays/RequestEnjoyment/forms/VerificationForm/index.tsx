@@ -13,12 +13,14 @@ import { VerificationBoxes } from "./VerificationBoxes";
 interface VerificationFormProps {
   updatedData: IFormsUpdateData;
   handleStepChange: (stepId: number) => void;
+  handlePreviousStep: () => void;
+  handleSubmit: () => void;
 }
 
-function VerificationForm({
-  updatedData,
-  handleStepChange,
-}: VerificationFormProps) {
+function VerificationForm(props: VerificationFormProps) {
+  const { updatedData, handleStepChange, handlePreviousStep, handleSubmit } =
+    props;
+
   const isTablet = useMediaQuery("(max-width: 1224px)");
 
   return (
@@ -50,6 +52,23 @@ function VerificationForm({
             </Stack>
           </Accordion>
         ))}
+      <Stack
+        direction="row"
+        justifyContent="flex-end"
+        alignItems="center"
+        gap={spacing.s250}
+      >
+        <Button
+          onClick={handlePreviousStep}
+          variant="outlined"
+          appearance="gray"
+        >
+          Anterior
+        </Button>
+        <Button onClick={handleSubmit} appearance="primary">
+          Enviar
+        </Button>
+      </Stack>
     </Stack>
   );
 }
