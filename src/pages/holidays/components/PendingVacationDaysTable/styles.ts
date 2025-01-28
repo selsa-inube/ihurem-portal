@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Th, Td } from "@inubekit/table";
+import { Th, Td } from "@inubekit/inubekit";
 
 export const StyledTh = styled(Th)`
   & > p {
