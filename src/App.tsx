@@ -115,13 +115,7 @@ function App() {
   if (isLoading || !isReady || employeeLoading || optionsLoading) {
     return <div>Cargando....</div>;
   }
-  if (
-    hasError ||
-    hasManagersError ||
-    hasBusinessUnitError ||
-    employeeError ||
-    optionsError
-  ) {
+  if (hasError || hasManagersError || hasBusinessUnitError || optionsError) {
     return (
       <ErrorPage
         errorCode={
