@@ -1,4 +1,5 @@
 import styled from "styled-components";
+
 import { spacing } from "@design/tokens/spacing/spacing";
 
 const StyledMenu = styled.div`

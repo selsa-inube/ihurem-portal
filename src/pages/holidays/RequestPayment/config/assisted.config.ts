@@ -1,4 +1,4 @@
-import { IAssistedStep } from "@inubekit/assisted";
+import { IAssistedStep } from "@inubekit/inubekit";
 
 export const requestPaymentSteps: IAssistedStep[] = [
   {

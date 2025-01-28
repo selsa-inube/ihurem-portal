@@ -1,7 +1,6 @@
 import styled from "styled-components";
-import { inube } from "@inubekit/foundations";
+import { inube } from "@inubekit/inubekit";
 
-// Define the theme type
 interface Theme {
   palette: {
     neutral: {

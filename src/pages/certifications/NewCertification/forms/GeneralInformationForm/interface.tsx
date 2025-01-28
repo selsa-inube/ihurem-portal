@@ -1,10 +1,13 @@
 import { FormikProps } from "formik";
-import { useMediaQuery } from "@inubekit/hooks";
-import { Stack } from "@inubekit/stack";
-import { Button } from "@inubekit/button";
-import { Select, IOption } from "@inubekit/select";
-import { Textarea } from "@inubekit/textarea";
-import { Input } from "@inubekit/input";
+import {
+  Input,
+  Textarea,
+  Select,
+  IOption,
+  Button,
+  Stack,
+  useMediaQuery,
+} from "@inubekit/inubekit";
 
 import { isRequired } from "@utils/forms/forms";
 import { getFieldState } from "@utils/forms/forms";

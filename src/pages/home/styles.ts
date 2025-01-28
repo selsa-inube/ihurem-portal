@@ -1,6 +1,7 @@
 import styled from "styled-components";
-import { inube } from "@inubekit/foundations";
 import { Link } from "react-router-dom";
+import { inube } from "@inubekit/inubekit";
+
 import { spacing } from "@design/tokens/spacing/spacing";
 
 interface Theme {

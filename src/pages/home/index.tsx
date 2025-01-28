@@ -1,9 +1,5 @@
 import { Outlet } from "react-router-dom";
-import { Text } from "@inubekit/text";
-import { Grid } from "@inubekit/grid";
-import { Header } from "@inubekit/header";
-import { Stack } from "@inubekit/stack";
-import { useMediaQueries } from "@inubekit/hooks";
+import { Text, Stack, Grid, Header, useMediaQueries } from "@inubekit/inubekit";
 
 import { AppCard } from "@components/feedback/AppCard";
 import { spacing } from "@design/tokens/spacing/spacing.ts";
@@ -43,8 +39,10 @@ function Home() {
         <Header
           portalId="portal"
           logoURL={renderLogo(logoUrl)}
-          userName={user?.username ?? "Nombre de usuario"}
-          userMenu={userMenu}
+          user={{
+            username: user?.username ?? "Nombre de usuario",
+          }}
+          menu={userMenu}
         />
         <StyledContainer>
           <StyledMain $isTablet={isTablet}>

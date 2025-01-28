@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { MdOutlineAirplanemodeActive, MdOutlinePayments } from "react-icons/md";
-import { Button } from "@inubekit/button";
-import { Stack } from "@inubekit/stack";
-import { useMediaQuery } from "@inubekit/hooks";
+import { Stack, Button, useMediaQuery } from "@inubekit/inubekit";
 
 import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";

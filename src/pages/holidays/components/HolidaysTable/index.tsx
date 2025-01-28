@@ -1,6 +1,10 @@
 import { MdOutlineVisibility, MdDeleteOutline } from "react-icons/md";
 import { useState } from "react";
 import {
+  Text,
+  Icon,
+  SkeletonLine,
+  useMediaQueries,
   Col,
   Colgroup,
   Pagination,
@@ -10,11 +14,7 @@ import {
   Tfoot,
   Thead,
   Tr,
-} from "@inubekit/table";
-import { Icon } from "@inubekit/icon";
-import { useMediaQueries } from "@inubekit/hooks";
-import { Text } from "@inubekit/text";
-import { SkeletonLine } from "@inubekit/skeleton";
+} from "@inubekit/inubekit";
 
 import RequestComponentDetail from "@components/modals/ComponentDetailModal";
 import { IHolidaysTable } from "./types";

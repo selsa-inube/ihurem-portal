@@ -1,7 +1,5 @@
 import React from "react";
-import { useMediaQuery } from "@inubekit/hooks";
-import { Stack } from "@inubekit/stack";
-import { Button } from "@inubekit/button";
+import { Stack, Button, useMediaQuery } from "@inubekit/inubekit";
 
 import { AlertCard } from "@src/components/data/AlertCard";
 

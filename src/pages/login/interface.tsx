@@ -1,8 +1,5 @@
 import { Outlet } from "react-router-dom";
-import { useMediaQueries } from "@inubekit/hooks";
-import { Grid } from "@inubekit/grid";
-import { Stack } from "@inubekit/stack";
-import { Text } from "@inubekit/text";
+import { Text, Grid, Stack, useMediaQueries } from "@inubekit/inubekit";
 
 import selsaLogo from "@assets/images/team-success-5-66 1.png";
 

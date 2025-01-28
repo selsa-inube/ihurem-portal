@@ -1,5 +1,4 @@
-import { IAssistedStep } from "@inubekit/assisted";
-import { IOption } from "@inubekit/select";
+import { IAssistedStep, IOption } from "@inubekit/inubekit";
 
 export const newCCertificationApplication: IAssistedStep[] = [
   {

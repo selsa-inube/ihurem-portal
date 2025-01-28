@@ -1,6 +1,4 @@
-import { useMediaQuery } from "@inubekit/hooks";
-import { Stack } from "@inubekit/stack";
-import { Button } from "@inubekit/button";
+import { Stack, Button, useMediaQuery } from "@inubekit/inubekit";
 
 import { AlertCard } from "@components/data/AlertCard";
 import { spacing } from "@design/tokens/spacing/spacing";

@@ -1,6 +1,6 @@
 import { StoryFn } from "@storybook/react";
 import { BrowserRouter } from "react-router-dom";
-import { Grid } from "@inubekit/grid";
+import { Grid } from "@inubekit/inubekit";
 
 import { BoxAttribute } from "@components/cards/BoxAttribute";
 

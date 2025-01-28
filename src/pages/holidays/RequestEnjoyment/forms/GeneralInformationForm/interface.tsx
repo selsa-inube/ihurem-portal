@@ -1,11 +1,13 @@
 import { FormikProps } from "formik";
 import * as Yup from "yup";
-import { Date } from "@inubekit/date";
-import { Textfield } from "@inubekit/input";
-import { useMediaQuery } from "@inubekit/hooks";
-import { Button } from "@inubekit/button";
-import { Stack } from "@inubekit/stack";
-import { Textarea } from "@inubekit/textarea";
+import {
+  Date,
+  Stack,
+  Button,
+  Textarea,
+  Textfield,
+  useMediaQuery,
+} from "@inubekit/inubekit";
 
 import { isRequired } from "@utils/forms/forms";
 import { spacing } from "@design/tokens/spacing/spacing";

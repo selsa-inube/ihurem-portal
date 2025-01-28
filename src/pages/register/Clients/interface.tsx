@@ -1,8 +1,5 @@
-import { Button } from "@inubekit/button";
-import { Text } from "@inubekit/text";
-import { Stack } from "@inubekit/stack";
-import { Input } from "@inubekit/input";
 import { useNavigate } from "react-router-dom";
+import { Text, Stack, Input, Button } from "@inubekit/inubekit";
 
 import selsaLogo from "@assets/images/logoInube.png";
 import { StyledClients } from "./styles";
