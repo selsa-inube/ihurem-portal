@@ -24,7 +24,8 @@ const renderLogo = (imgUrl: string) => {
 };
 
 function Home() {
-  const { user, logoUrl, employeeOptions } = useAppContext();
+  const { user, logoUrl, employeeOptions, businessUnit } = useAppContext();
+  const businessUnitName = businessUnit?.abbreviatedName ?? "Unidad de Negocio";
   const mediaQueries = useMediaQueries([
     "(max-width: 944px)",
     "(max-width: 690px)",
@@ -41,6 +42,7 @@ function Home() {
           logoURL={renderLogo(logoUrl)}
           user={{
             username: user?.username ?? "Nombre de usuario",
+            client: businessUnitName,
           }}
           menu={userMenu}
         />

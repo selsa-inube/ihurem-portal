@@ -24,7 +24,7 @@ function AppPage() {
   const { user, logoUrl, businessUnit, employeeOptions } = useAppContext();
   const isTablet = useMediaQuery("(max-width: 944px)");
 
-  const businessUnitName = businessUnit?.businessUnit ?? "Unidad de Negocio";
+  const businessUnitName = businessUnit?.abbreviatedName ?? "Unidad de Negocio";
 
   const availableTitles = employeeOptions.map((option) =>
     option.abbreviatedName.trim().toLowerCase(),
