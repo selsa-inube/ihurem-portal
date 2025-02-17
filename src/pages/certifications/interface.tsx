@@ -1,6 +1,4 @@
-import { Button } from "@inubekit/button";
-import { Stack } from "@inubekit/stack";
-import { useMediaQuery } from "@inubekit/hooks";
+import { Button, Stack, useMediaQuery } from "@inubekit/inubekit";
 import { MdOutlineAdd } from "react-icons/md";
 
 import { AppMenu } from "@components/layout/AppMenu";

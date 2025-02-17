@@ -1,9 +1,5 @@
 import { Outlet } from "react-router-dom";
-import { Text } from "@inubekit/text";
-import { Grid } from "@inubekit/grid";
-import { Header } from "@inubekit/header";
-import { Stack } from "@inubekit/stack";
-import { useMediaQueries } from "@inubekit/hooks";
+import { Text, Stack, Grid, Header, useMediaQueries } from "@inubekit/inubekit";
 
 import { AppCard } from "@components/feedback/AppCard";
 import { spacing } from "@design/tokens/spacing/spacing.ts";
@@ -28,7 +24,8 @@ const renderLogo = (imgUrl: string) => {
 };
 
 function Home() {
-  const { user, logoUrl, employeeOptions } = useAppContext();
+  const { user, logoUrl, employeeOptions, businessUnit } = useAppContext();
+  const businessUnitName = businessUnit?.abbreviatedName ?? "Unidad de Negocio";
   const mediaQueries = useMediaQueries([
     "(max-width: 944px)",
     "(max-width: 690px)",
@@ -43,8 +40,11 @@ function Home() {
         <Header
           portalId="portal"
           logoURL={renderLogo(logoUrl)}
-          userName={user?.username ?? "Nombre de usuario"}
-          userMenu={userMenu}
+          user={{
+            username: user?.username ?? "Nombre de usuario",
+            client: businessUnitName,
+          }}
+          menu={userMenu}
         />
         <StyledContainer>
           <StyledMain $isTablet={isTablet}>

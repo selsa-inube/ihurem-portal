@@ -1,11 +1,14 @@
 import { FormikProps } from "formik";
 import { ObjectSchema, AnyObject } from "yup";
-import { Select, IOption } from "@inubekit/select";
-import { Textfield } from "@inubekit/input";
-import { useMediaQuery } from "@inubekit/hooks";
-import { Button } from "@inubekit/button";
-import { Stack } from "@inubekit/stack";
-import { Textarea } from "@inubekit/textarea";
+import {
+  Stack,
+  Button,
+  Select,
+  IOption,
+  Textarea,
+  Textfield,
+  useMediaQuery,
+} from "@inubekit/inubekit";
 
 import { isRequired } from "@utils/forms/forms";
 import { spacing } from "@design/tokens/spacing/spacing";

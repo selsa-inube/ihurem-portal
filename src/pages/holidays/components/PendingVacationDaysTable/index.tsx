@@ -8,9 +8,9 @@ import {
   Tfoot,
   Thead,
   Tr,
-} from "@inubekit/table";
-import { Text } from "@inubekit/text";
-import { SkeletonLine } from "@inubekit/skeleton";
+  Text,
+  SkeletonLine,
+} from "@inubekit/inubekit";
 
 import { spacing } from "@design/tokens/spacing/spacing";
 

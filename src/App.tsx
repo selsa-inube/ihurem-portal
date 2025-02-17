@@ -5,24 +5,25 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { AppPage } from "@components/layout/AppPage";
-import { Home } from "@src/pages/home";
-import { AppProvider, useAppContext } from "@context/AppContext";
-import { decrypt } from "@utils/encrypt";
-import { environment } from "@config/environment";
-import { ErrorPage } from "@components/layout/ErrorPage";
-import { useEmployeeByNickname } from "@src/hooks/useEmployeeInquiry";
-import { GlobalStyles } from "@styles/global";
-import { HolidaysRoutes } from "@routes/holidays";
-import { CertificationsRoutes } from "@routes/certifications";
-import { LoginRoutes } from "@routes/login";
-import { pathStart } from "@config/nav.config";
-import { RegisterRoutes } from "@routes/register";
 import { useAuth0 } from "@auth0/auth0-react";
-import { useBusinessManagers } from "@hooks/useBusinessManagers";
-import { useBusinessUnit } from "@hooks/useBusinessUnit";
+
+import { Home } from "@src/pages/home";
+import { decrypt } from "@utils/encrypt";
+import { LoginRoutes } from "@routes/login";
+import { GlobalStyles } from "@styles/global";
+import { pathStart } from "@config/nav.config";
+import { environment } from "@config/environment";
+import { HolidaysRoutes } from "@routes/holidays";
+import { RegisterRoutes } from "@routes/register";
+import { AppPage } from "@components/layout/AppPage";
 import { usePortalData } from "@hooks/usePortalData";
+import { ErrorPage } from "@components/layout/ErrorPage";
+import { useBusinessUnit } from "@hooks/useBusinessUnit";
+import { CertificationsRoutes } from "@routes/certifications";
 import { useEmployeeOptions } from "@hooks/useEmployeeOptions";
+import { AppProvider, useAppContext } from "@context/AppContext";
+import { useBusinessManagers } from "@hooks/useBusinessManagers";
+import { useEmployeeByNickname } from "@src/hooks/useEmployeeInquiry";
 
 function LogOut() {
   localStorage.clear();

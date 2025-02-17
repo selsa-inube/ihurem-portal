@@ -1,12 +1,15 @@
 import { createPortal } from "react-dom";
 import { MdClear } from "react-icons/md";
-import { useMediaQuery } from "@inubekit/hooks";
-import { Button } from "@inubekit/button";
-import { Stack } from "@inubekit/stack";
-import { Text } from "@inubekit/text";
-import { Blanket } from "@inubekit/blanket";
-import { Icon } from "@inubekit/icon";
-import { Divider } from "@inubekit/divider";
+
+import {
+  Icon,
+  Text,
+  Stack,
+  Button,
+  Blanket,
+  Divider,
+  useMediaQuery,
+} from "@inubekit/inubekit";
 
 import { spacing } from "@design/tokens/spacing/spacing";
 

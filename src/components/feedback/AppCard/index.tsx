@@ -1,8 +1,5 @@
 import { MdOutlineInfo } from "react-icons/md";
-import { Stack } from "@inubekit/stack";
-import { Text } from "@inubekit/text";
-import { Icon } from "@inubekit/icon";
-import { Divider } from "@inubekit/divider";
+import { Stack, Text, Icon, Divider } from "@inubekit/inubekit";
 
 import { spacing } from "@design/tokens/spacing/spacing";
 

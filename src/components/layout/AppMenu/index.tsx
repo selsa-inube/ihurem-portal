@@ -1,5 +1,4 @@
-import { Stack } from "@inubekit/stack";
-import { Breadcrumbs } from "@inubekit/breadcrumbs";
+import { Stack, Breadcrumbs } from "@inubekit/inubekit";
 
 import { PageTitle } from "../PageTitle";
 import { StyledAppMenu } from "./styles";

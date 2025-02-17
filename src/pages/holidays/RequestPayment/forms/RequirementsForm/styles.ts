@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import { inube } from "@inubekit/foundations";
+import { inube } from "@inubekit/inubekit";
+
 import { spacing } from "@design/tokens/spacing/spacing";
 
 interface StyledContainerProps {

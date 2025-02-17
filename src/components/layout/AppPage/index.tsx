@@ -1,8 +1,5 @@
 import { Outlet } from "react-router-dom";
-import { Grid } from "@inubekit/grid";
-import { Header } from "@inubekit/header";
-import { Nav } from "@inubekit/nav";
-import { useMediaQuery } from "@inubekit/hooks";
+import { Grid, Header, Nav, useMediaQuery } from "@inubekit/inubekit";
 
 import { nav, userMenu, actions } from "@config/nav.config";
 import { useAppContext } from "@context/AppContext";
@@ -27,7 +24,7 @@ function AppPage() {
   const { user, logoUrl, businessUnit, employeeOptions } = useAppContext();
   const isTablet = useMediaQuery("(max-width: 944px)");
 
-  const businessUnitName = businessUnit?.businessUnit ?? "Unidad de Negocio";
+  const businessUnitName = businessUnit?.abbreviatedName ?? "Unidad de Negocio";
 
   const availableTitles = employeeOptions.map((option) =>
     option.abbreviatedName.trim().toLowerCase(),
@@ -52,11 +49,15 @@ function AppPage() {
       <Grid templateRows="auto 1fr" height="100vh" justifyContent="unset">
         <Header
           portalId="portal"
-          navigation={filteredNav}
+          navigation={{
+            items: filteredNav,
+          }}
           logoURL={renderLogo(logoUrl)}
-          userName={user?.username ?? "Nombre de usuario"}
-          userMenu={userMenu}
-          client={businessUnitName}
+          user={{
+            username: user?.username ?? "Nombre de usuario",
+            client: businessUnitName,
+          }}
+          menu={userMenu}
         />
         <StyledContainer>
           <Grid

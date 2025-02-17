@@ -1,5 +1,4 @@
-import { Stack } from "@inubekit/stack";
-import { Grid } from "@inubekit/grid";
+import { Stack, Grid } from "@inubekit/inubekit";
 
 import { BoxAttribute } from "@components/cards/BoxAttribute";
 import { spacing } from "@design/tokens/spacing/spacing";

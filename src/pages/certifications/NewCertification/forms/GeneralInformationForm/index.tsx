@@ -1,7 +1,7 @@
 import { FormikProps, useFormik } from "formik";
 import { object } from "yup";
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
-import { IOption } from "@inubekit/select";
+import { IOption } from "@inubekit/inubekit";
 
 import { useAppContext } from "@context/AppContext";
 import { IEmploymentContract } from "@src/types/employeePortalBusiness.types";

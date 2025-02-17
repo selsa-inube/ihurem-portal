@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from "@storybook/react";
-import { useMediaQuery } from "@inubekit/hooks";
+import { useMediaQuery } from "@inubekit/inubekit";
 
 import { parameters, props } from "./props";
 

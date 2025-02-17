@@ -2,14 +2,16 @@ import { createPortal } from "react-dom";
 import { Formik, Form, Field, FieldProps, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import { MdClear } from "react-icons/md";
-import { Textarea } from "@inubekit/textarea";
-import { Icon } from "@inubekit/icon";
-import { Stack } from "@inubekit/stack";
-import { Text } from "@inubekit/text";
-import { Button } from "@inubekit/button";
-import { useMediaQuery } from "@inubekit/hooks";
-import { Blanket } from "@inubekit/blanket";
-import { Divider } from "@inubekit/divider";
+import {
+  Text,
+  Icon,
+  Stack,
+  Button,
+  Blanket,
+  Divider,
+  Textarea,
+  useMediaQuery,
+} from "@inubekit/inubekit";
 
 import { StyledModal, StyledContainerClose } from "./styles";
 

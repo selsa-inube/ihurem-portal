@@ -1,8 +1,5 @@
 import { ReactNode } from "react";
-import { useMediaQuery } from "@inubekit/hooks";
-import { Stack } from "@inubekit/stack";
-import { Grid } from "@inubekit/grid";
-import { Text } from "@inubekit/text";
+import { Text, Grid, Stack, useMediaQuery } from "@inubekit/inubekit";
 
 import { spacing } from "@design/tokens/spacing/spacing";
 
