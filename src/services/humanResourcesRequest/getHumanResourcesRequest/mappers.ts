@@ -13,7 +13,6 @@ const mapHumanResourceRequestApiToEntity = (
     item.humanResourceRequestDescription ?? "",
   ),
   humanResourceRequestDate: String(item.humanResourceRequestDate ?? ""),
-  // Use non-null assertion for succinct removal of null/undefined per eslint rule
   humanResourceRequestStatus: item.humanResourceRequestStatus!,
   humanResourceRequestData:
     item.humanResourceRequestData ??
@@ -56,7 +55,6 @@ const mapTaskManagingHumanResourceRequestApiToEntity = (
   humanResourceRequestId: String(item.humanResourceRequestId ?? ""),
   taskCode: String(item.taskCode ?? ""),
   taskName: String(item.taskName ?? ""),
-  // Apply non-null assertion here as well
   taskStatus: item.taskStatus!,
   description: String(item.description ?? ""),
 });

@@ -163,7 +163,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
         </Text>
         {renderActions()}
       </Stack>
-      {selectedEmployee.employmentContracts?.map((contract, index) => (
+      {selectedEmployee?.employmentContracts?.map((contract, index) => (
         <div key={index}>
           {selectedEmployee.employmentContracts.length > 1 && (
             <Text
@@ -193,7 +193,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
         {!tableData || tableData.length === 0 ? (
           renderDaysUsedContent()
         ) : (
-          <>
+          <Stack direction="column" gap={spacing.s300}>
             <Tabs
               tabs={tabs}
               selectedTab={selectedTab}
@@ -219,7 +219,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
             ) : (
               renderDaysUsedContent()
             )}
-          </>
+          </Stack>
         )}
       </AppMenu>
       {infoModal.open && (
