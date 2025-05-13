@@ -53,7 +53,7 @@ export function useRequestSubmission(
       }
 
       const requestBody = {
-        employeeId: selectedEmployee.employeeId,
+        employeeId: selectedEmployee?.employeeId,
         humanResourceRequestData,
         humanResourceRequestDate: new Date().toISOString(),
         humanResourceRequestDescription: formValues.observations ?? "",

@@ -37,7 +37,7 @@ export interface IHumanResourceRequestData {
 export interface IRequestBody {
   requestId?: string;
   humanResourceRequestNumber?: string;
-  employeeId: string;
+  employeeId?: string;
   humanResourceRequestData: string;
   humanResourceRequestDate: string;
   humanResourceRequestDescription: string;

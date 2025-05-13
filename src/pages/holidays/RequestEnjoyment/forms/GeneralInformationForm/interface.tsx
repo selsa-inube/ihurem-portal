@@ -55,12 +55,12 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
 
   const contractOptions = useMemo(
     () =>
-      (selectedEmployee.employmentContracts ?? []).map((c) => ({
+      (selectedEmployee?.employmentContracts ?? []).map((c) => ({
         id: c.contractId,
         value: `${c.businessName} - ${c.contractType}`,
         label: `${c.businessName} - ${c.contractType}`,
       })),
-    [selectedEmployee.employmentContracts],
+    [selectedEmployee?.employmentContracts],
   );
 
   useEffect(() => {
