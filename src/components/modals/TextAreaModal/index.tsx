@@ -1,17 +1,19 @@
+import {
+  Textarea,
+  Icon,
+  Stack,
+  Text,
+  Button,
+  useMediaQuery,
+  Blanket,
+  Divider,
+} from "@inubekit/inubekit";
 import { createPortal } from "react-dom";
 import { Formik, Form, Field, FieldProps, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import { MdClear } from "react-icons/md";
-import {
-  Text,
-  Icon,
-  Stack,
-  Button,
-  Blanket,
-  Divider,
-  Textarea,
-  useMediaQuery,
-} from "@inubekit/inubekit";
+
+import { spacing } from "@design/tokens/spacing/spacing";
 
 import { StyledModal, StyledContainerClose } from "./styles";
 
@@ -30,6 +32,7 @@ export interface TextAreaModalProps {
   hideCharCount?: boolean;
   disableTextarea?: boolean;
   secondaryButtonText?: string;
+  description?: string;
   onSubmit?: (values: { textarea: string }) => void;
   onCloseModal?: () => void;
   onSecondaryButtonClick?: () => void;
@@ -46,6 +49,7 @@ export function TextAreaModal(props: TextAreaModalProps) {
     readOnly = false,
     disableTextarea = false,
     secondaryButtonText = "Cancelar",
+    description,
     onSubmit,
     onCloseModal,
     onSecondaryButtonClick,
@@ -88,6 +92,7 @@ export function TextAreaModal(props: TextAreaModalProps) {
           </StyledContainerClose>
         </Stack>
         <Divider />
+        <Text>{description}</Text>
         <Formik
           initialValues={{ textarea: "" }}
           validationSchema={validationSchema}
@@ -97,7 +102,7 @@ export function TextAreaModal(props: TextAreaModalProps) {
             onCloseModal?.();
           }}
         >
-          {({ errors, touched, isValid }) => (
+          {({ errors, touched, values }) => (
             <Form>
               <Field name="textarea">
                 {({ field }: FieldProps) => (
@@ -120,19 +125,26 @@ export function TextAreaModal(props: TextAreaModalProps) {
                   />
                 )}
               </Field>
-              <Stack justifyContent="end" margin="12px 0" gap="12px">
+              <Stack
+                justifyContent="end"
+                margin={`${spacing.s150} ${spacing.s0}`}
+                gap={spacing.s250}
+              >
                 <Button
                   type="button"
                   variant="outlined"
                   appearance="gray"
-                  onClick={onSecondaryButtonClick}
+                  onClick={() => {
+                    onSecondaryButtonClick?.();
+                    onCloseModal?.();
+                  }}
                 >
                   {secondaryButtonText}
                 </Button>
                 <Button
-                  type={readOnly ? "button" : "submit"}
-                  onClick={readOnly ? onCloseModal : undefined}
-                  disabled={!isValid || disableTextarea}
+                  type="submit"
+                  disabled={!values.textarea || disableTextarea}
+                  appearance={values.textarea ? "danger" : "gray"}
                 >
                   {buttonText}
                 </Button>

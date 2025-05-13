@@ -2,7 +2,6 @@ import { BrowserRouter } from "react-router-dom";
 import { Meta, StoryFn } from "@storybook/react";
 
 import { AppPage } from ".";
-import { AppProvider } from "@context/AppContext";
 
 const meta: Meta<typeof AppPage> = {
   title: "layout/appPage",
@@ -10,9 +9,7 @@ const meta: Meta<typeof AppPage> = {
   decorators: [
     (Story: StoryFn) => (
       <BrowserRouter>
-        <AppProvider>
-          <Story />
-        </AppProvider>
+        <Story />
       </BrowserRouter>
     ),
   ],

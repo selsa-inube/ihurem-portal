@@ -2,7 +2,7 @@ import { Outlet } from "react-router-dom";
 import { Grid, Header, Nav, useMediaQuery } from "@inubekit/inubekit";
 
 import { nav, userMenu, actions } from "@config/nav.config";
-import { useAppContext } from "@context/AppContext";
+import { useAppContext } from "@context/AppContext/useAppContext";
 
 import {
   StyledAppPage,
@@ -10,6 +10,7 @@ import {
   StyledContentImg,
   StyledLogo,
   StyledMain,
+  StyledMainScroll,
 } from "./styles";
 
 const renderLogo = (imgUrl: string) => {
@@ -30,16 +31,30 @@ function AppPage() {
     option.abbreviatedName.trim().toLowerCase(),
   );
 
-  const filteredNav = {
+  const filteredLinks = Object.fromEntries(
+    Object.entries(nav.sections.administrate.links).filter(([, link]) =>
+      availableTitles.includes(link.label.trim().toLowerCase()),
+    ),
+  );
+
+  const headerNav = {
+    ...nav,
+    reactPortalId: "portal",
+    sections: [
+      {
+        ...nav.sections.administrate,
+        subtitle: "Administración",
+        links: Object.values(filteredLinks),
+      },
+    ],
+  };
+
+  const sidebarNav = {
     ...nav,
     sections: {
       administrate: {
         ...nav.sections.administrate,
-        links: Object.fromEntries(
-          Object.entries(nav.sections.administrate.links).filter(([_, link]) =>
-            availableTitles.includes(link.label.trim().toLowerCase()),
-          ),
-        ),
+        links: filteredLinks,
       },
     },
   };
@@ -48,9 +63,8 @@ function AppPage() {
     <StyledAppPage>
       <Grid templateRows="auto 1fr" height="100vh" justifyContent="unset">
         <Header
-          portalId="portal"
           navigation={{
-            items: filteredNav,
+            nav: headerNav,
           }}
           logoURL={renderLogo(logoUrl)}
           user={{
@@ -66,11 +80,13 @@ function AppPage() {
             height={"95vh"}
           >
             {!isTablet && (
-              <Nav navigation={filteredNav} actions={actions} collapse={true} />
+              <Nav navigation={sidebarNav} actions={actions} collapse={true} />
             )}
-            <StyledMain $isTablet={isTablet}>
-              <Outlet />
-            </StyledMain>
+            <StyledMainScroll>
+              <StyledMain>
+                <Outlet />
+              </StyledMain>
+            </StyledMainScroll>
           </Grid>
         </StyledContainer>
       </Grid>

@@ -4,7 +4,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import {
   IBusinessManagers,
   IEmployeePortalByBusinessManager,
-} from "@src/types/employeePortalBusiness.types";
+} from "@ptypes/employeePortalBusiness.types";
 import { encrypt } from "@utils/encrypt";
 
 export const useAuthRedirect = (

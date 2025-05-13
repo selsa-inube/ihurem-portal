@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
+
 import {
   IBusinessUnitsPortalEmployee,
   IEmployeePortalByBusinessManager,
 } from "@ptypes/employeePortalBusiness.types";
-import { businessUnitsPortalEmployee } from "@src/services/employeePortal/getBusinessUnits";
+import { businessUnitsPortalEmployee } from "@services/employeePortal/getBusinessUnits";
 
 export const useBusinessUnit = (
   portalPublicCode: IEmployeePortalByBusinessManager,
@@ -25,6 +26,7 @@ export const useBusinessUnit = (
         }
         setBusinessUnit(fetchBusinessUnit);
       } catch (error) {
+        console.log(error);
         setHasError(true);
       }
       if (hasError) {

@@ -14,7 +14,11 @@ interface Environment {
   REDIRECT_URI: string;
   IVITE_ISAAS_QUERY_PROCESS_SERVICE: string;
   IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE: string;
+  IVITE_IHUREM_PERSISTENCE_PROCESS_SERVICE: string;
+  IVITE_IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE: string;
   BASE_URL: string;
+  COUNTRY: string;
+  INCLUDES_SATURDAYS: string;
 }
 
 const environment: Environment = {
@@ -27,6 +31,12 @@ const environment: Environment = {
   IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE: import.meta.env
     .VITE_IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE as string,
   BASE_URL: import.meta.env.VITE_API_BASE_URL as string,
+  IVITE_IHUREM_PERSISTENCE_PROCESS_SERVICE: import.meta.env
+    .VITE_IHUREM_PERSISTENCE_PROCESS_SERVICE as string,
+  IVITE_IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE: import.meta.env
+    .VITE_IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE as string,
+  COUNTRY: import.meta.env.VITE_COUNTRY as string,
+  INCLUDES_SATURDAYS: import.meta.env.VITE_INCLUDES_SATURDAYS as string,
 };
 
 export {

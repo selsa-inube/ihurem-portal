@@ -20,6 +20,10 @@ const StyledHolidaysContainer = styled.div<StyledHolidaysContainerProps>`
         : inube.palette.neutral.N30};
   padding: ${({ $isMobile }) =>
     $isMobile ? `${spacing.s300} ${spacing.s150}` : spacing.s300};
+
+  & > div:nth-child(2) {
+    overflow: initial;
+  }
 `;
 
 export { StyledHolidaysContainer };

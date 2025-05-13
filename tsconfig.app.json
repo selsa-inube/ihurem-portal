@@ -27,6 +27,8 @@
       "@components/*": ["components/*"],
       "@config/*": ["config/*"],
       "@assets/*": ["assets/*"],
+      "@validations/*": ["validations/*"],
+      "@mocks/*": ["mocks/*"],
       "@context/*": ["context/*"],
       "@pages/*": ["pages/*"],
       "@design/*": ["design/*"],

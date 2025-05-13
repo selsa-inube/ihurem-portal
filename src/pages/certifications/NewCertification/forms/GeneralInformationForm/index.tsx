@@ -3,16 +3,15 @@ import { object } from "yup";
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { IOption } from "@inubekit/inubekit";
 
-import { useAppContext } from "@context/AppContext";
-import { IEmploymentContract } from "@src/types/employeePortalBusiness.types";
+import { useAppContext } from "@context/AppContext/useAppContext";
+import { IEmploymentContract } from "@ptypes/employeePortalBusiness.types";
+import { ContractActionTypes } from "@ptypes/contract.types";
+import { validationMessages } from "@validations/validationMessages";
+import { validationRules } from "@validations/validationRules";
 
-import { validationMessages } from "@src/validations/validationMessages";
-import { validationRules } from "@src/validations/validationRules";
 import { generalInformationRequiredFields } from "./config/formConfig";
-
 import { GeneralInformationFormUI } from "./interface";
 import { IGeneralInformationEntry } from "./types";
-import { ContractActionTypes } from "@src/types/contract.types";
 
 const createValidationSchema = () =>
   object().shape({
@@ -45,7 +44,9 @@ const GeneralInformationForm = forwardRef<
     {
       initialValues,
       onFormValid,
-      onSubmit = () => {},
+      onSubmit = () => {
+        console.log("submit form");
+      },
       handleNextStep,
       loading = false,
       withNextButton = false,
@@ -106,6 +107,8 @@ const GeneralInformationForm = forwardRef<
     );
   },
 );
+
+GeneralInformationForm.displayName = "GeneralInformationForm";
 
 export { GeneralInformationForm };
 export type { GeneralInformationFormProps };

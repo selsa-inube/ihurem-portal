@@ -17,6 +17,8 @@ export default defineConfig({
       "@ptypes": path.resolve(__dirname, "./src/types"),
       "@config": path.resolve(__dirname, "./src/config"),
       "@assets": path.resolve(__dirname, "./src/assets"),
+      "@validations": path.resolve(__dirname, "./src/validations"),
+      "@mocks": path.resolve(__dirname, "./src/mocks"),
       "@context": path.resolve(__dirname, "./src/context"),
       "@pages": path.resolve(__dirname, "./src/pages"),
       "@design": path.resolve(__dirname, "./src/design"),

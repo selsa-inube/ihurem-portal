@@ -1,10 +1,4 @@
-import { MdOutlineVisibility, MdDeleteOutline } from "react-icons/md";
-import { useState } from "react";
 import {
-  Text,
-  Icon,
-  SkeletonLine,
-  useMediaQueries,
   Col,
   Colgroup,
   Pagination,
@@ -14,23 +8,69 @@ import {
   Tfoot,
   Thead,
   Tr,
+  Icon,
+  IIcon,
+  useMediaQueries,
+  Text,
+  SkeletonLine,
+  Stack,
 } from "@inubekit/inubekit";
+import { MdOutlineVisibility, MdOutlineHighlightOff } from "react-icons/md";
+import { useState } from "react";
 
-import RequestComponentDetail from "@components/modals/ComponentDetailModal";
-import { IHolidaysTable } from "./types";
-import { StyledTd, StyledTh } from "./styles";
+import { TextAreaModal } from "@components/modals/TextAreaModal";
+import { RequestComponentDetail } from "@components/modals/ComponentDetailModal";
+import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
+import { Tooltip } from "@components/overlay/Tooltip";
+import { InfoModal } from "@components/modals/InfoModal";
+import { spacing } from "@design/tokens/spacing/spacing";
+
+import { IHolidaysTable, HolidayTableDataDetails } from "./types";
+import { StyledTd, StyledTh, TooltipWrapper } from "./styles";
 import { columns, headers } from "./tableConfig";
 import { usePagination } from "./usePagination";
-import { Detail } from "./Detail";
 
 interface HolidaysTableProps {
   data: IHolidaysTable[];
   loading?: boolean;
+  disableDeleteAction?: boolean;
+  hasViewDetailsPrivilege?: boolean;
+  hasDeletePrivilege?: boolean;
+  handleDeleteRequest: (requestId: string, justification: string) => void;
 }
 
-function HolidaysTable({ data, loading = false }: HolidaysTableProps) {
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [modalData, setModalData] = useState<any>(null);
+function HolidaysTable(props: HolidaysTableProps) {
+  const {
+    data,
+    loading = false,
+    disableDeleteAction = false,
+    hasViewDetailsPrivilege = false,
+    hasDeletePrivilege = false,
+    handleDeleteRequest,
+  } = props;
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
+  const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
+  const [infoModalContent, setInfoModalContent] = useState({
+    title: "Información",
+    titleDescription: "No tienes privilegios",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+  });
+  const [selectedRecord, setSelectedRecord] = useState<
+    { label: string; value: string }[] | null
+  >(null);
+  const [selectedRequestId, setSelectedRequestId] = useState<string | null>(
+    null,
+  );
+
+  const mediaQueries = useMediaQueries([
+    "(max-width: 1024px)",
+    "(max-width: 542px)",
+  ]);
+
+  const isMobile = mediaQueries["(max-width: 542px)"];
+  const iconSize = isMobile ? "20px" : "16px";
 
   const {
     totalRecords,
@@ -43,48 +83,208 @@ function HolidaysTable({ data, loading = false }: HolidaysTableProps) {
     currentData,
   } = usePagination(data);
 
-  const mediaQueries = useMediaQueries([
-    "(max-width: 1024px)",
-    "(max-width: 542px)",
-  ]);
+  const displayData = isMobile ? data : currentData;
 
   const determineVisibleHeaders = () => {
-    if (mediaQueries["(max-width: 542px)"]) {
-      return headers
-        .filter((header) => ["date", "status", "days"].includes(header.key))
-        .concat({
+    if (isMobile) {
+      return [
+        ...headers.filter((header) =>
+          ["description", "date"].includes(header.key),
+        ),
+        {
           label: "Acciones",
-          key: "mobileActions",
+          key: "actions",
           action: true,
-          style: { width: "50px" },
-        });
-    } else if (mediaQueries["(max-width: 1024px)"]) {
+        },
+      ];
+    }
+    if (mediaQueries["(max-width: 1024px)"]) {
       return headers.filter((header) =>
-        ["date", "status", "days", "details", "delete"].includes(header.key),
+        ["description", "days", "date", "details", "delete"].includes(
+          header.key,
+        ),
       );
     }
-    return headers;
+    return headers.filter((header) =>
+      ["date", "status", "days", "description", "details", "delete"].includes(
+        header.key,
+      ),
+    );
   };
 
   const visibleHeaders = determineVisibleHeaders();
-  const visibleColumns = mediaQueries["(max-width: 542px)"]
-    ? columns.slice(1, 3)
-    : mediaQueries["(max-width: 1024px)"]
-      ? columns.slice(0, 3)
-      : columns;
+  const visibleColumns =
+    (isMobile && columns.slice(1, 3)) ||
+    (mediaQueries["(max-width: 1024px)"] && columns.slice(0, 3)) ||
+    columns;
+
+  const getHeaderAlignment = (key: string) => {
+    if (mediaQueries["(max-width: 1024px)"]) {
+      return "center";
+    }
+
+    switch (key) {
+      case "date":
+        return "right";
+      case "days":
+        return "right";
+      case "status":
+      case "details":
+      case "delete":
+      case "actions":
+        return "center";
+      default:
+        return "left";
+    }
+  };
+
+  const getCellAlignment = (key: string) => {
+    if (mediaQueries["(max-width: 1024px)"]) {
+      return "center";
+    }
+
+    switch (key) {
+      case "days":
+        return "right";
+      case "details":
+      case "delete":
+      case "actions":
+      case "date":
+        return "center";
+      default:
+        return "left";
+    }
+  };
+
+  const handleClose = () => {
+    setIsSecondModalOpen(false);
+    setIsModalOpen(false);
+    setIsInfoModalOpen(false);
+    setSelectedRecord(null);
+    setSelectedRequestId(null);
+  };
+
+  const showInfoModal = (titleDescription: string, description: string) => {
+    setInfoModalContent({
+      title: "Información",
+      titleDescription,
+      description,
+    });
+    setIsInfoModalOpen(true);
+  };
+
+  const handleOpenDetailsModal = (rowIndex: number) => {
+    if (!hasViewDetailsPrivilege) {
+      showInfoModal(
+        "No tienes privilegios",
+        "No tienes privilegios para ver detalles.",
+      );
+      return;
+    }
+
+    const dataSource = isMobile ? data : currentData;
+    const dataDe = dataSource[rowIndex].dataDetails
+      ?.value as unknown as HolidayTableDataDetails;
+    const dataDeta = [
+      { label: "Días de disfrute", value: dataDe.daysOff },
+      { label: "Fecha de inicio", value: dataDe.startDate },
+      { label: "Contrato", value: dataDe.contract },
+      { label: "Observaciones", value: dataDe.description },
+    ];
+    setSelectedRecord(dataDeta);
+    setIsModalOpen(true);
+  };
+
+  const handleOpenModal = (requestId: string) => {
+    if (!hasDeletePrivilege) {
+      showInfoModal(
+        "No tienes privilegios",
+        "No tienes privilegios para eliminar este registro.",
+      );
+      return;
+    }
+    setSelectedRequestId(requestId);
+    setIsSecondModalOpen(true);
+  };
+
+  const renderDetailsIcon = (rowIndex: number) => {
+    const iconProps: IIcon = {
+      appearance: "dark",
+      size: iconSize,
+      cursorHover: true,
+      onClick: () => handleOpenDetailsModal(rowIndex),
+      icon: <MdOutlineVisibility />,
+    };
+    return (
+      <TooltipWrapper>
+        <Icon {...iconProps} />
+        <Tooltip
+          text={
+            hasViewDetailsPrivilege ? "Ver más detalles" : "Sin privilegios"
+          }
+        />
+      </TooltipWrapper>
+    );
+  };
+
+  const renderDeleteIcon = (requestId: string) => {
+    const iconProps: IIcon = {
+      appearance: "danger",
+      size: iconSize,
+      onClick: () => handleOpenModal(requestId),
+      cursorHover: true,
+      icon: <MdOutlineHighlightOff />,
+    };
+    return (
+      <TooltipWrapper>
+        <Icon {...iconProps} />
+        <Tooltip
+          text={
+            !disableDeleteAction && hasDeletePrivilege
+              ? "Descartar solicitud"
+              : "Sin privilegios"
+          }
+        />
+      </TooltipWrapper>
+    );
+  };
+
+  const renderCellContent = (
+    headerKey: string,
+    cellData?: {
+      value?: string | number | JSX.Element | HolidayTableDataDetails;
+      type?: string;
+    },
+    rowIndex?: number,
+  ) => {
+    if (loading) {
+      return <SkeletonLine width="100%" animated={true} />;
+    }
+
+    if (cellData?.type === "icon" && headerKey === "details") {
+      return rowIndex !== undefined ? renderDetailsIcon(rowIndex) : null;
+    }
+
+    if (cellData?.type === "icon" && headerKey === "delete") {
+      const dataSource = isMobile ? data : currentData;
+      const requestId = dataSource[rowIndex!]?.requestId;
+      return requestId ? renderDeleteIcon(requestId) : null;
+    }
+
+    return typeof cellData?.value === "object"
+      ? JSON.stringify(cellData.value)
+      : cellData?.value;
+  };
 
   const renderTableCell = (
     headerKey: string,
     cellData: {
       type?: string;
-      value?: string | number | JSX.Element;
-      onClick?: () => void;
+      value?: string | number | JSX.Element | HolidayTableDataDetails;
     },
     rowIndex: number,
   ) => {
-    const isMobileAction =
-      headerKey === "mobileActions" && mediaQueries["(max-width: 542px)"];
-    if (isMobileAction) {
+    if (headerKey === "actions" && isMobile) {
       return (
         <Td
           key={headerKey}
@@ -95,11 +295,10 @@ function HolidaysTable({ data, loading = false }: HolidaysTableProps) {
           {loading ? (
             <SkeletonLine width="100%" animated={true} />
           ) : (
-            <Detail
-              onClickDetails={() => handleDetailsClick(cellData)}
-              onClickEdit={cellData?.onClick}
-              onClickEliminate={cellData?.onClick}
-            />
+            <Stack justifyContent="center" gap={spacing.s400}>
+              {renderDetailsIcon(rowIndex)}
+              {renderDeleteIcon(displayData[rowIndex].requestId!)}
+            </Stack>
           )}
         </Td>
       );
@@ -110,137 +309,117 @@ function HolidaysTable({ data, loading = false }: HolidaysTableProps) {
         ? "custom"
         : "text";
 
+    const cellAlign = getCellAlignment(headerKey);
+
     return (
       <StyledTd
         key={headerKey}
         appearance={rowIndex % 2 === 1 ? "dark" : "light"}
         type={cellType}
-        align="center"
-        style={{ padding: "16px 2px" }}
+        align={cellAlign}
       >
-        {renderCellContent(headerKey, cellData)}
+        {renderCellContent(headerKey, cellData, rowIndex)}
       </StyledTd>
     );
   };
 
-  const renderCellContent = (
-    headerKey: string,
-    cellData?: {
-      value?: string | number | JSX.Element;
-      type?: string;
-      onClick?: () => void;
-    },
-  ) => {
-    if (loading) {
-      return <SkeletonLine width="100%" animated={true} />;
-    }
-
-    if (
-      cellData &&
-      cellData.type === "icon" &&
-      (headerKey === "details" || headerKey === "delete")
-    ) {
-      const appearanceValue: "dark" | "danger" | "gray" =
-        headerKey === "details" ? "dark" : "danger";
-
-      const iconProps = {
-        appearance: appearanceValue,
-        size: "16px",
-        onClick: () => handleDetailsClick(cellData),
-        cursorHover: true,
-      };
+  const renderHeaderRow = () => {
+    if (!isMobile) {
+      const headerSlice = mediaQueries["(max-width: 1024px)"]
+        ? headers.slice(0, 3)
+        : headers.slice(0, 4);
 
       return (
-        <Icon
-          icon={
-            headerKey === "details" ? (
-              <MdOutlineVisibility />
-            ) : (
-              <MdDeleteOutline />
-            )
-          }
-          {...iconProps}
-        />
+        <Tr border="bottom">
+          {headerSlice.map((header, index) => (
+            <StyledTh key={index} align={getHeaderAlignment(header.key)}>
+              <b>{header.label}</b>
+            </StyledTh>
+          ))}
+          <StyledTh
+            key="acciones"
+            colSpan={2}
+            align="center"
+            style={{ width: "110px" }}
+            action
+          >
+            <b>Acciones</b>
+          </StyledTh>
+        </Tr>
       );
     }
-    return cellData?.value;
+
+    return (
+      <Tr border="bottom">
+        {visibleHeaders.map((header, index) => (
+          <StyledTh
+            key={index}
+            align={getHeaderAlignment(header.key)}
+            action={header.key === "actions"}
+          >
+            <b>{header.label}</b>
+          </StyledTh>
+        ))}
+      </Tr>
+    );
   };
 
-  const handleDetailsClick = (cellData: any) => {
-    setModalData(cellData);
-    setModalOpen(true);
-  };
+  const renderLoadingRows = () =>
+    Array.from({ length: 3 }).map((_, idx) => (
+      <Tr key={idx} border="bottom">
+        {visibleHeaders.map((header, index) => (
+          <Td
+            key={index}
+            colSpan={1}
+            align={getCellAlignment(header.key)}
+            type="custom"
+          >
+            <SkeletonLine width="100%" animated />
+          </Td>
+        ))}
+      </Tr>
+    ));
 
-  const closeModal = () => {
-    setModalOpen(false);
-  };
+  const renderEmptyState = () => (
+    <Tr border="bottom">
+      <Td colSpan={visibleHeaders.length} align="center" type="custom">
+        <Text size="medium">No tiene solicitudes en trámite.</Text>
+      </Td>
+    </Tr>
+  );
 
-  const modalContent = [
-    { label: "Descripción", value: "Disfrute de vacaciones" },
-    { label: "Fecha", value: "18/Enr/2024" },
-    { label: "Días de disfrute", value: "2" },
-    { label: "Estado", value: "En trámite de aprobación" },
-    { label: "Fecha de inicio", value: "30 /Oct/2024" },
-    {
-      label: "Observaciones",
-      value:
-        "Me gustaría que uno de los asesores se contactaran vía telefónica, si es posible, ya que me quedan ciertas dudas que no se solucionan mediante la pagina. Agradecería una llamada al numero celular 312 3202874.",
-    },
-  ];
+  const renderDataRows = () =>
+    displayData.map((row: IHolidaysTable, rowIndex: number) => (
+      <Tr key={rowIndex} border="bottom">
+        {visibleHeaders.map((header) => {
+          const cellData = row[header.key as keyof IHolidaysTable] as {
+            type?: string;
+            value?: string | number | JSX.Element | HolidayTableDataDetails;
+          };
+          return renderTableCell(
+            header.key,
+            cellData ?? { value: "" },
+            rowIndex,
+          );
+        })}
+      </Tr>
+    ));
 
-  const filteredModalContent = mediaQueries["(max-width: 1024px)"]
-    ? modalContent
-    : modalContent.filter(
-        (item) =>
-          item.label === "Días de disfrute" ||
-          item.label === "Fecha de inicio" ||
-          item.label === "Observaciones",
-      );
   return (
     <>
       <Table>
         <Colgroup>
           {visibleColumns.map((col, index) => (
-            <Col key={index} span={col.span} style={col.style} />
+            <Col key={index} span={col.span} />
           ))}
         </Colgroup>
-        <Thead>
-          <Tr border="bottom">
-            {visibleHeaders.map((header, index) => (
-              <StyledTh
-                key={index}
-                action={header.action}
-                align="center"
-                style={header.style}
-              >
-                <b>{header.label}</b>
-              </StyledTh>
-            ))}
-          </Tr>
-        </Thead>
+        <Thead>{renderHeaderRow()}</Thead>
         <Tbody>
-          {data.length === 0 ? (
-            <Tr border="bottom">
-              <Td colSpan={visibleHeaders.length} align="center" type="custom">
-                <Text size="medium">No tiene solicitudes en trámite.</Text>
-              </Td>
-            </Tr>
-          ) : (
-            currentData.map((row: IHolidaysTable, rowIndex: number) => (
-              <Tr key={rowIndex} border="bottom">
-                {visibleHeaders.map((header) => {
-                  const cellData = row[header.key];
-                  return renderTableCell(
-                    header.key,
-                    cellData ?? { value: "" },
-                    rowIndex,
-                  );
-                })}
-              </Tr>
-            ))
-          )}
+          {(loading && renderLoadingRows()) ||
+            (data.length === 0 && renderEmptyState()) ||
+            renderDataRows()}
         </Tbody>
-        {data.length > 0 && (
+        {!isMobile && data.length > 0 && (
           <Tfoot>
             <Tr border="bottom">
               <Td colSpan={visibleHeaders.length} type="custom" align="center">
@@ -259,12 +438,42 @@ function HolidaysTable({ data, loading = false }: HolidaysTableProps) {
         )}
       </Table>
 
-      {isModalOpen && modalData && (
+      {isModalOpen && selectedRecord && (
         <RequestComponentDetail
+          handleClose={handleClose}
+          modalContent={selectedRecord}
+          requirements={mockRequirements}
           title="Detalles"
           buttonLabel="Cerrar"
-          modalContent={filteredModalContent}
-          handleClose={closeModal}
+          showRequirementsTable
+        />
+      )}
+
+      {isSecondModalOpen && (
+        <TextAreaModal
+          title="Descartar"
+          buttonText="Descartar"
+          inputLabel="Justificación"
+          inputPlaceholder="¿Por qué eliminarás el registro?"
+          description="Al descartar una solicitud esta no podrá continuar su trámite y desaparecerá. ¿Realmente quieres descartar esta solicitud?"
+          maxLength={500}
+          onSubmit={(values) => {
+            if (selectedRequestId) {
+              handleDeleteRequest(selectedRequestId, values.textarea);
+              handleClose();
+            }
+          }}
+          onCloseModal={handleClose}
+        />
+      )}
+
+      {isInfoModalOpen && (
+        <InfoModal
+          title="Información"
+          titleDescription={infoModalContent.titleDescription}
+          description={infoModalContent.description}
+          buttonText="Entendido"
+          onCloseModal={handleClose}
         />
       )}
     </>

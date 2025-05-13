@@ -4,7 +4,7 @@ import { Text, Stack, Grid, Header, useMediaQueries } from "@inubekit/inubekit";
 import { AppCard } from "@components/feedback/AppCard";
 import { spacing } from "@design/tokens/spacing/spacing.ts";
 import { userMenu, nav } from "@config/nav.config";
-import { useAppContext } from "@context/AppContext";
+import { useAppContext } from "@context/AppContext/useAppContext";
 
 import {
   StyledAppPage,
@@ -38,13 +38,19 @@ function Home() {
     <StyledAppPage>
       <Grid templateRows="auto 1fr" height="100vh" justifyContent="unset">
         <Header
-          portalId="portal"
           logoURL={renderLogo(logoUrl)}
           user={{
             username: user?.username ?? "Nombre de usuario",
             client: businessUnitName,
           }}
           menu={userMenu}
+          navigation={{
+            nav: {
+              reactPortalId: "portal",
+              title: "Menu",
+              sections: [],
+            },
+          }}
         />
         <StyledContainer>
           <StyledMain $isTablet={isTablet}>

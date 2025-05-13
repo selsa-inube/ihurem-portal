@@ -6,7 +6,7 @@ import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config({
-  ignores: [".storybook/preview-head.html", "dist"],
+  ignores: ["dist"],
   extends: [
     js.configs.recommended,
     ...tseslint.configs.recommendedTypeChecked,
@@ -30,28 +30,22 @@ export default tseslint.config({
     "react-refresh": reactRefresh,
   },
   rules: {
+    ...reactHooks.configs.recommended.rules,
+    ...react.configs.recommended.rules,
+    ...react.configs["jsx-runtime"].rules,
+    "@typescript-eslint/no-unsafe-assignment": "off",
+    "@typescript-eslint/only-throw-error": "off",
+    "@typescript-eslint/no-floating-promises": "off",
+    "@typescript-eslint/no-unsafe-argument": "off",
+    "@typescript-eslint/no-unsafe-member-access": "off",
+    "@typescript-eslint/no-unsafe-call": "off",
+    "@typescript-eslint/no-unsafe-return": "off",
+    "react-hooks/rules-of-hooks": "off",
     "react-hooks/exhaustive-deps": "off",
+    "react/prop-types": "off",
     "react-refresh/only-export-components": [
       "warn",
-      {
-        allowConstantExport: true,
-      },
+      { allowConstantExport: true },
     ],
-    eqeqeq: ["error", "always"],
-    "no-implicit-coercion": "warn",
-    "@typescript-eslint/no-explicit-any": "warn",
-    "@typescript-eslint/no-duplicate-enum-values": "warn",
-    "no-nested-ternary": "warn",
-    "no-var": "warn",
-    "prefer-const": "warn",
-    "@typescript-eslint/no-floating-promises": "off",
-    "@typescript-eslint/no-unsafe-assignment": "warn",
-    "@typescript-eslint/no-unsafe-member-access": "warn",
-    "@typescript-eslint/no-unsafe-argument": "warn",
-    "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
-    "@typescript-eslint/only-throw-error": "warn",
-    "@typescript-eslint/non-nullable-type-assertion-style": "off",
-    "@typescript-eslint/no-empty-function": ["off"],
-    "@typescript-eslint/no-base-to-string": ["warn"],
   },
 });

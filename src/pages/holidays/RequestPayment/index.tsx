@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { FormikProps } from "formik";
 
 import { SendRequestModal } from "@components/modals/SendRequestModal";
+import { RequestInfoModal } from "@components/modals/RequestInfoModal";
+import { useErrorFlag } from "@hooks/useErrorFlag";
+import { useRequestSubmission } from "@hooks/usePostHumanResourceRequest";
 
 import { IGeneralInformationEntry } from "./forms/GeneralInformationForm/types";
 import { holidaysNavConfig } from "../config/nav.config";
@@ -10,10 +13,7 @@ import { RequestPaymentUI } from "./interface";
 import { requestPaymentSteps } from "./config/assisted.config";
 import { ModalState } from "./types";
 
-function RequestPayment() {
-  const navigate = useNavigate();
-
-  const [currentStep, setCurrentStep] = useState(1);
+function useFormManagement() {
   const [formValues, setFormValues] = useState<IGeneralInformationEntry>({
     id: "",
     daysToPay: "",
@@ -22,12 +22,6 @@ function RequestPayment() {
     observations: "",
   });
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
-
-  const [modalState, setModalState] = useState<ModalState>({
-    isSendModalVisible: false,
-    isRequestInfoModalVisible: false,
-  });
-
   const generalInformationRef =
     useRef<FormikProps<IGeneralInformationEntry>>(null);
 
@@ -37,6 +31,80 @@ function RequestPayment() {
       setIsCurrentFormValid(generalInformationRef.current.isValid);
     }
   };
+
+  return {
+    formValues,
+    isCurrentFormValid,
+    setIsCurrentFormValid,
+    generalInformationRef,
+    updateFormValues,
+  };
+}
+
+function useModalManagement() {
+  const [modalState, setModalState] = useState<ModalState>({
+    isSendModalVisible: false,
+    isRequestInfoModalVisible: false,
+  });
+
+  const openSendModal = () =>
+    setModalState((prev) => ({ ...prev, isSendModalVisible: true }));
+  const closeSendModal = () =>
+    setModalState((prev) => ({ ...prev, isSendModalVisible: false }));
+  const openInfoModal = () =>
+    setModalState({
+      isSendModalVisible: false,
+      isRequestInfoModalVisible: true,
+    });
+  const closeInfoModal = () =>
+    setModalState((prev) => ({ ...prev, isRequestInfoModalVisible: false }));
+
+  return {
+    modalState,
+    openSendModal,
+    closeSendModal,
+    openInfoModal,
+    closeInfoModal,
+  };
+}
+
+function RequestPayment() {
+  const navigate = useNavigate();
+  const [currentStep, setCurrentStep] = useState(1);
+
+  const {
+    formValues,
+    isCurrentFormValid,
+    setIsCurrentFormValid,
+    generalInformationRef,
+    updateFormValues,
+  } = useFormManagement();
+
+  const {
+    modalState,
+    openSendModal,
+    closeSendModal,
+    openInfoModal,
+    closeInfoModal,
+  } = useModalManagement();
+
+  const userCodeInCharge = "User 1";
+  const userNameInCharge = "Johan Daniel Garcia Nova";
+
+  const {
+    requestNum,
+    submitRequestHandler,
+    showErrorFlag,
+    errorMessage,
+    setShowErrorFlag,
+  } = useRequestSubmission(
+    formValues,
+    "payments",
+    userCodeInCharge,
+    userNameInCharge,
+  );
+
+  useErrorFlag(showErrorFlag, errorMessage, "Error", false, 10000);
 
   const handleNextStep = () => {
     if (currentStep < requestPaymentSteps.length) {
@@ -52,16 +120,31 @@ function RequestPayment() {
   };
 
   const handleFinishAssisted = () => {
-    setModalState((prev) => ({ ...prev, isSendModalVisible: true }));
+    openSendModal();
   };
 
-  const handleCloseSendModal = () => {
-    setModalState((prev) => ({ ...prev, isSendModalVisible: false }));
+  const handleConfirmSendModal = async () => {
+    setShowErrorFlag(false);
+    const isSuccess = await submitRequestHandler();
+
+    if (isSuccess) {
+      closeSendModal();
+      openInfoModal();
+    } else {
+      closeSendModal();
+    }
   };
 
   const handleSubmitRequestInfoModal = () => {
-    setModalState((prev) => ({ ...prev, isRequestInfoModalVisible: false }));
-    navigate("/holidays");
+    closeInfoModal();
+    navigate("/holidays", {
+      state: {
+        showFlag: true,
+        flagTitle: "Solicitud enviada",
+        flagMessage: "La solicitud de pago fue enviada exitosamente.",
+        isSuccess: true,
+      },
+    });
   };
 
   const {
@@ -90,10 +173,21 @@ function RequestPayment() {
 
       {modalState.isSendModalVisible && (
         <SendRequestModal
-          descriptionText="¿Realmente deseas enviar la solicitud de certificación?"
-          onCloseModal={handleCloseSendModal}
+          descriptionText="¿Realmente deseas enviar la solicitud de pago?"
+          onSubmitButtonClick={() => {
+            handleConfirmSendModal();
+          }}
+          onCloseModal={closeSendModal}
+          onSecondaryButtonClick={closeSendModal}
+        />
+      )}
+
+      {modalState.isRequestInfoModalVisible && (
+        <RequestInfoModal
+          requestId={requestNum}
+          staffName={userNameInCharge}
+          onCloseModal={handleSubmitRequestInfoModal}
           onSubmitButtonClick={handleSubmitRequestInfoModal}
-          onSecondaryButtonClick={handleSubmitRequestInfoModal}
         />
       )}
     </>

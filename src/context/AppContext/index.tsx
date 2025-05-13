@@ -1,20 +1,17 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  ReactNode,
-} from "react";
-import selsaLogo from "@assets/images/selsa.png";
+import { createContext, useState, useEffect, ReactNode } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import { IAppContextType, IPreferences } from "./types";
+
 import {
   IBusinessManagers,
   IBusinessUnitsPortalEmployee,
   IEmployeePortalByBusinessManager,
   IEmployee,
   IEmployeeOptions,
-} from "@src/types/employeePortalBusiness.types";
+} from "@ptypes/employeePortalBusiness.types";
+import { Employee } from "@ptypes/employeePortalConsultation.types";
+import selsaLogo from "@assets/images/selsa.png";
+
+import { IAppContextType, IPreferences } from "./types";
 
 const AppContext = createContext<IAppContextType | undefined>(undefined);
 
@@ -87,6 +84,24 @@ const AppProvider: React.FC<{
     }
   }, [logoUrl, preferences, user]);
 
+  const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(
+    () => {
+      const stored = localStorage.getItem("selectedEmployee");
+      return stored ? (JSON.parse(stored) as Employee) : null;
+    },
+  );
+
+  useEffect(() => {
+    if (selectedEmployee) {
+      localStorage.setItem(
+        "selectedEmployee",
+        JSON.stringify(selectedEmployee),
+      );
+    } else {
+      localStorage.removeItem("selectedEmployee");
+    }
+  }, [selectedEmployee]);
+
   return (
     <AppContext.Provider
       value={{
@@ -109,6 +124,8 @@ const AppProvider: React.FC<{
         setEmployees,
         employeeOptions: employeeOptionsState,
         setEmployeeOptions,
+        selectedEmployee,
+        setSelectedEmployee,
       }}
     >
       {children}
@@ -116,12 +133,4 @@ const AppProvider: React.FC<{
   );
 };
 
-const useAppContext = () => {
-  const context = useContext(AppContext);
-  if (!context) {
-    throw new Error("useAppContext must be used within an AppProvider");
-  }
-  return context;
-};
-
-export { AppProvider, useAppContext };
+export { AppProvider, AppContext };

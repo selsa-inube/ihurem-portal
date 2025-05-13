@@ -7,7 +7,7 @@ import {
 import { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 
-import { Home } from "@src/pages/home";
+import { Home } from "@pages/home";
 import { decrypt } from "@utils/encrypt";
 import { LoginRoutes } from "@routes/login";
 import { GlobalStyles } from "@styles/global";
@@ -21,9 +21,11 @@ import { ErrorPage } from "@components/layout/ErrorPage";
 import { useBusinessUnit } from "@hooks/useBusinessUnit";
 import { CertificationsRoutes } from "@routes/certifications";
 import { useEmployeeOptions } from "@hooks/useEmployeeOptions";
-import { AppProvider, useAppContext } from "@context/AppContext";
+import { AppProvider } from "@context/AppContext";
 import { useBusinessManagers } from "@hooks/useBusinessManagers";
-import { useEmployeeByNickname } from "@src/hooks/useEmployeeInquiry";
+import { useEmployeeByNickname } from "@hooks/useEmployeeInquiry";
+
+import { useAppContext } from "./context/AppContext/useAppContext";
 
 function LogOut() {
   localStorage.clear();
@@ -62,9 +64,8 @@ const router = createBrowserRouter(
 function App() {
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
-  const portalCode = params.get("portal")
-    ? params.get("portal")
-    : decrypt(localStorage.getItem("portalCode") as string);
+  const portalCode =
+    params.get("portal") ?? decrypt(localStorage.getItem("portalCode")!);
 
   if (!portalCode) {
     return <ErrorPage errorCode={1000} />;
@@ -74,30 +75,22 @@ function App() {
   const { loginWithRedirect, isAuthenticated, isLoading, user } = useAuth0();
   const { portalData, hasError } = usePortalData(portalCode ?? "");
 
-  const {
-    businessManagersData,
-    hasError: hasManagersError,
-    codeError: BusinessManagersCode,
-  } = useBusinessManagers(portalData);
+  const { businessManagersData, hasError: hasManagersError } =
+    useBusinessManagers(portalData);
 
-  const {
-    businessUnitData,
-    hasError: hasBusinessUnitError,
-    codeError: BusinessUnit,
-  } = useBusinessUnit(portalData);
+  const { businessUnitData, hasError: hasBusinessUnitError } =
+    useBusinessUnit(portalData);
 
   const {
     employee,
     loading: employeeLoading,
     error: employeeError,
-    codeError: employeeCode,
   } = useEmployeeByNickname(user?.nickname ?? "");
 
   const {
     data: employeeOptions,
     loading: optionsLoading,
     error: optionsError,
-    codeError: optionsCode,
   } = useEmployeeOptions(user?.nickname ?? "");
 
   useEffect(() => {
@@ -116,6 +109,7 @@ function App() {
   if (isLoading || !isReady || employeeLoading || optionsLoading) {
     return <div>Cargando....</div>;
   }
+
   if (
     hasError ||
     hasManagersError ||
@@ -123,16 +117,15 @@ function App() {
     employeeError ||
     optionsError
   ) {
-    return (
-      <ErrorPage
-        errorCode={
-          BusinessManagersCode ??
-          BusinessUnit ??
-          employeeCode ??
-          optionsCode ??
-          1001
-        }
-      />
+    console.warn(
+      "Se detectaron errores en los hooks pero se continuará cargando la app",
+      {
+        hasError,
+        hasManagersError,
+        hasBusinessUnitError,
+        employeeError,
+        optionsError,
+      },
     );
   }
 
