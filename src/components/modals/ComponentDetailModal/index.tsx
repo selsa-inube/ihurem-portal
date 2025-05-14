@@ -1,6 +1,3 @@
-import { createPortal } from "react-dom";
-import { MdClear } from "react-icons/md";
-
 import {
   Icon,
   Text,
@@ -10,23 +7,35 @@ import {
   Divider,
   useMediaQuery,
 } from "@inubekit/inubekit";
+import {
+  MdClear,
+  MdAddCircleOutline,
+  MdOutlineCheckCircle,
+} from "react-icons/md";
+import { createPortal } from "react-dom";
 
 import { spacing } from "@design/tokens/spacing/spacing";
+import { TableBoard } from "@components/data/TableBoard";
+import { Requirement } from "@components/data/TableBoard/types";
 
-import { ModalContent } from "./types";
 import {
   StyledContainerClose,
   StyledContainerContent,
   StyledModal,
   StyledContainerTitle,
   StyledBoxAttribute,
+  StyledTableContainer,
 } from "./styles";
+import { ModalContent } from "./types";
 
 export interface RequestComponentDetailProps {
   title: string;
   buttonLabel: string;
   modalContent: string | ModalContent[];
   portalId?: string;
+  stackDirection?: "row" | "column";
+  requirements?: Requirement[];
+  showRequirementsTable?: boolean;
   handleClose: () => void;
   filterCriteria?: (item: ModalContent) => boolean;
 }
@@ -37,9 +46,21 @@ function RequestComponentDetail(props: RequestComponentDetailProps) {
     buttonLabel,
     modalContent,
     portalId = "portal",
+    stackDirection,
+    requirements,
+    showRequirementsTable = false,
     handleClose,
     filterCriteria,
   } = props;
+
+  const infoItems = [
+    { icon: <MdAddCircleOutline />, text: "Adjuntar", appearance: "help" },
+    {
+      icon: <MdOutlineCheckCircle />,
+      text: "Forzar Aprobación",
+      appearance: "help",
+    },
+  ];
 
   const node = document.getElementById(portalId);
   if (!node) {
@@ -49,14 +70,10 @@ function RequestComponentDetail(props: RequestComponentDetailProps) {
   }
 
   const isMobile = useMediaQuery("(max-width: 700px)");
-
   const filteredContent = Array.isArray(modalContent)
-    ? modalContent.filter((item) => {
-        if (filterCriteria) {
-          return filterCriteria(item);
-        }
-        return true;
-      })
+    ? modalContent.filter((item) =>
+        filterCriteria ? filterCriteria(item) : true,
+      )
     : modalContent;
 
   return createPortal(
@@ -81,15 +98,21 @@ function RequestComponentDetail(props: RequestComponentDetailProps) {
 
         <Divider />
         <StyledContainerContent>
-          <Stack gap={spacing.s250} direction="column">
+          <Stack gap={spacing.s150} direction="column">
             {Array.isArray(filteredContent) ? (
               filteredContent.map((item, index) => {
-                const isLongContent = item.value.length > 30;
+                const isLongContent = item.value
+                  ? item.value.length > 42
+                  : false;
 
                 return (
                   <StyledBoxAttribute key={index} $smallScreen={isMobile}>
                     <Stack
-                      direction={isLongContent || isMobile ? "column" : "row"}
+                      direction={
+                        isLongContent || isMobile || showRequirementsTable
+                          ? "column"
+                          : (stackDirection ?? "row")
+                      }
                       justifyContent="space-between"
                     >
                       <Text type="label" size="medium" weight="bold">
@@ -108,6 +131,34 @@ function RequestComponentDetail(props: RequestComponentDetailProps) {
               </Text>
             )}
           </Stack>
+
+          {showRequirementsTable && (
+            <Stack direction="column" alignItems="center" gap={spacing.s100}>
+              <Text type="label" weight="bold">
+                Requisitos
+              </Text>
+
+              <StyledTableContainer $smallScreen={isMobile}>
+                {requirements?.map((requirement, index) => (
+                  <TableBoard
+                    key={requirement.id}
+                    id={requirement.id}
+                    titles={requirement.titles}
+                    entries={requirement.entries}
+                    appearanceTable={{
+                      widthTd: isMobile ? "70%" : "80%",
+                      efectzebra: true,
+                      title: "primary",
+                      isStyleMobile: true,
+                    }}
+                    isFirstTable={index === 0}
+                    infoItems={infoItems}
+                    showTagsInMobile
+                  />
+                ))}
+              </StyledTableContainer>
+            </Stack>
+          )}
         </StyledContainerContent>
 
         <Stack justifyContent="flex-end" gap={spacing.s100}>
@@ -121,4 +172,4 @@ function RequestComponentDetail(props: RequestComponentDetailProps) {
   );
 }
 
-export default RequestComponentDetail;
+export { RequestComponentDetail };

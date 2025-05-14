@@ -2,7 +2,6 @@ import { Grid, Stack } from "@inubekit/inubekit";
 
 import { BoxAttribute } from "@components/cards/BoxAttribute";
 import { spacing } from "@design/tokens/spacing/spacing";
-import { formatDate } from "@utils/date";
 
 import { IGeneralInformationEntry } from "../../GeneralInformationForm/types";
 import { IFormsUpdateData } from "../../../types";
@@ -20,10 +19,7 @@ const renderPersonalInfoVerification = (
       width="100%"
     >
       <BoxAttribute label="Días de disfrute:" value={values.daysOff} />
-      <BoxAttribute
-        label="Fecha de inicio:"
-        value={formatDate(values.startDate)}
-      />
+      <BoxAttribute label="Contrato:" value={values.contract} />
     </Grid>
     <Stack width="100%" direction="column">
       <BoxAttribute
@@ -67,12 +63,12 @@ function VerificationBoxes({
 }: VerificationBoxesProps) {
   return (
     <>
-      {stepKey === 1 &&
+      {stepKey === 1 && renderAlerts(isTablet)}
+      {stepKey === 2 &&
         renderPersonalInfoVerification(
           updatedData.personalInformation.values,
           isTablet,
         )}
-      {stepKey === 2 && renderAlerts(isTablet)}
     </>
   );
 }

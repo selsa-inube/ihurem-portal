@@ -21,9 +21,10 @@ import { ErrorPage } from "@components/layout/ErrorPage";
 import { useBusinessUnit } from "@hooks/useBusinessUnit";
 import { CertificationsRoutes } from "@routes/certifications";
 import { useEmployeeOptions } from "@hooks/useEmployeeOptions";
-import { AppProvider, useAppContext } from "@context/AppContext";
+import { AppProvider } from "@context/AppContext";
 import { useBusinessManagers } from "@hooks/useBusinessManagers";
 import { useEmployeeByNickname } from "@src/hooks/useEmployeeInquiry";
+import { useAppContext } from "./context/AppContext/useAppContext";
 
 function LogOut() {
   localStorage.clear();
@@ -62,9 +63,10 @@ const router = createBrowserRouter(
 function App() {
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
-  const portalCode = params.get("portal")
-    ? params.get("portal")
-    : decrypt(localStorage.getItem("portalCode") as string);
+  const portalParam = params.get("portal");
+  const storedPortal = localStorage.getItem("portalCode");
+  const decryptedPortal = storedPortal ? decrypt(storedPortal) : "";
+  const portalCode = portalParam ?? decryptedPortal;
 
   if (!portalCode) {
     return <ErrorPage errorCode={1000} />;

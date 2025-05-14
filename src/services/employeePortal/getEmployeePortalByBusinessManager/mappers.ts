@@ -1,27 +1,52 @@
-import { IEmployeePortalByBusinessManager } from "@src/types/employeePortalBusiness.types";
+import { IEmployeePortalByBusinessManager } from "@ptypes/employeePortalBusiness.types";
+
+function toSafeString(value: unknown): string {
+  if (value === null || value === undefined) {
+    return "";
+  }
+
+  if (typeof value === "object") {
+    try {
+      return JSON.stringify(value);
+    } catch {
+      return "";
+    }
+  }
+
+  switch (typeof value) {
+    case "boolean":
+    case "number":
+    case "string":
+    case "bigint":
+      return String(value);
+    case "symbol":
+    case "function":
+    default:
+      return "";
+  }
+}
 
 const mapEmployeePortalByBusinessManagerApiToEntity = (
-  resend: Record<string, string | number | object>,
+  resend: Record<string, unknown>,
 ): IEmployeePortalByBusinessManager => {
-  const buildResend: IEmployeePortalByBusinessManager = {
-    abbreviatedName: String(resend.abbreviatedName),
-    businessManagerId: String(resend.businessManagerId),
-    businessUnit: String(resend.businessUnit),
-    descriptionUse: String(resend.descriptionUse),
-    portalCode: String(resend.portalCode),
-    employeePortalCatalogId: String(resend.employeePortalCatalogId),
-    employeePortalId: String(resend.employeePortalId),
+  return {
+    abbreviatedName: toSafeString(resend.abbreviatedName),
+    businessManagerId: toSafeString(resend.businessManagerId),
+    businessUnit: toSafeString(resend.businessUnit),
+    descriptionUse: toSafeString(resend.descriptionUse),
+    portalCode: toSafeString(resend.portalCode),
+    employeePortalCatalogId: toSafeString(resend.employeePortalCatalogId),
+    employeePortalId: toSafeString(resend.employeePortalId),
   };
-  return buildResend;
 };
 
 const mapEmployeePortalByBusinessManagerApiToEntities = (
-  resend: Record<string, string | number | object>[],
+  resendArray: Record<string, unknown>[],
 ): IEmployeePortalByBusinessManager[] => {
-  return resend.map(mapEmployeePortalByBusinessManagerApiToEntity);
+  return resendArray.map(mapEmployeePortalByBusinessManagerApiToEntity);
 };
 
 export {
-  mapEmployeePortalByBusinessManagerApiToEntities,
   mapEmployeePortalByBusinessManagerApiToEntity,
+  mapEmployeePortalByBusinessManagerApiToEntities,
 };

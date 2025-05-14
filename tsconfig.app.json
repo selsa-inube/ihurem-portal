@@ -18,25 +18,7 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-
-    /* Paths */
-    "baseUrl": "src",
-    "paths": {
-      "@src/*": ["*"],
-      "@components/*": ["components/*"],
-      "@config/*": ["config/*"],
-      "@assets/*": ["assets/*"],
-      "@context/*": ["context/*"],
-      "@pages/*": ["pages/*"],
-      "@design/*": ["design/*"],
-      "@ptypes/*": ["types/*"],
-      "@utils/*": ["utils/*"],
-      "@services/*": ["services/*"],
-      "@routes/*": ["routes/*"],
-      "@hooks/*": ["hooks/*"],
-      "@styles/*": ["styles/*"]
-    }
+    "noFallthroughCasesInSwitch": true
   },
   "include": ["src", ".storybook/**/*.ts"]
 }

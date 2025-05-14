@@ -25,6 +25,14 @@ const holidaysData: IHolidaysTable[] = [
       type: "icon",
       onClick: () => console.log("Delete clicked for row 0"),
     },
+    dataDetails: {
+      value: {
+        daysOff: "2",
+        startDate: "18/Ene/2024",
+        contract: "Contrato 123",
+        description: "Disfrute de vacaciones",
+      },
+    },
   },
   {
     description: {
@@ -44,6 +52,14 @@ const holidaysData: IHolidaysTable[] = [
       value: <MdDeleteOutline />,
       type: "icon",
       onClick: () => console.log("Delete clicked for row 1"),
+    },
+    dataDetails: {
+      value: {
+        daysOff: "2",
+        startDate: "18/Ene/2024",
+        contract: "Contrato 123",
+        description: "Disfrute de vacaciones",
+      },
     },
   },
 ];

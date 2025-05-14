@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { Auth0Provider } from "@auth0/auth0-react";
+import { FlagProvider } from "@inubekit/inubekit";
 
 import { environment } from "@config/environment";
 
@@ -18,7 +19,9 @@ root.render(
         redirect_uri,
       }}
     >
-      <App />
+      <FlagProvider>
+        <App />
+      </FlagProvider>
     </Auth0Provider>
   </React.StrictMode>,
 );

@@ -20,7 +20,7 @@ export const headers: {
   action?: boolean;
   style?: React.CSSProperties;
 }[] = [
-  { label: "Descripción", key: "description", style: { width: "auto" } },
+  { label: "Tipo de solicitud", key: "description", style: { width: "auto" } },
   { label: "Fecha", key: "date", style: { width: "auto" } },
   { label: "Días hábiles", key: "days", style: { width: "auto" } },
   { label: "Estado", key: "status", style: { width: "auto" } },

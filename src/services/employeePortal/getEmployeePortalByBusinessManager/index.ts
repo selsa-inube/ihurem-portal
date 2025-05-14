@@ -3,8 +3,14 @@ import {
   fetchTimeoutServices,
   maxRetriesServices,
 } from "@config/environment";
-import { IEmployeePortalByBusinessManager } from "@src/types/employeePortalBusiness.types";
+import { IEmployeePortalByBusinessManager } from "@ptypes/employeePortalBusiness.types";
 import { mapEmployeePortalByBusinessManagerApiToEntities } from "./mappers";
+
+interface ErrorResponse {
+  message: string;
+  status: number;
+  data: unknown;
+}
 
 const employeePortalByBusinessManager = async (
   codeParame: string,
@@ -40,18 +46,21 @@ const employeePortalByBusinessManager = async (
         return {} as IEmployeePortalByBusinessManager;
       }
 
-      const data = await res.json();
+      const data = (await res.json()) as Record<string, unknown>[];
 
       if (!res.ok) {
-        throw {
+        const errorResponse: ErrorResponse = {
           message: "Error al obtener los datos del portal",
           status: res.status,
           data,
         };
+        throw new Error(JSON.stringify(errorResponse));
       }
 
       const normalizedEmployeePortal = Array.isArray(data)
-        ? mapEmployeePortalByBusinessManagerApiToEntities(data)
+        ? mapEmployeePortalByBusinessManagerApiToEntities(
+            data as Record<string, string | number | object>[],
+          )
         : [];
 
       return normalizedEmployeePortal[0];
@@ -61,6 +70,7 @@ const employeePortalByBusinessManager = async (
           "Todos los intentos fallaron. No se pudieron obtener los datos del portal.",
         );
       }
+      console.error(`Attempt ${attempt} failed:`, error);
     }
   }
 

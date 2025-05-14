@@ -1,8 +1,11 @@
 export interface IHolidaysTable {
+  requestId?: string;
+  requestNumber?: string;
   description: HolidayTableField<string>;
   date: HolidayTableField<string>;
   days: HolidayTableField<number>;
   status: HolidayTableField<string>;
+  dataDetails: HolidayTableField<object>;
   details: HolidayTableDetails;
   delete: HolidayTableAction;
   type?: HolidayTableField<string>;
@@ -23,4 +26,11 @@ interface HolidayTableAction
   extends HolidayTableField<string | number | JSX.Element> {
   type?: "icon" | "text" | "toggle" | "custom";
   onClick?: () => void;
+}
+
+export interface HolidayTableDataDetails {
+  daysOff: string;
+  startDate: string;
+  contract: string;
+  description: string;
 }

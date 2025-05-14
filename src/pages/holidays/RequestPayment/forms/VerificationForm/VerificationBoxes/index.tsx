@@ -19,7 +19,7 @@ const renderPersonalInfoVerification = (
       width="100%"
     >
       <BoxAttribute label="Días hábiles a pagar:" value={values.daysToPay} />
-      <BoxAttribute label="Contrato:" value={values.contractDesc} />
+      <BoxAttribute label="Contrato:" value={values.contract} />
     </Grid>
     <Stack width="100%" direction="column">
       <BoxAttribute
@@ -63,12 +63,12 @@ function VerificationBoxes({
 }: VerificationBoxesProps) {
   return (
     <>
-      {stepKey === 1 &&
+      {stepKey === 1 && renderAlerts(isTablet)}
+      {stepKey === 2 &&
         renderPersonalInfoVerification(
           updatedData.personalInformation.values,
           isTablet,
         )}
-      {stepKey === 2 && renderAlerts(isTablet)}
     </>
   );
 }

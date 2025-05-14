@@ -1,4 +1,5 @@
 import { MdOutlineVisibility, MdDeleteOutline } from "react-icons/md";
+import { useState } from "react";
 import {
   Text,
   Icon,
@@ -15,13 +16,13 @@ import {
   Tr,
 } from "@inubekit/inubekit";
 
+import { RequestComponentDetail } from "@components/modals/ComponentDetailModal";
+
 import { ICertificationsTable } from "./types";
 import { StyledTd, StyledTh } from "./styles";
 import { columns, headers } from "./tableConfig";
 import { usePagination } from "./usePagination";
 import { Detail } from "./Detail";
-import { useState } from "react";
-import RequestComponentDetail from "@components/modals/ComponentDetailModal";
 
 interface CertificationsTableProps {
   data: ICertificationsTable[];
@@ -33,7 +34,11 @@ function CertificationsTable({
   loading = false,
 }: CertificationsTableProps) {
   const [isModalOpen, setModalOpen] = useState(false);
-  const [modalData, setModalData] = useState<any>(null);
+  const [modalData, setModalData] = useState<{
+    value?: string | number | JSX.Element;
+    type?: string;
+    onClick?: () => void;
+  }>();
 
   const {
     totalRecords,
@@ -70,11 +75,10 @@ function CertificationsTable({
   };
 
   const visibleHeaders = determineVisibleHeaders();
-  const visibleColumns = mediaQueries["(max-width: 542px)"]
-    ? columns.slice(1, 3)
-    : mediaQueries["(max-width: 1024px)"]
-      ? columns.slice(0, 3)
-      : columns;
+  const visibleColumns =
+    (mediaQueries["(max-width: 542px)"] && columns.slice(1, 3)) ||
+    (mediaQueries["(max-width: 1024px)"] && columns.slice(0, 3)) ||
+    columns;
 
   const renderTableCell = (
     headerKey: string,
@@ -169,7 +173,11 @@ function CertificationsTable({
     return cellData?.value;
   };
 
-  const handleDetailsClick = (cellData: any) => {
+  const handleDetailsClick = (cellData: {
+    value?: string | number | JSX.Element;
+    type?: string;
+    onClick?: () => void;
+  }) => {
     setModalData(cellData);
     setModalOpen(true);
   };

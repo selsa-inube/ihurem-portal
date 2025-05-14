@@ -3,9 +3,64 @@ import {
   IEmploymentContract,
   IEmployeeReference,
 } from "@ptypes/employeePortalBusiness.types";
-import { HolidaysActionTypes } from "@src/types/holidays.types";
+import { HolidaysActionTypes } from "@ptypes/holidays.types";
 
-const mapEmployeeApiToEntity = (employee: Record<string, any>): IEmployee => {
+interface EmployeeApiResponse {
+  employeeId: string | number;
+  names: string;
+  surnames: string;
+  biologicalSex: string;
+  birthDay: string;
+  identificationDocumentNumber: string;
+  identificationType: string;
+  employeeCode: string;
+  residenceAddress: string;
+  postalCode: string;
+  email: string;
+  telephone: string;
+  countryTaxResidence: string;
+  countryOfIdentityDocument: string;
+  residenceCity: string;
+  employeeStatus: string;
+  ubication: string;
+  userAccountId: string | number;
+  employmentContract?: EmploymentContractApiResponse[];
+  employeeReference?: EmployeeReferenceApiResponse[];
+}
+
+interface EmploymentContractApiResponse {
+  contractId: string | number;
+  contractNumber: string | number;
+  employeeId: string | number;
+  contractStatus: string;
+  contractType: string;
+  startDate: string;
+  formalizedStartDate: string;
+  joiningDetter: string;
+  contractDurationInDays?: string | number;
+  deadline?: string;
+  positionName: string;
+  jobModality: string;
+  workSchedule: string;
+  professionalRiskDevelName: string;
+  businessName: string;
+  costCenterName: string;
+  proyectNumber?: string | number;
+  branchOfficeName: string;
+  regulatoryFrameworkName?: string;
+  remunerationProfileName: string;
+}
+
+interface EmployeeReferenceApiResponse {
+  referenceId: string | number;
+  employeeId: string | number;
+  referenceName: string;
+  referencePhoneNumber: string;
+  referenceAddress: string;
+  referenceType: string;
+}
+
+const mapEmployeeApiToEntity = (employee: EmployeeApiResponse): IEmployee => {
   return {
     employeeId: String(employee.employeeId),
     names: String(employee.names),
@@ -35,7 +90,7 @@ const mapEmployeeApiToEntity = (employee: Record<string, any>): IEmployee => {
 };
 
 const mapEmploymentContracts = (
-  contracts: Record<string, any>[],
+  contracts: EmploymentContractApiResponse[],
 ): IEmploymentContract[] => {
   return contracts.map((contract) => ({
     contractId: String(contract.contractId),
@@ -66,7 +121,7 @@ const mapEmploymentContracts = (
 };
 
 const mapEmployeeReferences = (
-  references: Record<string, any>[],
+  references: EmployeeReferenceApiResponse[],
 ): IEmployeeReference[] => {
   return references.map((reference) => ({
     referenceId: String(reference.referenceId),

@@ -1,7 +1,7 @@
-import { IHolidaysInProcess } from "@src/types/holidays.types";
+import { IHolidaysInProcess } from "@ptypes/holidays.types";
 
 const mapHolidaysInProcessApiToEntity = (
-  item: Record<string, IHolidaysInProcess>,
+  item: IHolidaysInProcess,
 ): IHolidaysInProcess => {
   const buildItem: IHolidaysInProcess = {
     vacationId: String(item.vacationId ?? ""),
@@ -21,7 +21,7 @@ const mapHolidaysInProcessApiToEntity = (
 };
 
 const mapHolidaysInProcessApiToEntities = (
-  items: Record<string, IHolidaysInProcess>[],
+  items: IHolidaysInProcess[],
 ): IHolidaysInProcess[] => {
   return items.map(mapHolidaysInProcessApiToEntity);
 };

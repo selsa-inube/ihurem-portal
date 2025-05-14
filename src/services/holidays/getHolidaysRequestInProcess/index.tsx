@@ -3,7 +3,7 @@ import {
   maxRetriesServices,
   environment,
 } from "@config/environment";
-import { IHolidaysInProcess } from "@src/types/holidays.types";
+import { IHolidaysInProcess } from "@ptypes/holidays.types";
 
 import { mapHolidaysInProcessApiToEntities } from "./mappers";
 
