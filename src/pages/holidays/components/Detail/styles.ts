@@ -1,17 +1,18 @@
 import styled from "styled-components";
 import { inube } from "@inubekit/inubekit";
 
-interface IStyledActions {
+interface IStyledDetail {
   theme: typeof inube;
   $isMobile?: boolean;
+  $showTabs?: boolean;
 }
 
-const StyledDetail = styled.div<IStyledActions>`
+const StyledDetail = styled.div<IStyledDetail>`
   border-radius: 8px;
   position: relative;
   height: 0px;
   z-index: 1;
-  top: -150px;
+  top: ${({ $showTabs }) => ($showTabs ? "-150px" : "-90px")};
 `;
 
 export { StyledDetail };

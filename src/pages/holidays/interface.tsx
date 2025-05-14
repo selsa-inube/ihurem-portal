@@ -92,6 +92,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
         disableEnjoyment={!hasEnjoymentPrivilege || !hasActiveContract}
         disablePayment={!hasPaymentPrivilege || !hasActiveContract}
         actionDescriptions={actionDescriptions}
+        showTabs={tableData && tableData.length > 0}
         onRequestEnjoyment={handleRequestEnjoyment}
         onRequestPayment={handleRequestPayment}
         onInfoIconClick={onOpenInfoModal}

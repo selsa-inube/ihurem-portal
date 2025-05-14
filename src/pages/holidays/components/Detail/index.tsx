@@ -9,6 +9,7 @@ interface DetailProps {
   disableEnjoyment?: boolean;
   disablePayment?: boolean;
   actionDescriptions?: Record<string, string>;
+  showTabs?: boolean;
   onRequestEnjoyment?: () => void;
   onRequestPayment?: () => void;
   onInfoIconClick?: (description: string) => void;
@@ -19,6 +20,7 @@ export function Detail(props: DetailProps) {
     disableEnjoyment,
     disablePayment,
     actionDescriptions,
+    showTabs = false,
     onRequestEnjoyment,
     onRequestPayment,
     onInfoIconClick,
@@ -27,7 +29,7 @@ export function Detail(props: DetailProps) {
   const [modalOpen, setModalOpen] = useState(false);
 
   return (
-    <StyledDetail>
+    <StyledDetail $showTabs={showTabs}>
       <Stack justifyContent="flex-end">
         <Icon
           icon={<MdOutlineMoreVert />}
