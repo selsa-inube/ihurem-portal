@@ -70,6 +70,6 @@ export interface IAppContextType {
 
   employeeOptions: IEmployeeOptions[];
   setEmployeeOptions: React.Dispatch<React.SetStateAction<IEmployeeOptions[]>>;
-  selectedEmployee: Employee | null;
+  selectedEmployee: Employee;
   setSelectedEmployee: (employee: Employee) => void;
 }

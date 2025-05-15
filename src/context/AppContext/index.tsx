@@ -83,13 +83,10 @@ const AppProvider: React.FC<{
       localStorage.setItem("boardOrientation", preferences.boardOrientation);
     }
   }, [logoUrl, preferences, user]);
-
-  const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(
-    () => {
-      const stored = localStorage.getItem("selectedEmployee");
-      return stored ? (JSON.parse(stored) as Employee) : null;
-    },
-  );
+  const [selectedEmployee, setSelectedEmployee] = useState<Employee>(() => {
+    const storedEmployee = localStorage.getItem("selectedEmployee");
+    return storedEmployee ? JSON.parse(storedEmployee) : null;
+  });
 
   useEffect(() => {
     if (selectedEmployee) {

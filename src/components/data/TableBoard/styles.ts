@@ -55,22 +55,17 @@ export const StyledContainer = styled.div<IStyledContainer>`
 `;
 
 export const StyledThactions = styled.th<IStyledThactions>`
-  ${({ $isTablet, $isFirst, theme }) =>
-    $isTablet &&
-    `position: sticky; background-color: white; text-align: end; ${
-      $isFirst &&
-      `&::before { content: ""; position: absolute; top: 0; left: -2px; width: 2px; height: 100%;  box-shadow: 0px 1px 3px 1px #DFE1E6; background-color: ${theme?.palette?.neutral?.N100 || inube.palette.neutral.N100}; }`
-    }`}
+  text-align: end;
+  padding: ${spacing.s0} ${spacing.s100};
 `;
 
 export const StyledTdactions = styled.td<IStyledTdactions>`
-  text-align: center;
-  ${({ $isTablet, $isFirst, theme }) =>
-    $isTablet &&
-    `position: sticky; ${
-      $isFirst &&
-      `&::before { content: ""; position: absolute; top: 0; left: -2px; width: 2px; height: 100%; box-shadow: 0px 1px 3px 1px #DFE1E6; background-color: ${theme?.palette?.neutral?.N100 || inube.palette.neutral.N100}; }`
-    }`}
+  align-items: center;
+`;
+
+export const StyledDivactions = styled.div<IStyledTdactions>`
+  align-items: center;
+  align-content: center;
 `;
 
 export const StyledTable = styled.table<IStyledTable>`
@@ -124,6 +119,7 @@ export const StyledTh = styled.th<IStyledWithTheme>`
 `;
 
 export const StyledTr = styled.tr<IStyledTdbodyContainer>`
+  height: 36px;
   vertical-align: middle;
   white-space: normal;
   box-sizing: border-box;
@@ -137,6 +133,12 @@ export const StyledTr = styled.tr<IStyledTdbodyContainer>`
 `;
 
 export const StyledTd = styled.td<IStyledTd>`
+  width: ${({ $widthTd }) => $widthTd};
+  height: 24px;
+  padding: ${spacing.s050};
+`;
+
+export const StyledTdIcon = styled.div<IStyledTd>`
   width: ${({ $widthTd }) => $widthTd};
   height: 24px;
   padding: ${spacing.s050};
