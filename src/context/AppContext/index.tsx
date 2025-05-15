@@ -15,21 +15,24 @@ import { IAppContextType, IPreferences } from "./types";
 
 const AppContext = createContext<IAppContextType | undefined>(undefined);
 
-const AppProvider: React.FC<{
+interface AppProviderProps {
   children: ReactNode;
   dataPortal: IEmployeePortalByBusinessManager;
   businessManagersData: IBusinessManagers;
   businessUnitData: IBusinessUnitsPortalEmployee;
   employee: IEmployee;
   employeeOptions?: IEmployeeOptions[] | null;
-}> = ({
-  children,
-  dataPortal,
-  businessManagersData,
-  businessUnitData,
-  employee,
-  employeeOptions,
-}) => {
+}
+
+function AppProvider(props: AppProviderProps) {
+  const {
+    children,
+    dataPortal,
+    businessManagersData,
+    businessUnitData,
+    employee,
+    employeeOptions,
+  } = props;
   const { user: auth0User } = useAuth0();
   const [user, setUser] = useState<{
     username: string;
@@ -59,13 +62,13 @@ const AppProvider: React.FC<{
   });
 
   const [provisionedPortal, setProvisionedPortal] =
-    useState<IEmployeePortalByBusinessManager | null>(dataPortal);
+    useState<IEmployeePortalByBusinessManager>(dataPortal);
 
   const [businessManagers, setBusinessManagers] =
-    useState<IBusinessManagers | null>(businessManagersData);
+    useState<IBusinessManagers>(businessManagersData);
 
   const [businessUnit, setBusinessUnit] =
-    useState<IBusinessUnitsPortalEmployee | null>(businessUnitData);
+    useState<IBusinessUnitsPortalEmployee>(businessUnitData);
 
   const [employees, setEmployees] = useState<IEmployee>(employee);
 
@@ -83,9 +86,10 @@ const AppProvider: React.FC<{
       localStorage.setItem("boardOrientation", preferences.boardOrientation);
     }
   }, [logoUrl, preferences, user]);
+
   const [selectedEmployee, setSelectedEmployee] = useState<Employee>(() => {
-    const storedEmployee = localStorage.getItem("selectedEmployee");
-    return storedEmployee ? JSON.parse(storedEmployee) : null;
+    const stored = localStorage.getItem("selectedEmployee");
+    return stored ? JSON.parse(stored) : null;
   });
 
   useEffect(() => {
@@ -128,6 +132,6 @@ const AppProvider: React.FC<{
       {children}
     </AppContext.Provider>
   );
-};
+}
 
 export { AppProvider, AppContext };

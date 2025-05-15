@@ -53,17 +53,15 @@ export interface IAppContextType {
   setLogoUrl: React.Dispatch<React.SetStateAction<string>>;
   handleClientChange: (client: IClient) => void;
   businessUnitSigla?: string;
-  provisionedPortal: IEmployeePortalByBusinessManager | null;
+  provisionedPortal: IEmployeePortalByBusinessManager;
   setProvisionedPortal: React.Dispatch<
-    React.SetStateAction<IEmployeePortalByBusinessManager | null>
+    React.SetStateAction<IEmployeePortalByBusinessManager>
   >;
-  businessManagers: IBusinessManagers | null;
-  setBusinessManagers: React.Dispatch<
-    React.SetStateAction<IBusinessManagers | null>
-  >;
-  businessUnit: IBusinessUnitsPortalEmployee | null;
+  businessManagers: IBusinessManagers;
+  setBusinessManagers: React.Dispatch<React.SetStateAction<IBusinessManagers>>;
+  businessUnit: IBusinessUnitsPortalEmployee;
   setBusinessUnit: React.Dispatch<
-    React.SetStateAction<IBusinessUnitsPortalEmployee | null>
+    React.SetStateAction<IBusinessUnitsPortalEmployee>
   >;
   employees: IEmployee;
   setEmployees: React.Dispatch<React.SetStateAction<IEmployee>>;
