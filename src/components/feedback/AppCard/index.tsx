@@ -3,7 +3,11 @@ import { Stack, Text, Icon, Divider } from "@inubekit/inubekit";
 
 import { spacing } from "@design/tokens/spacing/spacing";
 
-import { StyledAppCard, StyledComplementContainer } from "./styles";
+import {
+  StyledAppCard,
+  StyledComplementContainer,
+  StyledDescription,
+} from "./styles";
 
 interface AppCardProps {
   title: string;
@@ -11,10 +15,11 @@ interface AppCardProps {
   description: string;
   icon: React.ReactNode;
   url: string;
+  showComplement?: boolean;
 }
 
 function AppCard(props: AppCardProps) {
-  const { title, complement, description, icon, url } = props;
+  const { title, complement, description, icon, url, showComplement } = props;
 
   return (
     <StyledAppCard to={url}>
@@ -24,12 +29,17 @@ function AppCard(props: AppCardProps) {
         </Text>
         <Icon icon={icon} appearance="dark" size="22px" cursorHover />
       </Stack>
+
       <Stack padding={`${spacing.s150} ${spacing.s0}`}>
         <Divider dashed />
       </Stack>
+
       <Stack direction="column" gap={spacing.s200}>
-        <Text size="small">{description}</Text>
-        {complement && complement.length > 0 && (
+        <StyledDescription>
+          <Text size="small">{description}</Text>
+        </StyledDescription>
+
+        {showComplement && complement && complement.length > 0 && (
           <StyledComplementContainer>
             {complement.map((text, index) => (
               <Stack key={index} alignItems="center" gap={spacing.s075}>
@@ -39,7 +49,7 @@ function AppCard(props: AppCardProps) {
                   size="12px"
                 />
                 <Text type="label" size="small">
-                  • {text}
+                  {text}
                 </Text>
               </Stack>
             ))}

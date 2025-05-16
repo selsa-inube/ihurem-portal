@@ -1,10 +1,10 @@
 import { Outlet } from "react-router-dom";
-import { Text, Stack, Grid, Header, useMediaQueries } from "@inubekit/inubekit";
+import { Text, Stack, Grid, Header, useMediaQuery } from "@inubekit/inubekit";
 
 import { AppCard } from "@components/feedback/AppCard";
-import { spacing } from "@design/tokens/spacing/spacing.ts";
-import { userMenu, nav } from "@config/nav.config";
-import { useAppContext } from "@context/AppContext/useAppContext";
+import { spacing } from "@design/tokens/spacing/spacing";
+import { userMenu, useConfigHeader, baseNavLinks } from "@config/nav.config";
+import { useAppContext } from "@context/AppContext";
 
 import {
   StyledAppPage,
@@ -12,99 +12,69 @@ import {
   StyledContentImg,
   StyledLogo,
   StyledMain,
-  StyledFooter,
+  StyledQuickAccessContainer,
 } from "./styles";
 
-const renderLogo = (imgUrl: string) => {
+const renderLogo = (imgUrl: string, altText: string) => {
   return (
     <StyledContentImg to="/">
-      <StyledLogo src={imgUrl} />
+      <StyledLogo src={imgUrl} alt={altText} />
     </StyledContentImg>
   );
 };
 
 function Home() {
-  const { user, logoUrl, employeeOptions, businessUnit } = useAppContext();
-  const businessUnitName = businessUnit?.abbreviatedName ?? "Unidad de Negocio";
-  const mediaQueries = useMediaQueries([
-    "(max-width: 944px)",
-    "(max-width: 690px)",
-  ]);
-
-  const isTablet = mediaQueries["(max-width: 944px)"];
-  const isMobile = mediaQueries["(max-width: 690px)"];
+  const { user, logoUrl, selectedClient } = useAppContext();
+  const configHeader = useConfigHeader();
+  const isTablet = useMediaQuery("(max-width: 944px)");
 
   return (
     <StyledAppPage>
-      <Grid templateRows="auto 1fr" height="100vh" justifyContent="unset">
+      <Grid templateRows="auto auto" height="100vh" justifyContent="unset">
         <Header
-          logoURL={renderLogo(logoUrl)}
+          navigation={{ nav: configHeader, breakpoint: "800px" }}
+          logoURL={renderLogo(
+            selectedClient?.logo ?? logoUrl,
+            selectedClient?.name ?? "Sin unidad seleccionada",
+          )}
           user={{
             username: user?.username ?? "Nombre de usuario",
-            client: businessUnitName,
+            client: selectedClient?.name ?? "Sin unidad seleccionada",
+            breakpoint: "800px",
           }}
           menu={userMenu}
-          navigation={{
-            nav: {
-              reactPortalId: "portal",
-              title: "Menu",
-              sections: [],
-            },
-          }}
         />
         <StyledContainer>
           <StyledMain $isTablet={isTablet}>
-            <Stack gap={spacing.s300} direction="column">
-              <Text size={isMobile ? "medium" : "large"} type="headline">
-                Bienvenido(a), {user?.username ?? "Usuario"}
-              </Text>
-              <Text
-                type="title"
-                appearance="gray"
-                size={isMobile ? "medium" : "large"}
-              >
-                Aquí tienes las funcionalidades disponibles.
-              </Text>
-              <Stack
-                direction={isMobile ? "column" : "row"}
-                gap={isMobile ? spacing.s200 : spacing.s250}
-                wrap="wrap"
-                justifyContent={isMobile ? "center" : "flex-start"}
-                alignItems={isMobile ? "center" : "flex-start"}
-              >
-                {Object.values(nav.sections.administrate.links).map(
-                  (link, index) => {
-                    const employeeOption = employeeOptions.find(
-                      (option) => option.abbreviatedName === link.label,
-                    );
-                    return (
-                      employeeOption && (
-                        <AppCard
-                          key={index}
-                          title={employeeOption.abbreviatedName}
-                          complement={[
-                            "Complemento: ",
-                            "Complemento: ",
-                            "Complemento: ",
-                            "Complemento: ",
-                            "Complemento: ",
-                          ]}
-                          description="Descripción"
-                          icon={link.icon}
-                          url={link.path}
-                        />
-                      )
-                    );
-                  },
-                )}
+            <Grid
+              templateColumns={isTablet ? "1fr" : "auto 1fr"}
+              alignItems="start"
+            >
+              <Stack gap={spacing.s300} direction="column">
+                <Text size={isTablet ? "medium" : "large"} type="headline">
+                  Bienvenido(a), {user?.username ?? "Usuario"}
+                </Text>
+                <Text
+                  type="title"
+                  appearance="gray"
+                  size={isTablet ? "medium" : "large"}
+                >
+                  Aquí tienes las funcionalidades disponibles.
+                </Text>
+                <StyledQuickAccessContainer $isTablet={isTablet}>
+                  {baseNavLinks.map((link, index) => (
+                    <AppCard
+                      key={index}
+                      title={link.label}
+                      description={"Descripción"}
+                      icon={link.icon}
+                      url={link.path}
+                    />
+                  ))}
+                </StyledQuickAccessContainer>
               </Stack>
-            </Stack>
+            </Grid>
             <Outlet />
-            <StyledFooter>
-              <Text appearance="gray" textAlign="center" size="medium">
-                © 2024 Inube
-              </Text>
-            </StyledFooter>
           </StyledMain>
         </StyledContainer>
       </Grid>

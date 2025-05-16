@@ -1,4 +1,10 @@
-import { createContext, useState, useEffect, ReactNode } from "react";
+import {
+  createContext,
+  useState,
+  useContext,
+  useEffect,
+  ReactNode,
+} from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 
 import {
@@ -11,7 +17,7 @@ import {
 import { Employee } from "@ptypes/employeePortalConsultation.types";
 import selsaLogo from "@assets/images/selsa.png";
 
-import { IAppContextType, IPreferences } from "./types";
+import { IAppContextType, IPreferences, IClient } from "./types";
 
 const AppContext = createContext<IAppContextType | undefined>(undefined);
 
@@ -76,6 +82,33 @@ function AppProvider(props: AppProviderProps) {
     setPreferences((prev) => ({ ...prev, ...newPreferences }));
   };
 
+  const [selectedClient, setSelectedClient] = useState<IClient | null>(() => {
+    const storedClient = localStorage.getItem("selectedClient");
+    if (storedClient) {
+      try {
+        return JSON.parse(storedClient);
+      } catch (error) {
+        console.error(
+          "Error al parsear selectedClient desde localStorage",
+          error,
+        );
+      }
+    }
+    return null;
+  });
+
+  useEffect(() => {
+    if (selectedClient) {
+      localStorage.setItem("selectedClient", JSON.stringify(selectedClient));
+    } else {
+      localStorage.removeItem("selectedClient");
+    }
+  }, [selectedClient]);
+
+  const handleClientChange = (client: IClient) => {
+    setSelectedClient(client);
+  };
+
   const [employeeOptionsState, setEmployeeOptions] = useState<
     IEmployeeOptions[]
   >(employeeOptions ?? []);
@@ -112,15 +145,15 @@ function AppProvider(props: AppProviderProps) {
         updatePreferences,
         logoUrl,
         setLogoUrl,
-        handleClientChange: () => {
-          console.log("handleClientChange");
-        },
+        handleClientChange,
         provisionedPortal,
         setProvisionedPortal,
         businessManagers,
         setBusinessManagers,
         businessUnit,
         setBusinessUnit,
+        selectedClient,
+        setSelectedClient,
         employees,
         setEmployees,
         employeeOptions: employeeOptionsState,
@@ -134,4 +167,12 @@ function AppProvider(props: AppProviderProps) {
   );
 }
 
-export { AppProvider, AppContext };
+const useAppContext = () => {
+  const context = useContext(AppContext);
+  if (!context) {
+    throw new Error("useAppContext must be used within an AppProvider");
+  }
+  return context;
+};
+
+export { AppProvider, AppContext, useAppContext };
