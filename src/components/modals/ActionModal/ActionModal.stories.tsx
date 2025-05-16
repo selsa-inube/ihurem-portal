@@ -12,7 +12,7 @@ const meta: Meta<typeof ActionModal> = {
           justifyContent: "center",
           alignItems: "center",
           height: "100vh",
-          backgroundColor: "#f5f5f5", // opcional para mejor visibilidad
+          backgroundColor: "#f5f5f5",
         }}
       >
         <Story />
