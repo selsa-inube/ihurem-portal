@@ -1,46 +1,97 @@
 import {
   MdLogout,
-  MdOutlinePersonOff,
-  MdAttachFile,
+  MdOutlineFilePresent,
   MdOutlineBeachAccess,
   MdOutlinePersonalInjury,
+  MdOutlinePersonOff,
 } from "react-icons/md";
+import { ILinkNav } from "@inubekit/inubekit";
+import { useLocation } from "react-router-dom";
 
-import { INav } from "@components/layout/AppPage/types";
+const baseNavLinks = [
+  {
+    id: "holidays",
+    label: "Vacaciones",
+    icon: <MdOutlineBeachAccess />,
+    path: "/holidays",
+  },
+  {
+    id: "disability",
+    label: "Incapacidades",
+    icon: <MdOutlinePersonalInjury />,
+    path: "/disability",
+  },
+  {
+    id: "certifications",
+    label: "Certificaciones",
+    icon: <MdOutlineFilePresent />,
+    path: "/certifications",
+  },
+  {
+    id: "absences",
+    label: "Ausencias",
+    icon: <MdOutlinePersonOff />,
+    path: "/absences",
+  },
+];
 
-const nav: INav = {
-  title: "MENU",
-  sections: {
-    administrate: {
-      name: "",
-      links: {
-        holidays: {
-          id: "holidays",
-          label: "Vacaciones",
-          icon: <MdOutlineBeachAccess />,
-          path: "/holidays",
-        },
-        disability: {
-          id: "disability",
-          label: "Incapacidades",
-          icon: <MdOutlinePersonalInjury />,
-          path: "/disability",
-        },
-        certifications: {
-          id: "certifications",
-          label: "Certificaciones",
-          icon: <MdAttachFile />,
-          path: "/certifications",
-        },
-        absences: {
-          id: "absences",
-          label: "Ausencias",
-          icon: <MdOutlinePersonOff />,
-          path: "/absences",
-        },
-      },
+const noop = () => undefined;
+
+const actions = [
+  {
+    id: "logout",
+    label: "Cerrar sesión",
+    icon: <MdLogout />,
+    action: () => {
+      window.location.href = "/logout";
     },
   },
+];
+
+const useNavConfig = () => {
+  const location = useLocation();
+
+  const nav = {
+    reactPortalId: "portals",
+    title: "MENU",
+    sections: {
+      administrate: {
+        name: "",
+        links: baseNavLinks.reduce(
+          (acc, link) => {
+            acc[link.id] = {
+              ...link,
+              isActive: location.pathname.startsWith(link.path),
+            };
+            return acc;
+          },
+          {} as Record<string, ILinkNav>,
+        ),
+      },
+    },
+    actions,
+  };
+
+  return nav;
+};
+
+const useConfigHeader = () => {
+  const nav = {
+    reactPortalId: "portal",
+    title: "MENU",
+    sections: [
+      {
+        isOpen: true,
+        onClose: noop,
+        onToggle: noop,
+        subtitle: "Administrate",
+        links: baseNavLinks,
+      },
+    ],
+    actions,
+  };
+
+  return nav;
 };
 
 const userMenu = [
@@ -59,17 +110,13 @@ const userMenu = [
   },
 ];
 
-const actions = [
-  {
-    id: "logout",
-    label: "Cerrar sesión",
-    icon: <MdLogout />,
-    action: () => {
-      window.location.href = "/logout";
-    },
-  },
-];
-
 const pathStart = ["/welcome", "/signin", "/"];
 
-export { nav, userMenu, actions, pathStart };
+export {
+  useNavConfig,
+  useConfigHeader,
+  baseNavLinks,
+  userMenu,
+  actions,
+  pathStart,
+};

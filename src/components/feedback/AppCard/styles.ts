@@ -15,9 +15,9 @@ interface IStyledAppCard {
 const StyledAppCard = styled(Link)<IStyledAppCard>`
   box-sizing: border-box;
   padding: ${spacing.s150} ${spacing.s300};
-  height: 174px;
-  max-height: 174px;
-  width: 313px;
+  height: 130px;
+  max-height: 176px;
+  width: 305px;
   display: flex;
   flex-direction: column;
   border-radius: 8px;
@@ -72,4 +72,23 @@ const StyledComplementContainer = styled.div<IStyledComplementContainer>`
   }
 `;
 
-export { StyledAppCard, StyledComplementContainer };
+const StyledDescription = styled.div<IStyledAppCard>`
+  max-height: 48px;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  &::-webkit-scrollbar {
+    width: 3px;
+    border-radius: 8px;
+    background-color: ${({ theme }) =>
+      theme?.palette?.neutral?.N30 || inube.palette.neutral.N30};
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: ${({ theme }) =>
+      theme?.palette?.neutral?.N50 || inube.palette.neutral.N50};
+    border-radius: 8px;
+  }
+`;
+
+export { StyledAppCard, StyledComplementContainer, StyledDescription };

@@ -82,7 +82,6 @@ interface IBusinessManagers {
   urlLogo: string;
   customerId: string;
 }
-
 interface IBusinessUnitsPortalEmployee {
   abbreviatedName: string;
   businessManagersByBusinessesUnit?: BusinessManagersByBusinessesUnit[];
