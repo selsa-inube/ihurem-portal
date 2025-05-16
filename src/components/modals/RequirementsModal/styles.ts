@@ -5,62 +5,71 @@ import { spacing } from "@design/tokens/spacing/spacing";
 
 interface IStyledModal {
   $smallScreen: boolean;
-  theme?: typeof inube;
+  theme: typeof inube;
 }
 
-interface IStyledContainerCards {
+interface IStyledContainerContent {
   $smallScreen: boolean;
-  theme?: typeof inube;
+  theme: typeof inube;
 }
 
-const StyledModal = styled.div<IStyledModal>`
+interface IStyledTableContainer {
+  $smallScreen: boolean;
+  theme: typeof inube;
+}
+
+export const StyledModal = styled.div<IStyledModal>`
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  white-space: nowrap;
-  background-color: ${({ theme }) =>
-    theme?.palette?.neutral?.N0 || inube.palette.neutral.N0};
-  height: ${({ $smallScreen }) => ($smallScreen ? "626px" : "618px")};
-  width: ${({ $smallScreen }) => ($smallScreen ? "311px" : "402px")};
+  height: inherit;
+  width: ${({ $smallScreen }) => ($smallScreen ? "302px" : "652px")};
+  background-color: ${inube.palette.neutral.N0};
   padding: ${({ $smallScreen }) =>
-    $smallScreen ? spacing.s150 : `${spacing.s200} ${spacing.s300}`};
+    $smallScreen ? spacing.s150 : spacing.s300};
   gap: ${spacing.s200};
   border-radius: ${spacing.s100};
-
-  textarea {
-    resize: none;
-  }
 `;
 
-const StyledContainerClose = styled.div`
+export const StyledContainerContent = styled.div<IStyledContainerContent>`
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  gap: ${spacing.s200};
+`;
+
+export const StyledContainerClose = styled.div`
   cursor: pointer;
 `;
 
-const StyledContainerCards = styled.div<IStyledContainerCards>`
-  overflow-y: auto;
+export const StyledContainerTitle = styled.div`
+  display: flex;
+  margin: 0;
+  padding: 0;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+export const StyledTableContainer = styled.div<IStyledTableContainer>`
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: ${({ $smallScreen }) => ($smallScreen ? spacing.s200 : spacing.s200)};
-  padding-right: ${spacing.s050};
+  border: 2px solid
+    ${({ theme }) => theme?.palette?.neutral?.N30 || inube.palette.neutral.N30};
+  padding: ${({ $smallScreen }) =>
+    $smallScreen ? `${spacing.s050} ${spacing.s0}` : `${spacing.s050}`};
+  border-radius: 8px;
+  height: ${({ $smallScreen }) => ($smallScreen ? "408px" : "384px")};
+  overflow-y: scroll;
 
   &::-webkit-scrollbar {
-    width: 8px;
-    border-radius: 8px;
-  }
-  &::-webkit-scrollbar-track {
-    background: ${({ theme }) =>
-      theme?.palette?.neutral?.N30 || inube.palette.neutral.N30};
+    width: 4px;
     border-radius: 8px;
   }
   &::-webkit-scrollbar-thumb {
-    background: ${({ theme }) =>
+    background-color: ${({ theme }) =>
       theme?.palette?.neutral?.N50 || inube.palette.neutral.N50};
     border-radius: 8px;
   }
-  &::-webkit-scrollbar-thumb:hover {
-    background: ${({ theme }) =>
-      theme?.palette?.neutral?.N70 || inube.palette.neutral.N70};
-  }
 `;
-
-export { StyledModal, StyledContainerClose, StyledContainerCards };

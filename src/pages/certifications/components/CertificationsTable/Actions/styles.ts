@@ -1,50 +1,53 @@
 import styled from "styled-components";
 import { inube } from "@inubekit/inubekit";
 
-interface Theme {
-  palette: {
-    neutral: {
-      N0: string;
-      N40: string;
-    };
-  };
+import { spacing } from "@design/tokens/spacing/spacing";
+
+interface IStyledActions {
+  theme: typeof inube;
+}
+
+interface IStyledLi {
+  theme: typeof inube;
+  $isDisabled: boolean;
 }
 
 const StyledContainer = styled.div`
-  position: absolute;
-
-  figure {
-    margin-right: 5px;
-  }
-
-  div > figure {
-    position: absolute;
-    right: 2%;
-  }
+  position: relative;
 `;
 
 const StyledUl = styled.ul`
-  margin: 0px 30px 0px 0px;
+  margin: 0px;
   padding: 0px;
 `;
 
-const StyledLi = styled.li`
+const StyledLi = styled.li<IStyledLi>`
   list-style: none;
   display: flex;
   align-items: center;
-  padding: 6px 0px;
+  padding: 10px 10px 7px 16px;
+  gap: ${spacing.s050};
   cursor: pointer;
 `;
 
-const StyledActions = styled.div<{ theme?: Theme }>`
-  border-radius: 4px;
+const StyledActions = styled.div<IStyledActions>`
+  border-radius: 8px;
+  width: 210px;
+  height: auto;
   position: absolute;
-  right: -8px;
-  top: -2px;
+  z-index: 1;
+  right: 10px;
+  top: 100%;
   background-color: ${({ theme }) =>
     theme?.palette?.neutral?.N0 || inube.palette.neutral.N0};
-  box-shadow: 8px 2px 6px
+  box-shadow: 0px 2px 6px 1px
     ${({ theme }) => theme?.palette?.neutral?.N40 || inube.palette.neutral.N40};
 `;
 
-export { StyledContainer, StyledUl, StyledLi, StyledActions };
+const StyledCloseIcon = styled.div`
+  position: absolute;
+  right: 15px;
+  top: 10px;
+`;
+
+export { StyledContainer, StyledUl, StyledLi, StyledActions, StyledCloseIcon };

@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { MdOutlineInfo } from "react-icons/md";
+import { Text, SkeletonLine, Icon, Stack } from "@inubekit/inubekit";
 
-import { InfoModal } from "@components/modals/InfoModal";
-import { Text, SkeletonLine, Icon } from "@inubekit/inubekit";
+import { ActionModal } from "@components/modals/ActionModal";
+import { spacing } from "@design/tokens/spacing/spacing";
 
 import {
   StyledContainer,
@@ -14,6 +15,7 @@ import {
   StyledTd,
   StyledThactions,
   StyledTdactions,
+  StyledDivactions,
 } from "./styles";
 import { ITitle, IRenderActionsTitles, IActionsComponent } from "./types";
 import { ITableBoardProps } from ".";
@@ -35,10 +37,10 @@ const RenderActionsTitles = (props: IRenderActionsTitles) => {
             <StyledThactions key={actionTitle.id}>
               <Text
                 appearance={appearance}
-                type="title"
-                size="medium"
+                size="large"
                 padding="0px 4px"
                 textAlign="center"
+                weight="bold"
               >
                 {actionTitle.actionName}
               </Text>
@@ -50,7 +52,7 @@ const RenderActionsTitles = (props: IRenderActionsTitles) => {
                 <Icon
                   icon={<MdOutlineInfo />}
                   appearance="primary"
-                  size="28px"
+                  size="20px"
                   onClick={onInfoClick}
                 />
               )}
@@ -87,6 +89,25 @@ const dataLoading = (titleColumns: ITitle[], numberActions: number) => {
     );
   }
   return rowsLoading;
+};
+
+const ActionsIcon = (props: IActionsComponent) => {
+  const { actionMobile, entry, isTablet } = props;
+
+  return (
+    <>
+      {isTablet &&
+        actionMobile?.map((action, index) => (
+          <StyledDivactions
+            key={action.id}
+            $isTablet={isTablet}
+            $isFirst={index === 0}
+          >
+            {action.content(entry)}
+          </StyledDivactions>
+        ))}
+    </>
+  );
 };
 
 const Actions = (props: IActionsComponent) => {
@@ -131,6 +152,7 @@ export const TableBoardUI = (props: ITableBoardUIProps) => {
     appearanceTable,
     isTablet,
     actionMobile,
+    actionMobileIcon,
     isFirstTable,
     showTagsInMobile = false,
   } = props;
@@ -198,16 +220,26 @@ export const TableBoardUI = (props: ITableBoardUIProps) => {
                       key={title.id}
                       $widthTd={appearanceTable?.widthTd}
                     >
-                      {typeof entry[title.id] !== "string" ? (
-                        entry[title.id]
-                      ) : (
-                        <Text
-                          size="medium"
-                          padding={isTablet ? "0px" : "0px 4px"}
-                        >
-                          {entry[title.id]}
-                        </Text>
-                      )}
+                      <Stack gap={spacing.s075}>
+                        {actionMobileIcon && (
+                          <ActionsIcon
+                            actionMobile={actionMobileIcon}
+                            entry={entry}
+                            isTablet={isTablet}
+                            actions={[]}
+                          />
+                        )}
+                        {typeof entry[title.id] !== "string" ? (
+                          entry[title.id]
+                        ) : (
+                          <Text
+                            size="medium"
+                            padding={isTablet ? "0px" : "0px 4px"}
+                          >
+                            {entry[title.id]}
+                          </Text>
+                        )}
+                      </Stack>
                     </StyledTd>
                   ))}
                   {actions && (
@@ -224,7 +256,12 @@ export const TableBoardUI = (props: ITableBoardUIProps) => {
           )}
         </StyledTbody>
       </StyledTable>
-      {isModalOpen && <InfoModal onCloseModal={() => setIsModalOpen(false)} />}
+      {isModalOpen && (
+        <ActionModal
+          onClose={() => setIsModalOpen(false)}
+          disableDeleteAction={true}
+        />
+      )}
     </StyledContainer>
   );
 };

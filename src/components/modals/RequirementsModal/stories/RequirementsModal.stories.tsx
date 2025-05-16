@@ -2,7 +2,7 @@ import { useState } from "react";
 import { StoryFn, Meta } from "@storybook/react";
 import { Button } from "@inubekit/inubekit";
 
-import { mockAlertCards } from "@mocks/requirements/requirements.mock";
+import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
 
 import { RequirementsModal, RequirementsModalProps } from "..";
 
@@ -13,7 +13,6 @@ const story: Meta<typeof RequirementsModal> = {
 
 const DefaultTemplate: StoryFn<RequirementsModalProps> = (args) => {
   const [showModal, setShowModal] = useState(false);
-
   const handleShowModal = () => {
     setShowModal(!showModal);
   };
@@ -24,8 +23,9 @@ const DefaultTemplate: StoryFn<RequirementsModalProps> = (args) => {
       {showModal && (
         <RequirementsModal
           {...args}
-          onCloseModal={handleShowModal}
-          alertCards={mockAlertCards}
+          title="Requisitos"
+          buttonLabel="Cerrar"
+          requirements={mockRequirements}
         />
       )}
     </>

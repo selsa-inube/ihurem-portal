@@ -1,11 +1,7 @@
 import { FormikProps, useFormik } from "formik";
 import { object } from "yup";
-import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
-import { IOption } from "@inubekit/inubekit";
+import { forwardRef, useEffect, useImperativeHandle } from "react";
 
-import { useAppContext } from "@context/AppContext/useAppContext";
-import { IEmploymentContract } from "@ptypes/employeePortalBusiness.types";
-import { ContractActionTypes } from "@ptypes/contract.types";
 import { validationMessages } from "@validations/validationMessages";
 import { validationRules } from "@validations/validationRules";
 
@@ -32,6 +28,7 @@ interface GeneralInformationFormProps {
   loading?: boolean;
   withNextButton?: boolean;
   handleNextStep: () => void;
+  handlePreviousStep: () => void;
   onFormValid?: React.Dispatch<React.SetStateAction<boolean>>;
   onSubmit?: (values: IGeneralInformationEntry) => void;
 }
@@ -44,53 +41,29 @@ const GeneralInformationForm = forwardRef<
     {
       initialValues,
       onFormValid,
-      onSubmit = () => {
-        console.log("submit form");
-      },
+      onSubmit,
       handleNextStep,
-      loading = false,
+      handlePreviousStep,
+      loading,
       withNextButton = false,
     },
     ref,
   ) => {
-    const { employees } = useAppContext();
-    const [contractOptions, setContractOptions] = useState<IOption[]>([]);
-
-    useEffect(() => {
-      if (!employees.employmentContract) return;
-      const options: IOption[] = employees.employmentContract.map(
-        (contract: IEmploymentContract) => {
-          const contractTypeLabel =
-            ContractActionTypes[
-              contract.contractType as unknown as keyof typeof ContractActionTypes
-            ] || contract.contractType;
-          return {
-            id: contract.contractNumber,
-            label: `${contractTypeLabel} - ${contract.contractNumber}`,
-            value: contract.contractNumber,
-          };
-        },
-      );
-      setContractOptions(options);
-      if (options.length === 1) {
-        formik.setFieldValue("contractDesc", options[0].label);
-        formik.setFieldValue("contract", options[0].value);
-      }
-    }, [employees]);
-
     const formik = useFormik({
       initialValues,
       validationSchema,
       validateOnBlur: false,
-      onSubmit,
+      onSubmit: onSubmit ?? (() => true),
     });
 
     useImperativeHandle(ref, () => formik);
+    GeneralInformationForm.displayName = "GeneralInformationForm";
 
     useEffect(() => {
       if (onFormValid) {
         formik.validateForm().then((errors) => {
-          onFormValid(Object.keys(errors).length === 0);
+          const isFormValid = Object.keys(errors).length === 0;
+          onFormValid(isFormValid);
         });
       }
     }, [formik.values, onFormValid]);
@@ -102,13 +75,11 @@ const GeneralInformationForm = forwardRef<
         withNextButton={withNextButton}
         validationSchema={validationSchema}
         handleNextStep={handleNextStep}
-        contractOptions={contractOptions}
+        handlePreviousStep={handlePreviousStep}
       />
     );
   },
 );
-
-GeneralInformationForm.displayName = "GeneralInformationForm";
 
 export { GeneralInformationForm };
 export type { GeneralInformationFormProps };

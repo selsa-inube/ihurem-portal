@@ -20,7 +20,7 @@ const certificationsNavConfig = [
   },
   {
     id: 2,
-    label: "Nueva certificación",
+    label: "Agregar solicitud",
     crumbs: [
       {
         path: "/",
@@ -30,13 +30,13 @@ const certificationsNavConfig = [
       },
       {
         path: "/certifications",
-        label: "Certificaciones",
+        label: "...",
         id: "/certifications",
         isActive: false,
       },
       {
         path: "/certifications/new-certification",
-        label: "Nueva certificación",
+        label: "Agregar solicitud",
         id: "/certifications/new-certification",
         isActive: true,
       },

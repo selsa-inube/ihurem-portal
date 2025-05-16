@@ -1,82 +1,276 @@
-import { createPortal } from "react-dom";
-import { MdClear } from "react-icons/md";
+import React, { useState } from "react";
 import {
   Icon,
-  Stack,
   Text,
-  useMediaQuery,
+  Stack,
+  Button,
   Blanket,
   Divider,
-  Button,
+  useMediaQuery,
 } from "@inubekit/inubekit";
+import {
+  MdClear,
+  MdAdd,
+  MdOutlineVisibility,
+  MdOutlineCheckCircle,
+  MdOutlineInfo,
+} from "react-icons/md";
+import { createPortal } from "react-dom";
 
-import { AlertCard, AlertCardProps } from "@components/data/AlertCard";
+import CheckIcon from "@assets/images/CheckIcon.svg";
+import CloseIcon from "@assets/images/CloseIcon.svg";
+import HelpIcon from "@assets/images/HelpIcon.svg";
 import { spacing } from "@design/tokens/spacing/spacing";
+import { TableBoard } from "@components/data/TableBoard";
+import {
+  IEntries,
+  IAction,
+  Requirement,
+} from "@components/data/TableBoard/types";
+import { InfoModal } from "@components/modals/InfoModal";
 
 import {
-  StyledModal,
   StyledContainerClose,
-  StyledContainerCards,
+  StyledContainerContent,
+  StyledModal,
+  StyledContainerTitle,
+  StyledTableContainer,
 } from "./styles";
 
 export interface RequirementsModalProps {
+  title: string;
+  buttonLabel: string;
   portalId?: string;
-  alertCards: AlertCardProps[];
-  onCloseModal?: () => void;
+  requirements: Requirement[];
+  handleClose: () => void;
+  hasPrivilege?: boolean;
+  onOpenInfoModal?: (title: string, description: string) => void;
 }
 
-export function RequirementsModal(props: RequirementsModalProps) {
-  const { portalId = "portal", alertCards, onCloseModal } = props;
+function RequirementsModal(props: RequirementsModalProps) {
+  const {
+    title,
+    buttonLabel,
+    portalId = "portal",
+    requirements,
+    handleClose,
+    hasPrivilege = true,
+  } = props;
 
-  const isMobile = useMediaQuery("(max-width: 700px)");
-  const portalNode = document.getElementById(portalId);
+  const [infoModal, setInfoModal] = useState({
+    open: false,
+    title: "",
+    description: "",
+  });
 
-  if (!portalNode) {
+  const node = document.getElementById(portalId);
+  if (!node) {
     throw new Error(
-      "The portal node is not defined. Ensure the specific node exists in the DOM.",
+      "The portal node is not defined. This can occur when the specific node used to render the portal has not been defined correctly.",
     );
   }
 
-  return createPortal(
-    <Blanket>
-      <StyledModal $smallScreen={isMobile}>
-        <Stack alignItems="center" justifyContent="space-between">
-          <Text type="headline" size="small">
-            Requisitos
-          </Text>
-          <StyledContainerClose onClick={onCloseModal}>
-            <Stack alignItems="center" gap={spacing.s100}>
-              <Text>Cerrar</Text>
+  const isMobile = useMediaQuery("(max-width: 730px)");
+
+  const renderAddIcon = (entry: IEntries) => {
+    return (
+      <Stack justifyContent="center">
+        <Icon
+          icon={<MdOutlineVisibility />}
+          appearance="dark"
+          onClick={() => console.log("Add clicked", entry)}
+          spacing="compact"
+          variant="empty"
+          size="20px"
+          cursorHover
+        />
+      </Stack>
+    );
+  };
+
+  const renderCheckIcon = (entry: IEntries) => {
+    const isDisabled =
+      React.isValidElement(entry.tag) && entry.tag.props.label === "No Cumple";
+
+    return (
+      <Stack justifyContent="center" padding={`${spacing.s0} ${spacing.s100}`}>
+        <Icon
+          icon={<MdOutlineCheckCircle />}
+          appearance="primary"
+          spacing="compact"
+          cursorHover
+          size="20px"
+          onClick={() => console.log("Check clicked", entry)}
+          disabled={isDisabled}
+        />
+      </Stack>
+    );
+  };
+
+  const actionsRequirements: IAction[] = [
+    { id: "agregar", content: renderAddIcon },
+    { id: "aprobar", content: renderCheckIcon },
+  ];
+
+  const getIconByTagStatus = (tagElement: React.ReactElement) => {
+    const label = tagElement.props.children;
+
+    if (label === "Cumple") {
+      return <img src={CheckIcon} alt="Cumple" width={14} height={14} />;
+    } else if (label === "Sin Evaluar") {
+      return <img src={HelpIcon} alt="Sin Evaluar" width={14} height={14} />;
+    } else if (label === "No Cumple") {
+      return <img src={CloseIcon} alt="No Cumple" width={14} height={14} />;
+    } else {
+      return null;
+    }
+  };
+
+  const getActionsMobileIcon = () => {
+    return [
+      {
+        id: "estado",
+        actionName: "",
+        content: (entry: IEntries) => {
+          const tagElement = entry.tag as React.ReactElement;
+          return (
+            <Stack>
               <Icon
-                icon={<MdClear />}
-                size="24px"
+                icon={getIconByTagStatus(tagElement)}
+                appearance={tagElement.props.appearance}
                 cursorHover
-                appearance="dark"
+                size="20px"
               />
             </Stack>
-          </StyledContainerClose>
-        </Stack>
-        <Divider />
-        <StyledContainerCards $smallScreen={isMobile}>
-          {alertCards.map((item, index) => (
-            <AlertCard
-              key={index}
-              icon={item.icon}
-              iconAppearance={item.iconAppearance}
-              requirement={item.requirement}
-              cause={item.cause}
-              ellipsis
-            />
-          ))}
-        </StyledContainerCards>
-        <Divider />
-        <Stack direction="column" alignItems="flex-end">
-          <Button onClick={onCloseModal} fullwidth={isMobile}>
-            Cerrar
-          </Button>
-        </Stack>
-      </StyledModal>
-    </Blanket>,
-    portalNode,
+          );
+        },
+      },
+    ];
+  };
+
+  const getActionsMobile = () => {
+    return [
+      {
+        id: "agregar",
+        content: (entry: IEntries) => renderAddIcon(entry),
+      },
+      {
+        id: "aprobar",
+        content: (entry: IEntries) => renderCheckIcon(entry),
+      },
+    ];
+  };
+
+  const infoItems = [
+    { icon: <MdOutlineVisibility />, text: "Adjuntar", appearance: "help" },
+    {
+      icon: <MdOutlineCheckCircle />,
+      text: "Forzar Aprobación",
+      appearance: "help",
+    },
+  ];
+
+  return createPortal(
+    <>
+      <Blanket>
+        <StyledModal $smallScreen={isMobile}>
+          <StyledContainerTitle>
+            <Text type="headline" size="small">
+              {title}
+            </Text>
+            <StyledContainerClose onClick={handleClose}>
+              <Stack alignItems="center" gap={spacing.s100}>
+                <Text>Cerrar</Text>
+                <Icon
+                  icon={<MdClear />}
+                  size="24px"
+                  cursorHover
+                  appearance="dark"
+                />
+              </Stack>
+            </StyledContainerClose>
+          </StyledContainerTitle>
+
+          <Divider />
+          <StyledContainerContent $smallScreen={isMobile}>
+            <Stack direction="column" gap={spacing.s100}>
+              <Stack
+                width="100%"
+                justifyContent="flex-end"
+                alignItems="center"
+                gap={spacing.s050}
+              >
+                <Button
+                  spacing="compact"
+                  iconBefore={<MdAdd />}
+                  disabled={!hasPrivilege}
+                  onClick={
+                    hasPrivilege
+                      ? () => console.log("Agregar Requisito")
+                      : undefined
+                  }
+                >
+                  Agregar Requisito
+                </Button>
+                {!hasPrivilege && (
+                  <Icon
+                    icon={<MdOutlineInfo />}
+                    appearance="primary"
+                    size="16px"
+                    cursorHover
+                    onClick={() =>
+                      setInfoModal({
+                        open: true,
+                        title: "Agregar Requisito",
+                        description:
+                          "No tienes permisos para agregar un requisito en este momento.",
+                      })
+                    }
+                  />
+                )}
+              </Stack>
+
+              <StyledTableContainer $smallScreen={isMobile}>
+                {requirements.map((requirement, index) => (
+                  <TableBoard
+                    key={requirement.id}
+                    id={requirement.id}
+                    titles={requirement.titles}
+                    entries={requirement.entries}
+                    actions={actionsRequirements}
+                    actionMobile={getActionsMobile()}
+                    actionMobileIcon={getActionsMobileIcon()}
+                    appearanceTable={{
+                      widthTd: "82%",
+                      efectzebra: true,
+                      title: "primary",
+                      isStyleMobile: true,
+                    }}
+                    isFirstTable={index === 0}
+                    infoItems={infoItems}
+                  />
+                ))}
+              </StyledTableContainer>
+            </Stack>
+            <Stack justifyContent="flex-end" gap={spacing.s100}>
+              <Button onClick={handleClose}>{buttonLabel}</Button>
+            </Stack>
+          </StyledContainerContent>
+        </StyledModal>
+      </Blanket>
+      {infoModal.open && (
+        <InfoModal
+          title={infoModal.title}
+          titleDescription="¿Por qué está inhabilitado?"
+          description={infoModal.description}
+          onCloseModal={() =>
+            setInfoModal({ open: false, title: "", description: "" })
+          }
+        />
+      )}
+    </>,
+    node,
   );
 }
+
+export { RequirementsModal };

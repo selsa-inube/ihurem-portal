@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { FormikProps } from "formik";
 import {
   Stack,
@@ -5,7 +6,12 @@ import {
   Assisted,
   IAssistedStep,
 } from "@inubekit/inubekit";
+import { MdRule } from "react-icons/md";
 
+import { RequirementsModal } from "@components/modals/RequirementsModal";
+import { ButtonRequirements } from "@components/inputs/ButtonWithCounter";
+import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
+import { mockAlertCards } from "@mocks/requirements/requirements-2.mock";
 import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
 import { spacing } from "@design/tokens/spacing/spacing";
@@ -53,55 +59,91 @@ function NewCertificationUI(
 
   const isTablet = useMediaQuery("(max-width: 1100px)");
 
+  const shouldDisableNext = currentStep !== 1 && !isCurrentFormValid;
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
-    <AppMenu appName={appName} appRoute={appRoute} navigatePage={navigatePage}>
-      <Stack direction="column" gap={isTablet ? spacing.s300 : spacing.s500}>
-        <Assisted
-          step={steps[currentStep - 1]}
-          totalSteps={steps.length}
-          disableNext={!isCurrentFormValid}
-          size={isTablet ? "small" : "large"}
-          controls={{
-            goBackText: "Anterior",
-            goNextText: "Siguiente",
-            submitText: "Enviar",
-          }}
-          onNextClick={handleNextStep}
-          onBackClick={handlePreviousStep}
-          onSubmitClick={handleFinishAssisted}
-        />
-        <Stack direction="column" gap={spacing.s500}>
-          {currentStep === 1 && (
-            <GeneralInformationForm
-              ref={generalInformationRef}
-              initialValues={initialGeneralInformationValues}
-              withNextButton={true}
-              onFormValid={setIsCurrentFormValid}
-              handleNextStep={handleNextStep}
-            />
-          )}
-        </Stack>
-        {currentStep === 2 && (
-          <AlertCardStep
-            handlePreviousStep={handlePreviousStep}
-            handleNextStep={handleNextStep}
+    <>
+      <AppMenu
+        appName={appName}
+        appRoute={appRoute}
+        navigatePage={navigatePage}
+        actionButton={
+          <ButtonRequirements
+            counter={mockAlertCards.length}
+            buttonIcon={<MdRule />}
+            buttonText="Solicitar Pago"
+            isMobile={isTablet}
+            onClick={handleOpenModal}
           />
-        )}
-        {currentStep === 3 && (
-          <VerificationForm
-            updatedData={{
-              personalInformation: {
-                isValid: isCurrentFormValid,
-                values: initialGeneralInformationValues,
-              },
+        }
+      >
+        <Stack direction="column" gap={isTablet ? spacing.s300 : spacing.s500}>
+          <Assisted
+            step={steps[currentStep - 1]}
+            totalSteps={steps.length}
+            disableNext={shouldDisableNext}
+            size={isTablet ? "small" : "large"}
+            controls={{
+              goBackText: "Anterior",
+              goNextText: "Siguiente",
+              submitText: "Enviar",
             }}
-            handleStepChange={(stepId) => setCurrentStep(stepId)}
-            handlePreviousStep={handlePreviousStep}
-            handleSubmit={handleFinishAssisted}
+            onNextClick={handleNextStep}
+            onBackClick={handlePreviousStep}
+            onSubmitClick={handleFinishAssisted}
           />
-        )}
-      </Stack>
-    </AppMenu>
+          <Stack direction="column">
+            <Stack direction="column" gap={spacing.s500}>
+              {currentStep === 1 && (
+                <AlertCardStep handleNextStep={handleNextStep} />
+              )}
+              {currentStep === 2 && (
+                <GeneralInformationForm
+                  ref={generalInformationRef}
+                  initialValues={initialGeneralInformationValues}
+                  withNextButton={true}
+                  onFormValid={setIsCurrentFormValid}
+                  handleNextStep={handleNextStep}
+                  handlePreviousStep={handlePreviousStep}
+                />
+              )}
+            </Stack>
+            {currentStep === 3 && (
+              <VerificationForm
+                updatedData={{
+                  personalInformation: {
+                    isValid: isCurrentFormValid,
+                    values: initialGeneralInformationValues,
+                  },
+                }}
+                handleStepChange={(stepId) => setCurrentStep(stepId)}
+                handlePreviousStep={handlePreviousStep}
+                handleSubmit={handleFinishAssisted}
+              />
+            )}
+          </Stack>
+        </Stack>
+      </AppMenu>
+
+      {isModalOpen && (
+        <RequirementsModal
+          title="Requisitos"
+          buttonLabel="Cerrar"
+          requirements={mockRequirements}
+          handleClose={handleCloseModal}
+        />
+      )}
+    </>
   );
 }
 

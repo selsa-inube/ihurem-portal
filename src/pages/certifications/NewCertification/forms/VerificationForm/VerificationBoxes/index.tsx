@@ -18,9 +18,9 @@ const renderPersonalInfoVerification = (
       gap={spacing.s100}
       width="100%"
     >
-      <BoxAttribute label="Días de disfrute:" value={values.certification} />
+      <BoxAttribute label="Tipo de solicitud" value={values.certification} />
       <BoxAttribute label="Destinatario:" value={values.addressee} />
-      <BoxAttribute label="Contrato:" value={values.contractDesc} />
+      <BoxAttribute label="Contrato:" value={values.contract} />
     </Grid>
     <Stack width="100%" direction="column">
       <BoxAttribute
@@ -64,12 +64,12 @@ function VerificationBoxes({
 }: VerificationBoxesProps) {
   return (
     <>
-      {stepKey === 1 &&
+      {stepKey === 1 && renderAlerts(isTablet)}
+      {stepKey === 2 &&
         renderPersonalInfoVerification(
           updatedData.personalInformation.values,
           isTablet,
         )}
-      {stepKey === 2 && renderAlerts(isTablet)}
     </>
   );
 }
