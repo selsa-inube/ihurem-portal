@@ -22,7 +22,7 @@ function HolidaysOptions() {
   const navigate = useNavigate();
   const location = useLocation();
   const locationState = location.state as LocationState | null;
-  const isMobile = useMediaQuery("(max-width: 768px)");
+  const isMobile = useMediaQuery("(max-width: 1060px)");
 
   const [isLoading, setIsLoading] = useState(true);
   const [tableData, setTableData] = useState<IHolidaysTable[]>([]);
