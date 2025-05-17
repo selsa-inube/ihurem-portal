@@ -7,7 +7,7 @@ import {
 import { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 
-import { Home } from "@src/pages/home";
+import { Home } from "@pages/home";
 import { decrypt } from "@utils/encrypt";
 import { LoginRoutes } from "@routes/login";
 import { GlobalStyles } from "@styles/global";
@@ -23,7 +23,8 @@ import { CertificationsRoutes } from "@routes/certifications";
 import { useEmployeeOptions } from "@hooks/useEmployeeOptions";
 import { AppProvider } from "@context/AppContext";
 import { useBusinessManagers } from "@hooks/useBusinessManagers";
-import { useEmployeeByNickname } from "@src/hooks/useEmployeeInquiry";
+import { useEmployeeByNickname } from "@hooks/useEmployeeInquiry";
+
 import { useAppContext } from "./context/AppContext/useAppContext";
 
 function LogOut() {

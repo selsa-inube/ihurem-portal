@@ -2,12 +2,13 @@ import { useState } from "react";
 import { MdAdd, MdOutlineInfo } from "react-icons/md";
 import { Button, Stack, Tabs, ITab, Text, Icon } from "@inubekit/inubekit";
 import { useNavigate } from "react-router-dom";
+import { MdOutlineBeachAccess } from "react-icons/md";
 
-import { useAppContext } from "@context/AppContext/useAppContext";
 import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
 import { spacing } from "@design/tokens/spacing/spacing";
 import { InfoModal } from "@components/modals/InfoModal";
+import { Widget } from "@components/cards/Widget";
 
 import { StyledHolidaysContainer } from "./styles";
 import { HolidaysTable } from "./components/HolidaysTable";
@@ -53,7 +54,6 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
   } = props;
 
   const [selectedTab, setSelectedTab] = useState("dias");
-  const { selectedEmployee } = useAppContext();
   const navigate = useNavigate();
   const [infoModal, setInfoModal] = useState<{
     open: boolean;
@@ -86,23 +86,31 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
     });
   };
 
+  const pendingDaysWidget = (
+    <Widget
+      icon={<MdOutlineBeachAccess />}
+      value={22}
+      label="Días pendientes"
+    />
+  );
+
   const renderActions = () =>
     isMobile ? (
-      <Detail
-        disableEnjoyment={!hasEnjoymentPrivilege || !hasActiveContract}
-        disablePayment={!hasPaymentPrivilege || !hasActiveContract}
-        actionDescriptions={actionDescriptions}
-        showTabs={tableData && tableData.length > 0}
-        onRequestEnjoyment={handleRequestEnjoyment}
-        onRequestPayment={handleRequestPayment}
-        onInfoIconClick={onOpenInfoModal}
-      />
+      <Stack direction="column" gap={spacing.s150}>
+        {pendingDaysWidget}
+        <Detail
+          disableEnjoyment={!hasEnjoymentPrivilege || !hasActiveContract}
+          disablePayment={!hasPaymentPrivilege || !hasActiveContract}
+          actionDescriptions={actionDescriptions}
+          showTabs={tableData && tableData.length > 0}
+          onRequestEnjoyment={handleRequestEnjoyment}
+          onRequestPayment={handleRequestPayment}
+          onInfoIconClick={onOpenInfoModal}
+        />
+      </Stack>
     ) : (
-      <Stack
-        gap={spacing.s150}
-        justifyContent="end"
-        direction={isMobile ? "column" : "row"}
-      >
+      <Stack gap={spacing.s150} justifyContent="end" direction="row">
+        {pendingDaysWidget}
         <Stack gap={spacing.s025} alignItems="center">
           <Button
             spacing="wide"
@@ -164,22 +172,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
         </Text>
         {renderActions()}
       </Stack>
-      {selectedEmployee?.employmentContracts?.map((contract, index) => (
-        <div key={index}>
-          {selectedEmployee.employmentContracts.length > 1 && (
-            <Text
-              type="title"
-              weight="bold"
-              size="small"
-              appearance="gray"
-              padding={`${spacing.s100} ${spacing.s0}`}
-            >
-              {contract.businessName} - {contract.contractType}
-            </Text>
-          )}
-          <DaysUsedTable data={daysUsedMock} />
-        </div>
-      ))}
+      <DaysUsedTable data={daysUsedMock} />
     </StyledHolidaysContainer>
   );
 
