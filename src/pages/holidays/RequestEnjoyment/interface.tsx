@@ -13,7 +13,7 @@ import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
 import { spacing } from "@design/tokens/spacing/spacing";
 import { RequirementsModal } from "@components/modals/RequirementsModal";
-import { mockAlertCards } from "@mocks/requirements/requirements.mock";
+import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
 
 import { GeneralInformationForm } from "./forms/GeneralInformationForm";
 import { IGeneralInformationEntry } from "./forms/GeneralInformationForm/types";
@@ -138,8 +138,10 @@ function RequestEnjoymentUI({
       </AppMenu>
       {isModalOpen && (
         <RequirementsModal
-          alertCards={mockAlertCards}
-          onCloseModal={handleCloseModal}
+          title="Requisitos"
+          buttonLabel="Cerrar"
+          requirements={mockRequirements}
+          handleClose={handleCloseModal}
         />
       )}
     </>

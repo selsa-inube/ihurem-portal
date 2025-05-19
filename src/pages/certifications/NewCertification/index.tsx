@@ -1,37 +1,31 @@
 import { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { FormikProps } from "formik";
 
 import { SendRequestModal } from "@components/modals/SendRequestModal";
+import { RequestInfoModal } from "@components/modals/RequestInfoModal";
+import { useErrorFlag } from "@hooks/useErrorFlag";
+import { ICertificationGeneralInformationEntry } from "@ptypes/humanResourcesRequest.types";
+import { useRequestSubmission } from "@hooks/usePostHumanResourceRequest";
 
+import { NewCertificationUI } from "./interface";
 import { newCCertificationApplication } from "./config/assisted.config";
 import { certificationsNavConfig } from "../config/nav.config";
-import { NewCertificationUI } from "./interface";
-import { IGeneralInformationEntry } from "./forms/GeneralInformationForm/types";
-import { RequestInfoModal } from "./modals/RequestInfoModal";
 import { ModalState } from "./types";
 
-function NewCertification() {
-  const navigate = useNavigate();
+function useFormManagement() {
+  const [formValues, setFormValues] =
+    useState<ICertificationGeneralInformationEntry>({
+      id: "",
+      certification: "",
+      addressee: "",
+      observations: "",
+      contractDesc: "",
+      contract: "",
+    });
 
-  const [currentStep, setCurrentStep] = useState(1);
-  const [formValues, setFormValues] = useState<IGeneralInformationEntry>({
-    id: "",
-    certification: "",
-    addressee: "",
-    observations: "",
-    contractDesc: "",
-    contract: "",
-  });
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
-
-  const [modalState, setModalState] = useState<ModalState>({
-    isSendModalVisible: false,
-    isRequestInfoModalVisible: false,
-  });
-
   const generalInformationRef =
-    useRef<FormikProps<IGeneralInformationEntry>>(null);
+    useRef<FormikProps<ICertificationGeneralInformationEntry>>(null);
 
   const updateFormValues = () => {
     if (generalInformationRef.current) {
@@ -39,6 +33,80 @@ function NewCertification() {
       setIsCurrentFormValid(generalInformationRef.current.isValid);
     }
   };
+
+  return {
+    formValues,
+    isCurrentFormValid,
+    setIsCurrentFormValid,
+    generalInformationRef,
+    updateFormValues,
+  };
+}
+
+function useModalManagement() {
+  const [modalState, setModalState] = useState<ModalState>({
+    isSendModalVisible: false,
+    isRequestInfoModalVisible: false,
+  });
+
+  const openSendModal = () =>
+    setModalState((prev) => ({ ...prev, isSendModalVisible: true }));
+  const closeSendModal = () =>
+    setModalState((prev) => ({ ...prev, isSendModalVisible: false }));
+  const openInfoModal = () =>
+    setModalState({
+      isSendModalVisible: false,
+      isRequestInfoModalVisible: true,
+    });
+  const closeInfoModal = () =>
+    setModalState((prev) => ({ ...prev, isRequestInfoModalVisible: false }));
+
+  return {
+    modalState,
+    openSendModal,
+    closeSendModal,
+    openInfoModal,
+    closeInfoModal,
+  };
+}
+
+function NewCertification() {
+  const [currentStep, setCurrentStep] = useState(1);
+
+  const {
+    formValues,
+    isCurrentFormValid,
+    setIsCurrentFormValid,
+    generalInformationRef,
+    updateFormValues,
+  } = useFormManagement();
+
+  const {
+    modalState,
+    openSendModal,
+    closeSendModal,
+    openInfoModal,
+    closeInfoModal,
+  } = useModalManagement();
+
+  const userCodeInCharge = "User 1";
+  const userNameInCharge = "Johan Daniel Garcia Nova";
+
+  const {
+    requestNum,
+    submitRequestHandler,
+    navigateAfterSubmission,
+    showErrorFlag,
+    errorMessage,
+    setShowErrorFlag,
+  } = useRequestSubmission(
+    formValues,
+    "certifications",
+    userCodeInCharge,
+    userNameInCharge,
+  );
+
+  useErrorFlag(showErrorFlag, errorMessage, "Error", false, 10000);
 
   const handleNextStep = () => {
     if (currentStep < newCCertificationApplication.length) {
@@ -54,23 +122,24 @@ function NewCertification() {
   };
 
   const handleFinishAssisted = () => {
-    setModalState((prev) => ({ ...prev, isSendModalVisible: true }));
+    openSendModal();
   };
 
-  const handleCloseSendModal = () => {
-    setModalState((prev) => ({ ...prev, isSendModalVisible: false }));
-  };
+  const handleConfirmSendModal = async () => {
+    setShowErrorFlag(false);
+    const isSuccess = await submitRequestHandler();
 
-  const handleConfirmSendModal = () => {
-    setModalState({
-      isSendModalVisible: false,
-      isRequestInfoModalVisible: true,
-    });
+    if (isSuccess) {
+      closeSendModal();
+      openInfoModal();
+    } else {
+      closeSendModal();
+    }
   };
 
   const handleSubmitRequestInfoModal = () => {
-    setModalState((prev) => ({ ...prev, isRequestInfoModalVisible: false }));
-    navigate("/certifications");
+    closeInfoModal();
+    navigateAfterSubmission("certifications");
   };
 
   const {
@@ -96,20 +165,19 @@ function NewCertification() {
         generalInformationRef={generalInformationRef}
         initialGeneralInformationValues={formValues}
       />
-
       {modalState.isSendModalVisible && (
         <SendRequestModal
           descriptionText="¿Realmente deseas enviar la solicitud de certificación?"
           onSubmitButtonClick={handleConfirmSendModal}
-          onCloseModal={handleCloseSendModal}
-          onSecondaryButtonClick={handleCloseSendModal}
+          onCloseModal={closeSendModal}
+          onSecondaryButtonClick={closeSendModal}
         />
       )}
 
       {modalState.isRequestInfoModalVisible && (
         <RequestInfoModal
-          requestId="#45678822"
-          staffName="Nombre Nombre Apellido Apellido"
+          requestId={requestNum}
+          staffName={userNameInCharge ?? ""}
           onCloseModal={handleSubmitRequestInfoModal}
           onSubmitButtonClick={handleSubmitRequestInfoModal}
         />
