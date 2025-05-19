@@ -1,22 +1,19 @@
-import { MdDeleteOutline, MdOutlineRemoveRedEye } from "react-icons/md";
+import { MdAdd } from "react-icons/md";
+
 import { IAction } from "./type";
 
 export const Actions = (
-  onClickDetails?: () => void,
-  onClickEliminate?: () => void,
+  disableEnjoyment?: boolean,
+  onRequestEnjoyment?: () => void,
 ): IAction[] => {
   return [
     {
-      icon: <MdOutlineRemoveRedEye />,
-      appearance: "dark",
-      label: "Detalles",
-      onClick: onClickDetails,
-    },
-    {
-      icon: <MdDeleteOutline />,
-      appearance: "danger",
-      label: "Eliminar",
-      onClick: onClickEliminate,
+      id: "enjoyment",
+      icon: <MdAdd />,
+      appearance: "primary",
+      label: "Agregar solicitud",
+      onClick: onRequestEnjoyment,
+      isDisabled: disableEnjoyment ?? false,
     },
   ];
 };

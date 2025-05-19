@@ -7,14 +7,10 @@ import { StyledContainer } from "./styles";
 import { alerts } from "./config/alertConfig";
 
 interface AlertCardContainerProps {
-  handlePreviousStep: () => void;
   handleNextStep: () => void;
 }
 
-const AlertCardStep = ({
-  handlePreviousStep,
-  handleNextStep,
-}: AlertCardContainerProps) => {
+const AlertCardStep = ({ handleNextStep }: AlertCardContainerProps) => {
   const isMobile = useMediaQuery("(max-width: 700px)");
 
   return (
@@ -25,13 +21,6 @@ const AlertCardStep = ({
         ))}
       </StyledContainer>
       <Stack justifyContent="flex-end" gap={spacing.s100}>
-        <Button
-          appearance="gray"
-          variant="outlined"
-          onClick={handlePreviousStep}
-        >
-          Anterior
-        </Button>
         <Button appearance="primary" onClick={handleNextStep}>
           Siguiente
         </Button>

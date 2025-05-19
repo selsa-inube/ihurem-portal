@@ -1,13 +1,16 @@
 export interface ICertificationsTable {
-  description: CertificationsTableField<string>;
+  requestId?: string;
+  requestNumber: CertificationsTableField<string>;
   date: CertificationsTableField<string>;
   status: CertificationsTableField<string>;
+  dataDetails: CertificationsTableField<object>;
   details: CertificationsTableDetails;
   delete: CertificationsTableAction;
-  type?: CertificationsTableField<string>;
+  type: CertificationsTableField<string>;
   mobileActions?: CertificationsTableField<JSX.Element>;
 }
-interface CertificationsTableField<T> {
+
+export interface CertificationsTableField<T> {
   value: T;
 }
 
@@ -21,4 +24,10 @@ interface CertificationsTableAction
   extends CertificationsTableField<string | number | JSX.Element> {
   type?: "icon" | "text" | "toggle" | "custom";
   onClick?: () => void;
+}
+
+export interface CertificationsTableDataDetails {
+  addressee: string;
+  contract: string;
+  description: string;
 }

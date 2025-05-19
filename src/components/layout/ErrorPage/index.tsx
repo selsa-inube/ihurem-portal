@@ -7,9 +7,10 @@ import {
   useMediaQueries,
 } from "@inubekit/inubekit";
 
-import { spacing } from "@design/tokens/spacing/spacing.ts";
+import { spacing } from "@design/tokens/spacing/spacing";
 import selsaLogo from "@assets/images/logoInube.png";
 import errorImage from "@assets/images/img-team-building-68.png";
+import { errorCodes } from "@config/errorCodes.tsx";
 
 import {
   StyledCompanyLogo,
@@ -21,19 +22,16 @@ import {
   StyledContainer,
   StyledDiv,
 } from "./styles";
-import { environment } from "@config/environment.ts";
-import { errorCodes } from "@config/errorCodes.tsx";
 
 interface ErrorPageProps {
   logo?: string;
   logoAlt?: string;
   heading?: string;
-  description?: string;
   image?: string;
   imageAlt?: string;
   nameButton?: string;
-  onClick?: () => void;
   errorCode?: number;
+  onClick?: () => void;
 }
 
 const ListContent = ({ items }: { items: string[] }) => (
@@ -52,22 +50,22 @@ function ErrorPage(props: ErrorPageProps) {
     image = errorImage,
     imageAlt = "Ha surgido un error. Revisa la descripción",
     nameButton = "Regresar",
-    onClick,
     errorCode = 0,
+    onClick,
   } = props;
 
   const mediaQueries = ["(max-width: 600px)"];
   const matches = useMediaQueries(mediaQueries);
-  const queriesMatches = matches["(max-width: 600px)"];
+  const isMobile = matches["(max-width: 600px)"];
 
-  const errorDetail = errorCodes[errorCode] || {
+  const errorDetail = errorCodes[errorCode] ?? {
     whatWentWrong: ["No se proporcionó información sobre el error."],
     howToFix: ["Intenta nuevamente más tarde."],
   };
 
   return (
     <StyledContainer>
-      <StyledMainContent>
+      <StyledMainContent $isMobile={isMobile}>
         <Stack justifyContent="center">
           <Stack
             gap={spacing.s800}
@@ -75,26 +73,25 @@ function ErrorPage(props: ErrorPageProps) {
             alignItems="center"
             width="100%"
           >
-            <Stack width="90%">
+            <Stack width="100%">
               <StyledCompanyLogo
                 src={logo}
                 alt={logoAlt}
-                width={queriesMatches ? "40px" : "54px"}
-                height={queriesMatches ? "40px" : "54px"}
+                width={isMobile ? "40px" : "54px"}
+                height={isMobile ? "40px" : "54px"}
               />
             </Stack>
-
             <Stack direction="column" alignItems="center">
               <Stack
                 direction="column"
                 alignItems="center"
-                gap={queriesMatches ? spacing.s300 : spacing.s400}
+                gap={isMobile ? spacing.s300 : spacing.s400}
               >
                 <Text
                   type="headline"
                   textAlign="center"
                   weight="bold"
-                  size={queriesMatches ? "small" : "large"}
+                  size={isMobile ? "small" : "large"}
                 >
                   {heading}
                 </Text>
@@ -105,15 +102,14 @@ function ErrorPage(props: ErrorPageProps) {
                 <StyledErrorImage
                   src={image}
                   alt={imageAlt}
-                  width={queriesMatches ? "180px" : "256px"}
-                  height={queriesMatches ? "160px" : "240px"}
+                  width={isMobile ? "180px" : "256px"}
+                  height={isMobile ? "160px" : "240px"}
                 />
               </Stack>
             </Stack>
-
-            <StyledCertificationsContainer $isMobile={queriesMatches}>
+            <StyledCertificationsContainer $isMobile={isMobile}>
               <Stack
-                direction={queriesMatches ? "column" : "row"}
+                direction={isMobile ? "column" : "row"}
                 gap={spacing.s400}
                 justifyContent="space-between"
                 width="100%"
@@ -126,10 +122,8 @@ function ErrorPage(props: ErrorPageProps) {
                     <ListContent items={errorDetail.whatWentWrong} />
                   </StyledDiv>
                 </Stack>
-
-                <VerticalDivider $isVertical={!queriesMatches} />
-                {queriesMatches && <Divider dashed />}
-
+                <VerticalDivider $isVertical={!isMobile} />
+                {isMobile && <Divider dashed />}
                 <Stack direction="column" gap={spacing.s300} width="100%">
                   <Text type="headline" size="medium" weight="bold">
                     ¿Cómo solucionarlo?
@@ -140,14 +134,8 @@ function ErrorPage(props: ErrorPageProps) {
                   <Stack justifyContent="center">
                     <Button
                       appearance="primary"
-                      spacing="wide"
-                      variant="filled"
-                      fullwidth={queriesMatches}
-                      onClick={() =>
-                        onClick
-                          ? onClick()
-                          : window.open(environment.REDIRECT_URI, "_self")
-                      }
+                      fullwidth={isMobile}
+                      onClick={onClick}
                     >
                       {nameButton}
                     </Button>
