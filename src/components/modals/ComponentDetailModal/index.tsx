@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Icon,
   Text,
@@ -184,6 +185,8 @@ function RequestComponentDetail(props: RequestComponentDetailProps) {
                     id={requirement.id}
                     titles={requirement.titles}
                     entries={requirement.entries}
+                    actions={[]}
+                    actionMobile={[]}
                     actionMobileIcon={getActionsMobileIcon()}
                     appearanceTable={{
                       widthTd: "75%",
