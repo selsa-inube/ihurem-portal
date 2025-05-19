@@ -63,6 +63,8 @@ export interface IAppContextType {
   setBusinessUnit: React.Dispatch<
     React.SetStateAction<IBusinessUnitsPortalEmployee>
   >;
+  selectedClient: IClient | null;
+  setSelectedClient: React.Dispatch<React.SetStateAction<IClient | null>>;
   employees: IEmployee;
   setEmployees: React.Dispatch<React.SetStateAction<IEmployee>>;
 
