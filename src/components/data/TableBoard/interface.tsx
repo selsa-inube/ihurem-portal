@@ -242,6 +242,9 @@ export const TableBoardUI = (props: ITableBoardUIProps) => {
                       </Stack>
                     </StyledTd>
                   ))}
+                  {isTablet &&
+                    appearanceTable!.isStyleMobile &&
+                    isFirstTable && <StyledTdactions $isTablet={isTablet} />}
                   {actions && (
                     <Actions
                       actions={actions}
