@@ -14,7 +14,6 @@ import { GlobalStyles } from "@styles/global";
 import { pathStart } from "@config/nav.config";
 import { environment } from "@config/environment";
 import { HolidaysRoutes } from "@routes/holidays";
-import { RegisterRoutes } from "@routes/register";
 import { AppPage } from "@components/layout/AppPage";
 import { usePortalData } from "@hooks/usePortalData";
 import { ErrorPage } from "@components/layout/ErrorPage";
@@ -49,14 +48,13 @@ function FirstPage() {
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="welcome/*" element={<LoginRoutes />} />
+      <Route path="/login/*" element={<LoginRoutes />} />
       <Route path="/*" element={<FirstPage />} errorElement={<ErrorPage />} />
       <Route path="/*" element={<AppPage />}>
         <Route path="holidays/*" element={<HolidaysRoutes />} />
         <Route path="certifications/*" element={<CertificationsRoutes />} />
       </Route>
       <Route path="logout" element={<LogOut />} />
-      <Route path="/signin/*" element={<RegisterRoutes />} />
     </>,
   ),
 );
