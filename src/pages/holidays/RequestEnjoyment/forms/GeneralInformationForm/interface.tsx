@@ -7,14 +7,14 @@ import {
   useMediaQuery,
   Text,
 } from "@inubekit/inubekit";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { FormikProps } from "formik";
 import * as Yup from "yup";
+import { IOption } from "@inubekit/inubekit";
 
 import { isRequired, getFieldState } from "@utils/forms/forms";
 import { spacing } from "@design/tokens/spacing/spacing";
 import { useAppContext } from "@context/AppContext";
-import { IOption } from "@inubekit/inubekit";
 import { useDayOptions } from "@hooks/useDayOptions";
 
 import { IGeneralInformationEntry } from "./types";
@@ -44,74 +44,79 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
     handlePreviousStep,
     handleNextStep,
   } = props;
-
   const isMobile = useMediaQuery("(max-width: 700px)");
   const { selectedEmployee } = useAppContext();
 
-  const [selectedYear, setSelectedYear] = useState("");
-  const [selectedMonth, setSelectedMonth] = useState("");
   const [yearOptions, setYearOptions] = useState<IOption[]>([]);
   const [monthOptions, setMonthOptions] = useState<IOption[]>([]);
+  const [selectedYear, setSelectedYear] = useState("");
+  const [selectedMonth, setSelectedMonth] = useState("");
+  const { dayOptions, selectedDay, setSelectedDay } = useDayOptions(
+    selectedYear,
+    selectedMonth,
+    "",
+  );
 
   const contractOptions = useMemo(
     () =>
-      (selectedEmployee?.employmentContracts ?? []).map((c) => ({
+      (selectedEmployee.employmentContracts ?? []).map((c) => ({
         id: c.contractId,
         value: `${c.businessName} - ${c.contractType}`,
         label: `${c.businessName} - ${c.contractType}`,
       })),
-    [selectedEmployee?.employmentContracts],
+    [selectedEmployee.employmentContracts],
   );
 
   useEffect(() => {
     const currentYear = new Date().getFullYear();
-    setYearOptions(
-      [currentYear, currentYear + 1].map((year) => ({
-        id: String(year),
-        value: String(year),
-        label: String(year),
-      })),
-    );
-
-    if (formik.values.startDate) {
-      const [monthName, year] = formik.values.startDate.split("/");
-      setSelectedYear(year);
-      setSelectedMonth(String(monthAbbr.indexOf(monthName)));
-    }
+    const opts = [currentYear, currentYear + 1].map((y) => ({
+      id: String(y),
+      value: String(y),
+      label: String(y),
+    }));
+    setYearOptions(opts);
   }, []);
+
+  useEffect(() => {
+    const sd = formik.values.startDate;
+    if (sd) {
+      const [d, mName, y] = sd.split("/");
+      const mIdx = monthAbbr.indexOf(mName);
+      setSelectedYear(y);
+      setSelectedMonth(String(mIdx));
+      setSelectedDay(d);
+    }
+  }, [formik.values.startDate, setSelectedDay]);
 
   useEffect(() => {
     if (!selectedYear) {
       setMonthOptions([]);
+
       return;
     }
     const current = new Date();
+    const yearNum = parseInt(selectedYear, 10);
     const available =
-      parseInt(selectedYear, 10) > current.getFullYear()
+      yearNum > current.getFullYear()
         ? MONTH_OPTIONS
         : MONTH_OPTIONS.filter((_, idx) => idx >= current.getMonth());
     setMonthOptions(available);
-    setSelectedMonth("");
   }, [selectedYear]);
 
-  const { dayOptions, selectedDay, setSelectedDay } = useDayOptions(
-    selectedYear,
-    selectedMonth,
-    formik.values.startDate.split("/")[0] || "",
-  );
-
   useEffect(() => {
-    const formattedDate =
-      selectedYear && selectedMonth && selectedDay
-        ? `${selectedDay}/${monthAbbr[parseInt(selectedMonth, 10)]}/${selectedYear}`
-        : "";
-    formik.setFieldValue("startDate", formattedDate);
-  }, [selectedDay, selectedMonth, selectedYear]);
+    if (selectedYear && selectedMonth && selectedDay) {
+      const formatted = `${selectedDay}/${monthAbbr[parseInt(selectedMonth, 10)]}/${selectedYear}`;
+      formik.setFieldValue("startDate", formatted);
+    } else {
+      formik.setFieldValue("startDate", "");
+    }
+  }, [selectedYear, selectedMonth, selectedDay]);
 
   useEffect(() => {
     if (contractOptions.length === 1 && !formik.values.contract) {
-      formik.setFieldValue("contract", contractOptions[0].value);
-      formik.setFieldValue("contractDesc", contractOptions[0].label);
+      const opt = contractOptions[0];
+      formik.setFieldValue("contract", opt.value);
+      formik.setFieldValue("contractDesc", opt.label);
     }
   }, [contractOptions]);
 
@@ -120,7 +125,7 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
       <Stack direction="column" gap={isMobile ? spacing.s300 : spacing.s400}>
         <StyledContainer $isMobile={isMobile}>
           <Stack direction="column" width="100%" gap={spacing.s200}>
-            <Stack direction={isMobile ? "column" : "row"} gap={spacing.s250}>
+            <Stack direction={isMobile ? "column" : "row"} gap={spacing.s200}>
               <Textfield
                 label="Días de disfrute"
                 placeholder="Ej: 2"
@@ -155,7 +160,7 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
                     value={selectedYear}
                     disabled={loading}
                     size="compact"
-                    onChange={(_, value) => setSelectedYear(value)}
+                    onChange={(_, v) => setSelectedYear(v)}
                     required={isRequired(props.validationSchema, "startDate")}
                   />
                   <Select
@@ -166,7 +171,7 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
                     value={selectedMonth}
                     disabled={!selectedYear || loading}
                     size="compact"
-                    onChange={(_, value) => setSelectedMonth(value)}
+                    onChange={(_, v) => setSelectedMonth(v)}
                     required={isRequired(props.validationSchema, "startDate")}
                   />
                   <Select
@@ -178,7 +183,7 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
                     disabled={!selectedMonth || !selectedYear || loading}
                     message={formik.errors.startDate}
                     size="compact"
-                    onChange={(_, value) => setSelectedDay(value)}
+                    onChange={(_, v) => setSelectedDay(v)}
                     required={isRequired(props.validationSchema, "startDate")}
                   />
                 </StyledDateContainer>
@@ -195,12 +200,11 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
                 disabled={loading}
                 size="compact"
                 fullwidth
-                onChange={(_, value) => {
-                  formik.setFieldValue("contract", value);
-                  formik.setFieldValue(
-                    "contractDesc",
-                    contractOptions.find((o) => o.value === value)?.label ?? "",
-                  );
+                onChange={(_, v) => {
+                  formik.setFieldValue("contract", v);
+                  const lbl =
+                    contractOptions.find((o) => o.value === v)?.label ?? "";
+                  formik.setFieldValue("contractDesc", lbl);
                 }}
                 required={isRequired(props.validationSchema, "contract")}
               />
