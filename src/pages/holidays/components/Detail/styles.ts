@@ -5,6 +5,7 @@ interface IStyledDetail {
   theme: typeof inube;
   $isMobile?: boolean;
   $showTabs?: boolean;
+  $isUsedDaysTab?: boolean;
 }
 
 const StyledDetail = styled.div<IStyledDetail>`
@@ -12,7 +13,12 @@ const StyledDetail = styled.div<IStyledDetail>`
   position: relative;
   height: 0px;
   z-index: 1;
-  top: ${({ $showTabs }) => ($showTabs ? "-150px" : "-90px")};
+  top: ${({ $showTabs, $isUsedDaysTab }) => {
+    if ($isUsedDaysTab) {
+      return $showTabs ? "-179px" : "-130px";
+    }
+    return $showTabs ? "-135px" : "-130px";
+  }};
 `;
 
 export { StyledDetail };

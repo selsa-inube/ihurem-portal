@@ -1,7 +1,7 @@
 const generalInformationRequiredFields = {
   daysToPay: true,
-  contract: true,
-  observations: true,
+  contract: false,
+  observations: false,
 };
 
 export { generalInformationRequiredFields };

@@ -1,15 +1,13 @@
-import { ReactNode } from "react";
 import { Text, Grid, Stack, useMediaQuery } from "@inubekit/inubekit";
 
 import { spacing } from "@design/tokens/spacing/spacing";
 
-import { IAttribute } from "./types";
 import { ButtonAttribute } from "./ButtonAttribute";
 import { StyledBoxAttribute } from "./styles";
 
 interface BoxAttributeProps {
   label?: string;
-  value?: number | string | IAttribute[] | ReactNode;
+  value?: string;
   withButton?: boolean;
   buttonIcon?: React.JSX.Element;
   buttonValue?: string | number;
@@ -57,7 +55,7 @@ function BoxAttribute(props: BoxAttributeProps) {
           </Text>
         )}
 
-        {(withButton ?? String(value)) && (
+        {(withButton ?? value) && (
           <Stack
             alignItems="center"
             justifyContent={
@@ -75,13 +73,13 @@ function BoxAttribute(props: BoxAttributeProps) {
               value && (
                 <Text
                   type="body"
-                  size={isMobile || downloadable ? "small" : "medium"}
+                  size="medium"
                   appearance="gray"
                   textAlign={
                     direction === "column" || iconAfter ? "start" : "end"
                   }
                 >
-                  {String(value)}
+                  {value}
                 </Text>
               )
             )}

@@ -14,7 +14,7 @@ const StyledAlertCard = styled.div<IStyledContainer>`
     theme?.palette?.neutral?.N10 || inube.palette.neutral.N10};
   border: 1px solid
     ${({ theme }) =>
-      theme?.palette?.neutral?.N300 || inube.palette.neutral.N300};
+      theme?.palette?.neutral?.N200 || inube.palette.neutral.N200};
 `;
 
 export { StyledAlertCard };

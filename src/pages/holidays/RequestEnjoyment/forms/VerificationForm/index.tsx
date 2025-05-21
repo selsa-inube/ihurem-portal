@@ -22,7 +22,7 @@ function VerificationForm(props: VerificationFormProps) {
   const isTablet = useMediaQuery("(max-width: 1224px)");
 
   return (
-    <Stack direction="column" gap={spacing.s300}>
+    <Stack direction="column" gap={isTablet ? spacing.s200 : spacing.s300}>
       {requestEnjoymentSteps
         .filter((step) => step.name.toLowerCase() !== "verificación")
         .map((step) => (

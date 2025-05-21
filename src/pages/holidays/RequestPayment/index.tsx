@@ -174,9 +174,7 @@ function RequestPayment() {
       {modalState.isSendModalVisible && (
         <SendRequestModal
           descriptionText="¿Realmente deseas enviar la solicitud de pago?"
-          onSubmitButtonClick={() => {
-            handleConfirmSendModal();
-          }}
+          onSubmitButtonClick={handleConfirmSendModal}
           onCloseModal={closeSendModal}
           onSecondaryButtonClick={closeSendModal}
         />

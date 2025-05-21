@@ -8,10 +8,10 @@ const StyledAppMenu = styled.div`
   box-sizing: border-box;
   width: 100%;
   padding: ${spacing.s400} ${spacing.s800};
-  gap: ${spacing.s300};
+  gap: ${spacing.s200};
 
   @media (max-width: 490px) {
-    padding: ${spacing.s200};
+    padding: ${spacing.s100} ${spacing.s200};
   }
 `;
 

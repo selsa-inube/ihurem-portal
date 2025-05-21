@@ -165,9 +165,7 @@ function RequestEnjoyment() {
       {modalState.isSendModalVisible && (
         <SendRequestModal
           descriptionText="¿Realmente deseas enviar la solicitud de vacaciones?"
-          onSubmitButtonClick={() => {
-            handleConfirmSendModal();
-          }}
+          onSubmitButtonClick={handleConfirmSendModal}
           onCloseModal={closeSendModal}
           onSecondaryButtonClick={closeSendModal}
         />

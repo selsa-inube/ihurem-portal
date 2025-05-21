@@ -30,7 +30,7 @@ const holidaysNavConfig = [
       },
       {
         path: "/holidays",
-        label: "Vacaciones",
+        label: "...",
         id: "/holidays",
         isActive: false,
       },
@@ -55,7 +55,7 @@ const holidaysNavConfig = [
       },
       {
         path: "/holidays",
-        label: "Vacaciones",
+        label: "...",
         id: "/holidays",
         isActive: false,
       },

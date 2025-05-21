@@ -26,7 +26,7 @@ const StyledMain = styled.main`
   box-sizing: border-box;
   width: 100%;
   max-width: 1192px;
-  padding-bottom: ${spacing.s600};
+  padding-bottom: ${spacing.s100};
 `;
 
 const StyledMainScroll = styled.main`
@@ -35,7 +35,6 @@ const StyledMainScroll = styled.main`
   align-items: center;
   overflow-y: auto;
   width: 100%;
-  height: calc(100vh - 54px);
 `;
 const StyledContentImg = styled(Link)`
   width: 100px;

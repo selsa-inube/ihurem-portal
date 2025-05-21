@@ -94,7 +94,62 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
     />
   );
 
-  const renderActions = () =>
+  const renderActionButtons = () => (
+    <>
+      <Stack gap={spacing.s025} alignItems="center">
+        <Button
+          spacing="wide"
+          variant="filled"
+          iconBefore={<MdAdd />}
+          fullwidth={isMobile}
+          disabled={!hasActiveContract || !hasEnjoymentPrivilege}
+          onClick={
+            hasActiveContract && hasEnjoymentPrivilege
+              ? handleRequestEnjoyment
+              : undefined
+          }
+        >
+          Solicitar disfrute
+        </Button>
+        {(!hasActiveContract || !hasEnjoymentPrivilege) && (
+          <Icon
+            icon={<MdOutlineInfo />}
+            appearance="primary"
+            size="16px"
+            cursorHover
+            onClick={() => onOpenInfoModal(actionDescriptions.enjoyment)}
+          />
+        )}
+      </Stack>
+      <Stack gap={spacing.s025} alignItems="center">
+        <Button
+          spacing="wide"
+          variant="filled"
+          iconBefore={<MdAdd />}
+          fullwidth={isMobile}
+          disabled={!hasActiveContract || !hasPaymentPrivilege}
+          onClick={
+            hasActiveContract && hasPaymentPrivilege
+              ? handleRequestPayment
+              : undefined
+          }
+        >
+          Solicitar pago
+        </Button>
+        {(!hasActiveContract || !hasPaymentPrivilege) && (
+          <Icon
+            icon={<MdOutlineInfo />}
+            appearance="primary"
+            size="16px"
+            cursorHover
+            onClick={() => onOpenInfoModal(actionDescriptions.payment)}
+          />
+        )}
+      </Stack>
+    </>
+  );
+
+  const renderDaysUsedActions = () =>
     isMobile ? (
       <Stack direction="column" gap={spacing.s150}>
         {pendingDaysWidget}
@@ -103,6 +158,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
           disablePayment={!hasPaymentPrivilege || !hasActiveContract}
           actionDescriptions={actionDescriptions}
           showTabs={tableData && tableData.length > 0}
+          isUsedDaysTab={true}
           onRequestEnjoyment={handleRequestEnjoyment}
           onRequestPayment={handleRequestPayment}
           onInfoIconClick={onOpenInfoModal}
@@ -111,56 +167,27 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
     ) : (
       <Stack gap={spacing.s150} justifyContent="end" direction="row">
         {pendingDaysWidget}
-        <Stack gap={spacing.s025} alignItems="center">
-          <Button
-            spacing="wide"
-            variant="filled"
-            iconBefore={<MdAdd />}
-            fullwidth={isMobile}
-            disabled={!hasActiveContract || !hasEnjoymentPrivilege}
-            onClick={
-              hasActiveContract && hasEnjoymentPrivilege
-                ? handleRequestEnjoyment
-                : undefined
-            }
-          >
-            Solicitar disfrute
-          </Button>
-          {(!hasActiveContract || !hasEnjoymentPrivilege) && (
-            <Icon
-              icon={<MdOutlineInfo />}
-              appearance="primary"
-              size="16px"
-              cursorHover
-              onClick={() => onOpenInfoModal(actionDescriptions.enjoyment)}
-            />
-          )}
-        </Stack>
-        <Stack gap={spacing.s025} alignItems="center">
-          <Button
-            spacing="wide"
-            variant="filled"
-            iconBefore={<MdAdd />}
-            fullwidth={isMobile}
-            disabled={!hasActiveContract || !hasPaymentPrivilege}
-            onClick={
-              hasActiveContract && hasPaymentPrivilege
-                ? handleRequestPayment
-                : undefined
-            }
-          >
-            Solicitar pago
-          </Button>
-          {(!hasActiveContract || !hasPaymentPrivilege) && (
-            <Icon
-              icon={<MdOutlineInfo />}
-              appearance="primary"
-              size="16px"
-              cursorHover
-              onClick={() => onOpenInfoModal(actionDescriptions.payment)}
-            />
-          )}
-        </Stack>
+        {renderActionButtons()}
+      </Stack>
+    );
+
+  const renderHolidaysTableActions = () =>
+    isMobile ? (
+      <Stack direction="column" gap={spacing.s150}>
+        <Detail
+          disableEnjoyment={!hasEnjoymentPrivilege || !hasActiveContract}
+          disablePayment={!hasPaymentPrivilege || !hasActiveContract}
+          actionDescriptions={actionDescriptions}
+          showTabs={tableData && tableData.length > 0}
+          isUsedDaysTab={false}
+          onRequestEnjoyment={handleRequestEnjoyment}
+          onRequestPayment={handleRequestPayment}
+          onInfoIconClick={onOpenInfoModal}
+        />
+      </Stack>
+    ) : (
+      <Stack gap={spacing.s150} justifyContent="end" direction="row">
+        {renderActionButtons()}
       </Stack>
     );
 
@@ -170,9 +197,27 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
         <Text type="title" size="medium">
           Consulta de días utilizados
         </Text>
-        {renderActions()}
+        {renderDaysUsedActions()}
       </Stack>
       <DaysUsedTable data={daysUsedMock} />
+    </StyledHolidaysContainer>
+  );
+
+  const renderHolidaysTableContent = () => (
+    <StyledHolidaysContainer $isMobile={isMobile}>
+      <Stack alignItems="center" justifyContent="space-between">
+        <Text type="title" size="medium">
+          Solicitudes en trámite
+        </Text>
+        {renderHolidaysTableActions()}
+      </Stack>
+      <HolidaysTable
+        data={tableData}
+        loading={isLoading}
+        hasViewDetailsPrivilege
+        hasDeletePrivilege
+        handleDeleteRequest={handleDeleteRequest}
+      />
     </StyledHolidaysContainer>
   );
 
@@ -187,33 +232,17 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
         {!tableData || tableData.length === 0 ? (
           renderDaysUsedContent()
         ) : (
-          <Stack direction="column" gap={spacing.s300}>
+          <>
             <Tabs
               tabs={tabs}
               selectedTab={selectedTab}
               onChange={(tabId) => setSelectedTab(tabId)}
               scroll={false}
             />
-            {selectedTab === "solicitudes" ? (
-              <StyledHolidaysContainer $isMobile={isMobile}>
-                <Stack alignItems="center" justifyContent="space-between">
-                  <Text type="title" size="medium">
-                    Solicitudes en trámite
-                  </Text>
-                  {isMobile && renderActions()}
-                </Stack>
-                <HolidaysTable
-                  data={tableData}
-                  loading={isLoading}
-                  hasViewDetailsPrivilege
-                  hasDeletePrivilege
-                  handleDeleteRequest={handleDeleteRequest}
-                />
-              </StyledHolidaysContainer>
-            ) : (
-              renderDaysUsedContent()
-            )}
-          </Stack>
+            {selectedTab === "solicitudes"
+              ? renderHolidaysTableContent()
+              : renderDaysUsedContent()}
+          </>
         )}
       </AppMenu>
       {infoModal.open && (

@@ -3,8 +3,8 @@ import { MdOutlineVisibility, MdDeleteOutline } from "react-icons/md";
 import {
   EStatus,
   EType,
-  IVacationGeneralInformationEntry,
   HumanResourceRequest,
+  IVacationGeneralInformationEntry,
 } from "@ptypes/humanResourcesRequest.types";
 import { formatDate } from "@utils/date";
 import { IDaysUsedTable } from "../components/DaysUsedTable/types";
