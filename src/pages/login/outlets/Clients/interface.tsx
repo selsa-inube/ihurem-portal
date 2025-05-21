@@ -11,7 +11,7 @@ function ClientsUI() {
           connection: "google-oauth2",
         },
         appState: {
-          returnTo: "/*",
+          returnTo: "/",
         },
       }).catch((error) => {
         console.error("Error al intentar iniciar sesión:", error);

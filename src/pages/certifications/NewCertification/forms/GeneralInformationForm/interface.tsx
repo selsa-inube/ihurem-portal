@@ -10,7 +10,6 @@ import {
   useMediaQuery,
 } from "@inubekit/inubekit";
 
-import { isRequired } from "@utils/forms/forms";
 import { getFieldState } from "@utils/forms/forms";
 import { spacing } from "@design/tokens/spacing/spacing";
 import { useAppContext } from "@context/AppContext/useAppContext";
@@ -37,7 +36,6 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
     formik,
     loading,
     withNextButton,
-    validationSchema,
     handleNextStep,
     handlePreviousStep,
   } = props;
@@ -78,7 +76,6 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
               size="compact"
               label="Tipo de certificación"
               fullwidth={true}
-              required
               options={certificationOptions}
               placeholder="Selecciona de la lista"
               value={formik.values.certification}
@@ -91,6 +88,7 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
               fullwidth={true}
               id="addressee"
               required
+              counter
               label="Destinatario"
               maxLength={60}
               name="addressee"
@@ -118,11 +116,6 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
                 fullwidth
                 onBlur={formik.handleBlur}
                 onChange={handleContractChange}
-                required={
-                  validationSchema
-                    ? isRequired(validationSchema, "contract")
-                    : false
-                }
               />
             </Stack>
           )}
@@ -138,11 +131,6 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
               status={getFieldState(formik, "observations")}
               message={formik.errors.observations}
               fullwidth
-              required={
-                validationSchema
-                  ? isRequired(validationSchema, "observations")
-                  : false
-              }
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
             />
