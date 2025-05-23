@@ -1,57 +1,41 @@
 import { MdOutlineVisibility, MdDeleteOutline } from "react-icons/md";
 
 import {
-  EStatus,
-  EType,
+  ERequestType,
+  ERequestStatus,
   HumanResourceRequest,
-  IVacationGeneralInformationEntry,
 } from "@ptypes/humanResourcesRequest.types";
 import { formatDate } from "@utils/date";
+import { parseDataSafely, getValueFromData } from "@utils/parser";
+
 import { IDaysUsedTable } from "../components/DaysUsedTable/types";
-
-import { VacationType } from "./enums";
-
-function isVacationData(
-  data: unknown,
-): data is IVacationGeneralInformationEntry {
-  return (
-    typeof data === "object" &&
-    data !== null &&
-    "startDate" in data &&
-    "daysOff" in data
-  );
-}
 
 export const formatHolidaysData = (holidays: HumanResourceRequest[]) =>
   holidays.map((holiday) => {
-    const isVacation =
-      holiday.humanResourceRequestType === EType.vacations &&
-      isVacationData(holiday.humanResourceRequestData);
+    const parsedData = parseDataSafely(holiday.humanResourceRequestData);
 
-    const vacationData = isVacation
-      ? (holiday.humanResourceRequestData as IVacationGeneralInformationEntry)
-      : null;
+    const daysValue = (getValueFromData(parsedData, "daysToPay", null) ??
+      getValueFromData(parsedData, "daysOff", 0)) as number;
 
     return {
       requestId: holiday.humanResourceRequestId,
       requestNumber: holiday.humanResourceRequestNumber,
       description: {
-        value: vacationData
-          ? VacationType[
-              vacationData.typeOfRequest as keyof typeof VacationType
-            ]
-          : "",
+        value:
+          ERequestType[
+            holiday.humanResourceRequestType as unknown as keyof typeof ERequestType
+          ],
       },
       date: {
         value: formatDate(holiday.humanResourceRequestDate),
       },
       days: {
-        value: isVacation ? Number(vacationData?.daysOff ?? 0) : 0,
+        value: daysValue,
       },
       status: {
         value:
-          EStatus[
-            holiday.humanResourceRequestStatus as unknown as keyof typeof EStatus
+          ERequestStatus[
+            holiday.humanResourceRequestStatus as unknown as keyof typeof ERequestStatus
           ],
       },
       details: {
@@ -70,12 +54,15 @@ export const formatHolidaysData = (holidays: HumanResourceRequest[]) =>
       },
       dataDetails: {
         value: {
-          ...holiday.humanResourceRequestData,
-          startDate:
-            isVacation && vacationData?.startDate
-              ? formatDate(vacationData.startDate)
-              : "",
-          description: holiday.humanResourceRequestDescription,
+          ...parsedData,
+          startDate: getValueFromData(parsedData, "startDate", "")
+            ? formatDate(
+                getValueFromData(parsedData, "startDate", "") as string,
+              )
+            : "",
+          description: getValueFromData(parsedData, "observations", ""),
+          contract: getValueFromData(parsedData, "contract", ""),
+          observations: getValueFromData(parsedData, "observations", ""),
         },
       },
     };

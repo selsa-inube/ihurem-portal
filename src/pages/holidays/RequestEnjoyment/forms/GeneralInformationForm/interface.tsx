@@ -10,11 +10,11 @@ import {
 import { useEffect, useState, useMemo } from "react";
 import { FormikProps } from "formik";
 import * as Yup from "yup";
-import { IOption } from "@inubekit/inubekit";
 
 import { isRequired, getFieldState } from "@utils/forms/forms";
-import { spacing } from "@design/tokens/spacing/spacing";
+import { spacing } from "@design/tokens/spacing";
 import { useAppContext } from "@context/AppContext";
+import { IOption } from "@ptypes/util.type";
 import { useDayOptions } from "@hooks/useDayOptions";
 
 import { IGeneralInformationEntry } from "./types";

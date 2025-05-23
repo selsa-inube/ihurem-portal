@@ -1,7 +1,7 @@
 import { MdClose } from "react-icons/md";
 import { Stack, Text, Icon } from "@inubekit/inubekit";
 
-import { spacing } from "@design/tokens/spacing/spacing";
+import { spacing } from "@design/tokens/spacing";
 
 import { StyledContainer, StyledLi, StyledUl, StyledActions } from "./styles";
 import { Actions } from "./config";

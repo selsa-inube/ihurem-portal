@@ -2,7 +2,7 @@ import { Outlet } from "react-router-dom";
 import { Text, Stack, Grid, Header, useMediaQuery } from "@inubekit/inubekit";
 
 import { AppCard } from "@components/feedback/AppCard";
-import { spacing } from "@design/tokens/spacing/spacing";
+import { spacing } from "@design/tokens/spacing";
 import { userMenu, useConfigHeader, baseNavLinks } from "@config/nav.config";
 import { useAppContext } from "@context/AppContext";
 

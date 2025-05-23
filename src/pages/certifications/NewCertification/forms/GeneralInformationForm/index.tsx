@@ -4,8 +4,8 @@ import { forwardRef, useEffect, useImperativeHandle } from "react";
 
 import { validationMessages } from "@validations/validationMessages";
 import { validationRules } from "@validations/validationRules";
-
 import { generalInformationRequiredFields } from "./config/formConfig";
+
 import { GeneralInformationFormUI } from "./interface";
 import { IGeneralInformationEntry } from "./types";
 

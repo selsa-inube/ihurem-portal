@@ -14,31 +14,26 @@ import { IHolidaysTable } from "./components/HolidaysTable/types";
 function HolidaysOptions() {
   const navigate = useNavigate();
   const location = useLocation();
-  const isMobile = useMediaQuery("(max-width: 1060px)");
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
-  const {
-    data: fetchedData,
-    isLoading,
-    error,
-  } = useHumanResourceRequests<IHolidaysTable>("vacations", formatHolidaysData);
+  const { data: enjoyedData, isLoading: isLoadingEnjoyed } =
+    useHumanResourceRequests<IHolidaysTable>(
+      "VacationsEnjoyed",
+      formatHolidaysData,
+    );
+
+  const { data: paidData, isLoading: isLoadingPaid } =
+    useHumanResourceRequests<IHolidaysTable>(
+      "PaidVacations",
+      formatHolidaysData,
+    );
+
   const [tableData, setTableData] = useState<IHolidaysTable[]>([]);
 
   const hasActiveContract = true;
   const hasEnjoymentPrivilege = true;
   const hasPaymentPrivilege = true;
   const mainNavItem = holidaysNavConfig[0];
-
-  const showError = (message: string) => {
-    navigate(location.pathname, {
-      state: {
-        showFlag: true,
-        flagMessage: message,
-        flagTitle: "Error",
-        isSuccess: false,
-      },
-      replace: true,
-    });
-  };
 
   const handleDeleteRequest = (requestId: string, justification: string) => {
     const request = tableData.find((item) => item.requestId === requestId);
@@ -51,14 +46,11 @@ function HolidaysOptions() {
   });
 
   useEffect(() => {
-    setTableData(fetchedData);
-  }, [fetchedData]);
+    const combined: IHolidaysTable[] = [...enjoyedData, ...paidData];
+    setTableData(combined);
+  }, [enjoyedData, paidData]);
 
-  useEffect(() => {
-    if (error) {
-      showError(error.message);
-    }
-  }, [error]);
+  const isLoading = isLoadingEnjoyed ?? isLoadingPaid;
 
   useEffect(() => {
     if (location.state?.showFlag) {

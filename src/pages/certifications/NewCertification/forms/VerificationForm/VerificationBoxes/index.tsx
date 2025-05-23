@@ -1,7 +1,7 @@
 import { Stack, Grid } from "@inubekit/inubekit";
 
 import { BoxAttribute } from "@components/cards/BoxAttribute";
-import { spacing } from "@design/tokens/spacing/spacing";
+import { spacing } from "@design/tokens/spacing";
 
 import { alerts } from "../../RequirementsForm/config/alertConfig";
 import { IGeneralInformationEntry } from "../../GeneralInformationForm/types";

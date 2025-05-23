@@ -7,7 +7,7 @@ import {
   useMediaQueries,
 } from "@inubekit/inubekit";
 
-import { spacing } from "@design/tokens/spacing/spacing";
+import { spacing } from "@design/tokens/spacing";
 import selsaLogo from "@assets/images/logoInube.png";
 import errorImage from "@assets/images/img-team-building-68.png";
 import { errorCodes } from "@config/errorCodes.tsx";

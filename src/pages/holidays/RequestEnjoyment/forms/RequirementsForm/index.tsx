@@ -2,7 +2,7 @@ import React from "react";
 import { Stack, Button, useMediaQuery } from "@inubekit/inubekit";
 
 import { AlertCard } from "@components/data/AlertCard";
-import { spacing } from "@design/tokens/spacing/spacing";
+import { spacing } from "@design/tokens/spacing";
 
 import { StyledContainer } from "./styles";
 import { alerts } from "./config/alertConfig";

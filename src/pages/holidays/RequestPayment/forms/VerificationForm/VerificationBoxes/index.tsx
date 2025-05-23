@@ -1,7 +1,8 @@
 import { Grid, Stack } from "@inubekit/inubekit";
 
 import { BoxAttribute } from "@components/cards/BoxAttribute";
-import { spacing } from "@design/tokens/spacing/spacing";
+import { spacing } from "@design/tokens/spacing";
+import { useAppContext } from "@context/AppContext";
 
 import { alerts } from "../../RequirementsForm/config/alertConfig";
 import { IFormsUpdateData } from "../../../types";
@@ -10,6 +11,7 @@ import { IGeneralInformationEntry } from "../../GeneralInformationForm/types";
 const renderPersonalInfoVerification = (
   values: IGeneralInformationEntry,
   isTablet: boolean,
+  hasMultipleContracts: boolean,
 ) => (
   <>
     <Grid
@@ -23,11 +25,13 @@ const renderPersonalInfoVerification = (
         value={values.daysToPay}
         direction="column"
       />
-      <BoxAttribute
-        label="Contrato:"
-        value={values.contract}
-        direction="column"
-      />
+      {hasMultipleContracts && (
+        <BoxAttribute
+          label="Contrato:"
+          value={values.contract}
+          direction="column"
+        />
+      )}
     </Grid>
     <Stack width="100%" direction="column">
       <BoxAttribute
@@ -69,6 +73,10 @@ function VerificationBoxes({
   isTablet,
   stepKey,
 }: VerificationBoxesProps) {
+  const { selectedEmployee } = useAppContext();
+
+  const hasMultipleContracts =
+    (selectedEmployee.employmentContracts?.length ?? 0) > 1;
   return (
     <>
       {stepKey === 1 && renderAlerts(isTablet)}
@@ -76,6 +84,7 @@ function VerificationBoxes({
         renderPersonalInfoVerification(
           updatedData.personalInformation.values,
           isTablet,
+          hasMultipleContracts,
         )}
     </>
   );

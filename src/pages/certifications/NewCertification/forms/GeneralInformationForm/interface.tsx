@@ -11,8 +11,8 @@ import {
 } from "@inubekit/inubekit";
 
 import { getFieldState } from "@utils/forms/forms";
-import { spacing } from "@design/tokens/spacing/spacing";
-import { useAppContext } from "@context/AppContext/useAppContext";
+import { spacing } from "@design/tokens/spacing";
+import { useAppContext } from "@context/AppContext";
 import { certificationOptions } from "@pages/certifications/NewCertification/config/assisted.config";
 
 import { StyledContainer } from "./styles";
@@ -42,13 +42,15 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
 
   const { selectedEmployee } = useAppContext();
 
-  const contractOptions = useMemo(() => {
-    return (selectedEmployee?.employmentContracts ?? []).map((c) => ({
-      id: c.contractId,
-      value: `${c.businessName} - ${c.contractType}`,
-      label: `${c.businessName} - ${c.contractType}`,
-    }));
-  }, [selectedEmployee]);
+  const contractOptions = useMemo(
+    () =>
+      (selectedEmployee.employmentContracts ?? []).map((c) => ({
+        id: c.contractId,
+        value: `${c.businessName} - ${c.contractType}`,
+        label: `${c.businessName} - ${c.contractType}`,
+      })),
+    [selectedEmployee.employmentContracts],
+  );
 
   const handleContractChange = (name: string, value: string) => {
     formik.setFieldValue(name, value);
@@ -89,9 +91,9 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
             <Input
               size="compact"
               fullwidth={true}
+              counter
               id="addressee"
               required
-              counter
               label="Destinatario"
               maxLength={60}
               name="addressee"

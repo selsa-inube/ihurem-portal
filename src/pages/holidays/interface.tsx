@@ -4,11 +4,11 @@ import { Button, Stack, Tabs, ITab, Text, Icon } from "@inubekit/inubekit";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineBeachAccess } from "react-icons/md";
 
+import { useAppContext } from "@context/AppContext";
 import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
-import { spacing } from "@design/tokens/spacing/spacing";
+import { spacing } from "@design/tokens/spacing";
 import { InfoModal } from "@components/modals/InfoModal";
-import { Widget } from "@components/cards/Widget";
 
 import { StyledHolidaysContainer } from "./styles";
 import { HolidaysTable } from "./components/HolidaysTable";
@@ -16,6 +16,7 @@ import { DaysUsedTable } from "./components/DaysUsedTable";
 import { IHolidaysTable } from "./components/HolidaysTable/types";
 import { daysUsedMock } from "./config/table.config";
 import { Detail } from "./components/Detail";
+import { Widget } from "@src/components/cards/Widget";
 
 interface HolidaysOptionsUIProps {
   appName: string;
@@ -54,6 +55,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
   } = props;
 
   const [selectedTab, setSelectedTab] = useState("dias");
+  const { selectedEmployee } = useAppContext();
   const navigate = useNavigate();
   const [infoModal, setInfoModal] = useState<{
     open: boolean;
@@ -85,7 +87,6 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
       description,
     });
   };
-
   const pendingDaysWidget = (
     <Widget
       icon={<MdOutlineBeachAccess />}
@@ -94,100 +95,73 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
     />
   );
 
-  const renderActionButtons = () => (
-    <>
-      <Stack gap={spacing.s025} alignItems="center">
-        <Button
-          spacing="wide"
-          variant="filled"
-          iconBefore={<MdAdd />}
-          fullwidth={isMobile}
-          disabled={!hasActiveContract || !hasEnjoymentPrivilege}
-          onClick={
-            hasActiveContract && hasEnjoymentPrivilege
-              ? handleRequestEnjoyment
-              : undefined
-          }
-        >
-          Solicitar disfrute
-        </Button>
-        {(!hasActiveContract || !hasEnjoymentPrivilege) && (
-          <Icon
-            icon={<MdOutlineInfo />}
-            appearance="primary"
-            size="16px"
-            cursorHover
-            onClick={() => onOpenInfoModal(actionDescriptions.enjoyment)}
-          />
-        )}
-      </Stack>
-      <Stack gap={spacing.s025} alignItems="center">
-        <Button
-          spacing="wide"
-          variant="filled"
-          iconBefore={<MdAdd />}
-          fullwidth={isMobile}
-          disabled={!hasActiveContract || !hasPaymentPrivilege}
-          onClick={
-            hasActiveContract && hasPaymentPrivilege
-              ? handleRequestPayment
-              : undefined
-          }
-        >
-          Solicitar pago
-        </Button>
-        {(!hasActiveContract || !hasPaymentPrivilege) && (
-          <Icon
-            icon={<MdOutlineInfo />}
-            appearance="primary"
-            size="16px"
-            cursorHover
-            onClick={() => onOpenInfoModal(actionDescriptions.payment)}
-          />
-        )}
-      </Stack>
-    </>
-  );
-
-  const renderDaysUsedActions = () =>
+  const renderActions = () =>
     isMobile ? (
-      <Stack direction="column" gap={spacing.s150}>
-        {pendingDaysWidget}
-        <Detail
-          disableEnjoyment={!hasEnjoymentPrivilege || !hasActiveContract}
-          disablePayment={!hasPaymentPrivilege || !hasActiveContract}
-          actionDescriptions={actionDescriptions}
-          showTabs={tableData && tableData.length > 0}
-          isUsedDaysTab={true}
-          onRequestEnjoyment={handleRequestEnjoyment}
-          onRequestPayment={handleRequestPayment}
-          onInfoIconClick={onOpenInfoModal}
-        />
-      </Stack>
+      <Detail
+        disableEnjoyment={!hasEnjoymentPrivilege || !hasActiveContract}
+        disablePayment={!hasPaymentPrivilege || !hasActiveContract}
+        actionDescriptions={actionDescriptions}
+        onRequestEnjoyment={handleRequestEnjoyment}
+        onRequestPayment={handleRequestPayment}
+        onInfoIconClick={onOpenInfoModal}
+      />
     ) : (
-      <Stack gap={spacing.s150} justifyContent="end" direction="row">
+      <Stack
+        gap={spacing.s150}
+        justifyContent="end"
+        direction={isMobile ? "column" : "row"}
+      >
         {pendingDaysWidget}
-        {renderActionButtons()}
-      </Stack>
-    );
-
-  const renderHolidaysTableActions = () =>
-    isMobile ? (
-      <Stack direction="column" gap={spacing.s150}>
-        <Detail
-          disableEnjoyment={!hasEnjoymentPrivilege || !hasActiveContract}
-          disablePayment={!hasPaymentPrivilege || !hasActiveContract}
-          actionDescriptions={actionDescriptions}
-          showTabs={tableData && tableData.length > 0}
-          isUsedDaysTab={false}
-          onRequestEnjoyment={handleRequestEnjoyment}
-          onRequestPayment={handleRequestPayment}
-          onInfoIconClick={onOpenInfoModal}
-        />
-      </Stack>
-    ) : (
-      <Stack gap={spacing.s150} justifyContent="end" direction="row">
-        {renderActionButtons()}
+        <Stack gap={spacing.s025} alignItems="center">
+          <Button
+            spacing="wide"
+            variant="filled"
+            iconBefore={<MdAdd />}
+            fullwidth={isMobile}
+            disabled={!hasActiveContract || !hasEnjoymentPrivilege}
+            onClick={
+              hasActiveContract && hasEnjoymentPrivilege
+                ? handleRequestEnjoyment
+                : undefined
+            }
+          >
+            Solicitar disfrute
+          </Button>
+          {(!hasActiveContract || !hasEnjoymentPrivilege) && (
+            <Icon
+              icon={<MdOutlineInfo />}
+              appearance="primary"
+              size="16px"
+              cursorHover
+              onClick={() => onOpenInfoModal(actionDescriptions.enjoyment)}
+            />
+          )}
+        </Stack>
+        <Stack gap={spacing.s025} alignItems="center">
+          <Button
+            spacing="wide"
+            variant="filled"
+            iconBefore={<MdAdd />}
+            fullwidth={isMobile}
+            disabled={!hasActiveContract || !hasPaymentPrivilege}
+            onClick={
+              hasActiveContract && hasPaymentPrivilege
+                ? handleRequestPayment
+                : undefined
+            }
+          >
+            Solicitar pago
+          </Button>
+          {(!hasActiveContract || !hasPaymentPrivilege) && (
+            <Icon
+              icon={<MdOutlineInfo />}
+              appearance="primary"
+              size="16px"
+              cursorHover
+              onClick={() => onOpenInfoModal(actionDescriptions.payment)}
+            />
+          )}
+        </Stack>
       </Stack>
     );
 
@@ -197,27 +171,24 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
         <Text type="title" size="medium">
           Consulta de días utilizados
         </Text>
-        {renderDaysUsedActions()}
+        {renderActions()}
       </Stack>
-      <DaysUsedTable data={daysUsedMock} />
-    </StyledHolidaysContainer>
-  );
-
-  const renderHolidaysTableContent = () => (
-    <StyledHolidaysContainer $isMobile={isMobile}>
-      <Stack alignItems="center" justifyContent="space-between">
-        <Text type="title" size="medium">
-          Solicitudes en trámite
-        </Text>
-        {renderHolidaysTableActions()}
-      </Stack>
-      <HolidaysTable
-        data={tableData}
-        loading={isLoading}
-        hasViewDetailsPrivilege
-        hasDeletePrivilege
-        handleDeleteRequest={handleDeleteRequest}
-      />
+      {selectedEmployee.employmentContracts?.map((contract, index) => (
+        <div key={index}>
+          {selectedEmployee.employmentContracts.length > 1 && (
+            <Text
+              type="title"
+              weight="bold"
+              size="small"
+              appearance="gray"
+              padding={`${spacing.s100} ${spacing.s0}`}
+            >
+              {contract.businessName} - {contract.contractType}
+            </Text>
+          )}
+          <DaysUsedTable data={daysUsedMock} />
+        </div>
+      ))}
     </StyledHolidaysContainer>
   );
 
@@ -239,9 +210,25 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
               onChange={(tabId) => setSelectedTab(tabId)}
               scroll={false}
             />
-            {selectedTab === "solicitudes"
-              ? renderHolidaysTableContent()
-              : renderDaysUsedContent()}
+            {selectedTab === "solicitudes" ? (
+              <StyledHolidaysContainer $isMobile={isMobile}>
+                <Stack alignItems="center" justifyContent="space-between">
+                  <Text type="title" size="medium">
+                    Solicitudes en trámite
+                  </Text>
+                  {isMobile && renderActions()}
+                </Stack>
+                <HolidaysTable
+                  data={tableData}
+                  loading={isLoading}
+                  hasViewDetailsPrivilege
+                  hasDeletePrivilege
+                  handleDeleteRequest={handleDeleteRequest}
+                />
+              </StyledHolidaysContainer>
+            ) : (
+              renderDaysUsedContent()
+            )}
           </>
         )}
       </AppMenu>

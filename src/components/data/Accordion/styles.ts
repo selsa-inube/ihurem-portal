@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { inube } from "@inubekit/inubekit";
 
-import { spacing } from "@design/tokens/spacing/spacing";
+import { spacing } from "@design/tokens/spacing";
 
 interface IStyledContainer {
   $isMobile: boolean;

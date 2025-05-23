@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import { Nav, Grid, Header, useMediaQuery, Stack } from "@inubekit/inubekit";
+import { Nav, Grid, Header, useMediaQuery } from "@inubekit/inubekit";
 
 import {
   useNavConfig,
@@ -8,7 +8,6 @@ import {
   useConfigHeader,
 } from "@config/nav.config";
 import { useAppContext } from "@context/AppContext/useAppContext";
-import { spacing } from "@design/tokens/spacing/spacing";
 
 import {
   StyledAppPage,
@@ -21,7 +20,6 @@ import {
 
 interface AppPageProps {
   withNav?: boolean;
-  withBanner?: boolean;
 }
 
 const renderLogo = (imgUrl: string, clientName: string) => {
@@ -35,7 +33,7 @@ const renderLogo = (imgUrl: string, clientName: string) => {
 };
 
 function AppPage(props: AppPageProps) {
-  const { withNav = true, withBanner = true } = props;
+  const { withNav = true } = props;
   const { user, logoUrl, selectedClient } = useAppContext();
   const isTablet = useMediaQuery("(max-width: 944px)");
 
@@ -68,20 +66,6 @@ function AppPage(props: AppPageProps) {
               <Nav navigation={navConfig} actions={actions} collapse={true} />
             )}
             <StyledMainScroll>
-              <Stack width="100%">
-                {withBanner && (
-                  <Stack
-                    padding={spacing.s075}
-                    width="100%"
-                    justifyContent="center"
-                    margin={
-                      isTablet
-                        ? `${spacing.s0} ${spacing.s200}`
-                        : `${spacing.s400} ${spacing.s800} ${spacing.s0} `
-                    }
-                  ></Stack>
-                )}
-              </Stack>
               <StyledMain>
                 <Outlet />
               </StyledMain>

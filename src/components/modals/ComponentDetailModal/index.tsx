@@ -18,7 +18,7 @@ import { createPortal } from "react-dom";
 import CheckIcon from "@assets/images/CheckIcon.svg";
 import CloseIcon from "@assets/images/CloseIcon.svg";
 import HelpIcon from "@assets/images/HelpIcon.svg";
-import { spacing } from "@design/tokens/spacing/spacing";
+import { spacing } from "@design/tokens/spacing";
 import { TableBoard } from "@components/data/TableBoard";
 import { Requirement, IEntries } from "@components/data/TableBoard/types";
 

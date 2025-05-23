@@ -97,7 +97,7 @@ function RequestEnjoyment() {
     setShowErrorFlag,
   } = useRequestSubmission(
     formValues,
-    "vacations",
+    "VacationsEnjoyed",
     userCodeInCharge,
     userNameInCharge,
   );

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import { spacing } from "@design/tokens/spacing/spacing";
+import { spacing } from "@design/tokens/spacing";
 
 const StyledMenu = styled.div`
   background-color: #ffff;

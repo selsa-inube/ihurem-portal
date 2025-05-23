@@ -1,6 +1,6 @@
 import { Text, Grid, Stack, useMediaQuery } from "@inubekit/inubekit";
 
-import { spacing } from "@design/tokens/spacing/spacing";
+import { spacing } from "@design/tokens/spacing";
 
 import { ButtonAttribute } from "./ButtonAttribute";
 import { StyledBoxAttribute } from "./styles";

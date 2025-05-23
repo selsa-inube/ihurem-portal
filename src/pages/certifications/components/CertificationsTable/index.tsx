@@ -23,7 +23,7 @@ import { RequestComponentDetail } from "@components/modals/ComponentDetailModal"
 import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
 import { Tooltip } from "@components/overlay/Tooltip";
 import { InfoModal } from "@components/modals/InfoModal";
-import { spacing } from "@design/tokens/spacing/spacing";
+import { spacing } from "@design/tokens/spacing";
 
 import { CertificationsTableDataDetails, ICertificationsTable } from "./types";
 import { StyledTd, StyledTh, TooltipWrapper } from "./styles";
@@ -91,6 +91,7 @@ function CertificationsTable({
           label: "Acciones",
           key: "mobileActions",
           action: true,
+          style: { width: "50px" },
         },
       ];
     }
@@ -321,6 +322,7 @@ function CertificationsTable({
     cellData: {
       type?: string;
       value?: string | number | JSX.Element | CertificationsTableDataDetails;
+      onClick?: () => void;
     },
     rowIndex: number,
   ) => {
@@ -338,9 +340,9 @@ function CertificationsTable({
           {loading ? (
             <SkeletonLine width="100%" animated={true} />
           ) : (
-            <Stack justifyContent="center" gap={spacing.s400}>
+            <Stack justifyContent="center" gap={spacing.s200}>
               {renderDetailsIcon(rowIndex)}
-              {renderDeleteIcon(displayData[rowIndex]?.requestId ?? "")}
+              {renderDeleteIcon(displayData[rowIndex].requestId!)}
             </Stack>
           )}
         </Td>
@@ -399,6 +401,7 @@ function CertificationsTable({
           <StyledTh
             key={index}
             align="center"
+            style={header.style}
             action={header.key === "mobileActions"}
           >
             <b>{header.label}</b>
@@ -465,7 +468,7 @@ function CertificationsTable({
               ? renderEmptyState()
               : renderDataRows()}
         </Tbody>
-        {!isMobile && data.length > 0 && (
+        {data.length > 0 && (
           <Tfoot>
             <Tr border="bottom">
               <Td colSpan={visibleHeaders.length} type="custom" align="center">
