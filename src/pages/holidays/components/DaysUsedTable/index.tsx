@@ -169,9 +169,11 @@ function DaysUsedTable(props: DaysUsedTableProps) {
         </Colgroup>
         <Thead>{renderHeaderRow()}</Thead>
         <Tbody>
-          {(loading && renderLoadingRows()) ||
-            (data.length === 0 && renderEmptyState()) ||
-            renderDataRows()}
+          {loading
+            ? renderLoadingRows()
+            : data.length === 0
+              ? renderEmptyState()
+              : renderDataRows()}
         </Tbody>
         {!isMobile && data.length > 0 && (
           <Tfoot>

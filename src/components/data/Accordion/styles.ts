@@ -33,6 +33,7 @@ const StyledHead = styled.button`
   align-items: center;
   width: 100%;
   cursor: pointer;
+  padding: 0px;
 `;
 
 const StyledIcon = styled.div`

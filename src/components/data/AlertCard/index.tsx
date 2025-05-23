@@ -30,47 +30,33 @@ function AlertCard(props: AlertCardProps) {
 
   return (
     <Stack direction="column">
-      <Stack>
-        {title && (
+      {title && (
+        <Stack>
           <Text type="title" size="medium" weight="bold" appearance="gray">
             {title}
           </Text>
-        )}
-      </Stack>
-
+        </Stack>
+      )}
       <StyledAlertCard>
-        <Stack direction="column" gap={spacing.s100}>
-          <Stack
-            direction="row"
-            alignItems="center"
-            gap="4px"
-            justifyContent="space-between"
-          >
-            <Text type="body" size="large">
-              Requisito:
-            </Text>
-            <Icon icon={icon} appearance={iconAppearance} size="20px" />
-          </Stack>
-
-          <Divider />
-
-          <Text type="body" size="medium" appearance="gray" ellipsis={ellipsis}>
-            {requirement}
-          </Text>
-
+        <Stack direction="column" gap={spacing.s200}>
           <Stack direction="column" gap={spacing.s050}>
-            <Text type="body" size="large">
-              Causa de incumplimiento:
-            </Text>
+            <Stack alignItems="center" justifyContent="space-between">
+              <Text>Requisito:</Text>
+              <Icon icon={icon} appearance={iconAppearance} size="22px" />
+            </Stack>
             <Divider />
-            <Text
-              type="body"
-              size="medium"
-              appearance="gray"
-              ellipsis={ellipsis}
-            >
-              {cause}
+            <Text size="medium" appearance="gray" ellipsis={ellipsis}>
+              {requirement}
             </Text>
+          </Stack>
+          <Stack direction="column" gap={spacing.s050}>
+            <Stack direction="column" gap={spacing.s050}>
+              <Text>Causa de incumplimiento:</Text>
+              <Divider />
+              <Text size="medium" appearance="gray" ellipsis={ellipsis}>
+                {cause}
+              </Text>
+            </Stack>
           </Stack>
         </Stack>
       </StyledAlertCard>

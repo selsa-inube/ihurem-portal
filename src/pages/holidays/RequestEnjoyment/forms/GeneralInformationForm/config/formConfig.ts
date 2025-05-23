@@ -1,8 +1,8 @@
 const generalInformationRequiredFields = {
   daysOff: true,
   startDate: true,
-  contract: true,
-  observations: true,
+  contract: false,
+  observations: false,
 };
 
 const monthAbbr = [

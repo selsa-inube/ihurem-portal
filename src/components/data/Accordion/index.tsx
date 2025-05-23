@@ -43,17 +43,17 @@ function Accordion(props: AccordionProps) {
         {!withButton ? (
           isOpen ? (
             <Icon
-              icon={<MdKeyboardArrowUp size={24} />}
+              icon={<MdKeyboardArrowUp />}
               appearance="dark"
-              spacing="compact"
               cursorHover={true}
+              size="20px"
             />
           ) : (
             <Icon
-              icon={<MdKeyboardArrowDown size={24} />}
+              icon={<MdKeyboardArrowDown />}
               appearance="dark"
-              spacing="compact"
               cursorHover={true}
+              size="20px"
             />
           )
         ) : (

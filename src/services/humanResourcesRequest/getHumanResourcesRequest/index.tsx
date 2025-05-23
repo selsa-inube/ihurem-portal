@@ -3,11 +3,13 @@ import {
   maxRetriesServices,
   environment,
 } from "@config/environment";
+
 import { mapHumanResourceRequestApiToEntity } from "./mappers";
 
 const getHumanResourceRequests = async (
   typeRequest: string,
   employeeId: string,
+  headers: Record<string, string>,
 ) => {
   const maxRetries = maxRetriesServices;
   const fetchTimeout = fetchTimeoutServices;
@@ -26,7 +28,8 @@ const getHumanResourceRequests = async (
         {
           method: "GET",
           headers: {
-            "Content-type": "application/json; charset=UTF-8",
+            "X-Action": "SearchAllHumanResourcesRequest",
+            ...headers,
           },
           signal: controller.signal,
         },

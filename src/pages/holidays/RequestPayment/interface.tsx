@@ -5,15 +5,16 @@ import {
   Assisted,
   IAssistedStep,
   useMediaQuery,
-  Button,
 } from "@inubekit/inubekit";
-import { MdCheckCircleOutline } from "react-icons/md";
+import { MdRule } from "react-icons/md";
 
 import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
 import { spacing } from "@design/tokens/spacing/spacing";
 import { RequirementsModal } from "@components/modals/RequirementsModal";
 import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
+import { mockAlertCards } from "@mocks/requirements/requirements-2.mock";
+import { ButtonRequirements } from "@components/inputs/ButtonWithCounter";
 
 import { GeneralInformationForm } from "./forms/GeneralInformationForm";
 import { IGeneralInformationEntry } from "./forms/GeneralInformationForm/types";
@@ -73,6 +74,15 @@ function RequestPaymentUI(props: RequestPaymentUIProps) {
         appName={appName}
         appRoute={appRoute}
         navigatePage={navigatePage}
+        actionButton={
+          <ButtonRequirements
+            counter={mockAlertCards.length}
+            buttonIcon={<MdRule />}
+            buttonText="Solicitar Pago"
+            isMobile={isTablet}
+            onClick={handleOpenModal}
+          />
+        }
       >
         <Stack direction="column" gap={isTablet ? spacing.s300 : spacing.s500}>
           <Assisted
@@ -90,23 +100,6 @@ function RequestPaymentUI(props: RequestPaymentUIProps) {
             }}
           />
           <Stack direction="column">
-            {currentStep !== 3 && (
-              <Stack
-                direction="column"
-                alignItems="flex-end"
-                margin={spacing.s075}
-              >
-                <Button
-                  appearance="gray"
-                  variant="outlined"
-                  spacing="compact"
-                  iconBefore={<MdCheckCircleOutline />}
-                  onClick={handleOpenModal}
-                >
-                  Requisitos
-                </Button>
-              </Stack>
-            )}
             {currentStep === 1 && (
               <AlertCardStep handleNextStep={handleNextStep} />
             )}

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useMediaQuery } from "@inubekit/inubekit";
 
-import { getHumanResourceRequests } from "@services/humanResourcesRequest/getHumanResourcesRequest";
+import { useHumanResourceRequests } from "@hooks/useHumanResourceRequests";
 import { useDeleteRequest } from "@hooks/useDeleteRequest";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 
@@ -11,48 +11,22 @@ import { HolidaysOptionsUI } from "./interface";
 import { holidaysNavConfig } from "./config/nav.config";
 import { IHolidaysTable } from "./components/HolidaysTable/types";
 
-interface LocationState {
-  showFlag?: boolean;
-  flagMessage?: string;
-  flagTitle?: string;
-  isSuccess?: boolean;
-}
-
 function HolidaysOptions() {
   const navigate = useNavigate();
   const location = useLocation();
-  const locationState = location.state as LocationState | null;
   const isMobile = useMediaQuery("(max-width: 1060px)");
 
-  const [isLoading, setIsLoading] = useState(true);
+  const {
+    data: fetchedData,
+    isLoading,
+    error,
+  } = useHumanResourceRequests<IHolidaysTable>("vacations", formatHolidaysData);
   const [tableData, setTableData] = useState<IHolidaysTable[]>([]);
 
   const hasActiveContract = true;
   const hasEnjoymentPrivilege = true;
   const hasPaymentPrivilege = true;
-
   const mainNavItem = holidaysNavConfig[0];
-
-  const fetchHolidaysData = async () => {
-    setIsLoading(true);
-    try {
-      const requests = await getHumanResourceRequests("vacations", "");
-      setTableData(formatHolidaysData(requests ?? []));
-
-      if (locationState?.showFlag) {
-        navigate(location.pathname, { replace: true });
-      }
-    } catch (error) {
-      setTableData([]);
-      showError(
-        error instanceof Error
-          ? error.message
-          : "An error occurred while fetching data.",
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const showError = (message: string) => {
     navigate(location.pathname, {
@@ -77,23 +51,29 @@ function HolidaysOptions() {
   });
 
   useEffect(() => {
-    void fetchHolidaysData();
-  }, []);
+    setTableData(fetchedData);
+  }, [fetchedData]);
 
   useEffect(() => {
-    if (locationState?.showFlag) {
+    if (error) {
+      showError(error.message);
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (location.state?.showFlag) {
       const timer = setTimeout(() => {
         navigate(location.pathname, { replace: true });
       }, 5000);
       return () => clearTimeout(timer);
     }
-  }, [locationState?.showFlag, navigate, location.pathname]);
+  }, [location.state?.showFlag]);
 
   useErrorFlag(
-    locationState?.showFlag ?? false,
-    locationState?.flagMessage,
-    locationState?.flagTitle,
-    locationState?.isSuccess ?? false,
+    location.state?.showFlag,
+    location.state?.flagMessage,
+    location.state?.flagTitle,
+    location.state?.isSuccess,
   );
 
   return (

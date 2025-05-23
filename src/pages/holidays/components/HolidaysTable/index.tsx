@@ -113,10 +113,11 @@ function HolidaysTable(props: HolidaysTableProps) {
   };
 
   const visibleHeaders = determineVisibleHeaders();
-  const visibleColumns =
-    (isMobile && columns.slice(1, 3)) ||
-    (mediaQueries["(max-width: 1024px)"] && columns.slice(0, 3)) ||
-    columns;
+  const visibleColumns = isMobile
+    ? columns.slice(1, 3)
+    : mediaQueries["(max-width: 1024px)"]
+      ? columns.slice(0, 3)
+      : columns;
 
   const getHeaderAlignment = (key: string) => {
     if (mediaQueries["(max-width: 1024px)"]) {
@@ -415,9 +416,11 @@ function HolidaysTable(props: HolidaysTableProps) {
         </Colgroup>
         <Thead>{renderHeaderRow()}</Thead>
         <Tbody>
-          {(loading && renderLoadingRows()) ||
-            (data.length === 0 && renderEmptyState()) ||
-            renderDataRows()}
+          {loading
+            ? renderLoadingRows()
+            : data.length === 0
+              ? renderEmptyState()
+              : renderDataRows()}
         </Tbody>
         {!isMobile && data.length > 0 && (
           <Tfoot>
