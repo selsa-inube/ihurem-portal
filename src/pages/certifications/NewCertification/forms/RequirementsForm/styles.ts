@@ -17,9 +17,7 @@ const StyledContainer = styled.div<StyledContainerProps>`
   border: 1px solid
     ${({ theme }) => theme?.palette?.neutral?.N30 || inube.palette.neutral.N30};
   padding: ${({ $isMobile }) =>
-    $isMobile
-      ? `${spacing?.s200 ?? "24px"} ${spacing?.s150 ?? "12px"}`
-      : (spacing?.s300 ?? "24px")};
+    $isMobile ? `${spacing?.s200 ?? "24px"} ` : (spacing?.s300 ?? "24px")};
 `;
 
 export { StyledContainer };

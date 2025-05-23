@@ -129,6 +129,7 @@ function NewCertificationUI(
                 handleStepChange={(stepId) => setCurrentStep(stepId)}
                 handlePreviousStep={handlePreviousStep}
                 handleSubmit={handleFinishAssisted}
+                contractOptions={[]}
               />
             )}
           </Stack>

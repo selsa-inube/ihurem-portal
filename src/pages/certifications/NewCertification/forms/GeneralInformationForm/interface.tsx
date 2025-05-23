@@ -70,7 +70,10 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
     <form onSubmit={formik.handleSubmit}>
       <Stack direction="column" gap={spacing.s300}>
         <StyledContainer $isMobile={isMobile}>
-          <Stack direction={isMobile ? "column" : "row"} gap={spacing.s300}>
+          <Stack
+            direction={isMobile ? "column" : "row"}
+            gap={isMobile ? spacing.s200 : spacing.s300}
+          >
             <Select
               name="certification"
               size="compact"

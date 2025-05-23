@@ -13,11 +13,17 @@ interface VerificationFormProps {
   handleStepChange: (stepId: number) => void;
   handlePreviousStep: () => void;
   handleSubmit: () => void;
+  contractOptions: { id: string; value: string; label: string }[];
 }
 
 function VerificationForm(props: VerificationFormProps) {
-  const { updatedData, handleStepChange, handlePreviousStep, handleSubmit } =
-    props;
+  const {
+    updatedData,
+    handleStepChange,
+    handlePreviousStep,
+    handleSubmit,
+    contractOptions,
+  } = props;
   const isTablet = useMediaQuery("(max-width: 1224px)");
 
   return (
@@ -36,6 +42,7 @@ function VerificationForm(props: VerificationFormProps) {
                 isTablet={isTablet}
                 updatedData={updatedData}
                 stepKey={Number(step.id)}
+                contractOptions={contractOptions || []}
               />
 
               <Button
