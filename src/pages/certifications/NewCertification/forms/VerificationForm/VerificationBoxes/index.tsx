@@ -10,6 +10,7 @@ import { IFormsUpdateData } from "../../../types";
 const renderPersonalInfoVerification = (
   values: IGeneralInformationEntry,
   isTablet: boolean,
+  contractOptions: { id: string; value: string; label: string }[],
 ) => (
   <>
     <Grid
@@ -18,9 +19,23 @@ const renderPersonalInfoVerification = (
       gap={spacing.s100}
       width="100%"
     >
-      <BoxAttribute label="Tipo de solicitud" value={values.certification} />
-      <BoxAttribute label="Destinatario:" value={values.addressee} />
-      <BoxAttribute label="Contrato:" value={values.contract} />
+      <BoxAttribute
+        label="Tipo de solicitud:"
+        value={values.certification}
+        direction="column"
+      />
+      <BoxAttribute
+        label="Destinatario:"
+        value={values.addressee}
+        direction="column"
+      />
+      {contractOptions.length > 1 && (
+        <BoxAttribute
+          label="Contrato:"
+          value={values.contract}
+          direction="column"
+        />
+      )}
     </Grid>
     <Stack width="100%" direction="column">
       <BoxAttribute
@@ -55,12 +70,14 @@ interface VerificationBoxesProps {
   updatedData: IFormsUpdateData;
   stepKey: number;
   isTablet: boolean;
+  contractOptions: { id: string; value: string; label: string }[];
 }
 
 function VerificationBoxes({
   updatedData,
   stepKey,
   isTablet,
+  contractOptions,
 }: VerificationBoxesProps) {
   return (
     <>
@@ -69,6 +86,7 @@ function VerificationBoxes({
         renderPersonalInfoVerification(
           updatedData.personalInformation.values,
           isTablet,
+          contractOptions,
         )}
     </>
   );
