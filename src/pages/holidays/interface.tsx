@@ -55,7 +55,8 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
   } = props;
 
   const [selectedTab, setSelectedTab] = useState("dias");
-  const { selectedEmployee } = useAppContext();
+  const { employees } = useAppContext();
+  console.log("Selected Employee:", employees);
   const navigate = useNavigate();
   const [infoModal, setInfoModal] = useState<{
     open: boolean;
@@ -173,9 +174,9 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
         </Text>
         {renderActions()}
       </Stack>
-      {selectedEmployee.employmentContracts?.map((contract, index) => (
+      {employees.employmentContracts?.map((contract, index) => (
         <div key={index}>
-          {selectedEmployee.employmentContracts.length > 1 && (
+          {employees.employmentContracts.length > 1 && (
             <Text
               type="title"
               weight="bold"

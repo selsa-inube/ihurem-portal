@@ -6,7 +6,10 @@ import {
 } from "@config/environment";
 import { mapEmployeeApiToEntity } from "./mappers";
 
-const employeeByNickname = async (nickname: string): Promise<IEmployee> => {
+const employeeByNickname = async (
+  numeroIdentificacion: string,
+  businessUnits: string,
+): Promise<IEmployee> => {
   const maxRetries = maxRetriesServices;
   const fetchTimeout = fetchTimeoutServices;
 
@@ -19,12 +22,14 @@ const employeeByNickname = async (nickname: string): Promise<IEmployee> => {
         method: "GET",
         headers: {
           "Content-Type": "application/json; charset=UTF-8",
+          "X-Action": "SearchAllEmployee",
+          "X-Business-Unit": businessUnits,
         },
         signal: controller.signal,
       };
 
       const res = await fetch(
-        `${environment.IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE}/employee/${nickname}`,
+        `${environment.IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE}/employees?identificationDocumentNumber=${numeroIdentificacion}`,
         options,
       );
 
@@ -41,10 +46,12 @@ const employeeByNickname = async (nickname: string): Promise<IEmployee> => {
           `Error al obtener los datos del empleado. Status: ${res.status}, Detalles: ${JSON.stringify(data)}`,
         );
       }
+
+      console.log("Datos del empleado obtenidos:", data);
       const normalizedEmployee = Array.isArray(data)
         ? mapEmployeeApiToEntity(data[0])
         : ({} as IEmployee);
-
+      console.log("Datos del empleado normalizados:", normalizedEmployee);
       return normalizedEmployee;
     } catch (error) {
       if (attempt === maxRetries) {
