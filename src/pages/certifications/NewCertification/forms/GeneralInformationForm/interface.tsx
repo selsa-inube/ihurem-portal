@@ -40,16 +40,16 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
     handlePreviousStep,
   } = props;
 
-  const { selectedEmployee } = useAppContext();
+  const { employees } = useAppContext();
 
   const contractOptions = useMemo(
     () =>
-      (selectedEmployee.employmentContracts ?? []).map((c) => ({
+      (employees.employmentContracts ?? []).map((c) => ({
         id: c.contractId,
         value: `${c.businessName} - ${c.contractType}`,
         label: `${c.businessName} - ${c.contractType}`,
       })),
-    [selectedEmployee.employmentContracts],
+    [employees.employmentContracts],
   );
 
   const handleContractChange = (name: string, value: string) => {

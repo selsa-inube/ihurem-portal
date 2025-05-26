@@ -73,10 +73,9 @@ function VerificationBoxes({
   isTablet,
   stepKey,
 }: VerificationBoxesProps) {
-  const { selectedEmployee } = useAppContext();
+  const { employees } = useAppContext();
 
-  const hasMultipleContracts =
-    (selectedEmployee.employmentContracts?.length ?? 0) > 1;
+  const hasMultipleContracts = (employees.employmentContracts?.length ?? 0) > 1;
   return (
     <>
       {stepKey === 1 && renderAlerts(isTablet)}

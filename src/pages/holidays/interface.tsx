@@ -56,7 +56,6 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
 
   const [selectedTab, setSelectedTab] = useState("dias");
   const { employees } = useAppContext();
-  console.log("Selected Employee:", employees);
   const navigate = useNavigate();
   const [infoModal, setInfoModal] = useState<{
     open: boolean;

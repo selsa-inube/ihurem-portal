@@ -5,7 +5,7 @@ import {
   IEmployee,
   IEmployeeOptions,
 } from "@ptypes/employeePortalBusiness.types";
-import { Employee } from "@ptypes/employeePortalConsultation.types";
+// import { Employee } from "@ptypes/employeePortalConsultation.types";
 
 export interface IPreferences {
   boardOrientation: "vertical" | "horizontal";
@@ -70,6 +70,6 @@ export interface IAppContextType {
 
   employeeOptions: IEmployeeOptions[];
   setEmployeeOptions: React.Dispatch<React.SetStateAction<IEmployeeOptions[]>>;
-  selectedEmployee: Employee;
-  setSelectedEmployee: (employee: Employee) => void;
+  // employees: Employee;
+  // setSelectedEmployee: (employee: Employee) => void;
 }

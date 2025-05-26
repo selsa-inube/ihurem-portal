@@ -45,7 +45,7 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
     handleNextStep,
   } = props;
   const isMobile = useMediaQuery("(max-width: 700px)");
-  const { selectedEmployee } = useAppContext();
+  const { employees } = useAppContext();
 
   const [yearOptions, setYearOptions] = useState<IOption[]>([]);
   const [monthOptions, setMonthOptions] = useState<IOption[]>([]);
@@ -59,12 +59,12 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
 
   const contractOptions = useMemo(
     () =>
-      (selectedEmployee.employmentContracts ?? []).map((c) => ({
+      (employees.employmentContracts ?? []).map((c) => ({
         id: c.contractId,
         value: `${c.businessName} - ${c.contractType}`,
         label: `${c.businessName} - ${c.contractType}`,
       })),
-    [selectedEmployee.employmentContracts],
+    [employees.employmentContracts],
   );
 
   useEffect(() => {

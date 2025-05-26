@@ -14,7 +14,6 @@ export const useHumanResourceRequests = <T>(
   const [error, setError] = useState<Error | null>(null);
   const { getHeaders } = useHeaders();
   const { employees } = useAppContext();
-
   const fetchData = async () => {
     setIsLoading(true);
     try {

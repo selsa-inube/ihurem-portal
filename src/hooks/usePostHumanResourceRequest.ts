@@ -15,7 +15,7 @@ export function useRequestSubmission(
 ) {
   const [requestNum, setRequestNum] = useState("");
 
-  const { selectedEmployee } = useAppContext();
+  const { employees } = useAppContext();
 
   const {
     submitRequestToAPI,
@@ -53,7 +53,7 @@ export function useRequestSubmission(
       }
 
       const requestBody = {
-        employeeId: selectedEmployee?.employeeId,
+        employeeId: employees?.employeeId,
         humanResourceRequestData,
         humanResourceRequestDate: new Date().toISOString(),
         humanResourceRequestDescription: formValues.observations ?? "",

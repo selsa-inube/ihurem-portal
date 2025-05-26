@@ -9,7 +9,7 @@ export const useEmployeeByNickname = (
   const [employee, setEmployee] = useState<IEmployee>({} as IEmployee);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
-  const [codeError, setCodeError] = useState<number | undefined>(undefined);
+  const [codeError, setCodeError] = useState<number | null>(null);
 
   useEffect(() => {
     if (!nickname || !businessUnit) return;
@@ -18,6 +18,7 @@ export const useEmployeeByNickname = (
       try {
         const result = await employeeByNickname(nickname, businessUnit);
         if (Object.keys(result).length === 0) {
+          console.error("No employee found for the given nickname.");
           setEmployee({} as IEmployee);
           setError(true);
           setCodeError(1004);
@@ -36,7 +37,7 @@ export const useEmployeeByNickname = (
     };
 
     fetchEmployee();
-  }, [nickname]);
+  }, [nickname, businessUnit]);
 
   return { employee, loading, error, codeError };
 };

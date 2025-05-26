@@ -34,7 +34,7 @@ const renderLogo = (imgUrl: string, clientName: string) => {
 
 function AppPage(props: AppPageProps) {
   const { withNav = true } = props;
-  const { user, logoUrl, selectedClient } = useAppContext();
+  const { user, logoUrl, businessUnit } = useAppContext();
   const isTablet = useMediaQuery("(max-width: 944px)");
 
   const navConfig = useNavConfig();
@@ -46,12 +46,12 @@ function AppPage(props: AppPageProps) {
         <Header
           navigation={{ nav: configHeader, breakpoint: "800px" }}
           logoURL={renderLogo(
-            selectedClient?.logo ?? logoUrl,
-            selectedClient?.name ?? "Sin unidad seleccionada",
+            businessUnit?.urlLogo ?? logoUrl,
+            businessUnit?.abbreviatedName ?? "Sin unidad seleccionada",
           )}
           user={{
             username: user?.username ?? "Nombre de usuario",
-            client: selectedClient?.name ?? "Sin unidad seleccionada",
+            client: businessUnit?.abbreviatedName ?? "Sin unidad seleccionada",
             breakpoint: "800px",
           }}
           menu={userMenu}

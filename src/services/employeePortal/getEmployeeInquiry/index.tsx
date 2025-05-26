@@ -46,12 +46,10 @@ const employeeByNickname = async (
           `Error al obtener los datos del empleado. Status: ${res.status}, Detalles: ${JSON.stringify(data)}`,
         );
       }
-
-      console.log("Datos del empleado obtenidos:", data);
       const normalizedEmployee = Array.isArray(data)
         ? mapEmployeeApiToEntity(data[0])
         : ({} as IEmployee);
-      console.log("Datos del empleado normalizados:", normalizedEmployee);
+
       return normalizedEmployee;
     } catch (error) {
       if (attempt === maxRetries) {
