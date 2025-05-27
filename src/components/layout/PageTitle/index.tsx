@@ -2,7 +2,7 @@ import { MdArrowBack } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { Stack, Text, Icon, useMediaQuery } from "@inubekit/inubekit";
 
-import { spacing } from "@design/tokens/spacing/spacing";
+import { spacing } from "@design/tokens/spacing";
 
 interface PageTitleProps {
   title: string;

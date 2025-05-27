@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import { useErrorFlag } from "@hooks/useErrorFlag";
+import { useHeaders } from "@hooks/useHeaders";
 import { deleteHumanResourceRequest } from "@services/humanResourcesRequest/deleteHumanResourceRequest";
 
 export function useDeleteRequest<T extends { requestId?: string }>(
@@ -11,6 +12,7 @@ export function useDeleteRequest<T extends { requestId?: string }>(
   const location = useLocation();
   const [isDeleting, setIsDeleting] = useState(false);
   const [showFlag, setShowFlag] = useState(false);
+  const { getHeaders } = useHeaders();
 
   useErrorFlag(
     showFlag,
@@ -27,7 +29,8 @@ export function useDeleteRequest<T extends { requestId?: string }>(
   ) => {
     setIsDeleting(true);
     try {
-      await deleteHumanResourceRequest(id, justification, number);
+      const headers = await getHeaders();
+      await deleteHumanResourceRequest(id, justification, number, headers);
       updateStateFunction((item: T) => item[idField] !== id);
       setShowFlag(false);
       return true;

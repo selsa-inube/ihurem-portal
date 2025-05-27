@@ -13,7 +13,10 @@ export const useBusinessUnit = (
     useState<IBusinessUnitsPortalEmployee>({} as IBusinessUnitsPortalEmployee);
   const [hasError, setHasError] = useState(false);
   const [codeError, setCodeError] = useState<number | undefined>(undefined);
+
   useEffect(() => {
+    let isMounted = true;
+
     const fetchBusinessManagers = async () => {
       if (!portalPublicCode) return;
       try {
@@ -21,20 +24,31 @@ export const useBusinessUnit = (
           portalPublicCode.businessUnit,
         );
         if (!fetchBusinessUnit) {
-          setHasError(true);
+          if (isMounted) {
+            setHasError(true);
+            setCodeError(1003);
+          }
           return;
         }
-        setBusinessUnit(fetchBusinessUnit);
+        if (isMounted) {
+          setBusinessUnit(fetchBusinessUnit);
+          setHasError(false);
+          setCodeError(undefined);
+        }
       } catch (error) {
         console.log(error);
-        setHasError(true);
-      }
-      if (hasError) {
-        setCodeError(1003);
+        if (isMounted) {
+          setHasError(true);
+          setCodeError(1003);
+        }
       }
     };
 
     fetchBusinessManagers();
+
+    return () => {
+      isMounted = false;
+    };
   }, [portalPublicCode]);
 
   return { businessUnitData, hasError, codeError };

@@ -7,6 +7,7 @@ export async function deleteHumanResourceRequest(
   id: string,
   justification: string,
   number: string,
+  headers: Record<string, string>,
 ): Promise<IDeleteResponse> {
   const body = mapRequestBody(id, justification, number);
   const response = await fetch(
@@ -14,7 +15,7 @@ export async function deleteHumanResourceRequest(
     {
       method: "DELETE",
       headers: {
-        "Content-Type": "application/json",
+        ...headers,
         "X-Action": "RemoveHumanResourcesRequest",
       },
       body: JSON.stringify(body),

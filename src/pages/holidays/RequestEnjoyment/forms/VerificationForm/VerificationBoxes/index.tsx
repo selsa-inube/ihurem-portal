@@ -1,7 +1,7 @@
 import { Grid, Stack } from "@inubekit/inubekit";
 
 import { BoxAttribute } from "@components/cards/BoxAttribute";
-import { spacing } from "@design/tokens/spacing/spacing";
+import { spacing } from "@design/tokens/spacing";
 import { useAppContext } from "@context/AppContext";
 
 import { IGeneralInformationEntry } from "../../GeneralInformationForm/types";
@@ -78,10 +78,9 @@ function VerificationBoxes({
   stepKey,
   isTablet,
 }: VerificationBoxesProps) {
-  const { selectedEmployee } = useAppContext();
+  const { employees } = useAppContext();
 
-  const hasMultipleContracts =
-    (selectedEmployee.employmentContracts?.length ?? 0) > 1;
+  const hasMultipleContracts = (employees.employmentContracts?.length ?? 0) > 1;
 
   return (
     <>

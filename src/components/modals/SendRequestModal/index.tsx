@@ -10,7 +10,7 @@ import {
   useMediaQuery,
 } from "@inubekit/inubekit";
 
-import { spacing } from "@design/tokens/spacing/spacing";
+import { spacing } from "@design/tokens/spacing";
 
 import { StyledModal, StyledContainerClose } from "./styles";
 

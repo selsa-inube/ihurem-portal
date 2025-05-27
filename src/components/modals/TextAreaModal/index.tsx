@@ -13,7 +13,7 @@ import { Formik, Form, Field, FieldProps, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import { MdClear } from "react-icons/md";
 
-import { spacing } from "@design/tokens/spacing/spacing";
+import { spacing } from "@design/tokens/spacing";
 
 import { StyledModal, StyledContainerClose } from "./styles";
 

@@ -11,7 +11,7 @@ import {
 } from "@inubekit/inubekit";
 
 import { isRequired } from "@utils/forms/forms";
-import { spacing } from "@design/tokens/spacing/spacing";
+import { spacing } from "@design/tokens/spacing";
 import { getFieldState } from "@utils/forms/forms";
 import { useAppContext } from "@context/AppContext";
 
@@ -42,16 +42,16 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
   } = props;
 
   const isMobile = useMediaQuery("(max-width: 700px)");
-  const { selectedEmployee } = useAppContext();
+  const { employees } = useAppContext();
 
   const contractOptions = useMemo(
     () =>
-      (selectedEmployee?.employmentContracts ?? []).map((c) => ({
+      (employees.employmentContracts ?? []).map((c) => ({
         id: c.contractId,
         value: `${c.businessName} - ${c.contractType}`,
         label: `${c.businessName} - ${c.contractType}`,
       })),
-    [selectedEmployee?.employmentContracts],
+    [employees.employmentContracts],
   );
 
   const handleContractChange = (name: string, value: string) => {

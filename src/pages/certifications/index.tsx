@@ -1,44 +1,40 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useMediaQuery } from "@inubekit/inubekit";
 
-import { useErrorFlag } from "@hooks/useErrorFlag";
+import { useHumanResourceRequests } from "@hooks/useHumanResourceRequests";
 import { useDeleteRequest } from "@hooks/useDeleteRequest";
-import { getHumanResourceRequests } from "@services/humanResourcesRequest/getHumanResourcesRequest";
+import { useErrorFlag } from "@hooks/useErrorFlag";
 
+import { formatHumanResourceData } from "./config/table.config";
 import { CertificationsOptionsUI } from "./interface";
 import { certificationsNavConfig } from "./config/nav.config";
 import { ICertificationsTable } from "./components/CertificationsTable/types";
-import { formatHumanResourceData } from "./config/table.config";
 
 function CertificationsOptions() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [isLoading, setIsLoading] = useState(true);
-  const [tableData, setTableData] = useState<ICertificationsTable[]>([]);
   const isMobile = useMediaQuery("(max-width: 768px)");
 
+  const {
+    data: fetchedData,
+    isLoading,
+    error,
+  } = useHumanResourceRequests<ICertificationsTable>(
+    "Certification",
+    formatHumanResourceData,
+  );
+  const [tableData, setTableData] = useState<ICertificationsTable[]>([]);
+
   useEffect(() => {
-    const fetchHumanResourceRequests = async () => {
-      setIsLoading(true);
+    setTableData(fetchedData);
+  }, [fetchedData]);
 
-      try {
-        const requests = await getHumanResourceRequests("certification", "");
-        const formattedData = formatHumanResourceData(requests ?? []);
-        setTableData(formattedData);
-      } catch (error) {
-        console.error(
-          "Error al obtener las solicitudes de recursos humanos:",
-          error,
-        );
-        setTableData([]);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchHumanResourceRequests();
-  }, []);
+  useEffect(() => {
+    if (error) {
+      console.error("Error fetching certifications:", error.message);
+    }
+  }, [error]);
 
   const { handleDelete } = useDeleteRequest((filterFn) => {
     setTableData((prev) => prev.filter(filterFn));

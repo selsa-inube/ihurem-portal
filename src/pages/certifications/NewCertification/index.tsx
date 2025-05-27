@@ -101,7 +101,7 @@ function NewCertification() {
     setShowErrorFlag,
   } = useRequestSubmission(
     formValues,
-    "certifications",
+    "Certification",
     userCodeInCharge,
     userNameInCharge,
   );

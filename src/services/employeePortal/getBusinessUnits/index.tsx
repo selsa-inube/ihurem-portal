@@ -46,12 +46,12 @@ const businessUnitsPortalEmployee = async (
           data,
         };
       }
-
-      return mapBusinessUnitsPortalEmployeeApiToEntity(data);
-    } catch (error) {
+      const normalizeData = mapBusinessUnitsPortalEmployeeApiToEntity(data);
+      return normalizeData;
+    } catch {
       if (attempt === maxRetries) {
         throw new Error(
-          "Todos los intentos fallaron. No se pudieron obtener los datos del operador.",
+          "Todos los intentos fallaron. No se pudieron obtener los datos de la unidad de negocio.",
         );
       }
     }

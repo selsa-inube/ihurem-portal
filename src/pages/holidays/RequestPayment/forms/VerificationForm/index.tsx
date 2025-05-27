@@ -2,7 +2,7 @@ import { MdOutlineArrowBack } from "react-icons/md";
 import { Stack, Button, useMediaQuery } from "@inubekit/inubekit";
 
 import { Accordion } from "@components/data/Accordion";
-import { spacing } from "@design/tokens/spacing/spacing";
+import { spacing } from "@design/tokens/spacing";
 
 import { requestPaymentSteps } from "../../config/assisted.config";
 import { VerificationBoxes } from "./VerificationBoxes";

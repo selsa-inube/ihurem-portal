@@ -19,7 +19,7 @@ interface IEmployee {
   employeeStatus: string;
   ubication: string;
   userAccountId: string;
-  employmentContract: IEmploymentContract[];
+  employmentContracts: IEmploymentContract[];
   employeeReference: IEmployeeReference[];
 }
 

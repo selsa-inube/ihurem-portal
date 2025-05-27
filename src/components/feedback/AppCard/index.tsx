@@ -1,7 +1,7 @@
 import { MdOutlineInfo } from "react-icons/md";
 import { Stack, Text, Icon, Divider } from "@inubekit/inubekit";
 
-import { spacing } from "@design/tokens/spacing/spacing";
+import { spacing } from "@design/tokens/spacing";
 
 import {
   StyledAppCard,

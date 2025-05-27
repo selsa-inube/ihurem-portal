@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Th, Td } from "@inubekit/inubekit";
 
-import { spacing } from "@design/tokens/spacing/spacing";
+import { spacing } from "@design/tokens/spacing";
 
 export const StyledTh = styled(Th)`
   & > p {

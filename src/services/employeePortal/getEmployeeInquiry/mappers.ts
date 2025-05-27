@@ -16,7 +16,7 @@ interface EmployeeApiResponse {
   employeeCode: string;
   residenceAddress: string;
   postalCode: string;
-  email: string;
+  eMail: string;
   telephone: string;
   countryTaxResidence: string;
   countryOfIdentityDocument: string;
@@ -24,7 +24,7 @@ interface EmployeeApiResponse {
   employeeStatus: string;
   ubication: string;
   userAccountId: string | number;
-  employmentContract?: EmploymentContractApiResponse[];
+  employmentContracts?: EmploymentContractApiResponse[];
   employeeReference?: EmployeeReferenceApiResponse[];
 }
 
@@ -72,16 +72,16 @@ const mapEmployeeApiToEntity = (employee: EmployeeApiResponse): IEmployee => {
     employeeCode: String(employee.employeeCode),
     residenceAddress: String(employee.residenceAddress),
     postalCode: String(employee.postalCode),
-    email: String(employee.email),
+    email: String(employee.eMail),
     telephone: String(employee.telephone),
     countryTaxResidence: String(employee.countryTaxResidence),
     countryOfIdentityDocument: String(employee.countryOfIdentityDocument),
     residenceCity: String(employee.residenceCity),
     employeeStatus: String(employee.employeeStatus),
-    ubication: String(employee.ubication),
+    ubication: employee.ubication ? String(employee.ubication) : "",
     userAccountId: String(employee.userAccountId),
-    employmentContract: employee.employmentContract
-      ? mapEmploymentContracts(employee.employmentContract)
+    employmentContracts: employee.employmentContracts
+      ? mapEmploymentContracts(employee.employmentContracts)
       : [],
     employeeReference: employee.employeeReference
       ? mapEmployeeReferences(employee.employeeReference)

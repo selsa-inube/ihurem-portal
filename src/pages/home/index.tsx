@@ -2,7 +2,7 @@ import { Outlet } from "react-router-dom";
 import { Text, Stack, Grid, Header, useMediaQuery } from "@inubekit/inubekit";
 
 import { AppCard } from "@components/feedback/AppCard";
-import { spacing } from "@design/tokens/spacing/spacing";
+import { spacing } from "@design/tokens/spacing";
 import { userMenu, useConfigHeader, baseNavLinks } from "@config/nav.config";
 import { useAppContext } from "@context/AppContext";
 
@@ -24,7 +24,7 @@ const renderLogo = (imgUrl: string, altText: string) => {
 };
 
 function Home() {
-  const { user, logoUrl, selectedClient } = useAppContext();
+  const { user, logoUrl, businessUnit } = useAppContext();
   const configHeader = useConfigHeader();
   const isTablet = useMediaQuery("(max-width: 944px)");
 
@@ -34,12 +34,12 @@ function Home() {
         <Header
           navigation={{ nav: configHeader, breakpoint: "800px" }}
           logoURL={renderLogo(
-            selectedClient?.logo ?? logoUrl,
-            selectedClient?.name ?? "Sin unidad seleccionada",
+            businessUnit?.urlLogo ?? logoUrl,
+            businessUnit?.abbreviatedName ?? "Sin unidad seleccionada",
           )}
           user={{
             username: user?.username ?? "Nombre de usuario",
-            client: selectedClient?.name ?? "Sin unidad seleccionada",
+            client: businessUnit?.abbreviatedName ?? "Sin unidad seleccionada",
             breakpoint: "800px",
           }}
           menu={userMenu}

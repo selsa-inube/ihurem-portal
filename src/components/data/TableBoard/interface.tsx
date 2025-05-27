@@ -3,7 +3,7 @@ import { MdOutlineInfo } from "react-icons/md";
 import { Text, SkeletonLine, Icon, Stack } from "@inubekit/inubekit";
 
 import { ActionModal } from "@components/modals/ActionModal";
-import { spacing } from "@design/tokens/spacing/spacing";
+import { spacing } from "@design/tokens/spacing";
 
 import {
   StyledContainer,

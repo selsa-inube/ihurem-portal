@@ -23,9 +23,9 @@ export interface HumanResourceRequest {
   humanResourceRequestDescription: string;
   humanResourceRequestId: string;
   humanResourceRequestNumber: string;
-  humanResourceRequestStatus: EStatus;
+  humanResourceRequestStatus: ERequestStatus;
   humanResourceRequestTraceabilities: HumanResourceRequestTraceability[];
-  humanResourceRequestType: EType;
+  humanResourceRequestType: ERequestType;
   tasksToManageTheHumanResourcesRequests: TaskToManageHumanResourceRequest[];
   userCodeInCharge: string;
   userNameInCharge: string;
@@ -61,31 +61,32 @@ export type HumanResourceRequestData =
   | ICertificationGeneralInformationEntry
   | IVacationPaymentGeneralInformationEntry;
 
-export enum EStatus {
-  in_progress = "En progreso",
-  finished = "Terminada",
-  closed = "Cerrada",
-  rejected = "Rechazada",
-  canceled = "Cancelada",
-}
-
-export enum EType {
-  onboarding = "Vinculación",
-  vacations = "Vacaciones",
-  certification = "Certificación",
-  disability = "Incapacidad",
-  leave = "Permiso",
-  unpaid_Leave = "Licencia no remunerada",
-  leaving_the_Job = "Retiro",
-  salary_increase = "Ascenso salarial",
-  position_transfer = "Traslado de cargo",
+export enum ERequestType {
   Absence = "Ausencia",
-  pqr = "PQR",
+  Certification = "Certificación",
+  Disability = "Incapacidad",
+  Leave = "Permiso",
+  LeavingTheJob = "Retiro",
+  Onboarding = "Ingreso",
+  PaidVacations = "Pago de vacaciones",
+  PositionTransfer = "Traslado de puesto",
+  PQR = "PQR",
+  SalaryIncrease = "Aumento salarial",
+  UnpaidLeave = "Licencia no remunerada",
+  VacationsEnjoyed = "Disfrute de vacaciones",
 }
 
 export enum ETaskStatus {
   Assigned = "Asignada",
   Executed = "Ejecutada",
+}
+
+export enum ERequestStatus {
+  Canceled = "Cancelado",
+  Closed = "Cerrado",
+  Finished = "Finalizado",
+  InProgress = "En progreso",
+  Rejected = "Rechazado",
 }
 
 export type HumanResourceRequests = HumanResourceRequest[];

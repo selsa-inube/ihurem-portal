@@ -10,7 +10,7 @@ import { MdRule } from "react-icons/md";
 
 import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
-import { spacing } from "@design/tokens/spacing/spacing";
+import { spacing } from "@design/tokens/spacing";
 import { RequirementsModal } from "@components/modals/RequirementsModal";
 import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
 import { mockAlertCards } from "@mocks/requirements/requirements-2.mock";

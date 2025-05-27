@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
-import { spacing } from "@design/tokens/spacing/spacing";
+import { spacing } from "@design/tokens/spacing";
 import { InfoModal } from "@components/modals/InfoModal";
 
 import { Detail } from "./components/CertificationsTable/Detail";

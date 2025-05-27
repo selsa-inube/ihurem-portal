@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import { IRequestBody } from "@services/humanResourcesRequest/postHumanResourceRequest/types";
 import { postHumanResourceRequest } from "@services/humanResourcesRequest/postHumanResourceRequest";
+import { useHeaders } from "@hooks/useHeaders";
 
 export function useRequestSubmissionAPI() {
   const [showErrorFlag, setShowErrorFlag] = useState(false);
@@ -9,10 +10,12 @@ export function useRequestSubmissionAPI() {
   const [humanResourceRequestId, setHumanResourceRequestId] = useState<
     string | null
   >(null);
+  const { getHeaders } = useHeaders();
 
   const submitRequestToAPI = async (requestBody: IRequestBody) => {
     try {
-      const response = await postHumanResourceRequest(requestBody);
+      const headers = await getHeaders();
+      const response = await postHumanResourceRequest(requestBody, headers);
 
       if (response?.humanResourceRequestId) {
         setHumanResourceRequestId(response.humanResourceRequestId);

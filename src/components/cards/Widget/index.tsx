@@ -1,6 +1,6 @@
 import { Icon, Stack, Text } from "@inubekit/inubekit";
 
-import { spacing } from "@design/tokens/spacing/spacing";
+import { spacing } from "@design/tokens/spacing";
 
 import { StyledWidget } from "./styles";
 

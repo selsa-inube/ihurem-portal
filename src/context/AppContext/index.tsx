@@ -14,7 +14,6 @@ import {
   IEmployee,
   IEmployeeOptions,
 } from "@ptypes/employeePortalBusiness.types";
-import { Employee } from "@ptypes/employeePortalConsultation.types";
 import selsaLogo from "@assets/images/selsa.png";
 
 import { IAppContextType, IPreferences, IClient } from "./types";
@@ -51,7 +50,7 @@ function AppProvider(props: AppProviderProps) {
       ? {
           username: auth0User.name ?? "",
           id: auth0User.nickname ?? "",
-          company: businessUnitData.businessUnit ?? "Company Name",
+          company: businessUnitData.publicCode ?? "Company Name",
           urlImgPerfil: auth0User.picture ?? "",
           nickname: auth0User.nickname ?? "",
         }
@@ -75,7 +74,7 @@ function AppProvider(props: AppProviderProps) {
 
   const [businessUnit, setBusinessUnit] =
     useState<IBusinessUnitsPortalEmployee>(businessUnitData);
-
+  console.log("businessUnitData", businessUnitData);
   const [employees, setEmployees] = useState<IEmployee>(employee);
 
   const updatePreferences = (newPreferences: Partial<IPreferences>) => {
@@ -120,22 +119,6 @@ function AppProvider(props: AppProviderProps) {
     }
   }, [logoUrl, preferences, user]);
 
-  const [selectedEmployee, setSelectedEmployee] = useState<Employee>(() => {
-    const stored = localStorage.getItem("selectedEmployee");
-    return stored ? JSON.parse(stored) : null;
-  });
-
-  useEffect(() => {
-    if (selectedEmployee) {
-      localStorage.setItem(
-        "selectedEmployee",
-        JSON.stringify(selectedEmployee),
-      );
-    } else {
-      localStorage.removeItem("selectedEmployee");
-    }
-  }, [selectedEmployee]);
-
   return (
     <AppContext.Provider
       value={{
@@ -158,8 +141,6 @@ function AppProvider(props: AppProviderProps) {
         setEmployees,
         employeeOptions: employeeOptionsState,
         setEmployeeOptions,
-        selectedEmployee,
-        setSelectedEmployee,
       }}
     >
       {children}
