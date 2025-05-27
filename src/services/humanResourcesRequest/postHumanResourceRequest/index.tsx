@@ -4,13 +4,15 @@ import { IRequestBody, IHumanResourceResponse } from "./types";
 
 export async function postHumanResourceRequest(
   requestBody: IRequestBody,
+  headers: Record<string, string>,
 ): Promise<IHumanResourceResponse> {
   const response = await fetch(
     `${environment.IVITE_IHUREM_PERSISTENCE_PROCESS_SERVICE}/human-resources-requests`,
     {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        ...headers,
+        "X-Action": "SaveHumanResourcesRequest",
       },
       body: JSON.stringify(requestBody),
     },
