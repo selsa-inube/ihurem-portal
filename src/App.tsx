@@ -73,8 +73,8 @@ function App() {
 
   const [isReady, setIsReady] = useState(false);
   const { loginWithRedirect, isAuthenticated, isLoading, user } = useAuth0();
+
   const { portalData, hasError } = usePortalData(portalCode ?? "");
-  const numberDoc = "1062905485";
   const {
     businessManagersData,
     hasError: hasManagersError,
@@ -87,6 +87,7 @@ function App() {
     codeError: BusinessUnit,
   } = useBusinessUnit(portalData);
 
+  const numberDoc = "1062905485";
   const {
     employee,
     loading: employeeLoading,

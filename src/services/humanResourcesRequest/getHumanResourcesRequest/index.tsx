@@ -37,6 +37,10 @@ const getHumanResourceRequests = async (
 
       clearTimeout(timeoutId);
 
+      if (res.status === 204) {
+        return [];
+      }
+
       if (!res.ok) {
         throw new Error(
           `Error al obtener las solicitudes de recursos humanos (Status: ${res.status})`,
