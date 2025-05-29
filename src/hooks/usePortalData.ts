@@ -9,7 +9,7 @@ export const usePortalData = (codeParame: string) => {
     useState<IEmployeePortalByBusinessManager>(
       {} as IEmployeePortalByBusinessManager,
     );
-  const [hasError, setHasError] = useState(false);
+  const [hasError, setHasError] = useState(true);
 
   useEffect(() => {
     const fetchPortalData = async () => {
@@ -26,6 +26,7 @@ export const usePortalData = (codeParame: string) => {
         const encryptedParamValue = encrypt(codeParame);
         localStorage.setItem("portalCode", encryptedParamValue);
         setPortalData(employeePortalData);
+        setHasError(false);
       } catch (error) {
         console.error(error);
         setHasError(true);

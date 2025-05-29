@@ -18,7 +18,6 @@ export const useEmployeeByNickname = (
       try {
         const result = await employeeByNickname(nickname, businessUnit);
         if (Object.keys(result).length === 0) {
-          console.error("No employee found for the given nickname.");
           setEmployee({} as IEmployee);
           setError(true);
           setCodeError(1004);

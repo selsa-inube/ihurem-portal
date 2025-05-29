@@ -2,7 +2,6 @@ import { useState } from "react";
 import { MdAdd, MdOutlineInfo } from "react-icons/md";
 import { Button, Stack, Tabs, ITab, Text, Icon } from "@inubekit/inubekit";
 import { useNavigate } from "react-router-dom";
-import { MdOutlineBeachAccess } from "react-icons/md";
 
 import { useAppContext } from "@context/AppContext";
 import { AppMenu } from "@components/layout/AppMenu";
@@ -16,7 +15,6 @@ import { DaysUsedTable } from "./components/DaysUsedTable";
 import { IHolidaysTable } from "./components/HolidaysTable/types";
 import { daysUsedMock } from "./config/table.config";
 import { Detail } from "./components/Detail";
-import { Widget } from "@src/components/cards/Widget";
 
 interface HolidaysOptionsUIProps {
   appName: string;
@@ -87,13 +85,6 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
       description,
     });
   };
-  const pendingDaysWidget = (
-    <Widget
-      icon={<MdOutlineBeachAccess />}
-      value={22}
-      label="Días pendientes"
-    />
-  );
 
   const renderActions = () =>
     isMobile ? (
@@ -101,6 +92,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
         disableEnjoyment={!hasEnjoymentPrivilege || !hasActiveContract}
         disablePayment={!hasPaymentPrivilege || !hasActiveContract}
         actionDescriptions={actionDescriptions}
+        hasTableData={tableData && tableData.length > 0}
         onRequestEnjoyment={handleRequestEnjoyment}
         onRequestPayment={handleRequestPayment}
         onInfoIconClick={onOpenInfoModal}
@@ -111,7 +103,6 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
         justifyContent="end"
         direction={isMobile ? "column" : "row"}
       >
-        {pendingDaysWidget}
         <Stack gap={spacing.s025} alignItems="center">
           <Button
             spacing="wide"
