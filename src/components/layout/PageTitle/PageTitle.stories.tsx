@@ -16,9 +16,9 @@ const meta: Meta<typeof PageTitle> = {
   ],
   argTypes: {
     title: { control: "text" },
-    icon: { control: "object" },
     description: { control: "text" },
     navigatePage: { control: "text" },
+    showBackModal: { control: "boolean" },
   },
 };
 
@@ -29,6 +29,7 @@ Default.args = {
   description: "This is a brief description of the page.",
   navigatePage: "/home",
   icon: <MdArrowBack />,
+  showBackModal: true,
 };
 
 export default meta;
