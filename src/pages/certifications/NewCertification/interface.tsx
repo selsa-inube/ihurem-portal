@@ -86,6 +86,7 @@ function NewCertificationUI(
             onClick={handleOpenModal}
           />
         }
+        showBackModal
       >
         <Stack direction="column" gap={isTablet ? spacing.s300 : spacing.s500}>
           <Assisted

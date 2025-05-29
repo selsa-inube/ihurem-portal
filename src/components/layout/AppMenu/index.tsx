@@ -12,6 +12,7 @@ interface AppMenuProps {
   navigatePage: string;
   appDescription?: string;
   actionButton?: React.ReactNode;
+  showBackModal?: boolean;
 }
 
 function AppMenu(props: AppMenuProps) {
@@ -22,6 +23,7 @@ function AppMenu(props: AppMenuProps) {
     navigatePage,
     appDescription,
     actionButton,
+    showBackModal,
   } = props;
 
   return (
@@ -32,6 +34,7 @@ function AppMenu(props: AppMenuProps) {
           title={appName}
           description={appDescription}
           navigatePage={navigatePage}
+          showBackModal={showBackModal}
         />
         {actionButton && (
           <Stack direction="row" justifyContent="flex-end">

@@ -82,6 +82,7 @@ function RequestEnjoymentUI({
             onClick={handleOpenModal}
           />
         }
+        showBackModal
       >
         <Stack direction="column" gap={isTablet ? spacing.s200 : spacing.s500}>
           <Assisted
