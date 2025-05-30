@@ -8,12 +8,15 @@ import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
 import { spacing } from "@design/tokens/spacing";
 import { InfoModal } from "@components/modals/InfoModal";
+import { capitalizeWords } from "@utils/texts";
+import { contractTypeLabels } from "@mocks/contracts/enums";
+import { useEmployee } from "@hooks/useEmployee";
 
 import { StyledHolidaysContainer } from "./styles";
 import { HolidaysTable } from "./components/HolidaysTable";
 import { DaysUsedTable } from "./components/DaysUsedTable";
 import { IHolidaysTable } from "./components/HolidaysTable/types";
-import { daysUsedMock } from "./config/table.config";
+import { formatVacationHistory } from "./config/table.config";
 import { Detail } from "./components/Detail";
 
 interface HolidaysOptionsUIProps {
@@ -64,6 +67,8 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
     title: "",
     description: "",
   });
+  const { employee } = useEmployee(employees.employeeId);
+  const contracts = employee?.employmentContracts ?? [];
 
   const tabs: ITab[] = [
     { id: "dias", label: "Días utilizados" },
@@ -156,32 +161,39 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
       </Stack>
     );
 
-  const renderDaysUsedContent = () => (
-    <StyledHolidaysContainer $isMobile={isMobile}>
-      <Stack alignItems="center" justifyContent="space-between">
-        <Text type="title" size="medium">
-          Consulta de días utilizados
-        </Text>
-        {renderActions()}
-      </Stack>
-      {employees.employmentContracts?.map((contract, index) => (
-        <div key={index}>
-          {employees.employmentContracts.length > 1 && (
-            <Text
-              type="title"
-              weight="bold"
-              size="small"
-              appearance="gray"
-              padding={`${spacing.s100} ${spacing.s0}`}
-            >
-              {contract.businessName} - {contract.contractType}
-            </Text>
-          )}
-          <DaysUsedTable data={daysUsedMock} />
-        </div>
-      ))}
-    </StyledHolidaysContainer>
-  );
+  const renderDaysUsedContent = () => {
+    const formattedVacationData = formatVacationHistory([employee]);
+
+    return (
+      <StyledHolidaysContainer $isMobile={isMobile}>
+        <Stack alignItems="center" justifyContent="space-between">
+          <Text type="title" size="medium">
+            Consulta de días utilizados
+          </Text>
+          {renderActions()}
+        </Stack>
+        {contracts.map((contract, index) => (
+          <div key={index}>
+            {contracts.length > 1 && (
+              <Text
+                type="title"
+                weight="bold"
+                size="small"
+                appearance="gray"
+                padding={`${spacing.s100} ${spacing.s0}`}
+              >
+                {`${capitalizeWords(contract.businessName)} - ${
+                  contractTypeLabels[contract.contractType] ??
+                  contract.contractType
+                }`}
+              </Text>
+            )}
+            <DaysUsedTable data={formattedVacationData} />
+          </div>
+        ))}
+      </StyledHolidaysContainer>
+    );
+  };
 
   return (
     <>

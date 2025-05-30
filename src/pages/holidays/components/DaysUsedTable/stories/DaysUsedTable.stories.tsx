@@ -1,8 +1,6 @@
 import { Meta, StoryFn } from "@storybook/react";
 import { BrowserRouter } from "react-router-dom";
 
-import { daysUsedMock } from "@pages/holidays/config/table.config";
-
 import { DaysUsedTable } from "..";
 
 const meta: Meta<typeof DaysUsedTable> = {
@@ -25,13 +23,13 @@ const Template: StoryFn<typeof DaysUsedTable> = (args) => (
 
 export const Default = Template.bind({});
 Default.args = {
-  data: daysUsedMock,
+  data: [],
   loading: false,
 };
 
 export const Loading = Template.bind({});
 Loading.args = {
-  data: daysUsedMock,
+  data: [],
   loading: true,
 };
 

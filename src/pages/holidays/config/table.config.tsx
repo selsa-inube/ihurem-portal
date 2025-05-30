@@ -5,6 +5,7 @@ import {
   ERequestStatus,
   HumanResourceRequest,
 } from "@ptypes/humanResourcesRequest.types";
+import { Employee } from "@ptypes/employeePortalConsultation.types";
 import { formatDate } from "@utils/date";
 import { parseDataSafely, getValueFromData } from "@utils/parser";
 
@@ -68,20 +69,39 @@ export const formatHolidaysData = (holidays: HumanResourceRequest[]) =>
     };
   });
 
-export const daysUsedMock: IDaysUsedTable[] = [
-  {
-    startDate: { value: "22/Mar/2025" },
-    usageMode: { value: "Pagadas" },
-    days: { value: 15 },
-  },
-  {
-    startDate: { value: "03/Jun/2023" },
-    usageMode: { value: "Disfrutadas" },
-    days: { value: 15 },
-  },
-  {
-    startDate: { value: "28/Dic/2021" },
-    usageMode: { value: "Disfrutadas" },
-    days: { value: 15 },
-  },
-];
+export const formatVacationHistory = (
+  employees: Employee[],
+): (IDaysUsedTable & { businessName: string; contractType: string })[] => {
+  const allVacations: (IDaysUsedTable & {
+    businessName: string;
+    contractType: string;
+  })[] = [];
+  employees.forEach((employee) => {
+    if (
+      !employee.employmentContracts ||
+      employee.employmentContracts.length === 0
+    ) {
+      return;
+    }
+    employee.employmentContracts.forEach((contract) => {
+      contract.vacationsHistory.forEach((vacation) => {
+        allVacations.push({
+          startDate: {
+            value: formatDate(vacation.startDateVacationEnjoyment),
+          },
+          usageMode: {
+            value:
+              vacation.vacationType === "Pagadas" ? "Pagadas" : "Disfrutadas",
+          },
+          days: {
+            value: vacation.businessDaysOfVacation,
+          },
+          businessName: contract.businessName,
+          contractType: contract.contractType,
+        });
+      });
+    });
+  });
+
+  return allVacations;
+};
