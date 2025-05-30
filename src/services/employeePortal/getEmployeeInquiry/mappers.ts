@@ -117,6 +117,9 @@ const mapEmploymentContracts = (
       ? String(contract.regulatoryFrameworkName)
       : "",
     remunerationProfileName: String(contract.remunerationProfileName),
+    vacationsHistory: [],
+    traceabilityEmploymentContracts: [],
+    contractRemunerationAssignments: [],
   }));
 };
 
