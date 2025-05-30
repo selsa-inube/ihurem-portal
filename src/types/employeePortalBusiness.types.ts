@@ -44,6 +44,9 @@ interface IEmploymentContract {
   branchOfficeName: string;
   regulatoryFrameworkName?: string;
   remunerationProfileName: string;
+  vacationsHistory: IVacationHistory[];
+  traceabilityEmploymentContracts: ITraceabilityEmploymentContract[];
+  contractRemunerationAssignments: IContractRemunerationAssignment[];
 }
 
 interface IEmployeeReference {
@@ -121,6 +124,43 @@ interface IEmployeeOptions {
   optionEmployeeId: string;
 }
 
+interface IVacationHistory {
+  businessDaysOfVacation: number;
+  contractId: string;
+  earlyReturnDate: string;
+  employeeId: string;
+  joiningLetter: string;
+  nonWorkingDaysOfVacation: number;
+  startDateVacationEnjoyment: string;
+  vacationDaysPendingEarlyReturn: number;
+  vacationId: string;
+  vacationPaymentDate: string;
+  vacationStatus: string;
+  vacationType: string;
+}
+
+interface ITraceabilityEmploymentContract {
+  addendumDate: string;
+  contractId: string;
+  modifiedContractProperty: string;
+  previousValue: string;
+  traceContractId: string;
+}
+
+interface IContractRemunerationAssignment {
+  assignmentId: string;
+  contractId: string;
+  currencyCodeForPayment: string;
+  currencyCodeForValue: string;
+  currencyNameForPayment: string;
+  currencyNameForValue: string;
+  descriptionForTheEmployee: string;
+  descriptionForTheStaff: string;
+  individualValuePerEmployee: string;
+  timeUnitOfValue: number;
+  wageComponentCode: string;
+}
+
 export type {
   IEmployee,
   IEmploymentContract,
@@ -133,4 +173,7 @@ export type {
   PublicCodeTablesByBusinessesUnit,
   UseCasesByBusinessesUnit,
   IEmployeeOptions,
+  IVacationHistory,
+  ITraceabilityEmploymentContract,
+  IContractRemunerationAssignment,
 };
