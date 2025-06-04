@@ -8,7 +8,7 @@ import { useErrorFlag } from "@hooks/useErrorFlag";
 
 import { formatHumanResourceData } from "./config/table.config";
 import { CertificationsOptionsUI } from "./interface";
-import { certificationsNavConfig } from "./config/nav.config";
+import { breadcrumbs } from "./config/nav.config";
 import { ICertificationsTable } from "./components/CertificationsTable/types";
 
 function CertificationsOptions() {
@@ -55,9 +55,9 @@ function CertificationsOptions() {
 
   return (
     <CertificationsOptionsUI
-      appName={certificationsNavConfig[0].label}
-      appRoute={certificationsNavConfig[0].crumbs}
-      navigatePage={certificationsNavConfig[0].url}
+      appName={breadcrumbs.label}
+      appRoute={breadcrumbs.crumbs}
+      navigatePage={breadcrumbs.url}
       tableData={tableData}
       isLoading={isLoading}
       isMobile={isMobile}

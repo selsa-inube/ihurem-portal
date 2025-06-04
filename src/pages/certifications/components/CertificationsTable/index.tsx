@@ -24,6 +24,7 @@ import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
 import { Tooltip } from "@components/overlay/Tooltip";
 import { InfoModal } from "@components/modals/InfoModal";
 import { spacing } from "@design/tokens/spacing";
+import { transformContractValue } from "@utils/texts";
 
 import { CertificationsTableDataDetails, ICertificationsTable } from "./types";
 import { StyledTd, StyledTh, TooltipWrapper } from "./styles";
@@ -241,7 +242,10 @@ function CertificationsTable({
       ?.value as unknown as CertificationsTableDataDetails;
     const dataDeta = [
       { label: "Destinatario", value: dataDe.addressee },
-      { label: "Contrato", value: dataDe.contract },
+      {
+        label: "Contrato",
+        value: transformContractValue(dataDe.contract),
+      },
       { label: "Observaciones", value: dataDe.description },
     ];
     setSelectedRecord(dataDeta);

@@ -8,7 +8,7 @@ import { useErrorFlag } from "@hooks/useErrorFlag";
 
 import { formatHolidaysData } from "./config/table.config";
 import { HolidaysOptionsUI } from "./interface";
-import { holidaysNavConfig } from "./config/nav.config";
+import { breadcrumbs } from "./config/nav.config";
 import { IHolidaysTable } from "./components/HolidaysTable/types";
 
 function HolidaysOptions() {
@@ -33,7 +33,6 @@ function HolidaysOptions() {
   const hasActiveContract = true;
   const hasEnjoymentPrivilege = true;
   const hasPaymentPrivilege = true;
-  const mainNavItem = holidaysNavConfig[0];
 
   const handleDeleteRequest = (requestId: string, justification: string) => {
     const request = tableData.find((item) => item.requestId === requestId);
@@ -70,9 +69,9 @@ function HolidaysOptions() {
 
   return (
     <HolidaysOptionsUI
-      appName={mainNavItem.label}
-      appRoute={mainNavItem.crumbs}
-      navigatePage={mainNavItem.url}
+      appName={breadcrumbs.label}
+      appRoute={breadcrumbs.crumbs}
+      navigatePage={breadcrumbs.url}
       tableData={tableData}
       isLoading={isLoading}
       hasActiveContract={hasActiveContract}

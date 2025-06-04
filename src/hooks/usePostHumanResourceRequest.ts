@@ -42,6 +42,7 @@ export function useRequestSubmission(
           daysOff: formValues.daysOff,
           startDate: formatDate(formValues.startDate),
           contract: formValues.contract,
+          observations: formValues.observations,
         });
       } else {
         humanResourceRequestData = JSON.stringify({
@@ -49,6 +50,7 @@ export function useRequestSubmission(
           addressee: formValues.addressee,
           contract: formValues.contract,
           contractDesc: formValues.contractDesc,
+          observations: formValues.observations,
         });
       }
 
