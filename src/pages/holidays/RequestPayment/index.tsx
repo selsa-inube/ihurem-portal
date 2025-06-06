@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FormikProps } from "formik";
+import { useMediaQuery } from "@inubekit/inubekit";
 
 import { SendRequestModal } from "@components/modals/SendRequestModal";
 import { RequestInfoModal } from "@components/modals/RequestInfoModal";
@@ -8,7 +9,6 @@ import { useErrorFlag } from "@hooks/useErrorFlag";
 import { useRequestSubmission } from "@hooks/usePostHumanResourceRequest";
 
 import { IGeneralInformationEntry } from "./forms/GeneralInformationForm/types";
-import { holidaysNavConfig } from "../config/nav.config";
 import { RequestPaymentUI } from "./interface";
 import { requestPaymentSteps } from "./config/assisted.config";
 import { ModalState } from "./types";
@@ -147,27 +147,49 @@ function RequestPayment() {
     });
   };
 
-  const {
-    label: appName,
-    crumbs: appRoute,
-    url: navigatePage,
-  } = holidaysNavConfig[2];
+  const isTablet = useMediaQuery("(max-width: 1100px)");
+
+  const breadcrumbs = {
+    id: 3,
+    label: "Solicitar pago",
+    crumbs: [
+      {
+        path: "/",
+        label: "Inicio",
+        id: "/",
+        isActive: false,
+      },
+      {
+        path: "/holidays",
+        label: isTablet ? "..." : "Vacaciones",
+        id: "/holidays",
+        isActive: false,
+      },
+      {
+        path: "/holidays/request-payment",
+        label: "Solicitar pago",
+        id: "/holidays/request-payment",
+        isActive: true,
+      },
+    ],
+    url: "/holidays",
+  };
 
   return (
     <>
       <RequestPaymentUI
-        appName={appName}
-        appRoute={appRoute}
-        navigatePage={navigatePage}
+        appName={breadcrumbs.label}
+        appRoute={breadcrumbs.crumbs}
+        navigatePage={breadcrumbs.url}
         steps={requestPaymentSteps}
         currentStep={currentStep}
+        generalInformationRef={generalInformationRef}
+        initialGeneralInformationValues={formValues}
+        isCurrentFormValid={isCurrentFormValid}
         setCurrentStep={setCurrentStep}
         handleNextStep={handleNextStep}
         handlePreviousStep={handlePreviousStep}
         handleFinishAssisted={handleFinishAssisted}
-        generalInformationRef={generalInformationRef}
-        initialGeneralInformationValues={formValues}
-        isCurrentFormValid={isCurrentFormValid}
         setIsCurrentFormValid={setIsCurrentFormValid}
       />
 

@@ -24,6 +24,7 @@ import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
 import { Tooltip } from "@components/overlay/Tooltip";
 import { InfoModal } from "@components/modals/InfoModal";
 import { spacing } from "@design/tokens/spacing";
+import { transformContractValue } from "@utils/texts";
 
 import { IHolidaysTable, HolidayTableDataDetails } from "./types";
 import { StyledTd, StyledTh, TooltipWrapper } from "./styles";
@@ -190,7 +191,10 @@ function HolidaysTable(props: HolidaysTableProps) {
       { label: "Días de disfrute", value: dataDe.daysOff },
       { label: "Días hábiles a pagar", value: dataDe.daysToPay },
       { label: "Fecha de inicio o pago", value: dataDe.startDate },
-      { label: "Contrato", value: dataDe.contract },
+      {
+        label: "Contrato",
+        value: transformContractValue(dataDe.contract),
+      },
       { label: "Observaciones", value: dataDe.description },
     ].filter(
       (item) =>

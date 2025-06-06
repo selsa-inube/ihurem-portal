@@ -1,11 +1,6 @@
 import { useState } from "react";
 import { FormikProps } from "formik";
-import {
-  Stack,
-  Assisted,
-  IAssistedStep,
-  useMediaQuery,
-} from "@inubekit/inubekit";
+import { Stack, Assisted, IAssistedStep } from "@inubekit/inubekit";
 import { MdRule } from "react-icons/md";
 
 import { AppMenu } from "@components/layout/AppMenu";
@@ -29,6 +24,7 @@ interface RequestEnjoymentUIProps {
   currentStep: number;
   generalInformationRef: React.RefObject<FormikProps<IGeneralInformationEntry>>;
   isCurrentFormValid: boolean;
+  isTablet: boolean;
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
   setIsCurrentFormValid: React.Dispatch<React.SetStateAction<boolean>>;
   handleNextStep: () => void;
@@ -45,6 +41,7 @@ function RequestEnjoymentUI({
   generalInformationRef,
   initialGeneralInformationValues,
   isCurrentFormValid,
+  isTablet,
   setCurrentStep,
   setIsCurrentFormValid,
   handleNextStep,
@@ -53,8 +50,6 @@ function RequestEnjoymentUI({
 }: RequestEnjoymentUIProps & {
   initialGeneralInformationValues: IGeneralInformationEntry;
 }) {
-  const isTablet = useMediaQuery("(max-width: 1100px)");
-
   const shouldDisableNext = currentStep !== 1 && !isCurrentFormValid;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
