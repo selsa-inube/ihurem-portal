@@ -1,4 +1,5 @@
-import { Outlet } from "react-router-dom";
+import { useEffect } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 import { Nav, Grid, Header, useMediaQuery } from "@inubekit/inubekit";
 
 import {
@@ -8,6 +9,8 @@ import {
   useConfigHeader,
 } from "@config/nav.config";
 import { useAppContext } from "@context/AppContext/useAppContext";
+import { useEmployee } from "@hooks/useEmployee";
+import { EmploymentContract } from "@ptypes/employeePortalConsultation.types";
 
 import {
   StyledAppPage,
@@ -22,6 +25,28 @@ interface AppPageProps {
   withNav?: boolean;
 }
 
+const FORMALIZED_STATUS = "Formalized";
+
+const isContractActive = (status: string, deadline: string): boolean => {
+  if (status !== FORMALIZED_STATUS) return false;
+
+  if (!deadline) return true;
+
+  const currentDate = new Date();
+  const endDate = new Date(deadline);
+  return endDate > currentDate;
+};
+
+const areAllContractsFinalized = (contracts: EmploymentContract[]): boolean => {
+  if (!contracts || contracts.length === 0) return true;
+
+  return contracts.every(
+    (contract) =>
+      contract.contractStatus === "Finalized" ||
+      !isContractActive(contract.contractStatus, contract.deadline),
+  );
+};
+
 const renderLogo = (imgUrl: string, clientName: string) => {
   return imgUrl ? (
     <StyledContentImg to="/">
@@ -34,11 +59,25 @@ const renderLogo = (imgUrl: string, clientName: string) => {
 
 function AppPage(props: AppPageProps) {
   const { withNav = true } = props;
-  const { user, logoUrl, businessUnit } = useAppContext();
+  const { user, logoUrl, businessUnit, employees } = useAppContext();
+  const { employee } = useEmployee(employees.employeeId);
+  const navigate = useNavigate();
   const isTablet = useMediaQuery("(max-width: 944px)");
 
   const navConfig = useNavConfig();
   const configHeader = useConfigHeader();
+
+  const contracts = employee?.employmentContracts ?? [];
+
+  useEffect(() => {
+    if (contracts.length > 0 && areAllContractsFinalized(contracts)) {
+      alert(
+        "Todos sus contratos han finalizado. La sesión se cerrará automáticamente.",
+      );
+
+      navigate("/logout");
+    }
+  }, [contracts, navigate]);
 
   return (
     <StyledAppPage>
