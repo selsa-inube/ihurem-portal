@@ -27,7 +27,6 @@ interface GeneralInformationFormUIProps {
   validationSchema: Yup.ObjectSchema<Yup.AnyObject>;
   loading?: boolean;
   withNextButton?: boolean;
-  handlePreviousStep: () => void;
   handleNextStep: () => void;
 }
 
@@ -38,13 +37,7 @@ const MONTH_OPTIONS: IOption[] = monthFull.map((label, index) => ({
 }));
 
 function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
-  const {
-    formik,
-    loading,
-    withNextButton,
-    handlePreviousStep,
-    handleNextStep,
-  } = props;
+  const { formik, loading, withNextButton, handleNextStep } = props;
   const isMobile = useMediaQuery("(max-width: 700px)");
   const { employees } = useAppContext();
 
@@ -229,13 +222,6 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
         </StyledContainer>
         {withNextButton && (
           <Stack justifyContent="flex-end" gap={spacing.s250}>
-            <Button
-              appearance="gray"
-              variant="outlined"
-              onClick={handlePreviousStep}
-            >
-              Anterior
-            </Button>
             <Button
               onClick={handleNextStep}
               disabled={loading ?? !formik.isValid}

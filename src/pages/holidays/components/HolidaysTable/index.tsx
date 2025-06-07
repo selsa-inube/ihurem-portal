@@ -20,7 +20,6 @@ import { useState } from "react";
 
 import { TextAreaModal } from "@components/modals/TextAreaModal";
 import { RequestComponentDetail } from "@components/modals/ComponentDetailModal";
-import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
 import { Tooltip } from "@components/overlay/Tooltip";
 import { InfoModal } from "@components/modals/InfoModal";
 import { spacing } from "@design/tokens/spacing";
@@ -458,10 +457,8 @@ function HolidaysTable(props: HolidaysTableProps) {
         <RequestComponentDetail
           handleClose={handleClose}
           modalContent={selectedRecord}
-          requirements={mockRequirements}
           title="Detalles"
           buttonLabel="Cerrar"
-          showRequirementsTable
         />
       )}
 
