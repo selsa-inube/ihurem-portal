@@ -32,9 +32,6 @@ export const useContractValidation = () => {
   useEffect(() => {
     const contracts = employee?.employmentContracts ?? [];
     if (contracts.length > 0 && areAllContractsFinalized(contracts)) {
-      alert(
-        "Todos sus contratos han finalizado. La sesión se cerrará automáticamente.",
-      );
       navigate("/logout");
     }
   }, [employee?.employmentContracts, navigate]);

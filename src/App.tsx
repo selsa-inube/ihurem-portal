@@ -30,7 +30,7 @@ function LogOut() {
   localStorage.clear();
   const { logout } = useAuth0();
   logout({ logoutParams: { returnTo: environment.REDIRECT_URI } });
-  return <Home />;
+  return <ErrorPage errorCode={1004} />;
 }
 
 function FirstPage() {
