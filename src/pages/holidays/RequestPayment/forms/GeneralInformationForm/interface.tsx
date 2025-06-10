@@ -15,6 +15,7 @@ import { spacing } from "@design/tokens/spacing";
 import { getFieldState } from "@utils/forms/forms";
 import { useAppContext } from "@context/AppContext";
 import { contractTypeLabels } from "@mocks/contracts/enums";
+import { showRequirements } from "@pages/holidays/config/requirements";
 
 import { IGeneralInformationEntry } from "./types";
 import { StyledContainer } from "./styles";
@@ -29,11 +30,18 @@ interface GeneralInformationFormUIProps {
   loading?: boolean;
   withNextButton?: boolean;
   handleNextStep: () => void;
+  handlePreviousStep: () => void;
 }
 
 function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
-  const { formik, loading, withNextButton, validationSchema, handleNextStep } =
-    props;
+  const {
+    formik,
+    loading,
+    withNextButton,
+    validationSchema,
+    handleNextStep,
+    handlePreviousStep,
+  } = props;
 
   const isMobile = useMediaQuery("(max-width: 700px)");
   const { employees } = useAppContext();
@@ -127,6 +135,15 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
 
         {withNextButton && (
           <Stack justifyContent="flex-end" gap={spacing.s250}>
+            {showRequirements && (
+              <Button
+                appearance="gray"
+                variant="outlined"
+                onClick={handlePreviousStep}
+              >
+                Anterior
+              </Button>
+            )}
             <Button
               onClick={handleNextStep}
               disabled={getDisabledState(loading, formik.isValid)}

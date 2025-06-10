@@ -17,6 +17,7 @@ import { useAppContext } from "@context/AppContext";
 import { IOption } from "@ptypes/util.type";
 import { useDayOptions } from "@hooks/useDayOptions";
 import { contractTypeLabels } from "@mocks/contracts/enums";
+import { showRequirements } from "@pages/holidays/config/requirements";
 
 import { IGeneralInformationEntry } from "./types";
 import { StyledContainer, StyledDateContainer } from "./styles";
@@ -28,6 +29,7 @@ interface GeneralInformationFormUIProps {
   loading?: boolean;
   withNextButton?: boolean;
   handleNextStep: () => void;
+  handlePreviousStep: () => void;
 }
 
 const MONTH_OPTIONS: IOption[] = monthFull.map((label, index) => ({
@@ -37,7 +39,13 @@ const MONTH_OPTIONS: IOption[] = monthFull.map((label, index) => ({
 }));
 
 function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
-  const { formik, loading, withNextButton, handleNextStep } = props;
+  const {
+    formik,
+    loading,
+    withNextButton,
+    handleNextStep,
+    handlePreviousStep,
+  } = props;
   const isMobile = useMediaQuery("(max-width: 700px)");
   const { employees } = useAppContext();
 
@@ -222,6 +230,15 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
         </StyledContainer>
         {withNextButton && (
           <Stack justifyContent="flex-end" gap={spacing.s250}>
+            {showRequirements && (
+              <Button
+                appearance="gray"
+                variant="outlined"
+                onClick={handlePreviousStep}
+              >
+                Anterior
+              </Button>
+            )}
             <Button
               onClick={handleNextStep}
               disabled={loading ?? !formik.isValid}

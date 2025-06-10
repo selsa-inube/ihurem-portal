@@ -20,10 +20,12 @@ import { useState } from "react";
 
 import { TextAreaModal } from "@components/modals/TextAreaModal";
 import { RequestComponentDetail } from "@components/modals/ComponentDetailModal";
+import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
 import { Tooltip } from "@components/overlay/Tooltip";
 import { InfoModal } from "@components/modals/InfoModal";
 import { spacing } from "@design/tokens/spacing";
 import { transformContractValue } from "@utils/texts";
+import { showRequirements } from "@pages/holidays/config/requirements";
 
 import { IHolidaysTable, HolidayTableDataDetails } from "./types";
 import { StyledTd, StyledTh, TooltipWrapper } from "./styles";
@@ -457,6 +459,8 @@ function HolidaysTable(props: HolidaysTableProps) {
         <RequestComponentDetail
           handleClose={handleClose}
           modalContent={selectedRecord}
+          requirements={showRequirements ? mockRequirements : undefined}
+          showRequirementsTable={showRequirements}
           title="Detalles"
           buttonLabel="Cerrar"
         />
