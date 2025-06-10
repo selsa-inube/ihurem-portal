@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 
 import { useAppContext } from "@context/AppContext";
+import { useContractValidation } from "@hooks/useContractValidation";
 import { getHumanResourceRequests } from "@services/humanResourcesRequest/getHumanResourcesRequest";
 import { HumanResourceRequest } from "@ptypes/humanResourcesRequest.types";
+
 import { useHeaders } from "./useHeaders";
 
 export const useHumanResourceRequests = <T>(
@@ -14,6 +16,9 @@ export const useHumanResourceRequests = <T>(
   const [error, setError] = useState<Error | null>(null);
   const { getHeaders } = useHeaders();
   const { employees } = useAppContext();
+
+  useContractValidation();
+
   const fetchData = async () => {
     setIsLoading(true);
     try {
