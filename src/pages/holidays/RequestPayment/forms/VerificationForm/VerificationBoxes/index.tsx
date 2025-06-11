@@ -3,10 +3,11 @@ import { Grid, Stack } from "@inubekit/inubekit";
 import { BoxAttribute } from "@components/cards/BoxAttribute";
 import { spacing } from "@design/tokens/spacing";
 import { useAppContext } from "@context/AppContext";
+import { showRequirements } from "@pages/holidays/config/requirements";
 
-import { alerts } from "../../RequirementsForm/config/alertConfig";
 import { IFormsUpdateData } from "../../../types";
 import { IGeneralInformationEntry } from "../../GeneralInformationForm/types";
+import { alerts } from "../../RequirementsForm/config/alertConfig";
 
 const renderPersonalInfoVerification = (
   values: IGeneralInformationEntry,
@@ -76,10 +77,13 @@ function VerificationBoxes({
   const { employees } = useAppContext();
 
   const hasMultipleContracts = (employees.employmentContracts?.length ?? 0) > 1;
+
+  const adjustedStepKey = showRequirements ? stepKey : stepKey + 1;
+
   return (
     <>
-      {stepKey === 1 && renderAlerts(isTablet)}
-      {stepKey === 2 &&
+      {showRequirements && adjustedStepKey === 1 && renderAlerts(isTablet)}
+      {adjustedStepKey === 2 &&
         renderPersonalInfoVerification(
           updatedData.personalInformation.values,
           isTablet,
