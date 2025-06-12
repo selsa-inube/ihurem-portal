@@ -14,24 +14,32 @@ const baseNavLinks = [
     label: "Vacaciones",
     icon: <MdOutlineBeachAccess />,
     path: "/holidays",
+    description:
+      "Son los días de descanso remunerado que le corresponden al empleado por cada año trabajado.",
   },
   {
     id: "disability",
     label: "Incapacidades",
     icon: <MdOutlinePersonalInjury />,
     path: "/disability",
+    description:
+      "Son períodos en los que el trabajador no puede laborar debido a una enfermedad o accidente, y está respaldado por un certificado médico.",
   },
   {
     id: "certifications",
     label: "Certificaciones",
     icon: <MdOutlineFilePresent />,
     path: "/certifications",
+    description:
+      "Son documentos que acreditan la formación o experiencia laboral de un empleado.",
   },
   {
     id: "absences",
     label: "Ausencias",
     icon: <MdOutlinePersonOff />,
     path: "/absences",
+    description:
+      "Son períodos en los que el trabajador no se presenta a laborar, ya sea de forma justificada o injustificada.",
   },
 ];
 
