@@ -118,7 +118,7 @@ function DaysUsedTable(props: DaysUsedTableProps) {
   };
 
   const renderLoadingRows = () =>
-    Array.from({ length: 3 }).map((_, idx) => (
+    Array.from({ length: 2 }).map((_, idx) => (
       <Tr key={idx} border="bottom">
         {headers.map((header, index) => (
           <Td

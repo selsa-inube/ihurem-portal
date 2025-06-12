@@ -49,7 +49,7 @@ function HolidaysOptions() {
     setTableData(combined);
   }, [enjoyedData, paidData]);
 
-  const isLoading = isLoadingEnjoyed ?? isLoadingPaid;
+  const isLoadingRequests = isLoadingEnjoyed ?? isLoadingPaid;
 
   useEffect(() => {
     if (location.state?.showFlag) {
@@ -73,7 +73,7 @@ function HolidaysOptions() {
       appRoute={breadcrumbs.crumbs}
       navigatePage={breadcrumbs.url}
       tableData={tableData}
-      isLoading={isLoading}
+      isLoadingRequests={isLoadingRequests}
       hasActiveContract={hasActiveContract}
       isMobile={isMobile}
       hasEnjoymentPrivilege={hasEnjoymentPrivilege}
