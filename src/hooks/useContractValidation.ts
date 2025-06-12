@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { useAppContext } from "@context/AppContext";
 import { useEmployee } from "@hooks/useEmployee";
+import { useErrorFlag } from "@hooks/useErrorFlag";
 import { EmploymentContract } from "@ptypes/employeePortalConsultation.types";
 
 const FORMALIZED_STATUS = "Formalized";
@@ -29,18 +30,28 @@ export const useContractValidation = () => {
   const { employees } = useAppContext();
   const { employee } = useEmployee(employees.employeeId);
 
+  const contracts = employee?.employmentContracts ?? [];
+  const allContractsFinalized = areAllContractsFinalized(contracts);
+
+  const shouldShowError = contracts.length > 0 && allContractsFinalized;
+
+  useErrorFlag(
+    shouldShowError,
+    "No tienes contratos vigentes. La sesión se cerrará automáticamente.",
+    "Sesión Finalizada",
+    false,
+    5000,
+  );
+
   useEffect(() => {
-    const contracts = employee?.employmentContracts ?? [];
-    if (contracts.length > 0 && areAllContractsFinalized(contracts)) {
+    if (shouldShowError) {
       navigate("/logout");
     }
-  }, [employee?.employmentContracts, navigate]);
+  }, [shouldShowError, navigate]);
 
   return {
-    contracts: employee?.employmentContracts ?? [],
-    areAllContractsFinalized: areAllContractsFinalized(
-      employee?.employmentContracts ?? [],
-    ),
+    contracts,
+    areAllContractsFinalized: allContractsFinalized,
     isContractActive,
   };
 };
