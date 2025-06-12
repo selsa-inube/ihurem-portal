@@ -14,7 +14,7 @@ import { IHolidaysTable } from "./components/HolidaysTable/types";
 function HolidaysOptions() {
   const navigate = useNavigate();
   const location = useLocation();
-  const isMobile = useMediaQuery("(max-width: 768px)");
+  const isMobile = useMediaQuery("(max-width: 1060px)");
 
   const { data: enjoyedData, isLoading: isLoadingEnjoyed } =
     useHumanResourceRequests<IHolidaysTable>(
