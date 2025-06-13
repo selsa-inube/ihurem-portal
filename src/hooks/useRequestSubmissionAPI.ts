@@ -3,6 +3,7 @@ import { useState } from "react";
 import { IRequestBody } from "@services/humanResourcesRequest/postHumanResourceRequest/types";
 import { postHumanResourceRequest } from "@services/humanResourcesRequest/postHumanResourceRequest";
 import { useHeaders } from "@hooks/useHeaders";
+import { useContractValidation } from "@hooks/useContractValidation";
 
 export function useRequestSubmissionAPI() {
   const [showErrorFlag, setShowErrorFlag] = useState(false);
@@ -11,6 +12,8 @@ export function useRequestSubmissionAPI() {
     string | null
   >(null);
   const { getHeaders } = useHeaders();
+
+  useContractValidation();
 
   const submitRequestToAPI = async (requestBody: IRequestBody) => {
     try {

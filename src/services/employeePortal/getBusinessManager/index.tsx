@@ -1,12 +1,13 @@
-import { IBusinessManagers } from "@ptypes/employeePortalBusiness.types";
 import {
   environment,
   fetchTimeoutServices,
   maxRetriesServices,
 } from "@config/environment";
+import { IBusinessManagers } from "@ptypes/employeePortalBusiness.types";
+
 import { mapBusinessManagerApiToEntity } from "./mappers";
 
-const businessManagers = async (
+const getBusinessManagers = async (
   businessManagerId: string,
 ): Promise<IBusinessManagers> => {
   const maxRetries = maxRetriesServices;
@@ -49,6 +50,7 @@ const businessManagers = async (
 
       return mapBusinessManagerApiToEntity(data);
     } catch (error) {
+      console.log(error);
       if (attempt === maxRetries) {
         throw new Error(
           "Todos los intentos fallaron. No se pudieron obtener los datos del operador.",
@@ -60,4 +62,4 @@ const businessManagers = async (
   return {} as IBusinessManagers;
 };
 
-export { businessManagers };
+export { getBusinessManagers };
