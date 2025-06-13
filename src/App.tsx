@@ -25,6 +25,7 @@ import { useBusinessManagers } from "@hooks/useBusinessManagers";
 import { useEmployeeByNickname } from "@hooks/useEmployeeInquiry";
 
 import { useAppContext } from "./context/AppContext/useAppContext";
+import { LoadingAppUI } from "./pages/login/outlets/LoadingApp/interface";
 
 function LogOut() {
   localStorage.clear();
@@ -116,7 +117,7 @@ function App() {
   }, [isLoading, isAuthenticated, loginWithRedirect]);
 
   if (isLoading || !isReady || employeeLoading || optionsLoading) {
-    return <div>Cargando....</div>;
+    return <LoadingAppUI />;
   }
   if (
     hasError ||
