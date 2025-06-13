@@ -45,13 +45,18 @@ export const useContractValidation = () => {
 
   useEffect(() => {
     if (shouldShowError) {
-      navigate("/logout");
+      const timer = setTimeout(() => {
+        navigate("/logout");
+      }, 5000);
+
+      return () => clearTimeout(timer);
     }
   }, [shouldShowError, navigate]);
 
   return {
     contracts,
     areAllContractsFinalized: allContractsFinalized,
+    shouldShowError,
     isContractActive,
   };
 };
