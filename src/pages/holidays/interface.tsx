@@ -24,7 +24,7 @@ interface HolidaysOptionsUIProps {
   appRoute: IRoute[];
   navigatePage: string;
   tableData: IHolidaysTable[];
-  isLoading: boolean;
+  isLoadingRequests: boolean;
   isMobile: boolean;
   appDescription?: string;
   hasActiveContract?: boolean;
@@ -40,7 +40,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
     appRoute,
     navigatePage,
     tableData,
-    isLoading,
+    isLoadingRequests,
     isMobile,
     appDescription,
     hasActiveContract = true,
@@ -67,7 +67,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
     title: "",
     description: "",
   });
-  const { employee } = useEmployee(employees.employeeId);
+  const { employee, loading } = useEmployee(employees.employeeId);
   const contracts = employee?.employmentContracts ?? [];
 
   const tabs: ITab[] = [
@@ -188,7 +188,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
                 }`}
               </Text>
             )}
-            <DaysUsedTable data={formattedVacationData} />
+            <DaysUsedTable data={formattedVacationData} loading={loading} />
           </div>
         ))}
       </StyledHolidaysContainer>
@@ -223,7 +223,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
                 </Stack>
                 <HolidaysTable
                   data={tableData}
-                  loading={isLoading}
+                  loading={isLoadingRequests}
                   hasViewDetailsPrivilege
                   hasDeletePrivilege
                   handleDeleteRequest={handleDeleteRequest}
