@@ -66,7 +66,7 @@ function Home() {
                     <AppCard
                       key={index}
                       title={link.label}
-                      description={"Descripción"}
+                      description={link.description}
                       icon={link.icon}
                       url={link.path}
                     />
