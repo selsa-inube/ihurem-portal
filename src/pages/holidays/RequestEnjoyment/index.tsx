@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { FormikProps } from "formik";
+import { useMediaQuery } from "@inubekit/inubekit";
 
 import { SendRequestModal } from "@components/modals/SendRequestModal";
 import { RequestInfoModal } from "@components/modals/RequestInfoModal";
@@ -9,7 +10,6 @@ import { IVacationGeneralInformationEntry } from "@ptypes/humanResourcesRequest.
 
 import { RequestEnjoymentUI } from "./interface";
 import { requestEnjoymentSteps } from "./config/assisted.config";
-import { holidaysNavConfig } from "../config/nav.config";
 import { ModalState } from "./types";
 
 function useFormManagement() {
@@ -105,7 +105,7 @@ function RequestEnjoyment() {
   useErrorFlag(showErrorFlag, errorMessage, "Error", false, 10000);
 
   const handleNextStep = () => {
-    if (currentStep < holidaysNavConfig.length) {
+    if (currentStep) {
       updateFormValues();
       setCurrentStep(currentStep + 1);
     }
@@ -138,28 +138,50 @@ function RequestEnjoyment() {
     navigateAfterSubmission("vacations");
   };
 
-  const {
-    label: appName,
-    crumbs: appRoute,
-    url: navigatePage,
-  } = holidaysNavConfig[1];
+  const isTablet = useMediaQuery("(max-width: 1100px)");
+
+  const breadcrumbs = {
+    label: "Solicitar disfrute",
+    crumbs: [
+      {
+        path: "/",
+        label: "Inicio",
+        id: "/",
+        isActive: false,
+      },
+      {
+        path: "/holidays",
+        label: isTablet ? "..." : "Vacaciones",
+        id: "/holidays",
+        isActive: false,
+      },
+      {
+        path: "/holidays/request-enjoyment",
+        label: "Solicitar disfrute",
+        id: "/holidays/request-enjoyment",
+        isActive: true,
+      },
+    ],
+    url: "/holidays",
+  };
 
   return (
     <>
       <RequestEnjoymentUI
-        appName={appName}
-        appRoute={appRoute}
-        navigatePage={navigatePage}
+        appName={breadcrumbs.label}
+        appRoute={breadcrumbs.crumbs}
+        navigatePage={breadcrumbs.url}
         steps={requestEnjoymentSteps}
         currentStep={currentStep}
+        isTablet={isTablet}
+        isCurrentFormValid={isCurrentFormValid}
+        generalInformationRef={generalInformationRef}
+        initialGeneralInformationValues={formValues}
         handleNextStep={handleNextStep}
         handlePreviousStep={handlePreviousStep}
         handleFinishAssisted={handleFinishAssisted}
         setIsCurrentFormValid={setIsCurrentFormValid}
         setCurrentStep={setCurrentStep}
-        isCurrentFormValid={isCurrentFormValid}
-        generalInformationRef={generalInformationRef}
-        initialGeneralInformationValues={formValues}
       />
 
       {modalState.isSendModalVisible && (

@@ -1,25 +1,42 @@
 import { IAssistedStep, IOption } from "@inubekit/inubekit";
 
-export const requestEnjoymentSteps: IAssistedStep[] = [
-  {
-    id: 1,
-    number: 1,
-    name: "Requisitos no cumplidos",
-    description: "Revisa los requisitos para el disfrute de vacaciones.",
-  },
-  {
-    id: 2,
-    number: 2,
-    name: "Información general",
-    description: "Proporciona información acerca de tu solicitud.",
-  },
-  {
-    id: 3,
-    number: 3,
-    name: "Verificación",
-    description: "Verifica la información proporcionada.",
-  },
-];
+import { showRequirements } from "@pages/holidays/config/requirements";
+
+export const requestEnjoymentSteps: IAssistedStep[] = showRequirements
+  ? [
+      {
+        id: 1,
+        number: 1,
+        name: "Requisitos no cumplidos",
+        description: "Revisa los requisitos para el disfrute de vacaciones.",
+      },
+      {
+        id: 2,
+        number: 2,
+        name: "Información general",
+        description: "Proporciona información acerca de tu solicitud.",
+      },
+      {
+        id: 3,
+        number: 3,
+        name: "Verificación",
+        description: "Verifica la información proporcionada.",
+      },
+    ]
+  : [
+      {
+        id: 1,
+        number: 1,
+        name: "Información general",
+        description: "Proporciona información acerca de tu solicitud.",
+      },
+      {
+        id: 2,
+        number: 2,
+        name: "Verificación",
+        description: "Verifica la información proporcionada.",
+      },
+    ];
 
 export const certificationOptions: IOption[] = [
   {

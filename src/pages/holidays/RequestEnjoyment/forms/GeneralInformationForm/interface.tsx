@@ -16,6 +16,8 @@ import { spacing } from "@design/tokens/spacing";
 import { useAppContext } from "@context/AppContext";
 import { IOption } from "@ptypes/util.type";
 import { useDayOptions } from "@hooks/useDayOptions";
+import { contractTypeLabels } from "@mocks/contracts/enums";
+import { showRequirements } from "@pages/holidays/config/requirements";
 
 import { IGeneralInformationEntry } from "./types";
 import { StyledContainer, StyledDateContainer } from "./styles";
@@ -26,8 +28,8 @@ interface GeneralInformationFormUIProps {
   validationSchema: Yup.ObjectSchema<Yup.AnyObject>;
   loading?: boolean;
   withNextButton?: boolean;
-  handlePreviousStep: () => void;
   handleNextStep: () => void;
+  handlePreviousStep: () => void;
 }
 
 const MONTH_OPTIONS: IOption[] = monthFull.map((label, index) => ({
@@ -41,8 +43,8 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
     formik,
     loading,
     withNextButton,
-    handlePreviousStep,
     handleNextStep,
+    handlePreviousStep,
   } = props;
   const isMobile = useMediaQuery("(max-width: 700px)");
   const { employees } = useAppContext();
@@ -61,8 +63,8 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
     () =>
       (employees.employmentContracts ?? []).map((c) => ({
         id: c.contractId,
-        value: `${c.businessName} - ${c.contractType}`,
-        label: `${c.businessName} - ${c.contractType}`,
+        value: `${c.businessName} - ${contractTypeLabels[c.contractType]}`,
+        label: `${c.businessName} - ${contractTypeLabels[c.contractType]}`,
       })),
     [employees.employmentContracts],
   );
@@ -228,13 +230,15 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
         </StyledContainer>
         {withNextButton && (
           <Stack justifyContent="flex-end" gap={spacing.s250}>
-            <Button
-              appearance="gray"
-              variant="outlined"
-              onClick={handlePreviousStep}
-            >
-              Anterior
-            </Button>
+            {showRequirements && (
+              <Button
+                appearance="gray"
+                variant="outlined"
+                onClick={handlePreviousStep}
+              >
+                Anterior
+              </Button>
+            )}
             <Button
               onClick={handleNextStep}
               disabled={loading ?? !formik.isValid}

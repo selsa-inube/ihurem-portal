@@ -26,6 +26,7 @@ import { useEmployeeByNickname } from "@hooks/useEmployeeInquiry";
 
 import { useAppContext } from "./context/AppContext/useAppContext";
 import { useContractValidation } from "./hooks/useContractValidation";
+import { LoadingAppUI } from "./pages/login/outlets/LoadingApp/interface";
 
 function LogOut() {
   localStorage.clear();
@@ -50,7 +51,7 @@ function ContractValidationWrapper() {
   const { contracts, areAllContractsFinalized } = useContractValidation();
 
   if (contracts.length > 0 && areAllContractsFinalized) {
-    return <ErrorPage errorCode={1004} />;
+    return <ErrorPage errorCode={1000} />;
   }
 
   return <FirstPage />;
@@ -138,7 +139,7 @@ function App() {
   }, [isLoading, isAuthenticated, loginWithRedirect]);
 
   if (isLoading || !isReady || employeeLoading || optionsLoading) {
-    return <div>Cargando....</div>;
+    return <LoadingAppUI />;
   }
   if (
     hasError ||

@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { FormikProps } from "formik";
+import { useMediaQuery } from "@inubekit/inubekit";
 
 import { SendRequestModal } from "@components/modals/SendRequestModal";
 import { RequestInfoModal } from "@components/modals/RequestInfoModal";
@@ -9,7 +10,6 @@ import { useRequestSubmission } from "@hooks/usePostHumanResourceRequest";
 
 import { NewCertificationUI } from "./interface";
 import { newCCertificationApplication } from "./config/assisted.config";
-import { certificationsNavConfig } from "../config/nav.config";
 import { ModalState } from "./types";
 
 function useFormManagement() {
@@ -142,18 +142,39 @@ function NewCertification() {
     navigateAfterSubmission("certifications");
   };
 
-  const {
-    label: appName,
-    crumbs: appRoute,
-    url: navigatePage,
-  } = certificationsNavConfig[1];
+  const isTablet = useMediaQuery("(max-width: 1100px)");
+
+  const breadcrumbs = {
+    label: "Agregar solicitud",
+    crumbs: [
+      {
+        path: "/",
+        label: "Inicio",
+        id: "/",
+        isActive: false,
+      },
+      {
+        path: "/certifications",
+        label: isTablet ? "..." : "Certificaciones",
+        id: "/certifications",
+        isActive: false,
+      },
+      {
+        path: "/certifications/new-certification",
+        label: "Agregar solicitud",
+        id: "/certifications/new-certification",
+        isActive: true,
+      },
+    ],
+    url: "/certifications",
+  };
 
   return (
     <>
       <NewCertificationUI
-        appName={appName}
-        appRoute={appRoute}
-        navigatePage={navigatePage}
+        appName={breadcrumbs.label}
+        appRoute={breadcrumbs.crumbs}
+        navigatePage={breadcrumbs.url}
         steps={newCCertificationApplication}
         currentStep={currentStep}
         handleNextStep={handleNextStep}

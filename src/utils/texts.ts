@@ -1,3 +1,5 @@
+import { contractTypeLabels } from "@mocks/contracts/enums";
+
 export function truncateText(text: string, maxLength: number): string {
   return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
 }
@@ -16,4 +18,21 @@ const capitalizeText = (text: string) => {
   return text.charAt(0).toUpperCase() + textTowerCase.slice(1);
 };
 
-export { capitalizeText };
+const transformContractValue = (contractValue: string): string => {
+  if (!contractValue) return contractValue;
+
+  const contractTypeKey = Object.keys(contractTypeLabels).find((key) =>
+    contractValue.includes(key),
+  );
+
+  if (contractTypeKey) {
+    return contractValue.replace(
+      contractTypeKey,
+      contractTypeLabels[contractTypeKey],
+    );
+  }
+
+  return contractValue;
+};
+
+export { capitalizeText, transformContractValue };

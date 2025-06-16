@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { MdAdd, MdOutlineInfo } from "react-icons/md";
+import { MdAdd, MdOutlineInfo, MdOutlineWarningAmber } from "react-icons/md";
 import { Button, Stack, Tabs, ITab, Text, Icon } from "@inubekit/inubekit";
 import { useNavigate } from "react-router-dom";
+import { MdOutlineBeachAccess } from "react-icons/md";
 
 import { useAppContext } from "@context/AppContext";
 import { AppMenu } from "@components/layout/AppMenu";
@@ -11,6 +12,7 @@ import { InfoModal } from "@components/modals/InfoModal";
 import { capitalizeWords } from "@utils/texts";
 import { contractTypeLabels } from "@mocks/contracts/enums";
 import { useEmployee } from "@hooks/useEmployee";
+import { Widget } from "@components/cards/Widget";
 
 import { StyledHolidaysContainer } from "./styles";
 import { HolidaysTable } from "./components/HolidaysTable";
@@ -24,7 +26,7 @@ interface HolidaysOptionsUIProps {
   appRoute: IRoute[];
   navigatePage: string;
   tableData: IHolidaysTable[];
-  isLoading: boolean;
+  isLoadingRequests: boolean;
   isMobile: boolean;
   appDescription?: string;
   hasActiveContract?: boolean;
@@ -40,7 +42,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
     appRoute,
     navigatePage,
     tableData,
-    isLoading,
+    isLoadingRequests,
     isMobile,
     appDescription,
     hasActiveContract = true,
@@ -67,7 +69,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
     title: "",
     description: "",
   });
-  const { employee } = useEmployee(employees.employeeId);
+  const { employee, loading } = useEmployee(employees.employeeId);
   const contracts = employee?.employmentContracts ?? [];
 
   const tabs: ITab[] = [
@@ -77,6 +79,11 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
       label: isMobile
         ? "Solicitudes en trámite"
         : "Solicitudes de vacaciones en trámite",
+      icon: {
+        appearance: "warning",
+        icon: <MdOutlineWarningAmber />,
+        size: "14px",
+      },
     },
   ];
 
@@ -91,23 +98,31 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
     });
   };
 
+  const pendingDaysWidget = (
+    <Widget
+      icon={<MdOutlineBeachAccess />}
+      value={22}
+      label="Días pendientes"
+    />
+  );
+
   const renderActions = () =>
     isMobile ? (
-      <Detail
-        disableEnjoyment={!hasEnjoymentPrivilege || !hasActiveContract}
-        disablePayment={!hasPaymentPrivilege || !hasActiveContract}
-        actionDescriptions={actionDescriptions}
-        hasTableData={tableData && tableData.length > 0}
-        onRequestEnjoyment={handleRequestEnjoyment}
-        onRequestPayment={handleRequestPayment}
-        onInfoIconClick={onOpenInfoModal}
-      />
+      <Stack direction="column" gap={spacing.s150}>
+        {pendingDaysWidget}
+        <Detail
+          disableEnjoyment={!hasEnjoymentPrivilege || !hasActiveContract}
+          disablePayment={!hasPaymentPrivilege || !hasActiveContract}
+          actionDescriptions={actionDescriptions}
+          hasTableData={tableData && tableData.length > 0}
+          onRequestEnjoyment={handleRequestEnjoyment}
+          onRequestPayment={handleRequestPayment}
+          onInfoIconClick={onOpenInfoModal}
+        />
+      </Stack>
     ) : (
-      <Stack
-        gap={spacing.s150}
-        justifyContent="end"
-        direction={isMobile ? "column" : "row"}
-      >
+      <Stack gap={spacing.s150} justifyContent="end" direction="row">
+        {pendingDaysWidget}
         <Stack gap={spacing.s025} alignItems="center">
           <Button
             spacing="wide"
@@ -188,7 +203,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
                 }`}
               </Text>
             )}
-            <DaysUsedTable data={formattedVacationData} />
+            <DaysUsedTable data={formattedVacationData} loading={loading} />
           </div>
         ))}
       </StyledHolidaysContainer>
@@ -219,11 +234,10 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
                   <Text type="title" size="medium">
                     Solicitudes en trámite
                   </Text>
-                  {isMobile && renderActions()}
                 </Stack>
                 <HolidaysTable
                   data={tableData}
-                  loading={isLoading}
+                  loading={isLoadingRequests}
                   hasViewDetailsPrivilege
                   hasDeletePrivilege
                   handleDeleteRequest={handleDeleteRequest}

@@ -10,7 +10,7 @@ const StyledDetail = styled.div<IStyledActions>`
   border-radius: 8px;
   position: relative;
   height: 0;
-  top: ${({ $hasTableData }) => ($hasTableData ? "-135px" : "-85px")};
+  top: ${({ $hasTableData }) => ($hasTableData ? "-175px" : "-125px")};
 `;
 
 export { StyledDetail };
