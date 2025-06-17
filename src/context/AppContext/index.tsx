@@ -74,10 +74,7 @@ function AppProvider(props: AppProviderProps) {
 
   const [businessUnit, setBusinessUnit] =
     useState<IBusinessUnitsPortalEmployee>(businessUnitData);
-  const [employees, setEmployees] = useState<IEmployee>({
-    ...employee,
-    employeeId: "301",
-  });
+  const [employees, setEmployees] = useState<IEmployee>(employee);
 
   const updatePreferences = (newPreferences: Partial<IPreferences>) => {
     setPreferences((prev) => ({ ...prev, ...newPreferences }));
