@@ -13,6 +13,7 @@ import { capitalizeWords } from "@utils/texts";
 import { contractTypeLabels } from "@mocks/contracts/enums";
 import { useEmployee } from "@hooks/useEmployee";
 import { Widget } from "@components/cards/Widget";
+import { useEmployeeVacationDays } from "@hooks/useEmployeeVacationDays";
 
 import { StyledHolidaysContainer } from "./styles";
 import { HolidaysTable } from "./components/HolidaysTable";
@@ -72,6 +73,13 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
   const { employee, loading } = useEmployee(employees.employeeId);
   const contracts = employee?.employmentContracts ?? [];
 
+  const { vacationDays, loadingDays } = useEmployeeVacationDays(
+    employee?.employeeId ?? null,
+  );
+
+  const totalDays =
+    vacationDays?.reduce((sum, contract) => sum + contract.pendingDays, 0) ?? 0;
+
   const tabs: ITab[] = [
     { id: "dias", label: "Días utilizados" },
     {
@@ -101,8 +109,9 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
   const pendingDaysWidget = (
     <Widget
       icon={<MdOutlineBeachAccess />}
-      value={22}
       label="Días pendientes"
+      value={totalDays}
+      isLoading={loadingDays}
     />
   );
 
