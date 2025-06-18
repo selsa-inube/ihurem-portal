@@ -2,6 +2,7 @@ import {
   IEmployee,
   IEmploymentContract,
   IEmployeeReference,
+  EContractStatus,
 } from "@ptypes/employeePortalBusiness.types";
 import { HolidaysActionTypes } from "@ptypes/holidays.types";
 
@@ -96,7 +97,7 @@ const mapEmploymentContracts = (
     contractId: String(contract.contractId),
     contractNumber: String(contract.contractNumber),
     employeeId: String(contract.employeeId),
-    contractStatus: String(contract.contractStatus),
+    contractStatus: String(contract.contractStatus) as EContractStatus,
     contractType: contract.contractType as HolidaysActionTypes,
     startDate: String(contract.startDate),
     formalizedStartDate: String(contract.formalizedStartDate),
