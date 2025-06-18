@@ -1,6 +1,19 @@
 import { useState, useEffect } from "react";
-import { IEmployee } from "@ptypes/employeePortalBusiness.types";
+import {
+  EContractStatus,
+  IEmployee,
+  IEmploymentContract,
+} from "@ptypes/employeePortalBusiness.types";
 import { employeeByNickname } from "@services/employeePortal/getEmployeeInquiry";
+
+const validateContractStatus = (
+  employmentContracts: IEmploymentContract[],
+): boolean => {
+  if (!employmentContracts || employmentContracts.length === 0) return false;
+  return employmentContracts.some(
+    (contract) => contract.contractStatus === EContractStatus.Formalized,
+  );
+};
 
 export const useEmployeeByNickname = (
   nickname: string,
@@ -19,6 +32,11 @@ export const useEmployeeByNickname = (
         const result = await employeeByNickname(nickname, businessUnit);
         if (Object.keys(result).length === 0) {
           setEmployee({} as IEmployee);
+          setError(true);
+          setCodeError(1004);
+          return;
+        }
+        if (!validateContractStatus(result.employmentContracts)) {
           setError(true);
           setCodeError(1004);
           return;

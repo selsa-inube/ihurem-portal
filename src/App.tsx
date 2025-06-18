@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 
 import { Home } from "@pages/home";
-import { decrypt } from "@utils/encrypt";
+import { decrypt, encrypt } from "@utils/encrypt";
 import { LoginRoutes } from "@routes/login";
 import { GlobalStyles } from "@styles/global";
 import { pathStart } from "@config/nav.config";
@@ -25,13 +25,14 @@ import { useBusinessManagers } from "@hooks/useBusinessManagers";
 import { useEmployeeByNickname } from "@hooks/useEmployeeInquiry";
 
 import { useAppContext } from "./context/AppContext/useAppContext";
+import { useContractValidation } from "./hooks/useContractValidation";
 import { LoadingAppUI } from "./pages/login/outlets/LoadingApp/interface";
 
 function LogOut() {
   localStorage.clear();
   const { logout } = useAuth0();
   logout({ logoutParams: { returnTo: environment.REDIRECT_URI } });
-  return <Home />;
+  return <ErrorPage errorCode={1000} />;
 }
 
 function FirstPage() {
@@ -46,11 +47,25 @@ function FirstPage() {
   );
 }
 
+function ContractValidationWrapper() {
+  const { contracts, areAllContractsFinalized } = useContractValidation();
+
+  if (contracts.length > 0 && areAllContractsFinalized) {
+    return <ErrorPage errorCode={1000} />;
+  }
+
+  return <FirstPage />;
+}
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="/login/*" element={<LoginRoutes />} />
-      <Route path="/*" element={<FirstPage />} errorElement={<ErrorPage />} />
+      <Route
+        path="/*"
+        element={<ContractValidationWrapper />}
+        errorElement={<ErrorPage />}
+      />
       <Route path="/*" element={<AppPage />}>
         <Route path="holidays/*" element={<HolidaysRoutes />} />
         <Route path="certifications/*" element={<CertificationsRoutes />} />
@@ -71,6 +86,13 @@ function App() {
   if (!portalCode) {
     return <ErrorPage errorCode={1000} />;
   }
+
+  useEffect(() => {
+    if (portalParam && portalParam !== decryptedPortal) {
+      const encryptedPortal = encrypt(portalParam);
+      localStorage.setItem("portalCode", encryptedPortal);
+    }
+  }, [portalParam, decryptedPortal]);
 
   const [isReady, setIsReady] = useState(false);
   const { loginWithRedirect, isAuthenticated, isLoading, user } = useAuth0();
@@ -120,7 +142,6 @@ function App() {
     return <LoadingAppUI />;
   }
   if (
-    hasError ||
     hasManagersError ||
     hasBusinessUnitError ||
     employeeError ||

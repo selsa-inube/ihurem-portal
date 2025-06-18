@@ -8,6 +8,7 @@ import {
   useConfigHeader,
 } from "@config/nav.config";
 import { useAppContext } from "@context/AppContext/useAppContext";
+import { useContractValidation } from "@hooks/useContractValidation";
 
 import {
   StyledAppPage,
@@ -39,6 +40,8 @@ function AppPage(props: AppPageProps) {
 
   const navConfig = useNavConfig();
   const configHeader = useConfigHeader();
+
+  useContractValidation();
 
   return (
     <StyledAppPage>

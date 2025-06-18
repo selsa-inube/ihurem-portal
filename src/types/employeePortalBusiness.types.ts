@@ -27,7 +27,7 @@ interface IEmploymentContract {
   contractId: string;
   contractNumber: string;
   employeeId: string;
-  contractStatus: string;
+  contractStatus: EContractStatus;
   contractType: HolidaysActionTypes;
   startDate: string;
   formalizedStartDate: string;
@@ -159,6 +159,13 @@ interface IContractRemunerationAssignment {
   individualValuePerEmployee: string;
   timeUnitOfValue: number;
   wageComponentCode: string;
+}
+
+export enum EContractStatus {
+  InTheProcessOfFormalization = "in_the_process_of_formalization",
+  Formalized = "Formalized",
+  Finalized = "Finalized",
+  InTheProcessOfEnding = "in_the_process_of_ending",
 }
 
 export type {

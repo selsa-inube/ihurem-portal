@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { businessManagers } from "@services/employeePortal/getBusinessManager";
+
 import {
   IBusinessManagers,
   IEmployeePortalByBusinessManager,
 } from "@ptypes/employeePortalBusiness.types";
+import { getBusinessManagers } from "@services/employeePortal/getBusinessManager";
 
 export const useBusinessManagers = (
   portalPublicCode: IEmployeePortalByBusinessManager,
@@ -16,7 +17,7 @@ export const useBusinessManagers = (
     const fetchBusinessManagers = async () => {
       if (!portalPublicCode) return;
       try {
-        const fetchedBusinessManagers = await businessManagers(
+        const fetchedBusinessManagers = await getBusinessManagers(
           portalPublicCode.businessManagerId,
         );
 
@@ -26,6 +27,7 @@ export const useBusinessManagers = (
         }
         setBusinessManagersData(fetchedBusinessManagers);
       } catch (error) {
+        console.log(error);
         setHasError(true);
       }
       if (hasError) {
