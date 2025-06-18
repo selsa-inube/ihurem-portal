@@ -32,7 +32,7 @@ function LogOut() {
   localStorage.clear();
   const { logout } = useAuth0();
   logout({ logoutParams: { returnTo: environment.REDIRECT_URI } });
-  return <Home />;
+  return <ErrorPage errorCode={1000} />;
 }
 
 function FirstPage() {
@@ -142,7 +142,6 @@ function App() {
     return <LoadingAppUI />;
   }
   if (
-    hasError ||
     hasManagersError ||
     hasBusinessUnitError ||
     employeeError ||
