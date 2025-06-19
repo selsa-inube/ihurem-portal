@@ -186,8 +186,6 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
     );
 
   const renderDaysUsedContent = () => {
-    const formattedVacationData = formatVacationHistory([employee]);
-
     return (
       <StyledHolidaysContainer $isMobile={isMobile}>
         <Stack alignItems="center" justifyContent="space-between">
@@ -196,25 +194,34 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
           </Text>
           {renderActions()}
         </Stack>
-        {contracts.map((contract, index) => (
-          <div key={index}>
-            {contracts.length > 1 && (
-              <Text
-                type="title"
-                weight="bold"
-                size="small"
-                appearance="gray"
-                padding={`${spacing.s100} ${spacing.s0}`}
-              >
-                {`${capitalizeWords(contract.businessName)} - ${
-                  contractTypeLabels[contract.contractType] ??
-                  contract.contractType
-                }`}
-              </Text>
-            )}
-            <DaysUsedTable data={formattedVacationData} loading={loading} />
-          </div>
-        ))}
+        {contracts.map((contract) => {
+          const contractVacationData = formatVacationHistory([
+            {
+              ...employee,
+              employmentContracts: [contract],
+            },
+          ]);
+
+          return (
+            <div key={contract.contractId}>
+              {contracts.length > 1 && (
+                <Text
+                  type="title"
+                  weight="bold"
+                  size="small"
+                  appearance="gray"
+                  padding={`${spacing.s100} ${spacing.s0}`}
+                >
+                  {`${capitalizeWords(contract.businessName)} - ${
+                    contractTypeLabels[contract.contractType] ??
+                    contract.contractType
+                  }`}
+                </Text>
+              )}
+              <DaysUsedTable data={contractVacationData} loading={loading} />
+            </div>
+          );
+        })}
       </StyledHolidaysContainer>
     );
   };
