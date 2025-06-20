@@ -85,7 +85,7 @@ export enum ERequestStatus {
   Canceled = "Cancelado",
   Closed = "Cerrado",
   Finished = "Finalizado",
-  InProgress = "En progreso",
+  supervisor_approval = "En progreso",
   Rejected = "Rechazado",
 }
 

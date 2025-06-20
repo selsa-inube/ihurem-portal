@@ -21,8 +21,8 @@ function CertificationsOptions() {
     isLoading,
     error,
   } = useHumanResourceRequests<ICertificationsTable>(
-    "Certification",
     formatHumanResourceData,
+    "Certification",
   );
   const [tableData, setTableData] = useState<ICertificationsTable[]>([]);
 
