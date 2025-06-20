@@ -1,4 +1,18 @@
+import { ERequestType } from "@ptypes/humanResourcesRequest.types";
+
 import { IVacationDeletion } from "./types";
+
+export const validateBeforeDelete = (
+  requestType: ERequestType,
+  disbursementDate: string | null | undefined,
+  startDateEnment: string | null | undefined,
+): IVacationDeletion => {
+  return validateVacationDeletion(
+    requestType,
+    disbursementDate,
+    startDateEnment,
+  );
+};
 
 export const validateVacationDeletion = (
   requestType: string,

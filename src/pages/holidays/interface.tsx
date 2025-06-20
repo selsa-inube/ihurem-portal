@@ -34,7 +34,10 @@ interface HolidaysOptionsUIProps {
   hasEnjoymentPrivilege?: boolean;
   hasPaymentPrivilege?: boolean;
   actionDescriptions?: Record<string, string>;
-  handleDeleteRequest: (requestId: string, justification: string) => void;
+  handleDeleteRequest: (
+    requestId: string,
+    justification?: string,
+  ) => boolean | void;
 }
 
 function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {

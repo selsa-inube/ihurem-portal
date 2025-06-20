@@ -4,9 +4,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 import { useHeaders } from "@hooks/useHeaders";
 import { deleteHumanResourceRequest } from "@services/humanResourcesRequest/deleteHumanResourceRequest";
-import { validateVacationDeletion } from "@validations/vacationDeletion/vacationDeletion";
 import { ERequestType } from "@ptypes/humanResourcesRequest.types";
-import { IVacationDeletion } from "@validations/vacationDeletion/types";
+import { validateBeforeDelete } from "@validations/vacationDeletion/vacationDeletion";
 
 import { useContractValidation } from "./useContractValidation";
 
@@ -37,18 +36,6 @@ export function useDeleteRequest<T extends { requestId?: string }>(
     true,
   );
 
-  const validateBeforeDelete = (
-    requestType: ERequestType,
-    disbursementDate: string | null | undefined,
-    startDateEnment: string | null | undefined,
-  ): IVacationDeletion => {
-    return validateVacationDeletion(
-      requestType,
-      disbursementDate,
-      startDateEnment,
-    );
-  };
-
   const showValidationError = (title: string, message: string) => {
     setValidationModal({
       show: true,
@@ -65,17 +52,11 @@ export function useDeleteRequest<T extends { requestId?: string }>(
     });
   };
 
-  const handleDelete = async (
-    id: string,
-    justification: string,
-    number: string,
-    requestData?: {
-      requestType: ERequestType;
-      disbursementDate?: string | null;
-      startDateEnment?: string | null;
-    },
-    idField: keyof T = "requestId",
-  ) => {
+  const validateDelete = (requestData?: {
+    requestType: ERequestType;
+    disbursementDate?: string | null;
+    startDateEnment?: string | null;
+  }) => {
     if (requestData) {
       const validation = validateBeforeDelete(
         requestData.requestType,
@@ -88,7 +69,15 @@ export function useDeleteRequest<T extends { requestId?: string }>(
         return false;
       }
     }
+    return true;
+  };
 
+  const handleDelete = async (
+    id: string,
+    justification: string,
+    number: string,
+    idField: keyof T = "requestId",
+  ) => {
     setIsDeleting(true);
     try {
       const headers = await getHeaders();
@@ -116,6 +105,7 @@ export function useDeleteRequest<T extends { requestId?: string }>(
   return {
     isDeleting,
     handleDelete,
+    validateDelete,
     validationModal,
     closeValidationModal,
   };

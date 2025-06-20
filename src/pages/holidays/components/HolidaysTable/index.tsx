@@ -38,7 +38,10 @@ interface HolidaysTableProps {
   disableDeleteAction?: boolean;
   hasViewDetailsPrivilege?: boolean;
   hasDeletePrivilege?: boolean;
-  handleDeleteRequest: (requestId: string, justification: string) => void;
+  handleDeleteRequest: (
+    requestId: string,
+    justification?: string,
+  ) => boolean | void;
 }
 
 function HolidaysTable(props: HolidaysTableProps) {
@@ -218,8 +221,13 @@ function HolidaysTable(props: HolidaysTableProps) {
       );
       return;
     }
-    setSelectedRequestId(requestId);
-    setIsSecondModalOpen(true);
+
+    const canDelete = handleDeleteRequest(requestId);
+
+    if (canDelete !== false) {
+      setSelectedRequestId(requestId);
+      setIsSecondModalOpen(true);
+    }
   };
 
   const renderDetailsIcon = (rowIndex: number) => {

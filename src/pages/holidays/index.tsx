@@ -43,12 +43,16 @@ function HolidaysOptions() {
   const hasEnjoymentPrivilege = true;
   const hasPaymentPrivilege = true;
 
-  const { handleDelete, validationModal, closeValidationModal } =
-    useDeleteRequest((filterFn) => {
-      setTableData((prev) => prev.filter(filterFn));
-    });
+  const {
+    handleDelete,
+    validateDelete,
+    validationModal,
+    closeValidationModal,
+  } = useDeleteRequest((filterFn) => {
+    setTableData((prev) => prev.filter(filterFn));
+  });
 
-  const handleDeleteRequest = (requestId: string, justification: string) => {
+  const handleDeleteRequest = (requestId: string, justification?: string) => {
     const request = tableData.find((item) => item.requestId === requestId);
     const requestNumber = request?.requestNumber ?? "";
 
@@ -77,7 +81,11 @@ function HolidaysOptions() {
       };
     }
 
-    void handleDelete(requestId, justification, requestNumber, requestData);
+    if (!justification) {
+      return validateDelete(requestData);
+    }
+
+    void handleDelete(requestId, justification, requestNumber);
   };
 
   useEffect(() => {
