@@ -4,6 +4,7 @@ import { useMediaQuery } from "@inubekit/inubekit";
 
 import { useHumanResourceRequests } from "@hooks/useHumanResourceRequests";
 import { useDeleteRequest } from "@hooks/useDeleteRequest";
+import { useDeleteValidation } from "@hooks/useDeleteValidation";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 import { InfoModal } from "@components/modals/InfoModal";
 import { ERequestType } from "@ptypes/humanResourcesRequest.types";
@@ -43,14 +44,12 @@ function HolidaysOptions() {
   const hasEnjoymentPrivilege = true;
   const hasPaymentPrivilege = true;
 
-  const {
-    handleDelete,
-    validateDelete,
-    validationModal,
-    closeValidationModal,
-  } = useDeleteRequest((filterFn) => {
+  const { handleDelete } = useDeleteRequest((filterFn) => {
     setTableData((prev) => prev.filter(filterFn));
   });
+
+  const { validateDelete, validationModal, closeValidationModal } =
+    useDeleteValidation();
 
   const handleDeleteRequest = (requestId: string, justification?: string) => {
     const request = tableData.find((item) => item.requestId === requestId);
