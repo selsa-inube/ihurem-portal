@@ -22,7 +22,7 @@ export const validateVacationDeletion = (
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  if (requestType === "VacationsEnjoyed" && !disbursementDate) {
+  if (requestType === "VacationsEnjoyed" && disbursementDate) {
     return {
       canDelete: false,
       title: "No se puede eliminar la solicitud",
@@ -31,7 +31,7 @@ export const validateVacationDeletion = (
     };
   }
 
-  if (requestType === "PaidVacations" && !disbursementDate) {
+  if (requestType === "PaidVacations" && disbursementDate) {
     return {
       canDelete: false,
       title: "No se puede eliminar la solicitud",
