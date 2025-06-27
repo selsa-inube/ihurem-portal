@@ -98,12 +98,18 @@ function RequestPayment() {
     errorMessage,
     setShowErrorFlag,
   } = useRequestSubmission(
-    formValues,
+    {
+      ...formValues,
+      contractId: "",
+      contractNumber: "",
+      businessName: "",
+      contractType: "",
+      observationEmployee: "",
+    },
     "PaidVacations",
     userCodeInCharge,
     userNameInCharge,
   );
-
   useErrorFlag(showErrorFlag, errorMessage, "Error", false, 10000);
 
   const handleNextStep = () => {

@@ -1,14 +1,14 @@
 import { useState } from "react";
 
 import { formatDate } from "@utils/date";
-import { HumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
+import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
 import { useAppContext } from "@context/AppContext/useAppContext";
 
 import { useRequestSubmissionAPI } from "./useRequestSubmissionAPI";
 import { useRequestNavigation } from "./useRequestNavigation";
 
 export function useRequestSubmission(
-  formValues: HumanResourceRequestData,
+  formValues: IUnifiedHumanResourceRequestData,
   typeRequest: string,
   userCodeInCharge: string,
   userNameInCharge: string,
@@ -31,26 +31,26 @@ export function useRequestSubmission(
     try {
       let humanResourceRequestData: string;
 
-      if ("daysToPay" in formValues) {
+      if (formValues.daysToPay) {
         humanResourceRequestData = JSON.stringify({
           daysToPay: formValues.daysToPay,
-          contract: formValues.contract,
-          observations: formValues.observations,
+          contract: formValues.contractId,
+          observations: formValues.observationEmployee,
         });
-      } else if ("daysOff" in formValues) {
+      } else if (formValues.daysOff && formValues.startDateEnyoment) {
         humanResourceRequestData = JSON.stringify({
           daysOff: formValues.daysOff,
-          startDate: formatDate(formValues.startDate),
-          contract: formValues.contract,
-          observations: formValues.observations,
+          startDate: formatDate(formValues.startDateEnyoment),
+          contract: formValues.contractId,
+          observations: formValues.observationEmployee,
         });
       } else {
         humanResourceRequestData = JSON.stringify({
-          certification: formValues.certification,
+          certification: formValues.certificationType,
           addressee: formValues.addressee,
-          contract: formValues.contract,
-          contractDesc: formValues.contractDesc,
-          observations: formValues.observations,
+          contract: formValues.contractId,
+          contractDesc: formValues.businessName,
+          observations: formValues.observationEmployee,
         });
       }
 
@@ -58,7 +58,7 @@ export function useRequestSubmission(
         employeeId: employees?.employeeId,
         humanResourceRequestData,
         humanResourceRequestDate: new Date().toISOString(),
-        humanResourceRequestDescription: formValues.observations ?? "",
+        humanResourceRequestDescription: formValues.observationEmployee ?? "",
         humanResourceRequestStatus: "InProgress",
         humanResourceRequestType: typeRequest,
         userCodeInCharge,

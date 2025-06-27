@@ -6,42 +6,56 @@ import { SendRequestModal } from "@components/modals/SendRequestModal";
 import { RequestInfoModal } from "@components/modals/RequestInfoModal";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 import { useRequestSubmission } from "@hooks/usePostHumanResourceRequest";
-import { IVacationGeneralInformationEntry } from "@ptypes/humanResourcesRequest.types";
 
+import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
+import { IGeneralInformationEntry } from "./forms/GeneralInformationForm/types";
 import { RequestEnjoymentUI } from "./interface";
 import { requestEnjoymentSteps } from "./config/assisted.config";
 import { ModalState } from "./types";
 
-function useFormManagement() {
+function RequestEnjoyment() {
+  const [currentStep, setCurrentStep] = useState(1);
+
   const [formValues, setFormValues] =
-    useState<IVacationGeneralInformationEntry>({
-      id: "",
+    useState<IUnifiedHumanResourceRequestData>({
+      contractId: "",
+      contractNumber: "",
+      businessName: "",
+      contractType: "",
+      observationEmployee: "",
       daysOff: "",
-      startDate: "",
-      observations: "",
-      contract: "",
+      startDateEnyoment: "",
     });
+
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
+
   const generalInformationRef =
-    useRef<FormikProps<IVacationGeneralInformationEntry>>(null);
+    useRef<FormikProps<IGeneralInformationEntry>>(null);
 
   const updateFormValues = () => {
     if (generalInformationRef.current) {
-      setFormValues(generalInformationRef.current.values);
+      const currentValues = generalInformationRef.current.values;
+      setFormValues({
+        contractId: currentValues.id ?? "",
+        contractNumber: "",
+        businessName: "",
+        contractType: currentValues.contract ?? "",
+        observationEmployee: currentValues.observations ?? "",
+        daysOff: "",
+        startDateEnyoment: currentValues.startDate ?? "",
+      });
       setIsCurrentFormValid(generalInformationRef.current.isValid);
     }
   };
 
-  return {
-    formValues,
-    isCurrentFormValid,
-    setIsCurrentFormValid,
-    generalInformationRef,
-    updateFormValues,
+  const generalInfoValues: IGeneralInformationEntry = {
+    id: formValues.contractId ?? "",
+    startDate: formValues.startDateEnyoment ?? "",
+    contract: formValues.contractType ?? "",
+    observations: formValues.observationEmployee ?? "",
+    daysOff: formValues.daysOff ?? "",
   };
-}
 
-function useModalManagement() {
   const [modalState, setModalState] = useState<ModalState>({
     isSendModalVisible: false,
     isRequestInfoModalVisible: false,
@@ -58,32 +72,6 @@ function useModalManagement() {
     });
   const closeInfoModal = () =>
     setModalState((prev) => ({ ...prev, isRequestInfoModalVisible: false }));
-
-  return {
-    modalState,
-    openSendModal,
-    closeSendModal,
-    openInfoModal,
-    closeInfoModal,
-  };
-}
-
-function RequestEnjoyment() {
-  const [currentStep, setCurrentStep] = useState(1);
-  const {
-    formValues,
-    isCurrentFormValid,
-    setIsCurrentFormValid,
-    generalInformationRef,
-    updateFormValues,
-  } = useFormManagement();
-  const {
-    modalState,
-    openSendModal,
-    closeSendModal,
-    openInfoModal,
-    closeInfoModal,
-  } = useModalManagement();
 
   const userCodeInCharge = "User 1";
   const userNameInCharge = "Johan Daniel Garcia Nova";
@@ -143,12 +131,7 @@ function RequestEnjoyment() {
   const breadcrumbs = {
     label: "Solicitar disfrute",
     crumbs: [
-      {
-        path: "/",
-        label: "Inicio",
-        id: "/",
-        isActive: false,
-      },
+      { path: "/", label: "Inicio", id: "/", isActive: false },
       {
         path: "/holidays",
         label: isTablet ? "..." : "Vacaciones",
@@ -176,7 +159,7 @@ function RequestEnjoyment() {
         isTablet={isTablet}
         isCurrentFormValid={isCurrentFormValid}
         generalInformationRef={generalInformationRef}
-        initialGeneralInformationValues={formValues}
+        initialGeneralInformationValues={generalInfoValues}
         handleNextStep={handleNextStep}
         handlePreviousStep={handlePreviousStep}
         handleFinishAssisted={handleFinishAssisted}
