@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { FormikProps } from "formik";
 import { useMediaQuery } from "@inubekit/inubekit";
 
@@ -6,15 +6,18 @@ import { SendRequestModal } from "@components/modals/SendRequestModal";
 import { RequestInfoModal } from "@components/modals/RequestInfoModal";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 import { useRequestSubmission } from "@hooks/usePostHumanResourceRequest";
+import {
+  IUnifiedHumanResourceRequestData,
+  ERequestType,
+} from "@ptypes/humanResourcesRequest.types";
+import { useAppContext } from "@context/AppContext/useAppContext";
 
-import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
-import { IGeneralInformationEntry } from "./forms/GeneralInformationForm/types";
 import { RequestEnjoymentUI } from "./interface";
 import { requestEnjoymentSteps } from "./config/assisted.config";
 import { ModalState } from "./types";
 
-function RequestEnjoyment() {
-  const [currentStep, setCurrentStep] = useState(1);
+function useFormManagement() {
+  const { employees } = useAppContext();
 
   const [formValues, setFormValues] =
     useState<IUnifiedHumanResourceRequestData>({
@@ -30,32 +33,39 @@ function RequestEnjoyment() {
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
 
   const generalInformationRef =
-    useRef<FormikProps<IGeneralInformationEntry>>(null);
+    useRef<FormikProps<IUnifiedHumanResourceRequestData>>(null);
+
+  useEffect(() => {
+    const contrato = employees?.employmentContracts?.[0];
+
+    if (contrato) {
+      setFormValues((prev) => ({
+        ...prev,
+        contractId: contrato.contractId ?? "",
+        contractNumber: contrato.contractNumber ?? "",
+        businessName: contrato.businessName ?? "",
+        contractType: contrato.contractType ?? "",
+      }));
+    }
+  }, [employees]);
 
   const updateFormValues = () => {
     if (generalInformationRef.current) {
-      const currentValues = generalInformationRef.current.values;
-      setFormValues({
-        contractId: currentValues.id ?? "",
-        contractNumber: "",
-        businessName: "",
-        contractType: currentValues.contract ?? "",
-        observationEmployee: currentValues.observations ?? "",
-        daysOff: "",
-        startDateEnyoment: currentValues.startDate ?? "",
-      });
+      setFormValues(generalInformationRef.current.values);
       setIsCurrentFormValid(generalInformationRef.current.isValid);
     }
   };
 
-  const generalInfoValues: IGeneralInformationEntry = {
-    id: formValues.contractId ?? "",
-    startDate: formValues.startDateEnyoment ?? "",
-    contract: formValues.contractType ?? "",
-    observations: formValues.observationEmployee ?? "",
-    daysOff: formValues.daysOff ?? "",
+  return {
+    formValues,
+    isCurrentFormValid,
+    setIsCurrentFormValid,
+    generalInformationRef,
+    updateFormValues,
   };
+}
 
+function useModalManagement() {
   const [modalState, setModalState] = useState<ModalState>({
     isSendModalVisible: false,
     isRequestInfoModalVisible: false,
@@ -63,15 +73,46 @@ function RequestEnjoyment() {
 
   const openSendModal = () =>
     setModalState((prev) => ({ ...prev, isSendModalVisible: true }));
+
   const closeSendModal = () =>
     setModalState((prev) => ({ ...prev, isSendModalVisible: false }));
+
   const openInfoModal = () =>
     setModalState({
       isSendModalVisible: false,
       isRequestInfoModalVisible: true,
     });
+
   const closeInfoModal = () =>
     setModalState((prev) => ({ ...prev, isRequestInfoModalVisible: false }));
+
+  return {
+    modalState,
+    openSendModal,
+    closeSendModal,
+    openInfoModal,
+    closeInfoModal,
+  };
+}
+
+function RequestEnjoyment() {
+  const [currentStep, setCurrentStep] = useState(1);
+
+  const {
+    formValues,
+    isCurrentFormValid,
+    setIsCurrentFormValid,
+    generalInformationRef,
+    updateFormValues,
+  } = useFormManagement();
+
+  const {
+    modalState,
+    openSendModal,
+    closeSendModal,
+    openInfoModal,
+    closeInfoModal,
+  } = useModalManagement();
 
   const userCodeInCharge = "User 1";
   const userNameInCharge = "Johan Daniel Garcia Nova";
@@ -85,7 +126,7 @@ function RequestEnjoyment() {
     setShowErrorFlag,
   } = useRequestSubmission(
     formValues,
-    "VacationsEnjoyed",
+    ERequestType.VacationsEnjoyed,
     userCodeInCharge,
     userNameInCharge,
   );
@@ -148,6 +189,9 @@ function RequestEnjoyment() {
     url: "/holidays",
   };
 
+  const humanResourceRequestType = ERequestType.VacationsEnjoyed;
+  const humanResourceRequestDate = new Date().toISOString();
+
   return (
     <>
       <RequestEnjoymentUI
@@ -159,7 +203,9 @@ function RequestEnjoyment() {
         isTablet={isTablet}
         isCurrentFormValid={isCurrentFormValid}
         generalInformationRef={generalInformationRef}
-        initialGeneralInformationValues={generalInfoValues}
+        initialGeneralInformationValues={formValues}
+        humanResourceRequestType={humanResourceRequestType}
+        humanResourceRequestDate={humanResourceRequestDate}
         handleNextStep={handleNextStep}
         handlePreviousStep={handlePreviousStep}
         handleFinishAssisted={handleFinishAssisted}
