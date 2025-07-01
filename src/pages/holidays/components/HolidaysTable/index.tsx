@@ -188,6 +188,7 @@ function HolidaysTable(props: HolidaysTableProps) {
     const dataSource = isMobile ? data : currentData;
     const dataDe = dataSource[rowIndex].dataDetails
       ?.value as unknown as HolidayTableDataDetails;
+
     const dataDeta = [
       { label: "Días de disfrute", value: dataDe.daysOff },
       { label: "Días hábiles a pagar", value: dataDe.daysToPay },
@@ -199,8 +200,8 @@ function HolidaysTable(props: HolidaysTableProps) {
         label: "Contrato",
         value:
           dataDe.businessName && dataDe.contractType
-            ? `${dataDe.businessName} - ${contractTypeLabels[dataDe.contractType]}`
-            : "",
+            ? `${dataDe.businessName} - ${contractTypeLabels[dataDe.contractType] ?? ""}`
+            : (dataDe.contractId ?? ""),
       },
       {
         label: "Observaciones",

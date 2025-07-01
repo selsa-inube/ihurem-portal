@@ -28,27 +28,9 @@ export enum HumanResourceRequestType {
   pqr = "PQR",
 }
 
-export interface IHumanResourceRequestData {
-  daysOff?: string;
-  startDate?: string;
-  contract: string;
-  certification?: string;
-}
 export interface IRequestBody {
   requestId?: string;
   humanResourceRequestNumber?: string;
-  employeeId?: string;
-  humanResourceRequestData: string;
-  humanResourceRequestDate: string;
-  humanResourceRequestDescription: string;
-  humanResourceRequestStatus: string;
-  humanResourceRequestType: string;
-  userCodeInCharge: string;
-  userNameInCharge: string;
-}
-
-export interface IHumanResourceRequest {
-  requestId?: string;
   employeeId: string;
   humanResourceRequestData: string;
   humanResourceRequestDate: string;
