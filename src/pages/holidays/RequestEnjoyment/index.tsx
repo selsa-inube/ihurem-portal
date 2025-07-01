@@ -27,11 +27,13 @@ function useFormManagement() {
       contractType: "",
       observationEmployee: "",
       daysOff: "",
+      disbursementDate: "",
       startDateEnyoment: "",
+      certificationType: "",
+      addressee: "",
     });
 
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
-
   const generalInformationRef =
     useRef<FormikProps<IUnifiedHumanResourceRequestData>>(null);
 
@@ -126,7 +128,7 @@ function RequestEnjoyment() {
     setShowErrorFlag,
   } = useRequestSubmission(
     formValues,
-    ERequestType.VacationsEnjoyed,
+    "VacationsEnjoyed",
     userCodeInCharge,
     userNameInCharge,
   );
@@ -172,7 +174,12 @@ function RequestEnjoyment() {
   const breadcrumbs = {
     label: "Solicitar disfrute",
     crumbs: [
-      { path: "/", label: "Inicio", id: "/", isActive: false },
+      {
+        path: "/",
+        label: "Inicio",
+        id: "/",
+        isActive: false,
+      },
       {
         path: "/holidays",
         label: isTablet ? "..." : "Vacaciones",

@@ -38,13 +38,7 @@ const MONTH_OPTIONS: IOption[] = monthFull.map((label, index) => ({
 }));
 
 function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
-  const {
-    formik,
-    loading,
-    withNextButton,
-    handlePreviousStep,
-    handleNextStep,
-  } = props;
+  const { formik, loading, withNextButton, handleNextStep } = props;
   const isMobile = useMediaQuery("(max-width: 700px)");
   const { employees } = useAppContext();
 
@@ -197,10 +191,11 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
                 </StyledDateContainer>
               </Stack>
             </Stack>
+
             {contractOptions.length > 1 && (
               <Select
                 label="Contrato"
-                name="contract"
+                name="contractId"
                 options={contractOptions}
                 placeholder="Selecciona de la lista"
                 value={formik.values.contractId}
@@ -209,12 +204,9 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
                 size="compact"
                 fullwidth
                 onChange={(_, v) => {
-                  formik.setFieldValue("contract", v);
-                  const lbl =
-                    contractOptions.find((o) => o.value === v)?.label ?? "";
-                  formik.setFieldValue("contractDesc", lbl);
+                  formik.setFieldValue("contractId", v);
                 }}
-                required={isRequired(props.validationSchema, "contract")}
+                required={isRequired(props.validationSchema, "contractId")}
               />
             )}
 
@@ -241,13 +233,6 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
 
         {withNextButton && (
           <Stack justifyContent="flex-end" gap={spacing.s250}>
-            <Button
-              appearance="gray"
-              variant="outlined"
-              onClick={handlePreviousStep}
-            >
-              Anterior
-            </Button>
             <Button
               onClick={handleNextStep}
               disabled={loading ?? !formik.isValid}

@@ -24,7 +24,7 @@ import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
 import { Tooltip } from "@components/overlay/Tooltip";
 import { InfoModal } from "@components/modals/InfoModal";
 import { spacing } from "@design/tokens/spacing";
-import { transformContractValue } from "@utils/texts";
+import { contractTypeLabels } from "@mocks/contracts/enums";
 import { showRequirements } from "@pages/holidays/config/requirements";
 
 import { IHolidaysTable, HolidayTableDataDetails } from "./types";
@@ -191,12 +191,21 @@ function HolidaysTable(props: HolidaysTableProps) {
     const dataDeta = [
       { label: "Días de disfrute", value: dataDe.daysOff },
       { label: "Días hábiles a pagar", value: dataDe.daysToPay },
-      { label: "Fecha de inicio o pago", value: dataDe.startDate },
+      {
+        label: "Fecha de inicio o pago",
+        value: String(dataDe.startDateEnyoment ?? ""),
+      },
       {
         label: "Contrato",
-        value: transformContractValue(dataDe.contract),
+        value:
+          dataDe.businessName && dataDe.contractType
+            ? `${dataDe.businessName} - ${contractTypeLabels[dataDe.contractType]}`
+            : "",
       },
-      { label: "Observaciones", value: dataDe.description },
+      {
+        label: "Observaciones",
+        value: String(dataDe.observationEmployee ?? ""),
+      },
     ].filter(
       (item) =>
         item.value !== undefined &&
