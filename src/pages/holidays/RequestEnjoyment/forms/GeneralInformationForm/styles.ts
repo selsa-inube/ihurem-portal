@@ -21,16 +21,4 @@ const StyledContainer = styled.div<StyledContainerProps>`
   }
 `;
 
-const StyledDateContainer = styled.div`
-  display: flex;
-  gap: ${spacing.s025};
-  && > div {
-    width: auto;
-  }
-
-  && input {
-    width: 100%;
-  }
-`;
-
-export { StyledContainer, StyledDateContainer };
+export { StyledContainer };

@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { FormikProps } from "formik";
 import { useMediaQuery } from "@inubekit/inubekit";
 
@@ -6,6 +6,7 @@ import { SendRequestModal } from "@components/modals/SendRequestModal";
 import { RequestInfoModal } from "@components/modals/RequestInfoModal";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 import { useRequestSubmission } from "@hooks/usePostHumanResourceRequest";
+import { useAppContext } from "@context/AppContext/useAppContext";
 
 import { NewCertificationUI } from "./interface";
 import { newCCertificationApplication } from "./config/assisted.config";
@@ -14,6 +15,8 @@ import { ModalState } from "./types";
 import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
 
 function useFormManagement() {
+  const { employees } = useAppContext();
+
   const [formValues, setFormValues] =
     useState<IUnifiedHumanResourceRequestData>({
       contractId: "",
@@ -21,11 +24,32 @@ function useFormManagement() {
       businessName: "",
       contractType: "",
       observationEmployee: "",
+      daysToPay: "",
+      disbursementDate: "",
+      daysOff: "",
+      startDateEnyoment: "",
+      certificationType: "",
+      addressee: "",
     });
 
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
+
   const generalInformationRef =
     useRef<FormikProps<IUnifiedHumanResourceRequestData>>(null);
+
+  useEffect(() => {
+    const contrato = employees?.employmentContracts?.[0];
+
+    if (contrato) {
+      setFormValues((prev) => ({
+        ...prev,
+        contractId: contrato.contractId ?? "",
+        contractNumber: contrato.contractNumber ?? "",
+        businessName: contrato.businessName ?? "",
+        contractType: contrato.contractType ?? "",
+      }));
+    }
+  }, [employees]);
 
   const updateFormValues = () => {
     if (generalInformationRef.current) {
@@ -51,16 +75,13 @@ function useModalManagement() {
 
   const openSendModal = () =>
     setModalState((prev) => ({ ...prev, isSendModalVisible: true }));
-
   const closeSendModal = () =>
     setModalState((prev) => ({ ...prev, isSendModalVisible: false }));
-
   const openInfoModal = () =>
     setModalState({
       isSendModalVisible: false,
       isRequestInfoModalVisible: true,
     });
-
   const closeInfoModal = () =>
     setModalState((prev) => ({ ...prev, isRequestInfoModalVisible: false }));
 
@@ -125,10 +146,12 @@ function NewCertification() {
   };
 
   const handleFinishAssisted = () => {
+    updateFormValues();
     openSendModal();
   };
 
   const handleConfirmSendModal = async () => {
+    updateFormValues();
     setShowErrorFlag(false);
     const isSuccess = await submitRequestHandler();
 

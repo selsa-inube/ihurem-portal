@@ -11,12 +11,12 @@ import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.
 
 const createValidationSchema = () =>
   object().shape({
-    certification: validationRules.certification.required(
+    certificationType: validationRules.certification.required(
       validationMessages.required,
     ),
     addressee: validationRules.addressee.required(validationMessages.required),
-    contract: validationRules.contract.required(validationMessages.required),
-    observations: generalInformationRequiredFields.observations
+    contractId: validationRules.contract.required(validationMessages.required),
+    observationEmployee: generalInformationRequiredFields.observations
       ? validationRules.observations.required(validationMessages.required)
       : validationRules.observations,
   });
@@ -75,6 +75,7 @@ const GeneralInformationForm = forwardRef<
         validationSchema={validationSchema}
         handleNextStep={handleNextStep}
         handlePreviousStep={handlePreviousStep}
+        isFormValid={Object.keys(formik.errors).length === 0}
       />
     );
   },

@@ -3,8 +3,9 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 import { useErrorFlag } from "@hooks/useErrorFlag";
 import { useHeaders } from "@hooks/useHeaders";
-import { useContractValidation } from "@hooks/useContractValidation";
 import { deleteHumanResourceRequest } from "@services/humanResourcesRequest/deleteHumanResourceRequest";
+
+import { useContractValidation } from "./useContractValidation";
 
 export function useDeleteRequest<T extends { requestId?: string }>(
   updateStateFunction: (filterFn: (item: T) => boolean) => void,
@@ -54,5 +55,8 @@ export function useDeleteRequest<T extends { requestId?: string }>(
     }
   };
 
-  return { isDeleting, handleDelete };
+  return {
+    isDeleting,
+    handleDelete,
+  };
 }

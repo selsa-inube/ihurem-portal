@@ -38,7 +38,10 @@ interface HolidaysTableProps {
   disableDeleteAction?: boolean;
   hasViewDetailsPrivilege?: boolean;
   hasDeletePrivilege?: boolean;
-  handleDeleteRequest: (requestId: string, justification: string) => void;
+  handleDeleteRequest: (
+    requestId: string,
+    justification?: string,
+  ) => boolean | void;
 }
 
 function HolidaysTable(props: HolidaysTableProps) {
@@ -188,10 +191,13 @@ function HolidaysTable(props: HolidaysTableProps) {
     const dataSource = isMobile ? data : currentData;
     const dataDe = dataSource[rowIndex].dataDetails
       ?.value as unknown as HolidayTableDataDetails;
+    const contractLabel = dataDe.contractType
+      ? contractTypeLabels[dataDe.contractType]
+      : "";
 
     const dataDeta = [
-      { label: "Días de disfrute", value: dataDe.daysOff },
-      { label: "Días hábiles a pagar", value: dataDe.daysToPay },
+      { label: "Días de disfrute", value: String(dataDe.daysOff ?? "") },
+      { label: "Días hábiles a pagar", value: String(dataDe.daysToPay ?? "") },
       {
         label: "Fecha de inicio o pago",
         value: String(dataDe.startDateEnyoment ?? ""),
@@ -199,9 +205,9 @@ function HolidaysTable(props: HolidaysTableProps) {
       {
         label: "Contrato",
         value:
-          dataDe.businessName && dataDe.contractType
-            ? `${dataDe.businessName} - ${contractTypeLabels[dataDe.contractType] ?? ""}`
-            : (dataDe.contractId ?? ""),
+          dataDe.businessName && contractLabel
+            ? `${dataDe.businessName} - ${contractLabel}`
+            : "",
       },
       {
         label: "Observaciones",
@@ -209,8 +215,7 @@ function HolidaysTable(props: HolidaysTableProps) {
       },
     ].filter(
       (item) =>
-        item.value !== undefined &&
-        item.value !== null &&
+        item.value !== "" &&
         !(typeof item.value === "string" && item.value.trim() === ""),
     );
 
@@ -228,8 +233,13 @@ function HolidaysTable(props: HolidaysTableProps) {
       );
       return;
     }
-    setSelectedRequestId(requestId);
-    setIsSecondModalOpen(true);
+
+    const canDelete = handleDeleteRequest(requestId);
+
+    if (canDelete !== false) {
+      setSelectedRequestId(requestId);
+      setIsSecondModalOpen(true);
+    }
   };
 
   const renderDetailsIcon = (rowIndex: number) => {
