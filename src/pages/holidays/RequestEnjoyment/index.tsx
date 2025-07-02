@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { FormikProps } from "formik";
 import { useMediaQuery } from "@inubekit/inubekit";
 
@@ -6,24 +6,50 @@ import { SendRequestModal } from "@components/modals/SendRequestModal";
 import { RequestInfoModal } from "@components/modals/RequestInfoModal";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 import { useRequestSubmission } from "@hooks/usePostHumanResourceRequest";
-import { IVacationGeneralInformationEntry } from "@ptypes/humanResourcesRequest.types";
+import {
+  IUnifiedHumanResourceRequestData,
+  ERequestType,
+} from "@ptypes/humanResourcesRequest.types";
+import { useAppContext } from "@context/AppContext/useAppContext";
 
 import { RequestEnjoymentUI } from "./interface";
 import { requestEnjoymentSteps } from "./config/assisted.config";
 import { ModalState } from "./types";
 
 function useFormManagement() {
+  const { employees } = useAppContext();
+
   const [formValues, setFormValues] =
-    useState<IVacationGeneralInformationEntry>({
-      id: "",
+    useState<IUnifiedHumanResourceRequestData>({
+      contractId: "",
+      contractNumber: "",
+      businessName: "",
+      contractType: "",
+      observationEmployee: "",
       daysOff: "",
-      startDate: "",
-      observations: "",
-      contract: "",
+      disbursementDate: "",
+      startDateEnyoment: "",
+      certificationType: "",
+      addressee: "",
     });
+
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
   const generalInformationRef =
-    useRef<FormikProps<IVacationGeneralInformationEntry>>(null);
+    useRef<FormikProps<IUnifiedHumanResourceRequestData>>(null);
+
+  useEffect(() => {
+    const contrato = employees?.employmentContracts?.[0];
+
+    if (contrato) {
+      setFormValues((prev) => ({
+        ...prev,
+        contractId: contrato.contractId ?? "",
+        contractNumber: contrato.contractNumber ?? "",
+        businessName: contrato.businessName ?? "",
+        contractType: contrato.contractType ?? "",
+      }));
+    }
+  }, [employees]);
 
   const updateFormValues = () => {
     if (generalInformationRef.current) {
@@ -49,13 +75,16 @@ function useModalManagement() {
 
   const openSendModal = () =>
     setModalState((prev) => ({ ...prev, isSendModalVisible: true }));
+
   const closeSendModal = () =>
     setModalState((prev) => ({ ...prev, isSendModalVisible: false }));
+
   const openInfoModal = () =>
     setModalState({
       isSendModalVisible: false,
       isRequestInfoModalVisible: true,
     });
+
   const closeInfoModal = () =>
     setModalState((prev) => ({ ...prev, isRequestInfoModalVisible: false }));
 
@@ -70,6 +99,7 @@ function useModalManagement() {
 
 function RequestEnjoyment() {
   const [currentStep, setCurrentStep] = useState(1);
+
   const {
     formValues,
     isCurrentFormValid,
@@ -77,6 +107,7 @@ function RequestEnjoyment() {
     generalInformationRef,
     updateFormValues,
   } = useFormManagement();
+
   const {
     modalState,
     openSendModal,
@@ -165,6 +196,9 @@ function RequestEnjoyment() {
     url: "/holidays",
   };
 
+  const humanResourceRequestType = ERequestType.VacationsEnjoyed;
+  const humanResourceRequestDate = new Date().toISOString();
+
   return (
     <>
       <RequestEnjoymentUI
@@ -177,6 +211,8 @@ function RequestEnjoyment() {
         isCurrentFormValid={isCurrentFormValid}
         generalInformationRef={generalInformationRef}
         initialGeneralInformationValues={formValues}
+        humanResourceRequestType={humanResourceRequestType}
+        humanResourceRequestDate={humanResourceRequestDate}
         handleNextStep={handleNextStep}
         handlePreviousStep={handlePreviousStep}
         handleFinishAssisted={handleFinishAssisted}

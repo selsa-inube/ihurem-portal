@@ -1,14 +1,28 @@
 import { useState } from "react";
 
 import { formatDate } from "@utils/date";
-import { HumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
+import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
 import { useAppContext } from "@context/AppContext/useAppContext";
 
 import { useRequestSubmissionAPI } from "./useRequestSubmissionAPI";
 import { useRequestNavigation } from "./useRequestNavigation";
 
+type FormValues = IUnifiedHumanResourceRequestData;
+
+function isVacationPaymentData(data: FormValues) {
+  return "daysToPay" in data;
+}
+
+function isVacationEnjoyedData(data: FormValues) {
+  return "daysOff" in data;
+}
+
+function isCertificationData(data: FormValues) {
+  return "certificationType" in data && "addressee" in data;
+}
+
 export function useRequestSubmission(
-  formValues: HumanResourceRequestData,
+  formValues: FormValues,
   typeRequest: string,
   userCodeInCharge: string,
   userNameInCharge: string,
@@ -31,34 +45,47 @@ export function useRequestSubmission(
     try {
       let humanResourceRequestData: string;
 
-      if ("daysToPay" in formValues) {
+      if (isVacationPaymentData(formValues)) {
         humanResourceRequestData = JSON.stringify({
           daysToPay: formValues.daysToPay,
-          contract: formValues.contract,
-          observations: formValues.observations,
+          disbursementDate: "",
+          contractId: formValues.contractId,
+          contractNumber: formValues.contractNumber,
+          businessName: formValues.businessName,
+          contractType: formValues.contractType,
+          observationEmployee: formValues.observationEmployee,
         });
-      } else if ("daysOff" in formValues) {
+      } else if (isVacationEnjoyedData(formValues)) {
         humanResourceRequestData = JSON.stringify({
           daysOff: formValues.daysOff,
-          startDate: formatDate(formValues.startDate),
-          contract: formValues.contract,
-          observations: formValues.observations,
+          startDateEnyoment: formValues.startDateEnyoment
+            ? formatDate(formValues.startDateEnyoment)
+            : "",
+          contractId: formValues.contractId,
+          contractNumber: formValues.contractNumber,
+          businessName: formValues.businessName,
+          contractType: formValues.contractType,
+          observationEmployee: formValues.observationEmployee,
+        });
+      } else if (isCertificationData(formValues)) {
+        humanResourceRequestData = JSON.stringify({
+          certificationType: formValues.certificationType,
+          addressee: formValues.addressee,
+          contractId: formValues.contractId,
+          contractNumber: formValues.contractNumber,
+          businessName: formValues.businessName,
+          contractType: formValues.contractType,
+          observationEmployee: formValues.observationEmployee,
         });
       } else {
-        humanResourceRequestData = JSON.stringify({
-          certification: formValues.certification,
-          addressee: formValues.addressee,
-          contract: formValues.contract,
-          contractDesc: formValues.contractDesc,
-          observations: formValues.observations,
-        });
+        throw new Error("Tipo de solicitud no reconocido.");
       }
 
       const requestBody = {
-        employeeId: employees?.employeeId,
+        employeeId: employees.employeeId,
         humanResourceRequestData,
         humanResourceRequestDate: new Date().toISOString(),
-        humanResourceRequestDescription: formValues.observations ?? "",
+        humanResourceRequestDescription: formValues.observationEmployee ?? "",
         humanResourceRequestStatus: "supervisor_approval",
         humanResourceRequestType: typeRequest,
         userCodeInCharge,
@@ -73,6 +100,7 @@ export function useRequestSubmission(
         if (humanResourceRequestId) {
           navigateAfterSubmission(typeRequest);
         }
+
         return true;
       }
 

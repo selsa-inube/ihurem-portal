@@ -1,29 +1,55 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FormikProps } from "formik";
 import { useMediaQuery } from "@inubekit/inubekit";
 
+import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
 import { SendRequestModal } from "@components/modals/SendRequestModal";
 import { RequestInfoModal } from "@components/modals/RequestInfoModal";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 import { useRequestSubmission } from "@hooks/usePostHumanResourceRequest";
+import { useAppContext } from "@context/AppContext/useAppContext";
 
-import { IGeneralInformationEntry } from "./forms/GeneralInformationForm/types";
 import { RequestPaymentUI } from "./interface";
 import { requestPaymentSteps } from "./config/assisted.config";
 import { ModalState } from "./types";
 
 function useFormManagement() {
-  const [formValues, setFormValues] = useState<IGeneralInformationEntry>({
-    id: "",
-    daysToPay: "",
-    contract: "",
-    contractDesc: "",
-    observations: "",
-  });
+  const { employees } = useAppContext();
+
+  const [formValues, setFormValues] =
+    useState<IUnifiedHumanResourceRequestData>({
+      contractId: "",
+      contractNumber: "",
+      businessName: "",
+      contractType: "",
+      observationEmployee: "",
+      daysToPay: "",
+      disbursementDate: "",
+      daysOff: "",
+      startDateEnyoment: "",
+      certificationType: "",
+      addressee: "",
+    });
+
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
+
   const generalInformationRef =
-    useRef<FormikProps<IGeneralInformationEntry>>(null);
+    useRef<FormikProps<IUnifiedHumanResourceRequestData>>(null);
+
+  useEffect(() => {
+    const contrato = employees?.employmentContracts?.[0];
+
+    if (contrato) {
+      setFormValues((prev) => ({
+        ...prev,
+        contractId: contrato.contractId ?? "",
+        contractNumber: contrato.contractNumber ?? "",
+        businessName: contrato.businessName ?? "",
+        contractType: contrato.contractType ?? "",
+      }));
+    }
+  }, [employees]);
 
   const updateFormValues = () => {
     if (generalInformationRef.current) {
@@ -183,13 +209,13 @@ function RequestPayment() {
         navigatePage={breadcrumbs.url}
         steps={requestPaymentSteps}
         currentStep={currentStep}
-        generalInformationRef={generalInformationRef}
-        initialGeneralInformationValues={formValues}
-        isCurrentFormValid={isCurrentFormValid}
         setCurrentStep={setCurrentStep}
         handleNextStep={handleNextStep}
         handlePreviousStep={handlePreviousStep}
         handleFinishAssisted={handleFinishAssisted}
+        generalInformationRef={generalInformationRef}
+        initialGeneralInformationValues={formValues}
+        isCurrentFormValid={isCurrentFormValid}
         setIsCurrentFormValid={setIsCurrentFormValid}
       />
 

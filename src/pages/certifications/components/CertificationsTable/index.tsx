@@ -23,8 +23,8 @@ import { RequestComponentDetail } from "@components/modals/ComponentDetailModal"
 import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
 import { Tooltip } from "@components/overlay/Tooltip";
 import { InfoModal } from "@components/modals/InfoModal";
+import { contractTypeLabels } from "@mocks/contracts/enums";
 import { spacing } from "@design/tokens/spacing";
-import { transformContractValue } from "@utils/texts";
 
 import { CertificationsTableDataDetails, ICertificationsTable } from "./types";
 import { StyledTd, StyledTh, TooltipWrapper } from "./styles";
@@ -228,7 +228,6 @@ function CertificationsTable({
       </TooltipWrapper>
     );
   };
-
   const handleOpenDetailsModal = (rowIndex: number) => {
     if (!hasViewDetailsPrivilege) {
       showInfoModal(
@@ -240,14 +239,36 @@ function CertificationsTable({
 
     const dataDe = data[rowIndex].dataDetails
       ?.value as unknown as CertificationsTableDataDetails;
+
+    console.log("📦 Data detalle recibida:", dataDe);
+
     const dataDeta = [
-      { label: "Destinatario", value: dataDe.addressee },
+      {
+        label: "Destinatario",
+        value:
+          typeof dataDe?.addressee === "string" && dataDe.addressee.trim()
+            ? dataDe.addressee.trim()
+            : "Sin información",
+      },
       {
         label: "Contrato",
-        value: transformContractValue(dataDe.contract),
+        value:
+          dataDe.businessName || dataDe.contractType
+            ? `${dataDe.businessName ?? ""} - ${
+                contractTypeLabels[dataDe.contractType] ?? ""
+              }`
+            : "Sin información",
       },
-      { label: "Observaciones", value: dataDe.description },
+      {
+        label: "Observaciones",
+        value:
+          typeof dataDe?.observationEmployee === "string" &&
+          dataDe.observationEmployee.trim()
+            ? dataDe.observationEmployee.trim()
+            : "Sin observaciones",
+      },
     ];
+
     setSelectedRecord(dataDeta);
     setIsModalOpen(true);
   };

@@ -17,9 +17,10 @@ import { IRoute } from "@components/layout/AppMenu/types";
 import { spacing } from "@design/tokens/spacing";
 
 import { GeneralInformationForm } from "./forms/GeneralInformationForm";
-import { IGeneralInformationEntry } from "./forms/GeneralInformationForm/types";
+import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
 import { VerificationForm } from "./forms/VerificationForm";
 import { AlertCardStep } from "./forms/RequirementsForm";
+import { IGeneralInformationEntry } from "./forms/GeneralInformationForm/types";
 
 interface RequestEnjoymentUIProps {
   appName: string;
@@ -27,7 +28,9 @@ interface RequestEnjoymentUIProps {
   navigatePage: string;
   steps: IAssistedStep[];
   currentStep: number;
-  generalInformationRef: React.RefObject<FormikProps<IGeneralInformationEntry>>;
+  generalInformationRef: React.RefObject<
+    FormikProps<IUnifiedHumanResourceRequestData>
+  >;
   isCurrentFormValid: boolean;
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
   setIsCurrentFormValid: React.Dispatch<React.SetStateAction<boolean>>;
@@ -38,7 +41,7 @@ interface RequestEnjoymentUIProps {
 
 function NewCertificationUI(
   props: RequestEnjoymentUIProps & {
-    initialGeneralInformationValues: IGeneralInformationEntry;
+    initialGeneralInformationValues: IUnifiedHumanResourceRequestData;
   },
 ) {
   const {
@@ -58,17 +61,19 @@ function NewCertificationUI(
   } = props;
 
   const isTablet = useMediaQuery("(max-width: 1100px)");
-
   const shouldDisableNext = currentStep !== 1 && !isCurrentFormValid;
-
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+  const generalInformationEntry: IGeneralInformationEntry = {
+    id: "",
+    certification: initialGeneralInformationValues.certificationType ?? "",
+    contract: initialGeneralInformationValues.contractId ?? "",
+    contractDesc: "",
+    observations: initialGeneralInformationValues.observationEmployee ?? "",
+    addressee: initialGeneralInformationValues.addressee ?? "",
   };
 
   return (
@@ -124,7 +129,7 @@ function NewCertificationUI(
                 updatedData={{
                   personalInformation: {
                     isValid: isCurrentFormValid,
-                    values: initialGeneralInformationValues,
+                    values: generalInformationEntry,
                   },
                 }}
                 handleStepChange={(stepId) => setCurrentStep(stepId)}

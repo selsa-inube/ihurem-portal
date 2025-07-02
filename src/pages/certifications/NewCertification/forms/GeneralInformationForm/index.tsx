@@ -7,34 +7,34 @@ import { validationRules } from "@validations/validationRules";
 import { generalInformationRequiredFields } from "./config/formConfig";
 
 import { GeneralInformationFormUI } from "./interface";
-import { IGeneralInformationEntry } from "./types";
+import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
 
 const createValidationSchema = () =>
   object().shape({
-    certification: validationRules.certification.required(
+    certificationType: validationRules.certification.required(
       validationMessages.required,
     ),
     addressee: validationRules.addressee.required(validationMessages.required),
-    contract: validationRules.contract.required(validationMessages.required),
-    observations: generalInformationRequiredFields.observations
+    contractId: validationRules.contract.required(validationMessages.required),
+    observationEmployee: generalInformationRequiredFields.observations
       ? validationRules.observations.required(validationMessages.required)
       : validationRules.observations,
   });
 
 const validationSchema = createValidationSchema();
 
-interface GeneralInformationFormProps {
-  initialValues: IGeneralInformationEntry;
+export interface GeneralInformationFormProps {
+  initialValues: IUnifiedHumanResourceRequestData;
   loading?: boolean;
   withNextButton?: boolean;
   handleNextStep: () => void;
   handlePreviousStep: () => void;
   onFormValid?: React.Dispatch<React.SetStateAction<boolean>>;
-  onSubmit?: (values: IGeneralInformationEntry) => void;
+  onSubmit?: (values: IUnifiedHumanResourceRequestData) => void;
 }
 
 const GeneralInformationForm = forwardRef<
-  FormikProps<IGeneralInformationEntry>,
+  FormikProps<IUnifiedHumanResourceRequestData>,
   GeneralInformationFormProps
 >(
   (
@@ -49,7 +49,7 @@ const GeneralInformationForm = forwardRef<
     },
     ref,
   ) => {
-    const formik = useFormik({
+    const formik = useFormik<IUnifiedHumanResourceRequestData>({
       initialValues,
       validationSchema,
       validateOnBlur: false,
@@ -57,7 +57,6 @@ const GeneralInformationForm = forwardRef<
     });
 
     useImperativeHandle(ref, () => formik);
-    GeneralInformationForm.displayName = "GeneralInformationForm";
 
     useEffect(() => {
       if (onFormValid) {
@@ -76,10 +75,11 @@ const GeneralInformationForm = forwardRef<
         validationSchema={validationSchema}
         handleNextStep={handleNextStep}
         handlePreviousStep={handlePreviousStep}
+        isFormValid={Object.keys(formik.errors).length === 0}
       />
     );
   },
 );
 
+GeneralInformationForm.displayName = "GeneralInformationForm";
 export { GeneralInformationForm };
-export type { GeneralInformationFormProps };

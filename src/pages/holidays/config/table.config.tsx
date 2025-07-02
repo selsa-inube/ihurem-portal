@@ -2,21 +2,28 @@ import { MdOutlineVisibility, MdDeleteOutline } from "react-icons/md";
 
 import {
   ERequestType,
-  ERequestStatus,
   HumanResourceRequest,
 } from "@ptypes/humanResourcesRequest.types";
 import { Employee } from "@ptypes/employeePortalConsultation.types";
 import { formatDate } from "@utils/date";
 import { parseDataSafely, getValueFromData } from "@utils/parser";
 
+import { HumanResourceRequestStatus } from "./enums";
 import { IDaysUsedTable } from "../components/DaysUsedTable/types";
 
 export const formatHolidaysData = (holidays: HumanResourceRequest[]) =>
   holidays.map((holiday) => {
     const parsedData = parseDataSafely(holiday.humanResourceRequestData);
 
+    const isPaidVacation =
+      holiday.humanResourceRequestType === ERequestType.PaidVacations;
+
     const daysValue = (getValueFromData(parsedData, "daysToPay", null) ??
       getValueFromData(parsedData, "daysOff", 0)) as number;
+
+    const displayDate = isPaidVacation
+      ? (getValueFromData(parsedData, "disbursementDate", "") as string)
+      : holiday.humanResourceRequestDate;
 
     return {
       requestId: holiday.humanResourceRequestId,
@@ -24,20 +31,20 @@ export const formatHolidaysData = (holidays: HumanResourceRequest[]) =>
       description: {
         value:
           ERequestType[
-            holiday.humanResourceRequestType as unknown as keyof typeof ERequestType
+            holiday.humanResourceRequestType as keyof typeof ERequestType
           ],
       },
       date: {
-        value: formatDate(holiday.humanResourceRequestDate),
+        value: formatDate(displayDate),
       },
       days: {
         value: daysValue,
       },
       status: {
         value:
-          ERequestStatus[
-            holiday.humanResourceRequestStatus as unknown as keyof typeof ERequestStatus
-          ],
+          HumanResourceRequestStatus[
+            holiday.humanResourceRequestStatus as unknown as keyof typeof HumanResourceRequestStatus
+          ] ?? "Estado desconocido",
       },
       details: {
         value: <MdOutlineVisibility />,

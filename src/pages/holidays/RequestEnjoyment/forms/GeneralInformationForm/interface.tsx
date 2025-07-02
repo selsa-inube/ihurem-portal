@@ -16,12 +16,12 @@ import { spacing } from "@design/tokens/spacing";
 import { useAppContext } from "@context/AppContext";
 import { contractTypeLabels } from "@mocks/contracts/enums";
 import { showRequirements } from "@pages/holidays/config/requirements";
+import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
 
-import { IGeneralInformationEntry } from "./types";
 import { StyledContainer } from "./styles";
 
 interface GeneralInformationFormUIProps {
-  formik: FormikProps<IGeneralInformationEntry>;
+  formik: FormikProps<IUnifiedHumanResourceRequestData>;
   validationSchema: Yup.ObjectSchema<Yup.AnyObject>;
   loading?: boolean;
   withNextButton?: boolean;
@@ -52,10 +52,19 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
   );
 
   useEffect(() => {
-    if (contractOptions.length === 1 && !formik.values.contract) {
+    if (contractOptions.length === 1 && !formik.values.contractId) {
       const opt = contractOptions[0];
-      formik.setFieldValue("contract", opt.value);
-      formik.setFieldValue("contractDesc", opt.label);
+      formik.setFieldValue("contractId", opt.id);
+
+      const contrato = employees.employmentContracts?.find(
+        (c) => c.contractId === opt.id,
+      );
+
+      if (contrato) {
+        formik.setFieldValue("businessName", contrato.businessName);
+        formik.setFieldValue("contractType", contrato.contractType);
+        formik.setFieldValue("contractNumber", contrato.contractNumber);
+      }
     }
   }, [contractOptions]);
 
@@ -79,60 +88,73 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
                 fullwidth
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                required={isRequired(props.validationSchema, "daysOff")}
+                required={isRequired(validationSchema, "daysOff")}
               />
+
               <Date
                 label="Fecha de inicio"
-                name="startDate"
-                id="startDate"
-                value={formik.values.startDate}
+                name="startDateEnyoment"
+                id="startDateEnyoment"
+                value={formik.values.startDateEnyoment}
                 disabled={loading}
-                status={getFieldState(formik, "startDate")}
-                message={formik.errors.startDate}
+                status={getFieldState(formik, "startDateEnyoment")}
+                message={formik.errors.startDateEnyoment}
                 size="compact"
                 fullwidth
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                required={isRequired(validationSchema, "startDate")}
+                required={isRequired(validationSchema, "startDateEnyoment")}
               />
             </Stack>
+
             {contractOptions.length > 1 && (
               <Select
                 label="Contrato"
-                name="contract"
+                name="contractId"
                 options={contractOptions}
                 placeholder="Selecciona de la lista"
-                value={formik.values.contract}
-                message={formik.errors.contract}
+                value={formik.values.contractId}
+                message={formik.errors.contractId}
                 disabled={loading}
                 size="compact"
                 fullwidth
                 onChange={(_, v) => {
-                  formik.setFieldValue("contract", v);
-                  const lbl =
-                    contractOptions.find((o) => o.value === v)?.label ?? "";
-                  formik.setFieldValue("contractDesc", lbl);
+                  formik.setFieldValue("contractId", v);
+                  const contrato = employees.employmentContracts?.find(
+                    (c) => c.contractId === v,
+                  );
+
+                  if (contrato) {
+                    formik.setFieldValue("businessName", contrato.businessName);
+                    formik.setFieldValue("contractType", contrato.contractType);
+                    formik.setFieldValue(
+                      "contractNumber",
+                      contrato.contractNumber,
+                    );
+                  }
                 }}
-                required={isRequired(props.validationSchema, "contract")}
+                required={isRequired(validationSchema, "contractId")}
               />
             )}
+
             <Textarea
               label="Observaciones"
               placeholder="Detalles a tener en cuenta."
-              name="observations"
-              id="observations"
-              value={formik.values.observations}
+              name="observationEmployee"
+              id="observationEmployee"
+              value={formik.values.observationEmployee}
               maxLength={1000}
               disabled={loading}
-              status={getFieldState(formik, "observations")}
-              message={formik.errors.observations}
+              status={getFieldState(formik, "observationEmployee")}
+              message={formik.errors.observationEmployee}
               fullwidth
-              required={isRequired(props.validationSchema, "observations")}
+              required={isRequired(validationSchema, "observationEmployee")}
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
             />
           </Stack>
         </StyledContainer>
+
         {withNextButton && (
           <Stack justifyContent="flex-end" gap={spacing.s250}>
             {showRequirements && (
