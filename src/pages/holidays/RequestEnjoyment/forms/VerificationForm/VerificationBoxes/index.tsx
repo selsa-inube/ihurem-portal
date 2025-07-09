@@ -5,6 +5,7 @@ import { spacing } from "@design/tokens/spacing";
 import { useAppContext } from "@context/AppContext";
 import { showRequirements } from "@pages/holidays/config/requirements";
 import { contractTypeLabels } from "@mocks/contracts/enums";
+import { formatDate } from "@utils/date";
 
 import { IGeneralInformationEntry } from "../../GeneralInformationForm/types";
 import { IFormsUpdateData } from "../../../types";
@@ -46,7 +47,7 @@ const renderPersonalInfoVerification = (
         />
         <BoxAttribute
           label="Fecha de inicio:"
-          value={values.startDate}
+          value={formatDate(values.startDate)}
           direction="column"
         />
         {hasMultipleContracts && (
@@ -100,9 +101,10 @@ function VerificationBoxes({
 }: VerificationBoxesProps) {
   const { employees } = useAppContext();
 
-  const hasMultipleContracts = (employees.employmentContracts?.length ?? 0) > 1;
-
   const adjustedStepKey = showRequirements ? stepKey : stepKey + 1;
+
+  const contracts = employees.employmentContracts as IContract[];
+  const hasMultipleContracts = (contracts?.length ?? 0) > 1;
 
   return (
     <>
@@ -112,6 +114,7 @@ function VerificationBoxes({
           updatedData.personalInformation.values,
           isTablet,
           hasMultipleContracts,
+          contracts,
         )}
     </>
   );
