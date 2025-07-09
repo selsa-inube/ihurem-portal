@@ -93,20 +93,35 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
                 <Select
                   label="Contrato"
                   name="contractId"
-                  id="contractId"
                   options={contractOptions}
                   placeholder="Selecciona de la lista"
                   value={formik.values.contractId}
                   message={formik.errors.contractId}
-                  disabled={getDisabledState(
-                    loading,
-                    contractOptions.length !== 1 || !formik.values.contractId,
-                  )}
+                  disabled={loading}
                   size="compact"
                   fullwidth
-                  onBlur={formik.handleBlur}
-                  onChange={(name, value) => handleContractChange(name, value)}
-                  required={isRequired(validationSchema, "contractId")}
+                  onChange={(_, v) => {
+                    formik.setFieldValue("contractId", v);
+                    const contrato = employees.employmentContracts?.find(
+                      (c) => c.contractId === v,
+                    );
+
+                    if (contrato) {
+                      formik.setFieldValue(
+                        "businessName",
+                        contrato.businessName,
+                      );
+                      formik.setFieldValue(
+                        "contractType",
+                        contrato.contractType,
+                      );
+                      formik.setFieldValue(
+                        "contractNumber",
+                        contrato.contractNumber,
+                      );
+                    }
+                  }}
+                  required={isRequired(props.validationSchema, "contractId")}
                 />
               )}
             </Stack>

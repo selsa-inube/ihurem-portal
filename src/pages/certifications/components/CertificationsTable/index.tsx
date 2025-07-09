@@ -228,6 +228,7 @@ function CertificationsTable({
       </TooltipWrapper>
     );
   };
+
   const handleOpenDetailsModal = (rowIndex: number) => {
     if (!hasViewDetailsPrivilege) {
       showInfoModal(
@@ -240,9 +241,15 @@ function CertificationsTable({
     const dataDe = data[rowIndex].dataDetails
       ?.value as unknown as CertificationsTableDataDetails;
 
-    console.log("📦 Data detalle recibida:", dataDe);
-
     const dataDeta = [
+      {
+        label: "Tipo de certificación",
+        value:
+          typeof dataDe?.certificationType === "string" &&
+          dataDe.certificationType.trim()
+            ? dataDe.certificationType.trim()
+            : "Sin información",
+      },
       {
         label: "Destinatario",
         value:

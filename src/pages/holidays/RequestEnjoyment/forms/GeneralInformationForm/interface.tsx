@@ -15,7 +15,6 @@ import { isRequired, getFieldState } from "@utils/forms/forms";
 import { spacing } from "@design/tokens/spacing";
 import { useAppContext } from "@context/AppContext";
 import { contractTypeLabels } from "@mocks/contracts/enums";
-import { showRequirements } from "@pages/holidays/config/requirements";
 import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
 
 import { StyledContainer } from "./styles";
@@ -45,7 +44,7 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
     () =>
       (employees.employmentContracts ?? []).map((c) => ({
         id: c.contractId,
-        value: `${c.businessName} - ${contractTypeLabels[c.contractType]}`,
+        value: c.contractId,
         label: `${c.businessName} - ${contractTypeLabels[c.contractType]}`,
       })),
     [employees.employmentContracts],
@@ -54,10 +53,10 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
   useEffect(() => {
     if (contractOptions.length === 1 && !formik.values.contractId) {
       const opt = contractOptions[0];
-      formik.setFieldValue("contractId", opt.id);
+      formik.setFieldValue("contractId", opt.value);
 
       const contrato = employees.employmentContracts?.find(
-        (c) => c.contractId === opt.id,
+        (c) => c.contractId === opt.value,
       );
 
       if (contrato) {
@@ -133,7 +132,7 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
                     );
                   }
                 }}
-                required={isRequired(validationSchema, "contractId")}
+                required={isRequired(props.validationSchema, "contractId")}
               />
             )}
 
@@ -154,18 +153,15 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
             />
           </Stack>
         </StyledContainer>
-
         {withNextButton && (
           <Stack justifyContent="flex-end" gap={spacing.s250}>
-            {showRequirements && (
-              <Button
-                appearance="gray"
-                variant="outlined"
-                onClick={handlePreviousStep}
-              >
-                Anterior
-              </Button>
-            )}
+            <Button
+              appearance="gray"
+              variant="outlined"
+              onClick={handlePreviousStep}
+            >
+              Anterior
+            </Button>
             <Button
               onClick={handleNextStep}
               disabled={loading ?? !formik.isValid}
