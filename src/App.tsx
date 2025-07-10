@@ -25,6 +25,7 @@ import { useBusinessManagers } from "@hooks/useBusinessManagers";
 import { useEmployeeByNickname } from "@hooks/useEmployeeInquiry";
 
 import { useAppContext } from "./context/AppContext/useAppContext";
+import { SelfRegistrationRoutes } from "./routes/self-registration";
 import { useContractValidation } from "./hooks/useContractValidation";
 import { LoadingAppUI } from "./pages/login/outlets/LoadingApp/interface";
 
@@ -60,6 +61,7 @@ function ContractValidationWrapper() {
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
+      <Route path="/self-registration" element={<SelfRegistrationRoutes />} />
       <Route path="/login/*" element={<LoginRoutes />} />
       <Route
         path="/*"
