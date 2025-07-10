@@ -4,51 +4,70 @@ import { BoxAttribute } from "@components/cards/BoxAttribute";
 import { spacing } from "@design/tokens/spacing";
 import { useAppContext } from "@context/AppContext";
 import { showRequirements } from "@pages/holidays/config/requirements";
+import { contractTypeLabels } from "@mocks/contracts/enums";
 import { formatDate } from "@utils/date";
 
 import { IGeneralInformationEntry } from "../../GeneralInformationForm/types";
 import { IFormsUpdateData } from "../../../types";
 import { alerts } from "../../RequirementsForm/config/alertConfig";
 
+interface IContract {
+  contractId: string;
+  businessName: string;
+  contractType: keyof typeof import("@mocks/contracts/enums").contractTypeLabels;
+}
+
 const renderPersonalInfoVerification = (
   values: IGeneralInformationEntry,
   isTablet: boolean,
   hasMultipleContracts: boolean,
-) => (
-  <>
-    <Grid
-      templateColumns={`repeat(${isTablet ? 1 : 2}, 1fr)`}
-      autoRows="auto"
-      gap={spacing.s100}
-      width="100%"
-    >
-      <BoxAttribute
-        label="Días de disfrute:"
-        value={values.daysOff}
-        direction="column"
-      />
-      <BoxAttribute
-        label="Fecha de inicio:"
-        value={formatDate(values.startDate)}
-        direction="column"
-      />
-      {hasMultipleContracts && (
+  contracts: IContract[] = [],
+) => {
+  const contractInfo = contracts.find((c) => c.contractId === values.contract);
+
+  const contractDisplay =
+    contractInfo?.contractId &&
+    contractInfo?.businessName &&
+    contractInfo?.contractType
+      ? `${contractInfo.contractId} - ${contractInfo.businessName} - ${contractTypeLabels[contractInfo.contractType]}`
+      : values.contract;
+
+  return (
+    <>
+      <Grid
+        templateColumns={`repeat(${isTablet ? 1 : 2}, 1fr)`}
+        autoRows="auto"
+        gap={spacing.s100}
+        width="100%"
+      >
         <BoxAttribute
-          label="Contrato:"
-          value={values.contract}
+          label="Días de disfrute:"
+          value={values.daysOff}
           direction="column"
         />
-      )}
-    </Grid>
-    <Stack width="100%" direction="column">
-      <BoxAttribute
-        label="Observaciones:"
-        value={values.observations}
-        direction="column"
-      />
-    </Stack>
-  </>
-);
+        <BoxAttribute
+          label="Fecha de inicio:"
+          value={formatDate(values.startDate)}
+          direction="column"
+        />
+        {hasMultipleContracts && (
+          <BoxAttribute
+            label="Contrato:"
+            value={contractDisplay}
+            direction="column"
+          />
+        )}
+      </Grid>
+      <Stack width="100%" direction="column">
+        <BoxAttribute
+          label="Observaciones:"
+          value={values.observations}
+          direction="column"
+        />
+      </Stack>
+    </>
+  );
+};
 
 const renderAlerts = (isTablet: boolean) => (
   <Grid
@@ -82,9 +101,10 @@ function VerificationBoxes({
 }: VerificationBoxesProps) {
   const { employees } = useAppContext();
 
-  const hasMultipleContracts = (employees.employmentContracts?.length ?? 0) > 1;
-
   const adjustedStepKey = showRequirements ? stepKey : stepKey + 1;
+
+  const contracts = employees.employmentContracts as IContract[];
+  const hasMultipleContracts = (contracts?.length ?? 0) > 1;
 
   return (
     <>
@@ -94,6 +114,7 @@ function VerificationBoxes({
           updatedData.personalInformation.values,
           isTablet,
           hasMultipleContracts,
+          contracts,
         )}
     </>
   );

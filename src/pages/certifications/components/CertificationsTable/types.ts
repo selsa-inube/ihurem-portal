@@ -27,7 +27,11 @@ interface CertificationsTableAction
 }
 
 export interface CertificationsTableDataDetails {
+  certificationType: string;
+  contractId: string;
   addressee: string;
-  contract: string;
   description: string;
+  businessName: string;
+  contractType: string;
+  observationEmployee: string;
 }
