@@ -3,6 +3,7 @@ import { Grid, useMediaQueries, Stack, Text } from "@inubekit/inubekit";
 import selsa from "@assets/images/selsa.png";
 import teamSuccess from "@assets/images/teamSuccess.png";
 import { spacing } from "@design/tokens/spacing";
+import { useAppContext } from "@context/AppContext/useAppContext";
 
 import {
   StyledWelcomeContainer,
@@ -13,8 +14,13 @@ import {
 import { RegistrationForm } from "./RegistrationForm";
 
 function SelfRegistrationUI() {
-  const { "(max-width: 768px)": screenMobile }: Record<string, boolean> =
-    useMediaQueries(["(max-width: 768px)"]);
+  const { "(max-width: 835px)": screenMobile }: Record<string, boolean> =
+    useMediaQueries(["(max-width: 835px)"]);
+
+  const { logoUrl, businessUnit } = useAppContext();
+
+  const logoSrc = businessUnit?.urlLogo ?? logoUrl ?? selsa;
+  const logoAlt = businessUnit?.abbreviatedName ?? "logo selsa";
 
   return (
     <Grid
@@ -33,7 +39,7 @@ function SelfRegistrationUI() {
             alignItems="center"
             gap={screenMobile ? spacing.s250 : spacing.s400}
           >
-            <StyledLogo src={selsa} alt="logo selsa" />
+            <StyledLogo src={logoSrc} alt={logoAlt} />
             <Stack direction="column" alignItems="center">
               <Text type="headline" size="small" weight="bold">
                 ¡Bienvenido!
