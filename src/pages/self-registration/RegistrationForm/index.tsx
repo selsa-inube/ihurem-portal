@@ -14,7 +14,7 @@ import * as Yup from "yup";
 import { spacing } from "@design/tokens/spacing";
 
 import { StyledContainerForm } from "./styles";
-import { idTypeOptions } from "./config";
+import { useIdentificationTypesForSelect } from "@hooks/enumerators/useIdentificationTypesForSelect";
 
 interface FormValues {
   idType: string;
@@ -37,6 +37,8 @@ export function RegistrationForm(props: RegistrationFormProps) {
   });
 
   const isMobile = useMediaQuery("(max-width: 700px)");
+  const { data } = useIdentificationTypesForSelect();
+  const idTypeOptions = data;
 
   return (
     <StyledContainerForm $smallScreen={isMobile}>
