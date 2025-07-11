@@ -55,7 +55,14 @@ export function RegistrationForm(props: RegistrationFormProps) {
           onCloseModal?.();
         }}
       >
-        {({ values, setFieldValue, isValid, isSubmitting, touched }) => (
+        {({
+          errors,
+          values,
+          setFieldValue,
+          isValid,
+          isSubmitting,
+          touched,
+        }) => (
           <Form>
             <Stack gap={spacing.s250} direction="column">
               <Field name="idType">
@@ -89,6 +96,14 @@ export function RegistrationForm(props: RegistrationFormProps) {
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       setFieldValue("idNumber", e.target.value);
                     }}
+                    status={
+                      touched.idNumber && errors.idNumber
+                        ? "invalid"
+                        : "pending"
+                    }
+                    message={
+                      touched.idNumber && errors.idNumber ? errors.idNumber : ""
+                    }
                     fullwidth
                     type="number"
                     size="compact"
@@ -99,11 +114,7 @@ export function RegistrationForm(props: RegistrationFormProps) {
               <Stack justifyContent="end">
                 <Button
                   type="submit"
-                  disabled={
-                    !isValid ||
-                    isSubmitting ||
-                    !(touched.idType && touched.idNumber)
-                  }
+                  disabled={!isValid || !touched.idType || isSubmitting}
                 >
                   Enviar
                 </Button>
