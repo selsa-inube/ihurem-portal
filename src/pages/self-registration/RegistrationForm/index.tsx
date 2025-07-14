@@ -12,9 +12,9 @@ import { MdTag } from "react-icons/md";
 import * as Yup from "yup";
 
 import { spacing } from "@design/tokens/spacing";
+import { useIdentificationTypesForSelect } from "@hooks/enumerators/useIdentificationTypesForSelect";
 
 import { StyledContainerForm } from "./styles";
-import { useIdentificationTypesForSelect } from "@hooks/enumerators/useIdentificationTypesForSelect";
 
 interface FormValues {
   idType: string;
