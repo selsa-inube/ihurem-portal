@@ -144,6 +144,7 @@ function App() {
     return <LoadingAppUI />;
   }
   if (
+    hasError ||
     hasManagersError ||
     hasBusinessUnitError ||
     employeeError ||

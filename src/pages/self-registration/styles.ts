@@ -30,6 +30,7 @@ const StyledOutletContainer = styled(
 
 const StyledLogo = styled.img`
   width: 194px;
+  height: 50px;
   margin-top: ${spacing.s200};
 `;
 

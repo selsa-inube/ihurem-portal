@@ -13,7 +13,6 @@ const StyledContainerForm = styled.div<IStyledContainerForm>`
   flex-direction: column;
   background-color: ${({ theme }) =>
     theme?.palette?.neutral?.N10 || inube.palette.neutral.N10};
-  height: 312px;
   width: ${({ $smallScreen }) => ($smallScreen ? "auto" : "402px")};
   padding: ${({ $smallScreen }) =>
     $smallScreen ? spacing.s200 : spacing.s300};
