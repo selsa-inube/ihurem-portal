@@ -28,7 +28,7 @@ const getEnumerators = async (
       });
 
       const res = await fetch(
-        `http://172.106.48.22:8020/isaas-query-process-service/api/enumerators/${enumeratorName}?${queryParameters}`,
+        `${environment.IVITE_ISAAS_QUERY_PROCESS_SERVICE}/enumerators/${enumeratorName}?${queryParameters}`,
         {
           method: "GET",
           headers: {

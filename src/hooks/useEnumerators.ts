@@ -4,7 +4,7 @@ import {
   EnumeratorItem,
   getEnumerators,
 } from "@services/enumerators/getEnumerators";
-import { useHeaders } from "@hooks/useHeaders";
+import { useAppContext } from "@context/AppContext";
 
 import { useContractValidation } from "./useContractValidation";
 import { useErrorFlag } from "./useErrorFlag";
@@ -19,7 +19,7 @@ export const useEnumerators = <T>(
   const [error, setError] = useState<Error | null>(null);
   const [flagShown, setFlagShown] = useState(false);
 
-  const { getHeaders } = useHeaders();
+  const { businessUnit } = useAppContext();
 
   useContractValidation();
 
@@ -37,7 +37,11 @@ export const useEnumerators = <T>(
     setFlagShown(false);
 
     try {
-      const headers = await getHeaders();
+      const headers = {
+        "Content-type": "application/json; charset=UTF-8",
+        "X-Business-unit": businessUnit.publicCode,
+      };
+
       const enumeratorData = await getEnumerators(enumeratorName, headers);
 
       const responseData = enumeratorData ?? [];
