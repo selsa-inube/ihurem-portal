@@ -17,6 +17,7 @@ interface Environment {
   IVITE_IHUREM_PERSISTENCE_PROCESS_SERVICE: string;
   IVITE_IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE: string;
   BASE_URL: string;
+  COUNTRY: string;
 }
 
 const environment: Environment = {
@@ -33,6 +34,7 @@ const environment: Environment = {
     .VITE_IHUREM_PERSISTENCE_PROCESS_SERVICE as string,
   IVITE_IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE: import.meta.env
     .VITE_IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE as string,
+  COUNTRY: import.meta.env.VITE_COUNTRY as string,
 };
 
 export {

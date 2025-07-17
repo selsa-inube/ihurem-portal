@@ -12,9 +12,9 @@ import { MdTag } from "react-icons/md";
 import * as Yup from "yup";
 
 import { spacing } from "@design/tokens/spacing";
+import { useIdentificationTypesForSelect } from "@hooks/enumerators/useIdentificationTypesForSelect";
 
 import { StyledContainerForm } from "./styles";
-import { idTypeOptions } from "./config";
 
 interface FormValues {
   idType: string;
@@ -37,6 +37,8 @@ export function RegistrationForm(props: RegistrationFormProps) {
   });
 
   const isMobile = useMediaQuery("(max-width: 700px)");
+  const { data } = useIdentificationTypesForSelect();
+  const idTypeOptions = data;
 
   return (
     <StyledContainerForm $smallScreen={isMobile}>
