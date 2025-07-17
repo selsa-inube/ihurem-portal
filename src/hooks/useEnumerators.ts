@@ -6,7 +6,6 @@ import {
 } from "@services/enumerators/getEnumerators";
 import { useAppContext } from "@context/AppContext";
 
-import { useContractValidation } from "./useContractValidation";
 import { useErrorFlag } from "./useErrorFlag";
 
 export const useEnumerators = <T>(
@@ -20,8 +19,6 @@ export const useEnumerators = <T>(
   const [flagShown, setFlagShown] = useState(false);
 
   const { businessUnit } = useAppContext();
-
-  useContractValidation();
 
   useErrorFlag(
     flagShown,
