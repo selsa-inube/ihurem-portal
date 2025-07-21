@@ -95,7 +95,6 @@ const GeneralInformationFormUI = ({
             <Input
               size="compact"
               fullwidth
-              counter
               id="addressee"
               required
               label="Destinatario"
