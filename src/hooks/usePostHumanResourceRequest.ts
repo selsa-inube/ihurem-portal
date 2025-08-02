@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { formatDate } from "@utils/date";
+import { formatWithOffset } from "@utils/date";
 import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
 import { useAppContext } from "@context/AppContext/useAppContext";
 
@@ -65,7 +65,7 @@ export function useRequestSubmission(
         humanResourceRequestData = JSON.stringify({
           daysOff: formValues.daysOff ?? "",
           startDateEnyoment: formValues.startDateEnyoment
-            ? formatDate(formValues.startDateEnyoment)
+            ? formatWithOffset(new Date(formValues.startDateEnyoment))
             : "",
           contractId: formValues.contractId ?? "",
           contractNumber: formValues.contractNumber ?? "",

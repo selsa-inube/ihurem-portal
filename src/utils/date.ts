@@ -19,3 +19,9 @@ export const formatDate = (dateString: string): string => {
   const year = date.getUTCFullYear();
   return `${day}/${month}/${year}`;
 };
+
+export function formatWithOffset(date: Date) {
+  const iso = new Date(date).toISOString();
+  const [datePart] = iso.split("Z");
+  return `${datePart}-05:00`;
+}
