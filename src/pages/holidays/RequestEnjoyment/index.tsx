@@ -196,7 +196,7 @@ function RequestEnjoyment() {
     url: "/holidays",
   };
 
-  const humanResourceRequestType = ERequestType.VacationsEnjoyed;
+  const humanResourceRequestType = ERequestType.vacations_enjoyed;
   const humanResourceRequestDate = new Date().toISOString();
 
   return (

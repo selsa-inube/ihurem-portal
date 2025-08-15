@@ -22,7 +22,7 @@ function CertificationsOptions() {
     error,
   } = useHumanResourceRequests<ICertificationsTable>(
     formatHumanResourceData,
-    "Certification",
+    "certification",
   );
   const [tableData, setTableData] = useState<ICertificationsTable[]>([]);
 

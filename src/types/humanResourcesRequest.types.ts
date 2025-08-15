@@ -1,16 +1,16 @@
 export enum ERequestType {
-  Absence = "Ausencia",
-  Certification = "Certificación",
-  Disability = "Incapacidad",
-  Leave = "Permiso",
-  LeavingTheJob = "Retiro",
-  Onboarding = "Vinculación",
-  PaidVacations = "Vacaciones Pagadas",
-  PositionTransfer = "Traslado de cargo",
-  PQR = "PQR",
-  SalaryIncrease = "Ascenso salarial",
-  UnpaidLeave = "Licencia no remunerada",
-  VacationsEnjoyed = "Vacaciones Disfrutadas",
+  absence = "Ausencia",
+  certification = "Certificación",
+  disability = "Incapacidad",
+  leave = "Permiso",
+  leaving_the_job = "Retiro",
+  onboarding = "Vinculación",
+  paid_vacations = "Vacaciones Pagadas",
+  position_transfer = "Traslado de cargo",
+  pqr = "PQR",
+  alary_increase = "Ascenso salarial",
+  unpaid_leave = "Licencia no remunerada",
+  vacations_enjoyed = "Vacaciones Disfrutadas",
 }
 
 export enum ETaskStatus {
@@ -31,11 +31,11 @@ export enum HumanResourceRequestStatus {
 }
 
 export enum ERequestStatus {
-  Canceled = "Cancelado",
-  Closed = "Cerrado",
-  Finished = "Finalizado",
+  canceled = "Cancelado",
+  closed = "Cerrado",
+  finished = "Finalizado",
   supervisor_approval = "En progreso",
-  Rejected = "Rechazado",
+  rejected = "Rechazado",
 }
 
 export interface IUnifiedHumanResourceRequestData {

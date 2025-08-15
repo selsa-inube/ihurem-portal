@@ -11,7 +11,7 @@ const validateContractStatus = (
 ): boolean => {
   if (!employmentContracts || employmentContracts.length === 0) return false;
   return employmentContracts.some(
-    (contract) => contract.contractStatus === EContractStatus.Formalized,
+    (contract) => contract.contractStatus === EContractStatus.formalized,
   );
 };
 
