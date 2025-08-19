@@ -31,11 +31,17 @@ export enum HumanResourceRequestStatus {
 }
 
 export enum ERequestStatus {
-  canceled = "Cancelado",
-  closed = "Cerrado",
-  finished = "Finalizado",
-  supervisor_approval = "En progreso",
-  rejected = "Rechazado",
+  closed = "Cerrada",
+  rejected = "Rechazada",
+  canceled = "Cancelada",
+  supervisor_approval = "Aprobacion Jefe Inmediato",
+  HR_compliance_verification = "Verificacion en Gestion Humana",
+  confirmation_of_vacation_taken = "Confirmacion Disfrute de vacaciones",
+  successfully_processed = "Tramitada con Exito",
+  certification_generation = "Generacion de la certificacion",
+  onboarding_in_progress = "Vinculación en Progreso",
+  pending_registration_invitation = "Pendiente de Invitacion para registro",
+  pending_to_complete_registration = "Pendiente de completar registro",
 }
 
 export interface IUnifiedHumanResourceRequestData {

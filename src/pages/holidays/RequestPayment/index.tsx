@@ -3,7 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { FormikProps } from "formik";
 import { useMediaQuery } from "@inubekit/inubekit";
 
-import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
+import {
+  IUnifiedHumanResourceRequestData,
+  ERequestType,
+} from "@ptypes/humanResourcesRequest.types";
 import { SendRequestModal } from "@components/modals/SendRequestModal";
 import { RequestInfoModal } from "@components/modals/RequestInfoModal";
 import { useErrorFlag } from "@hooks/useErrorFlag";
@@ -125,7 +128,7 @@ function RequestPayment() {
     setShowErrorFlag,
   } = useRequestSubmission(
     formValues,
-    "PaidVacations",
+    ERequestType.onboarding,
     userCodeInCharge,
     userNameInCharge,
   );

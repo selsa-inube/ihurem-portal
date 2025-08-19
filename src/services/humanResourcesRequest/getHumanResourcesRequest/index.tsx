@@ -5,12 +5,16 @@ import {
 } from "@config/environment";
 
 import { mapHumanResourceRequestApiToEntity } from "./mappers";
+import {
+  ERequestType,
+  HumanResourceRequest,
+} from "@ptypes/humanResourcesRequest.types";
 
 const getHumanResourceRequests = async (
-  typeRequest: string,
   employeeId: string,
   headers: Record<string, string>,
-) => {
+  typeRequest?: ERequestType,
+): Promise<HumanResourceRequest[]> => {
   const maxRetries = maxRetriesServices;
   const fetchTimeout = fetchTimeoutServices;
 
@@ -18,11 +22,13 @@ const getHumanResourceRequests = async (
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), fetchTimeout);
+
       const queryParameters = new URLSearchParams({
         employeeId,
-        humanResourceRequestType: typeRequest,
+        ...(typeRequest && { humanResourceRequestType: typeRequest }),
         sort: "desc.humanResourceRequestDate",
       });
+
       const res = await fetch(
         `${environment.IVITE_IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE}/human-resources-requests?${queryParameters}`,
         {
@@ -62,6 +68,8 @@ const getHumanResourceRequests = async (
           "Todos los intentos fallaron. No se pudo obtener las solicitudes de recursos humanos.",
         );
       }
+      // Espera antes del siguiente intento (opcional)
+      await new Promise((resolve) => setTimeout(resolve, 200));
     }
   }
 

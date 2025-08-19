@@ -128,7 +128,7 @@ function RequestEnjoyment() {
     setShowErrorFlag,
   } = useRequestSubmission(
     formValues,
-    "VacationsEnjoyed",
+    ERequestType.vacations_enjoyed,
     userCodeInCharge,
     userNameInCharge,
   );

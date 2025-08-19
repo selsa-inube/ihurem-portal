@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import { formatWithOffset } from "@utils/date";
 import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
+import { ERequestType } from "@ptypes/humanResourcesRequest.types";
 import { useAppContext } from "@context/AppContext/useAppContext";
 
 import { useRequestSubmissionAPI } from "./useRequestSubmissionAPI";
@@ -19,7 +20,7 @@ function isVacationEnjoyedData(data: FormValues) {
 
 export function useRequestSubmission(
   formValues: FormValues,
-  typeRequest: string,
+  typeRequest: ERequestType,
   userCodeInCharge: string,
   userNameInCharge: string,
 ) {
@@ -41,7 +42,7 @@ export function useRequestSubmission(
     try {
       let humanResourceRequestData: string;
 
-      if (typeRequest === "Certification") {
+      if (typeRequest === ERequestType.certification) {
         humanResourceRequestData = JSON.stringify({
           certificationType: formValues.certificationType ?? "",
           addressee: formValues.addressee ?? "",
