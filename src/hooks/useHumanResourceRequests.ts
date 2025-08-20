@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import {
   HumanResourceRequest,
   ERequestType,
+  requestTypeMap,
 } from "@ptypes/humanResourcesRequest.types";
 import { getHumanResourceRequests } from "@services/humanResourcesRequest/getHumanResourcesRequest";
 import { useHeaders } from "@hooks/useHeaders";
@@ -42,13 +43,18 @@ export const useHumanResourceRequests = <T>(
     if (!effectiveEmployeeId) return;
     setIsLoading(true);
     setFlagShown(false);
+
     try {
       const headers = await getHeaders();
+      // 👇 Traducción del tipo para backend
+      const backendType = typeRequest ? requestTypeMap[typeRequest] : undefined;
+
       const requests = await getHumanResourceRequests(
         effectiveEmployeeId,
         headers,
-        typeRequest,
+        backendType,
       );
+
       const requestsData = requests ?? [];
       setRawData(requestsData);
       setData(formatData(requestsData));

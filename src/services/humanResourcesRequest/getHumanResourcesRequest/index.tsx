@@ -5,15 +5,12 @@ import {
 } from "@config/environment";
 
 import { mapHumanResourceRequestApiToEntity } from "./mappers";
-import {
-  ERequestType,
-  HumanResourceRequest,
-} from "@ptypes/humanResourcesRequest.types";
+import { HumanResourceRequest } from "@ptypes/humanResourcesRequest.types";
 
 const getHumanResourceRequests = async (
   employeeId: string,
   headers: Record<string, string>,
-  typeRequest?: ERequestType,
+  typeRequest?: string,
 ): Promise<HumanResourceRequest[]> => {
   const maxRetries = maxRetriesServices;
   const fetchTimeout = fetchTimeoutServices;
