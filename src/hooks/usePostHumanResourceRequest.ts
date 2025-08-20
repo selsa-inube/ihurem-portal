@@ -52,7 +52,10 @@ export function useRequestSubmission(
           contractType: formValues.contractType ?? "",
           observationEmployee: formValues.observationEmployee ?? "",
         });
-      } else if (isVacationPaymentData(formValues)) {
+      } else if (
+        typeRequest === ERequestType.paid_vacations &&
+        isVacationPaymentData(formValues)
+      ) {
         humanResourceRequestData = JSON.stringify({
           daysToPay: formValues.daysToPay ?? "",
           disbursementDate: "",
@@ -62,7 +65,10 @@ export function useRequestSubmission(
           contractType: formValues.contractType ?? "",
           observationEmployee: formValues.observationEmployee ?? "",
         });
-      } else if (isVacationEnjoyedData(formValues)) {
+      } else if (
+        typeRequest === ERequestType.vacations_enjoyed &&
+        isVacationEnjoyedData(formValues)
+      ) {
         humanResourceRequestData = JSON.stringify({
           daysOff: formValues.daysOff ?? "",
           startDateEnyoment: formValues.startDateEnyoment
@@ -78,13 +84,17 @@ export function useRequestSubmission(
         throw new Error("Tipo de solicitud no reconocido.");
       }
 
+      const typeRequestKey = Object.keys(ERequestType).find(
+        (key) => ERequestType[key as keyof typeof ERequestType] === typeRequest,
+      ) as keyof typeof ERequestType;
+
       const requestBody = {
         employeeId: employees.employeeId,
         humanResourceRequestData,
         humanResourceRequestDate: new Date().toISOString(),
         humanResourceRequestDescription: formValues.observationEmployee ?? "",
         humanResourceRequestStatus: "supervisor_approval",
-        humanResourceRequestType: typeRequest,
+        humanResourceRequestType: typeRequestKey as ERequestType,
         userCodeInCharge,
         userNameInCharge,
       };
@@ -95,7 +105,7 @@ export function useRequestSubmission(
         setRequestNum(response.humanResourceRequestNumber);
 
         if (humanResourceRequestId) {
-          navigateAfterSubmission(typeRequest);
+          navigateAfterSubmission(typeRequestKey);
         }
 
         return true;

@@ -68,8 +68,6 @@ const getHumanResourceRequests = async (
           "Todos los intentos fallaron. No se pudo obtener las solicitudes de recursos humanos.",
         );
       }
-      // Espera antes del siguiente intento (opcional)
-      await new Promise((resolve) => setTimeout(resolve, 200));
     }
   }
 

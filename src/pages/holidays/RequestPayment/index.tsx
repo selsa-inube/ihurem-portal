@@ -128,7 +128,7 @@ function RequestPayment() {
     setShowErrorFlag,
   } = useRequestSubmission(
     formValues,
-    ERequestType.onboarding,
+    ERequestType.paid_vacations,
     userCodeInCharge,
     userNameInCharge,
   );
