@@ -14,8 +14,8 @@ export enum ERequestType {
 }
 
 export enum ETaskStatus {
-  Assigned = "Asignada",
-  Executed = "Ejecutada",
+  assigned = "Asignada",
+  executed = "Ejecutada",
 }
 
 export enum HumanResourceRequestStatus {
