@@ -13,6 +13,7 @@ const mapEmployeeOptionsApiToEntity = (
   return options.map((option) => ({
     abbreviatedName: toStringSafe(option.abbreviatedName),
     descriptionUse: toStringSafe(option.descriptionUse),
+    iconReference: toStringSafe(option.iconReference),
     optionCode: toStringSafe(option.optionCode),
     optionEmployeeId: toStringSafe(option.optionEmployeeId),
     parentOptionId: toStringSafe(option.parentOptionId),

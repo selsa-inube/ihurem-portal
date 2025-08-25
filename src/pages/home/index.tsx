@@ -3,8 +3,9 @@ import { Text, Stack, Grid, Header, useMediaQuery } from "@inubekit/inubekit";
 
 import { AppCard } from "@components/feedback/AppCard";
 import { spacing } from "@design/tokens/spacing";
-import { userMenu, useConfigHeader, baseNavLinks } from "@config/nav.config";
+import { userMenu, useConfigHeader, navConfig } from "@config/nav.config";
 import { useAppContext } from "@context/AppContext";
+import { useEmployeeOptions } from "@hooks/useEmployeeOptions";
 
 import {
   StyledAppPage,
@@ -25,7 +26,10 @@ const renderLogo = (imgUrl: string, altText: string) => {
 
 function Home() {
   const { user, logoUrl, businessUnit } = useAppContext();
-  const configHeader = useConfigHeader();
+  const { data: employeeOptions } = useEmployeeOptions(user?.id ?? "");
+  const safeEmployeeOptions = employeeOptions ?? [];
+
+  const configHeader = useConfigHeader(safeEmployeeOptions);
   const isTablet = useMediaQuery("(max-width: 944px)");
 
   return (
@@ -62,7 +66,7 @@ function Home() {
                   Aquí tienes las funcionalidades disponibles.
                 </Text>
                 <StyledQuickAccessContainer $isTablet={isTablet}>
-                  {baseNavLinks.map((link, index) => (
+                  {navConfig(safeEmployeeOptions).map((link, index) => (
                     <AppCard
                       key={index}
                       title={link.label}
@@ -81,5 +85,4 @@ function Home() {
     </StyledAppPage>
   );
 }
-
 export { Home };

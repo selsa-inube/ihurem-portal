@@ -5,11 +5,10 @@ import { useAppContext } from "@context/AppContext";
 import { useEmployee } from "@hooks/useEmployee";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 import { EmploymentContract } from "@ptypes/employeePortalConsultation.types";
-
-const FORMALIZED_STATUS = "Formalized";
+import { EContractStatus } from "@ptypes/employeePortalBusiness.types";
 
 const isContractActive = (status: string, deadline: string): boolean => {
-  if (status !== FORMALIZED_STATUS) return false;
+  if (status !== EContractStatus.formalized) return false;
   if (!deadline) return true;
   const currentDate = new Date();
   const endDate = new Date(deadline);
@@ -20,7 +19,7 @@ const areAllContractsFinalized = (contracts: EmploymentContract[]): boolean => {
   if (!contracts || contracts.length === 0) return true;
   return contracts.every(
     (contract) =>
-      contract.contractStatus === "Finalized" ||
+      contract.contractStatus === EContractStatus.finalized ||
       !isContractActive(contract.contractStatus, contract.deadline),
   );
 };
