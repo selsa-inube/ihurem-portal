@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useMediaQuery } from "@inubekit/inubekit";
 
 import { useHumanResourceRequests } from "@hooks/useHumanResourceRequests";
+import { ERequestType } from "@ptypes/humanResourcesRequest.types";
 import { useDeleteRequest } from "@hooks/useDeleteRequest";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 
@@ -22,8 +23,9 @@ function CertificationsOptions() {
     error,
   } = useHumanResourceRequests<ICertificationsTable>(
     formatHumanResourceData,
-    "Certification",
+    ERequestType.certification,
   );
+
   const [tableData, setTableData] = useState<ICertificationsTable[]>([]);
 
   useEffect(() => {

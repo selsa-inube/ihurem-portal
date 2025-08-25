@@ -1,21 +1,50 @@
 export enum ERequestType {
-  Absence = "Ausencia",
-  Certification = "Certificación",
-  Disability = "Incapacidad",
-  Leave = "Permiso",
-  LeavingTheJob = "Retiro",
-  Onboarding = "Vinculación",
-  PaidVacations = "Vacaciones Pagadas",
-  PositionTransfer = "Traslado de cargo",
-  PQR = "PQR",
-  SalaryIncrease = "Ascenso salarial",
-  UnpaidLeave = "Licencia no remunerada",
-  VacationsEnjoyed = "Vacaciones Disfrutadas",
+  absence = "Ausencia",
+  certification = "Certificación",
+  disability = "Incapacidad",
+  leave = "Permiso",
+  leaving_the_job = "Retiro",
+  onboarding = "Vinculación",
+  paid_vacations = "Vacaciones Pagadas",
+  position_transfer = "Traslado de cargo",
+  pqr = "PQR",
+  salary_increase = "Ascenso salarial",
+  unpaid_leave = "Licencia no remunerada",
+  vacations_enjoyed = "Vacaciones Disfrutadas",
 }
+export const requestTypeMap: Record<ERequestType, string> = {
+  [ERequestType.absence]: "absence",
+  [ERequestType.certification]: "certification",
+  [ERequestType.disability]: "disability",
+  [ERequestType.leave]: "leave",
+  [ERequestType.leaving_the_job]: "leaving_the_job",
+  [ERequestType.onboarding]: "onboarding",
+  [ERequestType.paid_vacations]: "paid_vacations",
+  [ERequestType.position_transfer]: "position_transfer",
+  [ERequestType.pqr]: "pqr",
+  [ERequestType.salary_increase]: "salary_increase",
+  [ERequestType.unpaid_leave]: "unpaid_leave",
+  [ERequestType.vacations_enjoyed]: "vacations_enjoyed",
+};
+
+export const requestTypeLabels: Record<ERequestType, string> = {
+  [ERequestType.absence]: "Ausencia",
+  [ERequestType.certification]: "Certificación",
+  [ERequestType.disability]: "Incapacidad",
+  [ERequestType.leave]: "Permiso",
+  [ERequestType.leaving_the_job]: "Retiro",
+  [ERequestType.onboarding]: "Vinculación",
+  [ERequestType.paid_vacations]: "Vacaciones Pagadas",
+  [ERequestType.position_transfer]: "Traslado de cargo",
+  [ERequestType.pqr]: "PQR",
+  [ERequestType.salary_increase]: "Ascenso salarial",
+  [ERequestType.unpaid_leave]: "Licencia no remunerada",
+  [ERequestType.vacations_enjoyed]: "Vacaciones Disfrutadas",
+};
 
 export enum ETaskStatus {
-  Assigned = "Asignada",
-  Executed = "Ejecutada",
+  assigned = "Asignada",
+  executed = "Ejecutada",
 }
 
 export enum HumanResourceRequestStatus {
@@ -31,11 +60,17 @@ export enum HumanResourceRequestStatus {
 }
 
 export enum ERequestStatus {
-  Canceled = "Cancelado",
-  Closed = "Cerrado",
-  Finished = "Finalizado",
-  supervisor_approval = "En progreso",
-  Rejected = "Rechazado",
+  closed = "Cerrada",
+  rejected = "Rechazada",
+  canceled = "Cancelada",
+  supervisor_approval = "Aprobacion Jefe Inmediato",
+  HR_compliance_verification = "Verificacion en Gestion Humana",
+  confirmation_of_vacation_taken = "Confirmacion Disfrute de vacaciones",
+  successfully_processed = "Tramitada con Exito",
+  certification_generation = "Generacion de la certificacion",
+  onboarding_in_progress = "Vinculación en Progreso",
+  pending_registration_invitation = "Pendiente de Invitacion para registro",
+  pending_to_complete_registration = "Pendiente de completar registro",
 }
 
 export interface IUnifiedHumanResourceRequestData {
