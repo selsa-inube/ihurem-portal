@@ -120,8 +120,10 @@ interface UseCasesByBusinessesUnit {
 interface IEmployeeOptions {
   abbreviatedName: string;
   descriptionUse: string;
+  iconReference: string;
   optionCode: string;
   optionEmployeeId: string;
+  parentOptionId: string;
 }
 
 interface IVacationHistory {

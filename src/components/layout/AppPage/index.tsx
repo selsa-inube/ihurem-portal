@@ -7,6 +7,7 @@ import {
   actions,
   useConfigHeader,
 } from "@config/nav.config";
+import { useEmployeeOptions } from "@hooks/useEmployeeOptions";
 import { useAppContext } from "@context/AppContext/useAppContext";
 import { useContractValidation } from "@hooks/useContractValidation";
 
@@ -38,8 +39,11 @@ function AppPage(props: AppPageProps) {
   const { user, logoUrl, businessUnit } = useAppContext();
   const isTablet = useMediaQuery("(max-width: 944px)");
 
-  const navConfig = useNavConfig();
-  const configHeader = useConfigHeader();
+  const { data: employeeOptions } = useEmployeeOptions(user?.id ?? "");
+  const safeEmployeeOptions = employeeOptions ?? [];
+
+  const navConfig = useNavConfig(safeEmployeeOptions);
+  const configHeader = useConfigHeader(safeEmployeeOptions);
 
   useContractValidation();
 

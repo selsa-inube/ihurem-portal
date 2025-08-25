@@ -1,18 +1,14 @@
-import {
-  MdLogout,
-  MdOutlineFilePresent,
-  MdOutlineBeachAccess,
-  MdOutlinePersonalInjury,
-  MdOutlinePersonOff,
-} from "react-icons/md";
+import { MdLogout } from "react-icons/md";
 import { ILinkNav } from "@inubekit/inubekit";
 import { useLocation } from "react-router-dom";
+import { ReactNode } from "react";
+
+import { IEmployeeOptions } from "@ptypes/employeePortalBusiness.types";
 
 const baseNavLinks = [
   {
     id: "holidays",
     label: "Vacaciones",
-    icon: <MdOutlineBeachAccess />,
     path: "/holidays",
     description:
       "Son los días de descanso remunerado que le corresponden al empleado por cada año trabajado.",
@@ -20,26 +16,23 @@ const baseNavLinks = [
   {
     id: "disability",
     label: "Incapacidades",
-    icon: <MdOutlinePersonalInjury />,
     path: "/disability",
     description:
       "Son períodos en los que el trabajador no puede laborar debido a una enfermedad o accidente, y está respaldado por un certificado médico.",
   },
   {
-    id: "certifications",
-    label: "Certificaciones",
-    icon: <MdOutlineFilePresent />,
-    path: "/certifications",
-    description:
-      "Son documentos que acreditan la formación o experiencia laboral de un empleado.",
-  },
-  {
     id: "absences",
     label: "Ausencias",
-    icon: <MdOutlinePersonOff />,
     path: "/absences",
     description:
       "Son períodos en los que el trabajador no se presenta a laborar, ya sea de forma justificada o injustificada.",
+  },
+  {
+    id: "certifications",
+    label: "Certificaciones",
+    path: "/certifications",
+    description:
+      "Son documentos que acreditan la formación o experiencia laboral de un empleado.",
   },
 ];
 
@@ -56,8 +49,35 @@ const actions = [
   },
 ];
 
-const useNavConfig = () => {
+const getIcon = (iconReference?: string): ReactNode => {
+  if (iconReference && iconReference.trim() !== "") {
+    return (
+      <img
+        src={iconReference}
+        alt="icon"
+        style={{ width: 24, height: 24, objectFit: "contain" }}
+      />
+    );
+  }
+  return <div style={{ width: 24, height: 24 }} />;
+};
+
+const navConfig = (employeeOptions: IEmployeeOptions[]) => {
+  return baseNavLinks.map((link) => {
+    const option = employeeOptions.find((opt) => opt.optionCode === link.id);
+
+    return {
+      ...link,
+      label: option?.abbreviatedName ?? link.label,
+      icon: getIcon(option?.iconReference),
+      isEnabled: !!option,
+    };
+  });
+};
+
+const useNavConfig = (employeeOptions: IEmployeeOptions[]) => {
   const location = useLocation();
+  const baseNav = navConfig(employeeOptions);
 
   const nav = {
     reactPortalId: "portals",
@@ -65,7 +85,7 @@ const useNavConfig = () => {
     sections: {
       administrate: {
         name: "",
-        links: baseNavLinks.reduce(
+        links: baseNav.reduce(
           (acc, link) => {
             acc[link.id] = {
               ...link,
@@ -83,7 +103,7 @@ const useNavConfig = () => {
   return nav;
 };
 
-const useConfigHeader = () => {
+const useConfigHeader = (employeeOptions: IEmployeeOptions[]) => {
   const nav = {
     reactPortalId: "portal",
     title: "MENU",
@@ -93,7 +113,7 @@ const useConfigHeader = () => {
         onClose: noop,
         onToggle: noop,
         subtitle: "Administrate",
-        links: baseNavLinks,
+        links: navConfig(employeeOptions),
       },
     ],
     actions,
@@ -127,4 +147,6 @@ export {
   userMenu,
   actions,
   pathStart,
+  navConfig,
+  getIcon,
 };
