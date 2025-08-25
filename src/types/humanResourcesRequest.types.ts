@@ -27,6 +27,21 @@ export const requestTypeMap: Record<ERequestType, string> = {
   [ERequestType.vacations_enjoyed]: "vacations_enjoyed",
 };
 
+export const requestTypeLabels: Record<ERequestType, string> = {
+  [ERequestType.absence]: "Ausencia",
+  [ERequestType.certification]: "Certificación",
+  [ERequestType.disability]: "Incapacidad",
+  [ERequestType.leave]: "Permiso",
+  [ERequestType.leaving_the_job]: "Retiro",
+  [ERequestType.onboarding]: "Vinculación",
+  [ERequestType.paid_vacations]: "Vacaciones Pagadas",
+  [ERequestType.position_transfer]: "Traslado de cargo",
+  [ERequestType.pqr]: "PQR",
+  [ERequestType.salary_increase]: "Ascenso salarial",
+  [ERequestType.unpaid_leave]: "Licencia no remunerada",
+  [ERequestType.vacations_enjoyed]: "Vacaciones Disfrutadas",
+};
+
 export enum ETaskStatus {
   assigned = "Asignada",
   executed = "Ejecutada",

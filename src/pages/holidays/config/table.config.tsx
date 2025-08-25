@@ -3,6 +3,8 @@ import { MdOutlineVisibility, MdDeleteOutline } from "react-icons/md";
 import {
   ERequestType,
   HumanResourceRequest,
+  requestTypeMap,
+  requestTypeLabels,
 } from "@ptypes/humanResourcesRequest.types";
 import { Employee } from "@ptypes/employeePortalConsultation.types";
 import { formatDate } from "@utils/date";
@@ -25,11 +27,17 @@ export const formatHolidaysData = (holidays: HumanResourceRequest[]) =>
       ? (getValueFromData(parsedData, "disbursementDate", "") as string)
       : holiday.humanResourceRequestDate;
 
+    const typeKey = Object.entries(requestTypeMap).find(
+      ([, slug]) => slug === holiday.humanResourceRequestType,
+    )?.[0] as keyof typeof requestTypeMap | undefined;
+
     return {
       requestId: holiday.humanResourceRequestId,
       requestNumber: holiday.humanResourceRequestNumber,
       description: {
-        value: holiday.humanResourceRequestType,
+        value: typeKey
+          ? requestTypeLabels[typeKey as ERequestType]
+          : holiday.humanResourceRequestType,
       },
       date: {
         value: formatDate(displayDate),
