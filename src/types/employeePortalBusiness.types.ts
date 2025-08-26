@@ -117,13 +117,24 @@ interface UseCasesByBusinessesUnit {
   effectiveDate: string;
   useCaseId: string;
 }
+
+interface ISubOption {
+  abbreviatedName: string;
+  descriptionUse: string;
+  optionStaffId: string;
+  publicCode: string;
+  subOption: string[];
+  useCaseName: string;
+}
 interface IEmployeeOptions {
   abbreviatedName: string;
   descriptionUse: string;
   iconReference: string;
-  optionCode: string;
-  optionEmployeeId: string;
+  optionStaffId: string;
   parentOptionId: string;
+  publicCode: string;
+  subOption?: ISubOption[];
+  useCaseName: string;
 }
 
 interface IVacationHistory {

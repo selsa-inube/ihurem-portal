@@ -1,3 +1,5 @@
+import * as MdIcons from "react-icons/md";
+import { IconType } from "react-icons";
 import { MdLogout } from "react-icons/md";
 import { ILinkNav } from "@inubekit/inubekit";
 import { useLocation } from "react-router-dom";
@@ -8,6 +10,7 @@ import { IEmployeeOptions } from "@ptypes/employeePortalBusiness.types";
 const baseNavLinks = [
   {
     id: "holidays",
+    serviceCode: "vacacionesPortalErm",
     label: "Vacaciones",
     path: "/holidays",
     description:
@@ -15,6 +18,7 @@ const baseNavLinks = [
   },
   {
     id: "disability",
+    serviceCode: "incapacidadesPortalErm",
     label: "Incapacidades",
     path: "/disability",
     description:
@@ -22,6 +26,7 @@ const baseNavLinks = [
   },
   {
     id: "absences",
+    serviceCode: "ausenciasPortalErm",
     label: "Ausencias",
     path: "/absences",
     description:
@@ -29,6 +34,7 @@ const baseNavLinks = [
   },
   {
     id: "certifications",
+    serviceCode: "certificacionPortalErm",
     label: "Certificaciones",
     path: "/certifications",
     description:
@@ -51,20 +57,21 @@ const actions = [
 
 const getIcon = (iconReference?: string): ReactNode => {
   if (iconReference && iconReference.trim() !== "") {
-    return (
-      <img
-        src={iconReference}
-        alt="icon"
-        style={{ width: 24, height: 24, objectFit: "contain" }}
-      />
-    );
+    const IconComponent: IconType | undefined = (
+      MdIcons as Record<string, IconType>
+    )[iconReference];
+    if (IconComponent) {
+      return <IconComponent size={24} />;
+    }
   }
   return <div style={{ width: 24, height: 24 }} />;
 };
 
-const navConfig = (employeeOptions: IEmployeeOptions[]) => {
+const navConfig = (optionForCustomerPortal: IEmployeeOptions[]) => {
   return baseNavLinks.map((link) => {
-    const option = employeeOptions.find((opt) => opt.optionCode === link.id);
+    const option = optionForCustomerPortal.find(
+      (opt) => opt.publicCode === link.serviceCode,
+    );
 
     return {
       ...link,

@@ -14,9 +14,13 @@ const mapEmployeeOptionsApiToEntity = (
     abbreviatedName: toStringSafe(option.abbreviatedName),
     descriptionUse: toStringSafe(option.descriptionUse),
     iconReference: toStringSafe(option.iconReference),
-    optionCode: toStringSafe(option.optionCode),
-    optionEmployeeId: toStringSafe(option.optionEmployeeId),
+    optionStaffId: toStringSafe(option.optionStaffId),
     parentOptionId: toStringSafe(option.parentOptionId),
+    publicCode: toStringSafe(option.publicCode),
+    useCaseName: toStringSafe(option.useCaseName),
+    subOption: Array.isArray(option.subOption)
+      ? (option.subOption as IEmployeeOptions["subOption"])
+      : undefined,
   }));
 };
 
