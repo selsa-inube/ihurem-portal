@@ -162,10 +162,10 @@ interface IContractRemunerationAssignment {
 }
 
 export enum EContractStatus {
-  InTheProcessOfFormalization = "in_the_process_of_formalization",
-  Formalized = "Formalized",
-  Finalized = "Finalized",
-  InTheProcessOfEnding = "in_the_process_of_ending",
+  in_the_process_of_formalization = "in_the_process_of_formalization",
+  formalized = "formalized",
+  finalized = "finalized",
+  in_the_process_of_ending = "in_the_process_of_ending",
 }
 
 export type {

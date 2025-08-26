@@ -4,6 +4,7 @@ import { useMediaQuery } from "@inubekit/inubekit";
 
 import { SendRequestModal } from "@components/modals/SendRequestModal";
 import { RequestInfoModal } from "@components/modals/RequestInfoModal";
+import { ERequestType } from "@ptypes/humanResourcesRequest.types";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 import { useRequestSubmission } from "@hooks/usePostHumanResourceRequest";
 import { useAppContext } from "@context/AppContext/useAppContext";
@@ -125,7 +126,7 @@ function NewCertification() {
     setShowErrorFlag,
   } = useRequestSubmission(
     formValues,
-    "Certification",
+    ERequestType.certification,
     userCodeInCharge,
     userNameInCharge,
   );
