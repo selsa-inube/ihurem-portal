@@ -23,6 +23,7 @@ import { useEmployeeOptions } from "@hooks/useEmployeeOptions";
 import { AppProvider } from "@context/AppContext";
 import { useBusinessManagers } from "@hooks/useBusinessManagers";
 import { useEmployeeByNickname } from "@hooks/useEmployeeInquiry";
+import { ProtectedRoute } from "@pages/protectedRoutes";
 
 import { useAppContext } from "./context/AppContext/useAppContext";
 import { SelfRegistrationRoutes } from "./routes/self-registration";
@@ -63,20 +64,46 @@ const router = createBrowserRouter(
     <>
       <Route path="/self-registration" element={<SelfRegistrationRoutes />} />
       <Route path="/login/*" element={<LoginRoutes />} />
-      <Route
-        path="/*"
-        element={<ContractValidationWrapper />}
-        errorElement={<ErrorPage />}
-      />
+
+      <Route index element={<ContractValidationWrapper />} />
+      <Route path="/" element={<ContractValidationWrapper />} />
       <Route path="/*" element={<AppPage />}>
-        <Route path="holidays/*" element={<HolidaysRoutes />} />
-        <Route path="certifications/*" element={<CertificationsRoutes />} />
+        <Route
+          path="holidays/*"
+          element={
+            <ProtectedRoute
+              element={<HolidaysRoutes />}
+              optionCode="vacations"
+            />
+          }
+        />
+        <Route
+          path="certifications/*"
+          element={
+            <ProtectedRoute
+              element={<CertificationsRoutes />}
+              optionCode="certifications"
+            />
+          }
+        />
+        <Route
+          path="disability/*"
+          element={<ProtectedRoute element={<></>} optionCode="disability" />}
+        />
+        <Route
+          path="absences/*"
+          element={<ProtectedRoute element={<></>} optionCode="absences" />}
+        />
+        <Route
+          path="*"
+          element={<ProtectedRoute element={<></>} enforcePrivilegeCheck />}
+        />
       </Route>
+
       <Route path="logout" element={<LogOut />} />
     </>,
   ),
 );
-
 function App() {
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);

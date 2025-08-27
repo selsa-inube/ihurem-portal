@@ -10,7 +10,7 @@ import { useLocation } from "react-router-dom";
 
 const baseNavLinks = [
   {
-    id: "holidays",
+    id: "vacations",
     label: "Vacaciones",
     icon: <MdOutlineBeachAccess />,
     path: "/holidays",
