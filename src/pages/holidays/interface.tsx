@@ -73,7 +73,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
     title: "",
     description: "",
   });
-  const { employee, loading } = useEmployee(employees.employeeId);
+  const { employee, isLoading } = useEmployee(employees.employeeId);
   const contracts = employee?.employmentContracts ?? [];
 
   const { vacationDays, loadingDays } = useEmployeeVacationDays(
@@ -221,7 +221,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
                   }`}
                 </Text>
               )}
-              <DaysUsedTable data={contractVacationData} loading={loading} />
+              <DaysUsedTable data={contractVacationData} loading={isLoading} />
             </div>
           );
         })}

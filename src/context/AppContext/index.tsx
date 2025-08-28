@@ -5,7 +5,6 @@ import {
   useEffect,
   ReactNode,
 } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
 
 import {
   IBusinessManagers,
@@ -15,8 +14,9 @@ import {
   IEmployeeOptions,
 } from "@ptypes/employeePortalBusiness.types";
 import selsaLogo from "@assets/images/selsa.png";
+import { useIAuth } from "@context/authContext";
 
-import { IAppContextType, IPreferences, IClient } from "./types";
+import { IAppContextType, IPreferences, IClient, IUser } from "./types";
 
 const AppContext = createContext<IAppContextType | undefined>(undefined);
 
@@ -38,21 +38,15 @@ function AppProvider(props: AppProviderProps) {
     employee,
     employeeOptions,
   } = props;
-  const { user: auth0User } = useAuth0();
-  const [user, setUser] = useState<{
-    username: string;
-    id: string;
-    company: string;
-    urlImgPerfil: string;
-    nickname: string;
-  } | null>(
-    auth0User
+  const { user: IAuthUser } = useIAuth();
+  const [user, setUser] = useState<IUser | null>(
+    IAuthUser
       ? {
-          username: auth0User.name ?? "",
-          id: auth0User.nickname ?? "",
+          username: IAuthUser.username ?? "",
+          id: IAuthUser.nickname ?? "",
           company: businessUnitData.publicCode ?? "Company Name",
-          urlImgPerfil: auth0User.picture ?? "",
-          nickname: auth0User.nickname ?? "",
+          urlImgPerfil: IAuthUser.urlImgPerfil ?? "",
+          nickname: IAuthUser.nickname ?? "",
         }
       : null,
   );

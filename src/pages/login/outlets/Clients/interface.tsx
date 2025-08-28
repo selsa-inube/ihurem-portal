@@ -1,11 +1,25 @@
-import { useEffect } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
+import { useEffect, useState } from "react";
+
+import { useIAuth } from "@context/authContext";
 
 function ClientsUI() {
-  const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
+  const { loginWithRedirect, isAuthenticated, isLoading } = useIAuth();
+  const [hasAttemptedLogin, setHasAttemptedLogin] = useState(false);
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const hasAccessCode = urlParams.get("ac");
+    const authAttempted = localStorage.getItem("auth_attempted");
+
+    if (
+      !isLoading &&
+      !isAuthenticated &&
+      !hasAccessCode &&
+      !authAttempted &&
+      !hasAttemptedLogin
+    ) {
+      setHasAttemptedLogin(true);
+      localStorage.setItem("auth_attempted", "true");
       loginWithRedirect({
         authorizationParams: {
           connection: "google-oauth2",
@@ -13,11 +27,14 @@ function ClientsUI() {
         appState: {
           returnTo: "/",
         },
-      }).catch((error) => {
-        console.error("Error al intentar iniciar sesión:", error);
       });
     }
-  }, [isLoading, isAuthenticated, loginWithRedirect]);
+
+    if (isAuthenticated) {
+      localStorage.removeItem("auth_attempted");
+      setHasAttemptedLogin(false);
+    }
+  }, [isLoading, isAuthenticated, loginWithRedirect, hasAttemptedLogin]);
 
   return null;
 }
