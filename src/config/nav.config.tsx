@@ -9,7 +9,7 @@ import { IEmployeeOptions } from "@ptypes/employeePortalBusiness.types";
 
 const baseNavLinks = [
   {
-    id: "holidays",
+    id: "vacations",
     serviceCode: "vacacionesPortalErm",
     label: "Vacaciones",
     path: "/holidays",
@@ -70,7 +70,7 @@ const getIcon = (iconReference?: string): ReactNode => {
 const navConfig = (optionForCustomerPortal: IEmployeeOptions[]) => {
   return baseNavLinks.map((link) => {
     const option = optionForCustomerPortal.find(
-      (opt) => opt.publicCode === link.serviceCode,
+      (opt) => opt.optionCode === link.serviceCode,
     );
 
     return {
