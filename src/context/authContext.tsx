@@ -102,7 +102,6 @@ export function AuthProvider({
             throw new Error("Invalid user data");
           }
         } catch {
-          // Removed unused 'error' variable
           localStorage.removeItem("auth_token");
           localStorage.removeItem("auth_user");
         }
