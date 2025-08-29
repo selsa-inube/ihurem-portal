@@ -73,6 +73,7 @@ interface IEmployeePortalByBusinessManager {
   employeePortalCatalogId: string;
   employeePortalId: string;
   optionsByEmployeePortalBusinessManager?: IOptionsByEmployeePortalBusinessManager[];
+  externalAuthenticationProvider: string;
 }
 
 interface IBusinessManagers {
@@ -84,6 +85,8 @@ interface IBusinessManagers {
   urlBrand: string;
   urlLogo: string;
   customerId: string;
+  clientId: string;
+  clientSecret: string;
 }
 interface IBusinessUnitsPortalEmployee {
   abbreviatedName: string;
