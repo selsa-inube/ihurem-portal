@@ -141,8 +141,14 @@ function App() {
 
       if (!externalAuthProvider) {
         if (!isAuthenticated && !isLoading) {
-          loginWithRedirect();
-          return;
+          loginWithRedirect({
+            authorizationParams: {
+              connection: "google-oauth2",
+            },
+            appState: {
+              returnTo: window.location.pathname,
+            },
+          });
         }
       } else {
         setExternalAuthProvider(externalAuthProvider);
@@ -159,7 +165,14 @@ function App() {
       !pathStart.includes(window.location.pathname) &&
       !portalData.externalAuthenticationProvider
     ) {
-      loginWithRedirect();
+      loginWithRedirect({
+        authorizationParams: {
+          connection: "google-oauth2",
+        },
+        appState: {
+          returnTo: window.location.pathname,
+        },
+      });
     } else {
       setIsReady(true);
     }
@@ -168,6 +181,8 @@ function App() {
     isAuthenticated,
     loginWithRedirect,
     portalData.externalAuthenticationProvider,
+    hasError,
+    pathStart,
   ]);
 
   const handleCloseExternalAuthNotification = () => {

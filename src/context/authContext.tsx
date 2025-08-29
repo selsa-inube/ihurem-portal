@@ -10,6 +10,14 @@ import {
 import { IUser } from "./AppContext/types";
 
 interface LoginOptions {
+  authorizationParams?: {
+    connection?: string;
+    [key: string]: unknown;
+  };
+  appState?: {
+    returnTo?: string;
+    [key: string]: unknown;
+  };
   redirectUri?: string;
   scope?: string;
   state?: string;
@@ -93,8 +101,8 @@ export function AuthProvider({
           } else {
             throw new Error("Invalid user data");
           }
-        } catch (error) {
-          console.error("Error parsing stored user data:", error);
+        } catch {
+          // Removed unused 'error' variable
           localStorage.removeItem("auth_token");
           localStorage.removeItem("auth_user");
         }
@@ -113,9 +121,34 @@ export function AuthProvider({
       loginUrl.searchParams.set("originatorId", originatorId);
       loginUrl.searchParams.set("callbackUrl", callbackUrl);
 
+      if (options?.authorizationParams) {
+        Object.entries(options.authorizationParams).forEach(([key, value]) => {
+          if (value !== undefined && value !== null) {
+            const stringValue =
+              typeof value === "string" ? value : JSON.stringify(value);
+            loginUrl.searchParams.set(key, stringValue);
+          }
+        });
+      }
+
+      if (options?.appState) {
+        Object.entries(options.appState).forEach(([key, value]) => {
+          if (value !== undefined && value !== null) {
+            const stringValue =
+              typeof value === "string" ? value : JSON.stringify(value);
+            loginUrl.searchParams.set(key, stringValue);
+          }
+        });
+      }
+
       if (options) {
         Object.entries(options).forEach(([key, value]) => {
-          if (value !== undefined) {
+          if (
+            key !== "authorizationParams" &&
+            key !== "appState" &&
+            value !== undefined &&
+            value !== null
+          ) {
             const stringValue =
               typeof value === "string" ? value : JSON.stringify(value);
             loginUrl.searchParams.set(key, stringValue);
