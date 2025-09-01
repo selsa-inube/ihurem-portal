@@ -37,6 +37,9 @@ const mapEmployeePortalByBusinessManagerApiToEntity = (
     portalCode: toSafeString(resend.portalCode),
     employeePortalCatalogId: toSafeString(resend.employeePortalCatalogId),
     employeePortalId: toSafeString(resend.employeePortalId),
+    externalAuthenticationProvider: toSafeString(
+      resend.externalAuthenticationProvider,
+    ),
   };
 };
 

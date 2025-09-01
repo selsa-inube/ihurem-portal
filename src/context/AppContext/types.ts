@@ -29,6 +29,14 @@ export interface IProvisionedPortal {
   }[];
 }
 
+export interface IUser {
+  username: string;
+  id: string;
+  company: string;
+  urlImgPerfil: string;
+  nickname: string;
+}
+
 export interface IAppContextType {
   user: {
     username: string;

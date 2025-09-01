@@ -5,7 +5,6 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
 
 import { Home } from "@pages/home";
 import { decrypt, encrypt } from "@utils/encrypt";
@@ -23,7 +22,10 @@ import { useEmployeeOptions } from "@hooks/useEmployeeOptions";
 import { AppProvider } from "@context/AppContext";
 import { useBusinessManagers } from "@hooks/useBusinessManagers";
 import { useEmployeeByNickname } from "@hooks/useEmployeeInquiry";
+import { useIAuth } from "@context/authContext";
+import { ProtectedRoute } from "@pages/protectedRoutes";
 
+import { InfoModal } from "./components/modals/InfoModal";
 import { useAppContext } from "./context/AppContext/useAppContext";
 import { SelfRegistrationRoutes } from "./routes/self-registration";
 import { useContractValidation } from "./hooks/useContractValidation";
@@ -31,7 +33,7 @@ import { LoadingAppUI } from "./pages/login/outlets/LoadingApp/interface";
 
 function LogOut() {
   localStorage.clear();
-  const { logout } = useAuth0();
+  const { logout } = useIAuth();
   logout({ logoutParams: { returnTo: environment.REDIRECT_URI } });
   return <ErrorPage errorCode={1000} />;
 }
@@ -63,20 +65,46 @@ const router = createBrowserRouter(
     <>
       <Route path="/self-registration" element={<SelfRegistrationRoutes />} />
       <Route path="/login/*" element={<LoginRoutes />} />
-      <Route
-        path="/*"
-        element={<ContractValidationWrapper />}
-        errorElement={<ErrorPage />}
-      />
+
+      <Route index element={<ContractValidationWrapper />} />
+      <Route path="/" element={<ContractValidationWrapper />} />
       <Route path="/*" element={<AppPage />}>
-        <Route path="holidays/*" element={<HolidaysRoutes />} />
-        <Route path="certifications/*" element={<CertificationsRoutes />} />
+        <Route
+          path="holidays/*"
+          element={
+            <ProtectedRoute
+              element={<HolidaysRoutes />}
+              optionCode="vacations"
+            />
+          }
+        />
+        <Route
+          path="certifications/*"
+          element={
+            <ProtectedRoute
+              element={<CertificationsRoutes />}
+              optionCode="certifications"
+            />
+          }
+        />
+        <Route
+          path="disability/*"
+          element={<ProtectedRoute element={<></>} optionCode="disability" />}
+        />
+        <Route
+          path="absences/*"
+          element={<ProtectedRoute element={<></>} optionCode="absences" />}
+        />
+        <Route
+          path="*"
+          element={<ProtectedRoute element={<></>} enforcePrivilegeCheck />}
+        />
       </Route>
+
       <Route path="logout" element={<LogOut />} />
     </>,
   ),
 );
-
 function App() {
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
@@ -84,6 +112,12 @@ function App() {
   const storedPortal = localStorage.getItem("portalCode");
   const decryptedPortal = storedPortal ? decrypt(storedPortal) : "";
   const portalCode = portalParam ?? decryptedPortal;
+
+  const [showExternalAuthNotification, setShowExternalAuthNotification] =
+    useState(false);
+  const [externalAuthProvider, setExternalAuthProvider] = useState<
+    string | null
+  >(null);
 
   if (!portalCode) {
     return <ErrorPage errorCode={1000} />;
@@ -97,9 +131,10 @@ function App() {
   }, [portalParam, decryptedPortal]);
 
   const [isReady, setIsReady] = useState(false);
-  const { loginWithRedirect, isAuthenticated, isLoading, user } = useAuth0();
+  const { loginWithRedirect, isAuthenticated, isLoading, user } = useIAuth();
 
   const { portalData, hasError } = usePortalData(portalCode ?? "");
+
   const {
     businessManagersData,
     hasError: hasManagersError,
@@ -128,17 +163,58 @@ function App() {
   } = useEmployeeOptions(user?.nickname ?? "");
 
   useEffect(() => {
+    if (portalData && portalData.externalAuthenticationProvider !== undefined) {
+      const externalAuthProvider = portalData.externalAuthenticationProvider;
+
+      if (!externalAuthProvider) {
+        if (!isAuthenticated && !isLoading) {
+          loginWithRedirect({
+            authorizationParams: {
+              connection: "google-oauth2",
+            },
+            appState: {
+              returnTo: window.location.pathname,
+            },
+          });
+        }
+      } else {
+        setExternalAuthProvider(externalAuthProvider);
+        setShowExternalAuthNotification(true);
+      }
+    }
+  }, [portalData, isAuthenticated, isLoading, loginWithRedirect]);
+
+  useEffect(() => {
     if (
       !isLoading &&
       !isAuthenticated &&
       !hasError &&
-      !pathStart.includes(window.location.pathname)
+      !pathStart.includes(window.location.pathname) &&
+      !portalData.externalAuthenticationProvider
     ) {
-      loginWithRedirect();
+      loginWithRedirect({
+        authorizationParams: {
+          connection: "google-oauth2",
+        },
+        appState: {
+          returnTo: window.location.pathname,
+        },
+      });
     } else {
       setIsReady(true);
     }
-  }, [isLoading, isAuthenticated, loginWithRedirect]);
+  }, [
+    isLoading,
+    isAuthenticated,
+    loginWithRedirect,
+    portalData.externalAuthenticationProvider,
+    hasError,
+    pathStart,
+  ]);
+
+  const handleCloseExternalAuthNotification = () => {
+    setShowExternalAuthNotification(false);
+  };
 
   if (isLoading || !isReady || employeeLoading || optionsLoading) {
     return <LoadingAppUI />;
@@ -164,16 +240,29 @@ function App() {
   }
 
   return (
-    <AppProvider
-      dataPortal={portalData}
-      businessManagersData={businessManagersData}
-      businessUnitData={businessUnitData}
-      employee={employee}
-      employeeOptions={employeeOptions}
-    >
-      <GlobalStyles />
-      <RouterProvider router={router} />
-    </AppProvider>
+    <>
+      <AppProvider
+        dataPortal={portalData}
+        businessManagersData={businessManagersData}
+        businessUnitData={businessUnitData}
+        employee={employee}
+        employeeOptions={employeeOptions}
+      >
+        <GlobalStyles />
+        <RouterProvider router={router} />
+      </AppProvider>
+
+      {showExternalAuthNotification && (
+        <InfoModal
+          title="Método de autenticación diferente"
+          titleDescription="Proveedor de autenticación externo"
+          description={`Este portal utiliza un método de autenticación externo a través de ${externalAuthProvider}. Por favor, utiliza las credenciales correspondientes a este proveedor para acceder al sistema.`}
+          buttonText="Entendido"
+          onCloseModal={handleCloseExternalAuthNotification}
+          portalId="root"
+        />
+      )}
+    </>
   );
 }
 

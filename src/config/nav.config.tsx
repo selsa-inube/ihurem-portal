@@ -77,7 +77,7 @@ const navConfig = (optionForCustomerPortal: IEmployeeOptions[]) => {
       ...link,
       label: option?.abbreviatedName ?? link.label,
       icon: getIcon(option?.iconReference),
-      isEnabled: !!option,
+      isEnabled: true,
     };
   });
 };
