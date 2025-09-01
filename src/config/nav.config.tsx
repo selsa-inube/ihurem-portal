@@ -68,14 +68,10 @@ const getIcon = (iconReference?: string): ReactNode => {
 };
 
 const navConfig = (employeeOptions: IEmployeeOptions[]) => {
-  console.log("Opciones del backend:", employeeOptions);
-
   return baseNavLinks
     .filter((link) => employeeOptions.some((opt) => opt.optionCode === link.id))
     .map((link) => {
       const option = employeeOptions.find((opt) => opt.optionCode === link.id);
-
-      console.log("Link incluido:", link.id, "con opción:", option);
 
       return {
         ...link,
