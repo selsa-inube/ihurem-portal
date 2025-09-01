@@ -21,6 +21,8 @@ const mapEmployeeOptionsApiToEntity = (
     subOption: Array.isArray(option.subOption)
       ? (option.subOption as IEmployeeOptions["subOption"])
       : undefined,
+    optionCode: toStringSafe(option.optionCode),
+    optionEmployeeId: toStringSafe(option.optionEmployeeId),
   }));
 };
 

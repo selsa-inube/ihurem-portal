@@ -9,7 +9,7 @@ import { IEmployeeOptions } from "@ptypes/employeePortalBusiness.types";
 
 const baseNavLinks = [
   {
-    id: "holidays",
+    id: "vacations",
     serviceCode: "vacacionesPortalErm",
     label: "Vacaciones",
     path: "/holidays",
@@ -67,19 +67,19 @@ const getIcon = (iconReference?: string): ReactNode => {
   return <div style={{ width: 24, height: 24 }} />;
 };
 
-const navConfig = (optionForCustomerPortal: IEmployeeOptions[]) => {
-  return baseNavLinks.map((link) => {
-    const option = optionForCustomerPortal.find(
-      (opt) => opt.publicCode === link.serviceCode,
-    );
+const navConfig = (employeeOptions: IEmployeeOptions[]) => {
+  return baseNavLinks
+    .filter((link) => employeeOptions.some((opt) => opt.optionCode === link.id))
+    .map((link) => {
+      const option = employeeOptions.find((opt) => opt.optionCode === link.id);
 
-    return {
-      ...link,
-      label: option?.abbreviatedName ?? link.label,
-      icon: getIcon(option?.iconReference),
-      isEnabled: !!option,
-    };
-  });
+      return {
+        ...link,
+        label: option?.abbreviatedName ?? link.label,
+        icon: getIcon(option?.iconReference),
+        isEnabled: true,
+      };
+    });
 };
 
 const useNavConfig = (employeeOptions: IEmployeeOptions[]) => {

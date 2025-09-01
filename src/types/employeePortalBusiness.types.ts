@@ -138,6 +138,8 @@ interface IEmployeeOptions {
   publicCode: string;
   subOption?: ISubOption[];
   useCaseName: string;
+  optionCode: string;
+  optionEmployeeId: string;
 }
 
 interface IVacationHistory {
