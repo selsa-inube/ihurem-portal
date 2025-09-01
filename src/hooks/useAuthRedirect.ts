@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
 
 import {
   IBusinessManagers,
   IEmployeePortalByBusinessManager,
 } from "@ptypes/employeePortalBusiness.types";
 import { encrypt } from "@utils/encrypt";
+import { useIAuth } from "@context/authContext";
 
 export const useAuthRedirect = (
   portalPublicCode: IEmployeePortalByBusinessManager[],
   businessManagersData: IBusinessManagers,
   portalCode: string | null,
 ) => {
-  const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
+  const { loginWithRedirect, isAuthenticated, isLoading } = useIAuth();
   const [hasRedirected, setHasRedirected] = useState(false);
   const [hasError, setHasError] = useState(false);
 
@@ -32,7 +32,15 @@ export const useAuthRedirect = (
       ) {
         const encryptedParamValue = encrypt(portalCode!);
         localStorage.setItem("portalCode", encryptedParamValue);
-        void loginWithRedirect();
+        loginWithRedirect({
+          authorizationParams: {
+            connection: "google-oauth2",
+          },
+          appState: {
+            returnTo: window.location.pathname,
+          },
+        });
+        setHasRedirected(true);
       } else if (isAuthenticated) {
         setHasRedirected(true);
       } else {

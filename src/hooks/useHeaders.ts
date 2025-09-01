@@ -1,7 +1,7 @@
-import { useAuth0 } from "@auth0/auth0-react";
+import { useIAuth } from "@context/authContext";
 
 export const useHeaders = () => {
-  const { getAccessTokenSilently } = useAuth0();
+  const { getAccessTokenSilently } = useIAuth();
 
   const getHeaders = async () => {
     const accessToken = await getAccessTokenSilently();
