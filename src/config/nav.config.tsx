@@ -67,19 +67,19 @@ const getIcon = (iconReference?: string): ReactNode => {
   return <div style={{ width: 24, height: 24 }} />;
 };
 
-const navConfig = (employeeOptions: IEmployeeOptions[]) => {
-  return baseNavLinks
-    .filter((link) => employeeOptions.some((opt) => opt.optionCode === link.id))
-    .map((link) => {
-      const option = employeeOptions.find((opt) => opt.optionCode === link.id);
+const navConfig = (optionForCustomerPortal: IEmployeeOptions[]) => {
+  return baseNavLinks.map((link) => {
+    const option = optionForCustomerPortal.find(
+      (opt) => opt.optionCode === link.serviceCode,
+    );
 
-      return {
-        ...link,
-        label: option?.abbreviatedName ?? link.label,
-        icon: getIcon(option?.iconReference),
-        isEnabled: true,
-      };
-    });
+    return {
+      ...link,
+      label: option?.abbreviatedName ?? link.label,
+      icon: getIcon(option?.iconReference),
+      isEnabled: true,
+    };
+  });
 };
 
 const useNavConfig = (employeeOptions: IEmployeeOptions[]) => {
