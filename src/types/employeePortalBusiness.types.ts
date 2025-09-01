@@ -73,6 +73,7 @@ interface IEmployeePortalByBusinessManager {
   employeePortalCatalogId: string;
   employeePortalId: string;
   optionsByEmployeePortalBusinessManager?: IOptionsByEmployeePortalBusinessManager[];
+  externalAuthenticationProvider: string;
 }
 
 interface IBusinessManagers {
@@ -84,6 +85,8 @@ interface IBusinessManagers {
   urlBrand: string;
   urlLogo: string;
   customerId: string;
+  clientId: string;
+  clientSecret: string;
 }
 interface IBusinessUnitsPortalEmployee {
   abbreviatedName: string;
@@ -117,9 +120,24 @@ interface UseCasesByBusinessesUnit {
   effectiveDate: string;
   useCaseId: string;
 }
+
+interface ISubOption {
+  abbreviatedName: string;
+  descriptionUse: string;
+  optionStaffId: string;
+  publicCode: string;
+  subOption: string[];
+  useCaseName: string;
+}
 interface IEmployeeOptions {
   abbreviatedName: string;
   descriptionUse: string;
+  iconReference: string;
+  optionStaffId: string;
+  parentOptionId: string;
+  publicCode: string;
+  subOption?: ISubOption[];
+  useCaseName: string;
   optionCode: string;
   optionEmployeeId: string;
 }

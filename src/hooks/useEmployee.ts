@@ -7,37 +7,43 @@ import { useHeaders } from "@hooks/useHeaders";
 
 interface UseEmployeeResult {
   employee: Employee;
-  loading: boolean;
-  error: string | null;
+  isLoading: boolean;
+  error: Error | null;
   refetch: (id?: string) => void;
 }
 
 export const useEmployee = (initialEmployeeId: string): UseEmployeeResult => {
   const [employee, setEmployee] = useState<Employee>({} as Employee);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<Error | null>(null);
+  const [flagShown, setFlagShown] = useState(false);
   const [employeeId, setEmployeeId] = useState<string>(initialEmployeeId);
   const { getHeaders } = useHeaders();
 
-  useErrorFlag(!!error, error ?? undefined);
+  useErrorFlag(
+    flagShown,
+    "Error al obtener información del empleado",
+    error?.message ?? "Error en la solicitud",
+    false,
+  );
 
   const fetchEmployee = useCallback(
     async (id = employeeId) => {
-      setLoading(true);
+      setIsLoading(true);
       setError(null);
+      setFlagShown(false);
 
       try {
         const headers = await getHeaders();
         const data = await getEmployeeById(id, headers);
         setEmployee(data);
       } catch (err) {
-        const errorMessage =
-          err instanceof Error
-            ? err.message
-            : "Ocurrió un error desconocido al obtener el empleado";
-        setError(errorMessage);
+        const errorObj = err instanceof Error ? err : new Error(String(err));
+        setError(errorObj);
+        setFlagShown(true);
       } finally {
-        setLoading(false);
+        setIsLoading(false);
+        setFlagShown(false);
       }
     },
     [employeeId],
@@ -52,5 +58,5 @@ export const useEmployee = (initialEmployeeId: string): UseEmployeeResult => {
     fetchEmployee(newId);
   };
 
-  return { employee, loading, error, refetch };
+  return { employee, isLoading, error, refetch };
 };
