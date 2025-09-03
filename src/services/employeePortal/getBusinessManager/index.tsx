@@ -1,8 +1,4 @@
-import {
-  environment,
-  fetchTimeoutServices,
-  maxRetriesServices,
-} from "@config/environment";
+import { fetchTimeoutServices, maxRetriesServices } from "@config/environment";
 import { IBusinessManagers } from "@ptypes/employeePortalBusiness.types";
 
 import { mapBusinessManagerApiToEntity } from "./mappers";
@@ -28,7 +24,7 @@ const getBusinessManagers = async (
       };
 
       const res = await fetch(
-        `${environment.IVITE_ISAAS_QUERY_PROCESS_SERVICE}/business-managers/${businessManagerId}`,
+        `http://172.106.48.22:8020/isaas-query-process-service/api/business-managers/${businessManagerId}`,
         options,
       );
 

@@ -30,6 +30,7 @@ import { useAppContext } from "./context/AppContext/useAppContext";
 import { SelfRegistrationRoutes } from "./routes/self-registration";
 import { useContractValidation } from "./hooks/useContractValidation";
 import { LoadingAppUI } from "./pages/login/outlets/LoadingApp/interface";
+import { usePostUserAccountsData } from "./hooks/usePostUserAccountsData";
 
 function LogOut() {
   localStorage.clear();
@@ -161,6 +162,13 @@ function App() {
     error: optionsError,
     codeError: optionsCode,
   } = useEmployeeOptions(user?.nickname ?? "");
+
+  const { data: userAccountsData } = usePostUserAccountsData(
+    businessManagersData.clientId,
+    businessManagersData.clientSecret,
+  );
+
+  console.log(userAccountsData);
 
   useEffect(() => {
     if (portalData && portalData.externalAuthenticationProvider !== undefined) {

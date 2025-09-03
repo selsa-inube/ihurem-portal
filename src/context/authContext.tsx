@@ -83,10 +83,6 @@ export function AuthProvider({
       setIsAuthenticated(true);
       localStorage.setItem("auth_token", accessCode);
       localStorage.setItem("auth_user", JSON.stringify(userData));
-
-      const cleanUrl = new URL(window.location.href);
-      cleanUrl.searchParams.delete("ac");
-      window.history.replaceState({}, "", cleanUrl.toString());
     } else {
       const storedToken = localStorage.getItem("auth_token");
       const storedUser = localStorage.getItem("auth_user");
