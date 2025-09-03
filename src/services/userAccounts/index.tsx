@@ -1,4 +1,5 @@
 import { decrypt } from "@utils/encrypt";
+import { environment } from "@config/environment";
 import { IPostUserAccountsResponse } from "./types";
 
 export async function postUserAccountsData(
@@ -16,33 +17,28 @@ export async function postUserAccountsData(
     const credentials = `${decryptedClientId}:${decryptedClientSecret}`;
     const base64Credentials = btoa(credentials);
 
-    console.log("🔍 DATOS RECIBIDOS:");
-    console.log("├── AC:", ac);
-    console.log("├── Client ID (encrypted):", clientId);
-    console.log("└── Client Secret (encrypted):", clientSecret);
+    const apiUrl = import.meta.env.DEV
+      ? "/api/user-accounts"
+      : `${environment.IAUTH_API_URL}/user-accounts`;
 
-    console.log("\n🔓 DESPUÉS DEL DECRYPT:");
-    console.log("└── Credentials:", credentials);
+    const formData = new URLSearchParams();
+    formData.append("authorizationValue", ac);
 
-    console.log("\n📤 ENVIANDO AL SERVICIO:");
-    console.log("├── AC:", ac);
-    console.log("└── Base64 Credentials:", base64Credentials);
+    console.log("🔄 Sending request with body:", formData.toString());
+    console.log("📝 Authorization Value:", ac);
 
-    const response = await fetch(
-      "https://four.external.iauth.persistence.process.inube.dev/iauth-persistence-process-service/api/user-accounts",
-      {
-        method: "POST",
-        headers: {
-          ...headers,
-          "X-Token": base64Credentials,
-          "X-Action": "UserAuthenticationToken",
-          "Content-Type": "application/x-www-form-urlencoded",
-          Accept: "application/json",
-        },
-        body: `authorizationValue=${ac}`,
-        signal: controller.signal,
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      headers: {
+        ...headers,
+        "X-Token": base64Credentials,
+        "X-Action": "UserAuthenticationToken",
+        "Content-Type": "application/x-www-form-urlencoded",
+        Accept: "application/json",
       },
-    );
+      body: formData.toString(),
+      signal: controller.signal,
+    });
 
     clearTimeout(timeoutId);
 
@@ -51,7 +47,9 @@ export async function postUserAccountsData(
       throw new Error(`HTTP ${response.status}: ${errorText}`);
     }
 
-    return response.json();
+    const result = await response.json();
+    console.log("✅ Success response:", result);
+    return result;
   } catch (error) {
     clearTimeout(timeoutId);
 

@@ -37,6 +37,10 @@ export const usePostUserAccountsData = (
           throw new Error('Parámetro "ac" no encontrado en la URL');
         }
 
+        if (ac.trim() === "") {
+          throw new Error('Parámetro "ac" está vacío');
+        }
+
         if (!clientId || !clientSecret) {
           throw new Error(
             "Los parámetros clientId y clientSecret son requeridos",
