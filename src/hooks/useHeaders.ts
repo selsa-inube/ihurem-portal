@@ -1,4 +1,4 @@
-import { useIAuth } from "@context/authContext";
+import { useIAuth } from "@context/AuthContext/useAuthContext";
 
 export const useHeaders = () => {
   const { getAccessTokenSilently } = useIAuth();

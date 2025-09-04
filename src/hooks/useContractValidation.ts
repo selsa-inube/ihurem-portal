@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { useAppContext } from "@context/AppContext";
+import { useAppContext } from "@context/AppContext/useAppContext";
 import { useEmployee } from "@hooks/useEmployee";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 import { EmploymentContract } from "@ptypes/employeePortalConsultation.types";

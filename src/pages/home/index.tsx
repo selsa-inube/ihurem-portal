@@ -4,7 +4,7 @@ import { Text, Stack, Grid, Header, useMediaQuery } from "@inubekit/inubekit";
 import { AppCard } from "@components/feedback/AppCard";
 import { spacing } from "@design/tokens/spacing";
 import { userMenu, useConfigHeader, navConfig } from "@config/nav.config";
-import { useAppContext } from "@context/AppContext";
+import { useAppContext } from "@context/AppContext/useAppContext";
 import { useEmployeeOptions } from "@hooks/useEmployeeOptions";
 
 import {

@@ -4,7 +4,7 @@ import { Button, Stack, Tabs, ITab, Text, Icon } from "@inubekit/inubekit";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineBeachAccess } from "react-icons/md";
 
-import { useAppContext } from "@context/AppContext";
+import { useAppContext } from "@context/AppContext/useAppContext";
 import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
 import { spacing } from "@design/tokens/spacing";

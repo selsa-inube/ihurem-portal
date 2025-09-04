@@ -2,7 +2,7 @@ import { Stack, Grid } from "@inubekit/inubekit";
 
 import { BoxAttribute } from "@components/cards/BoxAttribute";
 import { contractTypeLabels } from "@mocks/contracts/enums";
-import { useAppContext } from "@context/AppContext";
+import { useAppContext } from "@context/AppContext/useAppContext";
 import { spacing } from "@design/tokens/spacing";
 
 import { alerts } from "../../RequirementsForm/config/alertConfig";

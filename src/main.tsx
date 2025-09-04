@@ -3,8 +3,8 @@ import ReactDOM from "react-dom/client";
 import { FlagProvider } from "@inubekit/inubekit";
 
 import { environment } from "@config/environment";
-import { AuthProvider } from "@context/authContext";
 
+import { AuthProvider } from "./context/AuthContext";
 import App from "./App";
 
 const root = ReactDOM.createRoot(document.getElementById("root")!);

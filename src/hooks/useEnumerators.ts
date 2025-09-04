@@ -4,7 +4,7 @@ import {
   EnumeratorItem,
   getEnumerators,
 } from "@services/enumerators/getEnumerators";
-import { useAppContext } from "@context/AppContext";
+import { useAppContext } from "@context/AppContext/useAppContext";
 
 import { useErrorFlag } from "./useErrorFlag";
 

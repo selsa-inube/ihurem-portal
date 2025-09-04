@@ -5,7 +5,7 @@ import {
   IEmployeePortalByBusinessManager,
 } from "@ptypes/employeePortalBusiness.types";
 import { encrypt } from "@utils/encrypt";
-import { useIAuth } from "@context/authContext";
+import { useIAuth } from "@context/AuthContext/useAuthContext";
 
 export const useAuthRedirect = (
   portalPublicCode: IEmployeePortalByBusinessManager[],

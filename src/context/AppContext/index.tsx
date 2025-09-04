@@ -1,10 +1,4 @@
-import {
-  createContext,
-  useState,
-  useContext,
-  useEffect,
-  ReactNode,
-} from "react";
+import { createContext, useState, useEffect, ReactNode } from "react";
 
 import {
   IBusinessManagers,
@@ -14,8 +8,8 @@ import {
   IEmployeeOptions,
 } from "@ptypes/employeePortalBusiness.types";
 import selsaLogo from "@assets/images/selsa.png";
-import { useIAuth } from "@context/authContext";
 
+import { useIAuth } from "../AuthContext/useAuthContext";
 import { IAppContextType, IPreferences, IClient, IUser } from "./types";
 
 const AppContext = createContext<IAppContextType | undefined>(undefined);
@@ -141,12 +135,4 @@ function AppProvider(props: AppProviderProps) {
   );
 }
 
-const useAppContext = () => {
-  const context = useContext(AppContext);
-  if (!context) {
-    throw new Error("useAppContext must be used within an AppProvider");
-  }
-  return context;
-};
-
-export { AppProvider, AppContext, useAppContext };
+export { AppProvider, AppContext };

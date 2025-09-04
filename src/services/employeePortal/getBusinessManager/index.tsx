@@ -1,7 +1,7 @@
 import {
-  environment,
   fetchTimeoutServices,
   maxRetriesServices,
+  environment,
 } from "@config/environment";
 import { IBusinessManagers } from "@ptypes/employeePortalBusiness.types";
 

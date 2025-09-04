@@ -38,22 +38,8 @@ export interface IUser {
 }
 
 export interface IAppContextType {
-  user: {
-    username: string;
-    id: string;
-    company: string;
-    urlImgPerfil: string;
-    nickname: string;
-  } | null;
-  setUser: React.Dispatch<
-    React.SetStateAction<{
-      username: string;
-      id: string;
-      company: string;
-      urlImgPerfil: string;
-      nickname: string;
-    } | null>
-  >;
+  user: IUser | null;
+  setUser: React.Dispatch<React.SetStateAction<IUser | null>>;
   preferences: IPreferences;
   updatePreferences: (newPreferences: Partial<IPreferences>) => void;
   logoUrl: string;

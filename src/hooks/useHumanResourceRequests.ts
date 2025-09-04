@@ -7,7 +7,7 @@ import {
   requestTypeLabels,
 } from "@ptypes/humanResourcesRequest.types";
 import { useHeaders } from "@hooks/useHeaders";
-import { useAppContext } from "@context/AppContext";
+import { useAppContext } from "@context/AppContext/useAppContext";
 import { useErrorFlag } from "./useErrorFlag";
 
 export const useHumanResourceRequests = <T>(
