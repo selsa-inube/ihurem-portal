@@ -1,47 +1,20 @@
 import {
   createContext,
-  useContext,
   useState,
   useEffect,
   ReactNode,
   useCallback,
 } from "react";
+import { LogoutOptions, RedirectLoginOptions } from "@auth0/auth0-react";
 
-import { IUser } from "./AppContext/types";
+import { IUser } from "../AppContext/types";
+import { IAuthContextType } from "./types";
 
-interface LoginOptions {
-  authorizationParams?: {
-    connection?: string;
-    [key: string]: unknown;
-  };
-  appState?: {
-    returnTo?: string;
-    [key: string]: unknown;
-  };
-  redirectUri?: string;
-  scope?: string;
-  state?: string;
-  [key: string]: unknown;
-}
+const AuthContext = createContext<IAuthContextType | undefined>(undefined);
 
-interface LogoutOptions {
-  logoutParams?: {
-    returnTo?: string;
-    [key: string]: unknown;
-  };
-  [key: string]: unknown;
-}
-
-interface AuthContextType {
-  user: IUser | null;
-  isAuthenticated: boolean;
-  isLoading: boolean;
-  loginWithRedirect: (options?: LoginOptions) => void;
-  logout: (options?: LogoutOptions) => void;
-  getAccessTokenSilently: () => Promise<string>;
-}
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const isIUser = (obj: unknown): obj is IUser => {
+  return !!obj && typeof obj === "object" && "id" in obj;
+};
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -49,10 +22,6 @@ interface AuthProviderProps {
   callbackUrl: string;
   iAuthUrl: string;
 }
-
-const isIUser = (obj: unknown): obj is IUser => {
-  return !!obj && typeof obj === "object" && "id" in obj;
-};
 
 export function AuthProvider({
   children,
@@ -66,7 +35,8 @@ export function AuthProvider({
   const [accessToken, setAccessToken] = useState<string | null>(null);
 
   const handleAuthCallback = useCallback(() => {
-    const urlParams = new URLSearchParams(window.location.search);
+    const url = new URL(window.location.href);
+    const urlParams = url.searchParams;
     const accessCode = urlParams.get("ac");
 
     if (accessCode) {
@@ -103,6 +73,14 @@ export function AuthProvider({
         }
       }
     }
+
+    if (url.searchParams.has("ac")) {
+      url.searchParams.delete("ac");
+
+      const newRelative = url.pathname + url.search + url.hash;
+      window.history.replaceState({}, document.title, newRelative);
+    }
+
     setIsLoading(false);
   }, []);
 
@@ -111,7 +89,7 @@ export function AuthProvider({
   }, [handleAuthCallback]);
 
   const loginWithRedirect = useCallback(
-    (options?: LoginOptions) => {
+    (options?: RedirectLoginOptions) => {
       const loginUrl = new URL(iAuthUrl);
       loginUrl.searchParams.set("originatorId", originatorId);
       loginUrl.searchParams.set("callbackUrl", callbackUrl);
@@ -178,6 +156,7 @@ export function AuthProvider({
     <AuthContext.Provider
       value={{
         user,
+        setUser,
         isAuthenticated,
         isLoading,
         loginWithRedirect,
@@ -189,11 +168,4 @@ export function AuthProvider({
     </AuthContext.Provider>
   );
 }
-
-export function useIAuth(): AuthContextType {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error("useIAuth must be used within an AuthProvider");
-  }
-  return context;
-}
+export { AuthContext };

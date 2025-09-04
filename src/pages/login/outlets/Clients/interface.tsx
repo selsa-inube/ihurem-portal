@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-import { useIAuth } from "@context/authContext";
+import { useIAuth } from "@context/AuthContext/useAuthContext";
 
 function ClientsUI() {
   const { loginWithRedirect, isAuthenticated, isLoading } = useIAuth();

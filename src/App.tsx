@@ -5,6 +5,7 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
 
 import { Home } from "@pages/home";
 import { decrypt, encrypt } from "@utils/encrypt";
@@ -22,7 +23,6 @@ import { useEmployeeOptions } from "@hooks/useEmployeeOptions";
 import { AppProvider } from "@context/AppContext";
 import { useBusinessManagers } from "@hooks/useBusinessManagers";
 import { useEmployeeByNickname } from "@hooks/useEmployeeInquiry";
-import { useIAuth } from "@context/authContext";
 import { ProtectedRoute } from "@pages/protectedRoutes";
 
 import { InfoModal } from "./components/modals/InfoModal";
@@ -31,6 +31,8 @@ import { SelfRegistrationRoutes } from "./routes/self-registration";
 import { useContractValidation } from "./hooks/useContractValidation";
 import { LoadingAppUI } from "./pages/login/outlets/LoadingApp/interface";
 import { usePostUserAccountsData } from "./hooks/usePostUserAccountsData";
+import { IUser } from "./context/AppContext/types";
+import { useIAuth } from "./context/AuthContext/useAuthContext";
 
 function LogOut() {
   localStorage.clear();
@@ -106,6 +108,7 @@ const router = createBrowserRouter(
     </>,
   ),
 );
+
 function App() {
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
@@ -113,6 +116,7 @@ function App() {
   const storedPortal = localStorage.getItem("portalCode");
   const decryptedPortal = storedPortal ? decrypt(storedPortal) : "";
   const portalCode = portalParam ?? decryptedPortal;
+  const { setUser } = useIAuth();
 
   const [showExternalAuthNotification, setShowExternalAuthNotification] =
     useState(false);
@@ -163,17 +167,41 @@ function App() {
     codeError: optionsCode,
   } = useEmployeeOptions(user?.nickname ?? "");
 
-  const { data: userAccountsData } = usePostUserAccountsData(
+  const {
+    data: userAccountsData,
+    isLoading: userAccountsLoading,
+    error: userAccountsError,
+    codeError: userAccountsCode,
+  } = usePostUserAccountsData(
     businessManagersData.clientId,
     businessManagersData.clientSecret,
   );
 
-  console.log(userAccountsData);
+  useEffect(() => {
+    if (userAccountsData?.idToken) {
+      const decoded = jwtDecode<{
+        identificationNumber: string;
+        names: string;
+        surNames: string;
+        userAccount: string;
+        consumerApplicationCode: string;
+      }>(userAccountsData.idToken);
+
+      const mappedUser: IUser = {
+        id: decoded.identificationNumber,
+        username: `${decoded.names} ${decoded.surNames}`,
+        nickname: decoded.userAccount,
+        company: decoded.consumerApplicationCode,
+        urlImgPerfil: "",
+      };
+
+      setUser(mappedUser);
+    }
+  }, [userAccountsData, setUser]);
 
   useEffect(() => {
     if (portalData && portalData.externalAuthenticationProvider !== undefined) {
       const externalAuthProvider = portalData.externalAuthenticationProvider;
-
       if (!externalAuthProvider) {
         if (!isAuthenticated && !isLoading) {
           loginWithRedirect({
@@ -224,15 +252,23 @@ function App() {
     setShowExternalAuthNotification(false);
   };
 
-  if (isLoading || !isReady || employeeLoading || optionsLoading) {
+  if (
+    isLoading ||
+    !isReady ||
+    employeeLoading ||
+    optionsLoading ||
+    userAccountsLoading
+  ) {
     return <LoadingAppUI />;
   }
+
   if (
     hasError ||
     hasManagersError ||
     hasBusinessUnitError ||
     employeeError ||
-    optionsError
+    optionsError ||
+    userAccountsError
   ) {
     return (
       <ErrorPage
@@ -241,6 +277,7 @@ function App() {
           BusinessUnit ??
           employeeCode ??
           optionsCode ??
+          userAccountsCode ??
           1001
         }
       />

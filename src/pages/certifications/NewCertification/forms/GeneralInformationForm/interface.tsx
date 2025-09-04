@@ -12,7 +12,7 @@ import {
 
 import { getFieldState } from "@utils/forms/forms";
 import { spacing } from "@design/tokens/spacing";
-import { useAppContext } from "@context/AppContext";
+import { useAppContext } from "@context/AppContext/useAppContext";
 import { certificationOptions } from "@pages/certifications/NewCertification/config/assisted.config";
 import { contractTypeLabels } from "@mocks/contracts/enums";
 

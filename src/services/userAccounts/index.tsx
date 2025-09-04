@@ -17,15 +17,11 @@ export async function postUserAccountsData(
     const credentials = `${decryptedClientId}:${decryptedClientSecret}`;
     const base64Credentials = btoa(credentials);
 
-    const apiUrl = import.meta.env.DEV
+    const baseApiUrl = import.meta.env.DEV
       ? "/api/user-accounts"
       : `${environment.IAUTH_API_URL}/user-accounts`;
 
-    const formData = new URLSearchParams();
-    formData.append("authorizationValue", ac);
-
-    console.log("🔄 Sending request with body:", formData.toString());
-    console.log("📝 Authorization Value:", ac);
+    const apiUrl = `${baseApiUrl}?authorizationValue=${encodeURIComponent(ac)}`;
 
     const response = await fetch(apiUrl, {
       method: "POST",
@@ -33,10 +29,8 @@ export async function postUserAccountsData(
         ...headers,
         "X-Token": base64Credentials,
         "X-Action": "UserAuthenticationToken",
-        "Content-Type": "application/x-www-form-urlencoded",
         Accept: "application/json",
       },
-      body: formData.toString(),
       signal: controller.signal,
     });
 
@@ -48,11 +42,10 @@ export async function postUserAccountsData(
     }
 
     const result = await response.json();
-    console.log("✅ Success response:", result);
+
     return result;
   } catch (error) {
     clearTimeout(timeoutId);
-
     throw error;
   }
 }

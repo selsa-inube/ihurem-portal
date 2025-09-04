@@ -89,6 +89,16 @@ const errorCodes: Record<number, ErrorDetail> = {
     whatWentWrong: ["No se encontraron opciones para el empleado."],
     howToFix: ["Confirma que estés usando la url adecuada."],
   },
+  1006: {
+    whatWentWrong: [
+      "Error al obtener los datos del usuario.",
+      "No fue posible recuperar la información necesaria.",
+    ],
+    howToFix: [
+      "Intenta nuevamente más tarde.",
+      "Si el problema persiste, contacta al soporte.",
+    ],
+  },
 };
 
 export { errorCodes };
