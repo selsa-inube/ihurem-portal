@@ -4,6 +4,8 @@ import { useHeaders } from "@hooks/useHeaders";
 import { postUserAccountsData } from "@services/userAccounts";
 import { IPostUserAccountsResponse } from "@services/userAccounts/types";
 
+import { useSignOut } from "./useSignOut";
+
 const USER_ACCOUNTS_CACHE_KEY = "userAccountsData";
 const USER_ACCOUNTS_TIMESTAMP_KEY = "userAccountsTimestamp";
 
@@ -19,6 +21,7 @@ export const usePostUserAccountsData = (
   const [codeError, setCodeError] = useState<number | undefined>(undefined);
 
   const { getHeaders } = useHeaders();
+  const { signOut } = useSignOut();
 
   const isCacheValid = (): boolean => {
     const timestamp = localStorage.getItem(USER_ACCOUNTS_TIMESTAMP_KEY);
@@ -106,6 +109,7 @@ export const usePostUserAccountsData = (
         setCodeError(1006);
 
         clearCache();
+        signOut("/error?code=1006");
         throw errorInstance;
       } finally {
         setIsLoading(false);
@@ -147,6 +151,7 @@ export const usePostUserAccountsData = (
           err instanceof Error ? err : new Error(String(err));
         setError(errorInstance);
         setCodeError(1006);
+        signOut("/error?code=1006");
         throw errorInstance;
       } finally {
         setIsLoading(false);

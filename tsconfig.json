@@ -7,7 +7,7 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@src/*": ["src/*"],
+      "@*": ["src/*"],
       "@design/*": ["src/design/*"],
       "@components/*": ["src/components/*"],
       "@config/*": ["src/config/*"],
