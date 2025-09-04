@@ -1,6 +1,9 @@
-import { fetchTimeoutServices, maxRetriesServices } from "@config/environment";
+import {
+  fetchTimeoutServices,
+  maxRetriesServices,
+  environment,
+} from "@config/environment";
 import { IBusinessManagers } from "@ptypes/employeePortalBusiness.types";
-import { environment } from "@config/environment";
 
 import { mapBusinessManagerApiToEntity } from "./mappers";
 
