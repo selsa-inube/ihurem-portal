@@ -62,13 +62,17 @@ export function ProtectedRoutes() {
     codeError: BusinessUnit,
   } = useBusinessUnit(portalData);
 
-  const numberDoc = "1062905485";
+  const identificationNumber = user?.id ?? "";
+
   const {
     employee,
     loading: employeeLoading,
     error: employeeError,
     codeError: employeeCode,
-  } = useEmployeeByNickname(numberDoc ?? "", businessUnitData.publicCode ?? "");
+  } = useEmployeeByNickname(
+    identificationNumber ?? "",
+    businessUnitData.publicCode ?? "",
+  );
 
   const {
     data: employeeOptions,
