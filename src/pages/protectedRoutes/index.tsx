@@ -11,7 +11,7 @@ import { AppProvider } from "@context/AppContext";
 import { LoadingAppUI } from "@pages/login/outlets/LoadingApp/interface";
 import { useIAuth } from "@context/AuthContext/useAuthContext";
 import { useBusinessUnit } from "@hooks/useBusinessUnit";
-import { useEmployeeByNickname } from "@hooks/useEmployeeInquiry";
+import { useEmployeeByIdentification } from "@hooks/useEmployeeInquiry";
 import { useEmployeeOptions } from "@hooks/useEmployeeOptions";
 import { usePostUserAccountsData } from "@hooks/usePostUserAccountsData";
 import { IUser } from "@context/AppContext/types";
@@ -62,13 +62,19 @@ export function ProtectedRoutes() {
     codeError: BusinessUnit,
   } = useBusinessUnit(portalData);
 
-  const numberDoc = "1062905485";
+  const identificationNumber = user?.id ?? "";
+  const identificationType = user?.identificationType ?? "";
+
   const {
     employee,
     loading: employeeLoading,
     error: employeeError,
     codeError: employeeCode,
-  } = useEmployeeByNickname(numberDoc ?? "", businessUnitData.publicCode ?? "");
+  } = useEmployeeByIdentification(
+    identificationType,
+    identificationNumber,
+    businessUnitData.publicCode ?? "",
+  );
 
   const {
     data: employeeOptions,
@@ -87,6 +93,7 @@ export function ProtectedRoutes() {
     if (userAccountsData?.idToken) {
       const decoded = jwtDecode<{
         identificationNumber: string;
+        identificationType: string;
         names: string;
         surNames: string;
         userAccount: string;
@@ -95,6 +102,7 @@ export function ProtectedRoutes() {
 
       const mappedUser: IUser = {
         id: decoded.identificationNumber,
+        identificationType: decoded.identificationType,
         username: `${decoded.names} ${decoded.surNames}`,
         nickname: decoded.userAccount,
         company: decoded.consumerApplicationCode,
@@ -173,7 +181,8 @@ export function ProtectedRoutes() {
     hasManagersError ||
     hasBusinessUnitError ||
     employeeError ||
-    optionsError
+    optionsError ||
+    (employee && employee.identificationType !== identificationType)
   ) {
     return (
       <ErrorPage
@@ -182,7 +191,9 @@ export function ProtectedRoutes() {
           BusinessUnit ??
           employeeCode ??
           optionsCode ??
-          1001
+          (employee && employee.identificationType !== identificationType
+            ? 1002
+            : 1001)
         }
       />
     );

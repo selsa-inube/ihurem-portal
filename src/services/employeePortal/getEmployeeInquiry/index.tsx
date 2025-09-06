@@ -6,8 +6,9 @@ import {
 } from "@config/environment";
 import { mapEmployeeApiToEntity } from "./mappers";
 
-const employeeByNickname = async (
-  numeroIdentificacion: string,
+const employeeByIdentification = async (
+  identificationType: string,
+  identificationNumber: string,
   businessUnits: string,
 ): Promise<IEmployee> => {
   const maxRetries = maxRetriesServices;
@@ -28,10 +29,9 @@ const employeeByNickname = async (
         signal: controller.signal,
       };
 
-      const res = await fetch(
-        `${environment.IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE}/employees?identificationDocumentNumber=${numeroIdentificacion}`,
-        options,
-      );
+      const url = `${environment.IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE}/employees?identificationDocumentNumber=${identificationNumber}&identificationDocumentType=${identificationType}`;
+
+      const res = await fetch(url, options);
 
       clearTimeout(timeoutId);
 
@@ -46,6 +46,7 @@ const employeeByNickname = async (
           `Error al obtener los datos del empleado. Status: ${res.status}, Detalles: ${JSON.stringify(data)}`,
         );
       }
+
       const normalizedEmployee = Array.isArray(data)
         ? mapEmployeeApiToEntity(data[0])
         : ({} as IEmployee);
@@ -64,4 +65,4 @@ const employeeByNickname = async (
   return {} as IEmployee;
 };
 
-export { employeeByNickname };
+export { employeeByIdentification };

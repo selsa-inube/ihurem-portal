@@ -32,6 +32,7 @@ export interface IProvisionedPortal {
 export interface IUser {
   username: string;
   id: string;
+  identificationType?: string;
   company: string;
   urlImgPerfil: string;
   nickname: string;
