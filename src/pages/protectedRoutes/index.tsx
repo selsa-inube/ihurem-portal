@@ -18,6 +18,7 @@ import { IUser } from "@context/AppContext/types";
 import { pathStart } from "@config/nav.config";
 import { InfoModal } from "@components/modals/InfoModal";
 import { protectedRouter } from "@routes/publicRouter";
+import { useSignOut } from "@hooks/useSignOut";
 
 export function ProtectedRoutes() {
   const url = new URL(window.location.href);
@@ -27,6 +28,7 @@ export function ProtectedRoutes() {
   const decryptedPortal = storedPortal ? decrypt(storedPortal) : "";
   const portalCode = portalParam ?? decryptedPortal;
   const { setUser } = useIAuth();
+  const { signOut } = useSignOut();
 
   const [showExternalAuthNotification, setShowExternalAuthNotification] =
     useState(false);
@@ -176,6 +178,20 @@ export function ProtectedRoutes() {
     return <LoadingAppUI />;
   }
 
+  const errorCode =
+    BusinessManagersCode ??
+    BusinessUnit ??
+    employeeCode ??
+    optionsCode ??
+    (employee && employee.identificationType !== identificationType
+      ? 1002
+      : 1001);
+
+  if (errorCode === 1004) {
+    signOut("/error?code=1004");
+    return null;
+  }
+
   if (
     hasError ||
     hasManagersError ||
@@ -184,19 +200,7 @@ export function ProtectedRoutes() {
     optionsError ||
     (employee && employee.identificationType !== identificationType)
   ) {
-    return (
-      <ErrorPage
-        errorCode={
-          BusinessManagersCode ??
-          BusinessUnit ??
-          employeeCode ??
-          optionsCode ??
-          (employee && employee.identificationType !== identificationType
-            ? 1002
-            : 1001)
-        }
-      />
-    );
+    return <ErrorPage errorCode={errorCode} />;
   }
 
   return (
