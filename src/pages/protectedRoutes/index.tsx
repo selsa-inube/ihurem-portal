@@ -11,13 +11,14 @@ import { AppProvider } from "@context/AppContext";
 import { LoadingAppUI } from "@pages/login/outlets/LoadingApp/interface";
 import { useIAuth } from "@context/AuthContext/useAuthContext";
 import { useBusinessUnit } from "@hooks/useBusinessUnit";
-import { useEmployeeByNickname } from "@hooks/useEmployeeInquiry";
+import { useEmployeeByIdentification } from "@hooks/useEmployeeInquiry";
 import { useEmployeeOptions } from "@hooks/useEmployeeOptions";
 import { usePostUserAccountsData } from "@hooks/usePostUserAccountsData";
 import { IUser } from "@context/AppContext/types";
 import { pathStart } from "@config/nav.config";
 import { InfoModal } from "@components/modals/InfoModal";
 import { protectedRouter } from "@routes/publicRouter";
+import { useSignOut } from "@hooks/useSignOut";
 
 export function ProtectedRoutes() {
   const url = new URL(window.location.href);
@@ -27,6 +28,7 @@ export function ProtectedRoutes() {
   const decryptedPortal = storedPortal ? decrypt(storedPortal) : "";
   const portalCode = portalParam ?? decryptedPortal;
   const { setUser } = useIAuth();
+  const { signOut } = useSignOut();
 
   const [showExternalAuthNotification, setShowExternalAuthNotification] =
     useState(false);
@@ -62,13 +64,19 @@ export function ProtectedRoutes() {
     codeError: BusinessUnit,
   } = useBusinessUnit(portalData);
 
-  const numberDoc = "1062905485";
+  const identificationNumber = user?.id ?? "";
+  const identificationType = user?.identificationType ?? "";
+
   const {
     employee,
     loading: employeeLoading,
     error: employeeError,
     codeError: employeeCode,
-  } = useEmployeeByNickname(numberDoc ?? "", businessUnitData.publicCode ?? "");
+  } = useEmployeeByIdentification(
+    identificationType,
+    identificationNumber,
+    businessUnitData.publicCode ?? "",
+  );
 
   const {
     data: employeeOptions,
@@ -87,6 +95,7 @@ export function ProtectedRoutes() {
     if (userAccountsData?.idToken) {
       const decoded = jwtDecode<{
         identificationNumber: string;
+        identificationType: string;
         names: string;
         surNames: string;
         userAccount: string;
@@ -95,6 +104,7 @@ export function ProtectedRoutes() {
 
       const mappedUser: IUser = {
         id: decoded.identificationNumber,
+        identificationType: decoded.identificationType,
         username: `${decoded.names} ${decoded.surNames}`,
         nickname: decoded.userAccount,
         company: decoded.consumerApplicationCode,
@@ -168,24 +178,29 @@ export function ProtectedRoutes() {
     return <LoadingAppUI />;
   }
 
+  const errorCode =
+    BusinessManagersCode ??
+    BusinessUnit ??
+    employeeCode ??
+    optionsCode ??
+    (employee && employee.identificationType !== identificationType
+      ? 1002
+      : 1001);
+
+  if (errorCode === 1004) {
+    signOut("/error?code=1004");
+    return null;
+  }
+
   if (
     hasError ||
     hasManagersError ||
     hasBusinessUnitError ||
     employeeError ||
-    optionsError
+    optionsError ||
+    (employee && employee.identificationType !== identificationType)
   ) {
-    return (
-      <ErrorPage
-        errorCode={
-          BusinessManagersCode ??
-          BusinessUnit ??
-          employeeCode ??
-          optionsCode ??
-          1001
-        }
-      />
-    );
+    return <ErrorPage errorCode={errorCode} />;
   }
 
   return (
