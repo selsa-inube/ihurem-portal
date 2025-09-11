@@ -4,7 +4,7 @@ import {
   IEmployee,
   IEmploymentContract,
 } from "@ptypes/employeePortalBusiness.types";
-import { employeeByNickname } from "@services/employeePortal/getEmployeeInquiry";
+import { employeeByIdentification } from "@services/employeePortal/getEmployeeInquiry";
 
 const validateContractStatus = (
   employmentContracts: IEmploymentContract[],
@@ -15,8 +15,9 @@ const validateContractStatus = (
   );
 };
 
-export const useEmployeeByNickname = (
-  nickname: string,
+export const useEmployeeByIdentification = (
+  identificationType: string,
+  identificationNumber: string,
   businessUnit: string,
 ) => {
   const [employee, setEmployee] = useState<IEmployee>({} as IEmployee);
@@ -25,36 +26,42 @@ export const useEmployeeByNickname = (
   const [codeError, setCodeError] = useState<number | null>(null);
 
   useEffect(() => {
-    if (!nickname || !businessUnit) return;
+    if (!identificationType || !identificationNumber || !businessUnit) return;
+
     const fetchEmployee = async () => {
       setLoading(true);
       try {
-        const result = await employeeByNickname(nickname, businessUnit);
+        const result = await employeeByIdentification(
+          identificationType,
+          identificationNumber,
+          businessUnit,
+        );
+
         if (Object.keys(result).length === 0) {
           setEmployee({} as IEmployee);
           setError(true);
           setCodeError(1004);
           return;
         }
+
         if (!validateContractStatus(result.employmentContracts)) {
           setError(true);
           setCodeError(1004);
           return;
         }
+
         setEmployee(result);
       } catch {
         setError(true);
         setEmployee({} as IEmployee);
+        setCodeError(1004);
       } finally {
         setLoading(false);
-      }
-      if (error) {
-        setCodeError(1004);
       }
     };
 
     fetchEmployee();
-  }, [nickname, businessUnit]);
+  }, [identificationType, identificationNumber, businessUnit]);
 
   return { employee, loading, error, codeError };
 };
