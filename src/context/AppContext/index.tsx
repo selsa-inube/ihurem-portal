@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
+import { useIAuth } from "@inube/iauth-react";
 
 import {
   IBusinessManagers,
@@ -9,7 +10,6 @@ import {
 } from "@ptypes/employeePortalBusiness.types";
 import selsaLogo from "@assets/images/selsa.png";
 
-import { useIAuth } from "../AuthContext/useAuthContext";
 import { IAppContextType, IPreferences, IClient, IUser } from "./types";
 
 const AppContext = createContext<IAppContextType | undefined>(undefined);

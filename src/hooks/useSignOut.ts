@@ -1,4 +1,4 @@
-import { useIAuth } from "@context/AuthContext/useAuthContext";
+import { useIAuth } from "@inube/iauth-react";
 
 import { environment } from "@config/environment";
 
