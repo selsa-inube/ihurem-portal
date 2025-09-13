@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
+import { useIAuth } from "@inube/iauth-react";
 
 import {
   IBusinessManagers,
   IEmployeePortalByBusinessManager,
 } from "@ptypes/employeePortalBusiness.types";
 import { encrypt } from "@utils/encrypt";
-import { useIAuth } from "@context/AuthContext/useAuthContext";
 
 export const useAuthRedirect = (
   portalPublicCode: IEmployeePortalByBusinessManager[],

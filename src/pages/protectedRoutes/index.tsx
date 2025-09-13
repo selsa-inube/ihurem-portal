@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { RouterProvider } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
+import { useIAuth } from "@inube/iauth-react";
 
 import { ErrorPage } from "@components/layout/ErrorPage";
 import { decrypt, encrypt } from "@utils/encrypt";
@@ -9,12 +9,9 @@ import { useBusinessManagers } from "@hooks/useBusinessManagers";
 import { GlobalStyles } from "@styles/global";
 import { AppProvider } from "@context/AppContext";
 import { LoadingAppUI } from "@pages/login/outlets/LoadingApp/interface";
-import { useIAuth } from "@context/AuthContext/useAuthContext";
 import { useBusinessUnit } from "@hooks/useBusinessUnit";
 import { useEmployeeByIdentification } from "@hooks/useEmployeeInquiry";
 import { useEmployeeOptions } from "@hooks/useEmployeeOptions";
-import { usePostUserAccountsData } from "@hooks/usePostUserAccountsData";
-import { IUser } from "@context/AppContext/types";
 import { pathStart } from "@config/nav.config";
 import { InfoModal } from "@components/modals/InfoModal";
 import { protectedRouter } from "@routes/publicRouter";
@@ -27,12 +24,12 @@ export function ProtectedRoutes() {
   const storedPortal = localStorage.getItem("portalCode");
   const decryptedPortal = storedPortal ? decrypt(storedPortal) : "";
   const portalCode = portalParam ?? decryptedPortal;
-  const { setUser } = useIAuth();
+
   const { signOut } = useSignOut();
 
   const [showExternalAuthNotification, setShowExternalAuthNotification] =
     useState(false);
-  const [externalAuthProvider, setExternalAuthProvider] = useState<
+  const [externalIAuthProvider, setExternalIAuthProvider] = useState<
     string | null
   >(null);
 
@@ -48,7 +45,12 @@ export function ProtectedRoutes() {
   }, [portalParam, decryptedPortal]);
 
   const [isReady, setIsReady] = useState(false);
-  const { loginWithRedirect, isAuthenticated, isLoading, user } = useIAuth();
+  const { loginWithRedirect, isAuthenticated, isLoading, user, error } =
+    useIAuth();
+
+  if (error) {
+    signOut("/error?code=1006");
+  }
 
   const { portalData, hasError } = usePortalData(portalCode ?? "");
 
@@ -85,40 +87,10 @@ export function ProtectedRoutes() {
     codeError: optionsCode,
   } = useEmployeeOptions(user?.nickname ?? "");
 
-  const { data: userAccountsData, isLoading: userAccountsLoading } =
-    usePostUserAccountsData(
-      businessManagersData.clientId,
-      businessManagersData.clientSecret,
-    );
-
-  useEffect(() => {
-    if (userAccountsData?.idToken) {
-      const decoded = jwtDecode<{
-        identificationNumber: string;
-        identificationType: string;
-        names: string;
-        surNames: string;
-        userAccount: string;
-        consumerApplicationCode: string;
-      }>(userAccountsData.idToken);
-
-      const mappedUser: IUser = {
-        id: decoded.identificationNumber,
-        identificationType: decoded.identificationType,
-        username: `${decoded.names} ${decoded.surNames}`,
-        nickname: decoded.userAccount,
-        company: decoded.consumerApplicationCode,
-        urlImgPerfil: "",
-      };
-
-      setUser(mappedUser);
-    }
-  }, [userAccountsData, setUser]);
-
   useEffect(() => {
     if (portalData && portalData.externalAuthenticationProvider !== undefined) {
-      const externalAuthProvider = portalData.externalAuthenticationProvider;
-      if (!externalAuthProvider) {
+      const externalIAuthProvider = portalData.externalAuthenticationProvider;
+      if (!externalIAuthProvider) {
         if (!isAuthenticated && !isLoading) {
           loginWithRedirect({
             authorizationParams: {
@@ -130,7 +102,7 @@ export function ProtectedRoutes() {
           });
         }
       } else {
-        setExternalAuthProvider(externalAuthProvider);
+        setExternalIAuthProvider(externalIAuthProvider);
         setShowExternalAuthNotification(true);
       }
     }
@@ -168,13 +140,7 @@ export function ProtectedRoutes() {
     setShowExternalAuthNotification(false);
   };
 
-  if (
-    isLoading ||
-    !isReady ||
-    employeeLoading ||
-    optionsLoading ||
-    userAccountsLoading
-  ) {
+  if (isLoading || !isReady || employeeLoading || optionsLoading) {
     return <LoadingAppUI />;
   }
 
@@ -197,8 +163,7 @@ export function ProtectedRoutes() {
     hasManagersError ||
     hasBusinessUnitError ||
     employeeError ||
-    optionsError ||
-    (employee && employee.identificationType !== identificationType)
+    optionsError
   ) {
     return <ErrorPage errorCode={errorCode} />;
   }
@@ -220,7 +185,7 @@ export function ProtectedRoutes() {
         <InfoModal
           title="Método de autenticación diferente"
           titleDescription="Proveedor de autenticación externo"
-          description={`Este portal utiliza un método de autenticación externo a través de ${externalAuthProvider}. Por favor, utiliza las credenciales correspondientes a este proveedor para acceder al sistema.`}
+          description={`Este portal utiliza un método de autenticación externo a través de ${externalIAuthProvider}. Por favor, utiliza las credenciales correspondientes a este proveedor para acceder al sistema.`}
           buttonText="Entendido"
           onCloseModal={handleCloseExternalAuthNotification}
           portalId="root"
