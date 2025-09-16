@@ -183,7 +183,11 @@ export function ProtectedRoutes() {
     BusinessUnit ??
     employeeCode ??
     optionsCode ??
-    (employee && employee.identificationType !== identificationType
+    (employee &&
+    identificationType &&
+    employee.identificationType &&
+    employee.identificationType.toUpperCase() !==
+      identificationType.toUpperCase()
       ? 1002
       : 1001);
 
