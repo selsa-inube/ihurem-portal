@@ -3,9 +3,6 @@ import { RouterProvider } from "react-router-dom";
 import { useIAuth } from "@inube/iauth-react";
 
 import { ErrorPage } from "@components/layout/ErrorPage";
-import { decrypt, encrypt } from "@utils/encrypt";
-import { usePortalData } from "@hooks/usePortalData";
-import { useBusinessManagers } from "@hooks/useBusinessManagers";
 import { GlobalStyles } from "@styles/global";
 import { AppProvider } from "@context/AppContext";
 import { LoadingAppUI } from "@pages/login/outlets/LoadingApp/interface";
@@ -16,14 +13,17 @@ import { pathStart } from "@config/nav.config";
 import { InfoModal } from "@components/modals/InfoModal";
 import { protectedRouter } from "@routes/publicRouter";
 import { useSignOut } from "@hooks/useSignOut";
+import { usePortalAuth } from "@hooks/usePortalAuth";
 
 export function ProtectedRoutes() {
-  const url = new URL(window.location.href);
-  const params = new URLSearchParams(url.search);
-  const portalParam = params.get("portal");
-  const storedPortal = localStorage.getItem("portalCode");
-  const decryptedPortal = storedPortal ? decrypt(storedPortal) : "";
-  const portalCode = portalParam ?? decryptedPortal;
+  const {
+    portalCode,
+    portalData,
+    hasPortalError,
+    hasManagersError,
+    businessManagersData,
+    errorCode: managersErrorCode,
+  } = usePortalAuth();
 
   const { signOut } = useSignOut();
 
@@ -37,13 +37,6 @@ export function ProtectedRoutes() {
     return <ErrorPage errorCode={1000} />;
   }
 
-  useEffect(() => {
-    if (portalParam && portalParam !== decryptedPortal) {
-      const encryptedPortal = encrypt(portalParam);
-      localStorage.setItem("portalCode", encryptedPortal);
-    }
-  }, [portalParam, decryptedPortal]);
-
   const [isReady, setIsReady] = useState(false);
   const { loginWithRedirect, isAuthenticated, isLoading, user, error } =
     useIAuth();
@@ -51,14 +44,6 @@ export function ProtectedRoutes() {
   if (error) {
     signOut("/error?code=1006");
   }
-
-  const { portalData, hasError } = usePortalData(portalCode ?? "");
-
-  const {
-    businessManagersData,
-    hasError: hasManagersError,
-    codeError: BusinessManagersCode,
-  } = useBusinessManagers(portalData);
 
   const {
     businessUnitData,
@@ -112,7 +97,7 @@ export function ProtectedRoutes() {
     if (
       !isLoading &&
       !isAuthenticated &&
-      !hasError &&
+      !hasPortalError &&
       !pathStart.includes(window.location.pathname) &&
       !portalData.externalAuthenticationProvider
     ) {
@@ -132,7 +117,7 @@ export function ProtectedRoutes() {
     isAuthenticated,
     loginWithRedirect,
     portalData.externalAuthenticationProvider,
-    hasError,
+    hasPortalError,
     pathStart,
   ]);
 
@@ -145,7 +130,7 @@ export function ProtectedRoutes() {
   }
 
   const errorCode =
-    BusinessManagersCode ??
+    managersErrorCode ??
     BusinessUnit ??
     employeeCode ??
     optionsCode ??
@@ -159,7 +144,7 @@ export function ProtectedRoutes() {
   }
 
   if (
-    hasError ||
+    hasPortalError ||
     hasManagersError ||
     hasBusinessUnitError ||
     employeeError ||
