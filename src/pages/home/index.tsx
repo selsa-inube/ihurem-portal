@@ -1,11 +1,7 @@
-import { Outlet } from "react-router-dom";
-import { Text, Stack, Grid, Header, useMediaQuery } from "@inubekit/inubekit";
+import { Text, Stack, Grid, Header } from "@inubekit/inubekit";
 
 import { AppCard } from "@components/feedback/AppCard";
 import { spacing } from "@design/tokens/spacing";
-import { userMenu, useConfigHeader, navConfig } from "@config/nav.config";
-import { useAppContext } from "@context/AppContext/useAppContext";
-import { useEmployeeOptions } from "@hooks/useEmployeeOptions";
 
 import {
   StyledAppPage,
@@ -15,6 +11,7 @@ import {
   StyledMain,
   StyledQuickAccessContainer,
 } from "./styles";
+import { useHome } from "./interface";
 
 const renderLogo = (imgUrl: string, altText: string) => {
   return (
@@ -25,28 +22,19 @@ const renderLogo = (imgUrl: string, altText: string) => {
 };
 
 function Home() {
-  const { user, logoUrl, businessUnit } = useAppContext();
-  const { data: employeeOptions } = useEmployeeOptions(user?.id ?? "");
-  const safeEmployeeOptions = employeeOptions ?? [];
-
-  const configHeader = useConfigHeader(safeEmployeeOptions);
-  const isTablet = useMediaQuery("(max-width: 944px)");
+  const { user, headerConfig, isTablet, quickAccess, Outlet } = useHome();
 
   return (
     <StyledAppPage>
       <Grid templateRows="auto auto" height="100vh" justifyContent="unset">
         <Header
-          navigation={{ nav: configHeader, breakpoint: "800px" }}
+          navigation={headerConfig.navigation}
           logoURL={renderLogo(
-            businessUnit?.urlLogo ?? logoUrl,
-            businessUnit?.abbreviatedName ?? "Sin unidad seleccionada",
+            headerConfig.logoURL.url,
+            headerConfig.logoURL.alt,
           )}
-          user={{
-            username: user?.username ?? "Nombre de usuario",
-            client: businessUnit?.abbreviatedName ?? "Sin unidad seleccionada",
-            breakpoint: "800px",
-          }}
-          menu={userMenu}
+          user={headerConfig.user}
+          menu={headerConfig.menu}
         />
         <StyledContainer>
           <StyledMain $isTablet={isTablet}>
@@ -66,7 +54,7 @@ function Home() {
                   Aquí tienes las funcionalidades disponibles.
                 </Text>
                 <StyledQuickAccessContainer $isTablet={isTablet}>
-                  {navConfig(safeEmployeeOptions).map((link, index) => (
+                  {quickAccess.map((link, index) => (
                     <AppCard
                       key={index}
                       title={link.label}
@@ -85,4 +73,5 @@ function Home() {
     </StyledAppPage>
   );
 }
+
 export { Home };
