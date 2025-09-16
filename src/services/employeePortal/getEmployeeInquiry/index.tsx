@@ -29,7 +29,7 @@ const employeeByIdentification = async (
         signal: controller.signal,
       };
 
-      const url = `${environment.IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE}/employees?identificationDocumentNumber=${identificationNumber}&identificationDocumentType=${identificationType}`;
+      const url = `${environment.IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE}/employees?identificationDocumentNumber=${identificationNumber}&identificationType=${identificationType}`;
 
       const res = await fetch(url, options);
 
@@ -40,7 +40,6 @@ const employeeByIdentification = async (
       }
 
       const data = (await res.json()) as IEmployee;
-
       if (!res.ok) {
         throw new Error(
           `Error al obtener los datos del empleado. Status: ${res.status}, Detalles: ${JSON.stringify(data)}`,
@@ -50,7 +49,6 @@ const employeeByIdentification = async (
       const normalizedEmployee = Array.isArray(data)
         ? mapEmployeeApiToEntity(data[0])
         : ({} as IEmployee);
-
       return normalizedEmployee;
     } catch (error) {
       if (attempt === maxRetries) {

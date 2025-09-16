@@ -135,13 +135,8 @@ export function ProtectedRoutes() {
     employeeCode ??
     optionsCode ??
     (employee && employee.identificationType !== identificationType
-      ? 1002
+      ? 1004
       : 1001);
-
-  if (errorCode === 1004) {
-    signOut("/error?code=1004");
-    return null;
-  }
 
   if (
     hasPortalError ||
