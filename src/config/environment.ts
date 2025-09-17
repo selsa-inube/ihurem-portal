@@ -16,7 +16,6 @@ interface Environment {
   COUNTRY: string;
   ORIGINATOR_ID: string;
   IAUTH_URL: string;
-  IAUTH_API_URL: string;
 }
 
 const environment: Environment = {
@@ -32,7 +31,6 @@ const environment: Environment = {
   COUNTRY: import.meta.env.VITE_COUNTRY as string,
   ORIGINATOR_ID: import.meta.env.VITE_ORIGINATOR_ID as string,
   IAUTH_URL: import.meta.env.VITE_IAUTH_URL as string,
-  IAUTH_API_URL: import.meta.env.VITE_IAUTH_API_URL as string,
 };
 
 export {

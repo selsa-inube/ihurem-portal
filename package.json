@@ -13,12 +13,11 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "@auth0/auth0-react": "^2.2.4",
+    "@inube/iauth-react": "^1.0.0",
     "@inubekit/inubekit": "^6.0.0",
     "crypto-js": "^4.2.0",
     "date-holidays": "^3.24.3",
     "formik": "^2.4.6",
-    "jwt-decode": "^4.0.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-router-dom": "^6.28.0",
