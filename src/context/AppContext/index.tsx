@@ -33,17 +33,22 @@ function AppProvider(props: AppProviderProps) {
     employeeOptions,
   } = props;
   const { user: IAuthUser } = useIAuth();
-  const [user, setUser] = useState<IUser | null>(
-    IAuthUser
-      ? {
-          username: IAuthUser.username ?? "",
-          id: IAuthUser.nickname ?? "",
-          company: businessUnitData.publicCode ?? "Company Name",
-          urlImgPerfil: IAuthUser.urlImgPerfil ?? "",
-          nickname: IAuthUser.nickname ?? "",
-        }
-      : null,
-  );
+
+  const [user, setUser] = useState<IUser | null>(null);
+
+  useEffect(() => {
+    if (IAuthUser) {
+      setUser({
+        username: IAuthUser.username ?? "",
+        id: IAuthUser.id ?? "",
+        company: businessUnitData.publicCode ?? "",
+        urlImgPerfil: IAuthUser.urlImgPerfil ?? "",
+        nickname: IAuthUser.nickname ?? "",
+      });
+    } else {
+      setUser(null);
+    }
+  }, [IAuthUser, businessUnitData.publicCode]);
 
   const initialLogo = localStorage.getItem("logoUrl") ?? selsaLogo;
   const [logoUrl, setLogoUrl] = useState<string>(initialLogo);
