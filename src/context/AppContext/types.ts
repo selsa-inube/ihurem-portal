@@ -61,7 +61,8 @@ export interface IAppContextType {
   setSelectedClient: React.Dispatch<React.SetStateAction<IClient | null>>;
   employees: IEmployee;
   setEmployees: React.Dispatch<React.SetStateAction<IEmployee>>;
-
   employeeOptions: IEmployeeOptions[];
   setEmployeeOptions: React.Dispatch<React.SetStateAction<IEmployeeOptions[]>>;
+  isUserInitialized: boolean;
+  isAuthLoading: boolean;
 }
