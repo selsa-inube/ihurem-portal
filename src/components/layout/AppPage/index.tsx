@@ -10,6 +10,7 @@ import {
 import { useEmployeeOptions } from "@hooks/useEmployeeOptions";
 import { useAppContext } from "@context/AppContext/useAppContext";
 import { useContractValidation } from "@hooks/useContractValidation";
+import { LoadingAppUI } from "@pages/login/outlets/LoadingApp/interface";
 
 import {
   StyledAppPage,
@@ -36,7 +37,7 @@ const renderLogo = (imgUrl: string, clientName: string) => {
 
 function AppPage(props: AppPageProps) {
   const { withNav = true } = props;
-  const { user, logoUrl, businessUnit } = useAppContext();
+  const { user, logoUrl, businessUnit, isLoadingUser } = useAppContext();
   const isTablet = useMediaQuery("(max-width: 944px)");
 
   const { data: employeeOptions } = useEmployeeOptions(user?.id ?? "");
@@ -46,6 +47,10 @@ function AppPage(props: AppPageProps) {
   const configHeader = useConfigHeader(safeEmployeeOptions);
 
   useContractValidation();
+
+  if (isLoadingUser) {
+    return <LoadingAppUI />;
+  }
 
   return (
     <StyledAppPage>
