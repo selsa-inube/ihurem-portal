@@ -63,6 +63,5 @@ export interface IAppContextType {
   setEmployees: React.Dispatch<React.SetStateAction<IEmployee>>;
   employeeOptions: IEmployeeOptions[];
   setEmployeeOptions: React.Dispatch<React.SetStateAction<IEmployeeOptions[]>>;
-  isUserInitialized: boolean;
-  isAuthLoading: boolean;
+  isLoadingUser: boolean;
 }

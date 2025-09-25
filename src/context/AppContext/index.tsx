@@ -32,65 +32,27 @@ function AppProvider(props: AppProviderProps) {
     employee,
     employeeOptions,
   } = props;
-
-  const authData = useIAuth();
-  const IAuthUser = authData.user;
-  const isAuthLoading = authData.isLoading ?? false;
+  const { user: IAuthUser, isLoading: isAuthLoading } = useIAuth();
 
   const [user, setUser] = useState<IUser | null>(null);
-  const [isUserInitialized, setIsUserInitialized] = useState(false);
-  const [isAuthInitializing, setIsAuthInitializing] = useState(true);
+  const [isLoadingUser, setIsLoadingUser] = useState(true);
 
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout | undefined;
-
-    if (authData.isLoading === undefined) {
-      timeoutId = setTimeout(() => {
-        setIsAuthInitializing(false);
-      }, 3000);
-    }
-
-    if (IAuthUser) {
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-        timeoutId = undefined;
+    if (!isAuthLoading) {
+      if (IAuthUser) {
+        setUser({
+          username: IAuthUser.username ?? "",
+          id: IAuthUser.id ?? "",
+          company: businessUnitData.publicCode ?? "",
+          urlImgPerfil: IAuthUser.urlImgPerfil ?? "",
+          nickname: IAuthUser.nickname ?? "",
+        });
+      } else {
+        setUser(null);
       }
-      setIsAuthInitializing(false);
-
-      setUser({
-        username: IAuthUser.username ?? "",
-        id: IAuthUser.id ?? "",
-        company: businessUnitData.publicCode ?? "",
-        urlImgPerfil: IAuthUser.urlImgPerfil ?? "",
-        nickname: IAuthUser.nickname ?? "",
-      });
-      setIsUserInitialized(true);
-    } else if (!isAuthLoading && !isAuthInitializing) {
-      setUser(null);
-      setIsUserInitialized(true);
+      setIsLoadingUser(false);
     }
-
-    return () => {
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
-    };
-  }, [
-    IAuthUser,
-    businessUnitData.publicCode,
-    isAuthLoading,
-    isAuthInitializing,
-    authData.isLoading,
-  ]);
-
-  useEffect(() => {
-    if (authData.isLoading !== undefined) {
-      setIsAuthInitializing(authData.isLoading);
-      if (!authData.isLoading) {
-        setIsUserInitialized(true);
-      }
-    }
-  }, [authData.isLoading]);
+  }, [IAuthUser, businessUnitData.publicCode, isAuthLoading]);
 
   const initialLogo = localStorage.getItem("logoUrl") ?? selsaLogo;
   const [logoUrl, setLogoUrl] = useState<string>(initialLogo);
@@ -147,11 +109,11 @@ function AppProvider(props: AppProviderProps) {
   >(employeeOptions ?? []);
 
   useEffect(() => {
-    if (user && isUserInitialized) {
+    if (user) {
       localStorage.setItem("logoUrl", logoUrl);
       localStorage.setItem("boardOrientation", preferences.boardOrientation);
     }
-  }, [logoUrl, preferences, user, isUserInitialized]);
+  }, [logoUrl, preferences, user]);
 
   return (
     <AppContext.Provider
@@ -175,8 +137,7 @@ function AppProvider(props: AppProviderProps) {
         setEmployees,
         employeeOptions: employeeOptionsState,
         setEmployeeOptions,
-        isUserInitialized,
-        isAuthLoading: isAuthLoading || isAuthInitializing,
+        isLoadingUser,
       }}
     >
       {children}
