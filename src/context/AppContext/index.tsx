@@ -45,6 +45,20 @@ function AppProvider(props: AppProviderProps) {
       IAuthUser.id !== "id" &&
       IAuthUser.username !== "username";
 
+    if (IAuthUser?.id === "id" && IAuthUser?.username === "username") {
+      const hasAlreadyRefreshed = localStorage.getItem(
+        "hasRefreshedForDefaultUser",
+      );
+
+      if (!hasAlreadyRefreshed) {
+        localStorage.setItem("hasRefreshedForDefaultUser", "true");
+        window.location.reload();
+        return;
+      }
+    } else {
+      localStorage.removeItem("hasRefreshedForDefaultUser");
+    }
+
     if (isValidAuthUser) {
       setUser({
         username: IAuthUser.username,
