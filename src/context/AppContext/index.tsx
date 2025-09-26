@@ -9,6 +9,7 @@ import {
   IEmployeeOptions,
 } from "@ptypes/employeePortalBusiness.types";
 import selsaLogo from "@assets/images/selsa.png";
+import { LoadingAppUI } from "@pages/login/outlets/LoadingApp/interface";
 
 import { IAppContextType, IPreferences, IClient, IUser } from "./types";
 
@@ -32,27 +33,39 @@ function AppProvider(props: AppProviderProps) {
     employee,
     employeeOptions,
   } = props;
-  const { user: IAuthUser, isLoading: isAuthLoading } = useIAuth();
+  const { user: IAuthUser } = useIAuth();
 
   const [user, setUser] = useState<IUser | null>(null);
-  const [isLoadingUser, setIsLoadingUser] = useState(true);
+  const [hasUserLoaded, setHasUserLoaded] = useState(false);
 
   useEffect(() => {
-    if (!isAuthLoading) {
-      if (IAuthUser) {
-        setUser({
-          username: IAuthUser.username ?? "",
-          id: IAuthUser.id ?? "",
-          company: businessUnitData.publicCode ?? "",
-          urlImgPerfil: IAuthUser.urlImgPerfil ?? "",
-          nickname: IAuthUser.nickname ?? "",
-        });
-      } else {
-        setUser(null);
-      }
-      setIsLoadingUser(false);
+    const isValidAuthUser =
+      IAuthUser?.id &&
+      IAuthUser?.username &&
+      IAuthUser.id !== "id" &&
+      IAuthUser.username !== "username";
+
+    if (isValidAuthUser) {
+      setUser({
+        username: IAuthUser.username,
+        id: IAuthUser.id,
+        company: businessUnitData.publicCode ?? "",
+        urlImgPerfil: IAuthUser.urlImgPerfil ?? "",
+        nickname: IAuthUser.nickname ?? "",
+      });
+      setHasUserLoaded(true);
+    } else if (
+      IAuthUser?.id === "id" &&
+      IAuthUser?.username === "username" &&
+      !hasUserLoaded
+    ) {
+      setUser(null);
+    } else if (!IAuthUser && !hasUserLoaded) {
+      setUser(null);
     }
-  }, [IAuthUser, businessUnitData.publicCode, isAuthLoading]);
+  }, [IAuthUser, businessUnitData.publicCode, hasUserLoaded]);
+
+  const isLoadingApp = !hasUserLoaded;
 
   const initialLogo = localStorage.getItem("logoUrl") ?? selsaLogo;
   const [logoUrl, setLogoUrl] = useState<string>(initialLogo);
@@ -115,6 +128,10 @@ function AppProvider(props: AppProviderProps) {
     }
   }, [logoUrl, preferences, user]);
 
+  if (isLoadingApp) {
+    return <LoadingAppUI />;
+  }
+
   return (
     <AppContext.Provider
       value={{
@@ -137,7 +154,7 @@ function AppProvider(props: AppProviderProps) {
         setEmployees,
         employeeOptions: employeeOptionsState,
         setEmployeeOptions,
-        isLoadingUser,
+        isLoadingUser: isLoadingApp,
       }}
     >
       {children}
