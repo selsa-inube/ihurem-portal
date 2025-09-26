@@ -45,13 +45,6 @@ export function ProtectedRoutes() {
     signOut("/error?code=1006");
   }
 
-  useEffect(() => {
-    const userAccountsData = localStorage.getItem("userAccountsData");
-    if (!userAccountsData && !isLoading && isAuthenticated) {
-      window.location.reload();
-    }
-  }, [isLoading, isAuthenticated]);
-
   const {
     businessUnitData,
     hasError: hasBusinessUnitError,
