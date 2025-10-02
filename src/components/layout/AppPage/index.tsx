@@ -20,6 +20,7 @@ import {
   StyledMain,
   StyledMainScroll,
 } from "./styles";
+import { useSignOut } from "@hooks/useSignOut";
 
 interface AppPageProps {
   withNav?: boolean;
@@ -39,10 +40,16 @@ function AppPage(props: AppPageProps) {
   const { withNav = true } = props;
   const { user, logoUrl, businessUnit, isLoadingUser } = useAppContext();
   const isTablet = useMediaQuery("(max-width: 944px)");
+  const { signOut } = useSignOut();
 
   const { data: employeeOptions } = useEmployeeOptions(user?.id ?? "");
-  const safeEmployeeOptions = employeeOptions ?? [];
+  console.log({ employeeOptions });
+  if (employeeOptions && employeeOptions.length === 0) {
+    signOut(`/error?code=1005`);
+    return;
+  }
 
+  const safeEmployeeOptions = employeeOptions ?? [];
   const navConfig = useNavConfig(safeEmployeeOptions);
   const configHeader = useConfigHeader(safeEmployeeOptions);
 

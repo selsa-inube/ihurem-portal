@@ -10,7 +10,7 @@ import { IEmployeeOptions } from "@ptypes/employeePortalBusiness.types";
 const baseNavLinks = [
   {
     id: "vacations",
-    serviceCode: "vacacionesPortalErm",
+    serviceCode: "vacations",
     label: "Vacaciones",
     path: "/holidays",
     description:
@@ -18,7 +18,7 @@ const baseNavLinks = [
   },
   {
     id: "disability",
-    serviceCode: "incapacidadesPortalErm",
+    serviceCode: "disability",
     label: "Incapacidades",
     path: "/disability",
     description:
@@ -26,7 +26,7 @@ const baseNavLinks = [
   },
   {
     id: "absences",
-    serviceCode: "ausenciasPortalErm",
+    serviceCode: "absences",
     label: "Ausencias",
     path: "/absences",
     description:
@@ -34,7 +34,7 @@ const baseNavLinks = [
   },
   {
     id: "certifications",
-    serviceCode: "certificacionPortalErm",
+    serviceCode: "certifications",
     label: "Certificaciones",
     path: "/certifications",
     description:
@@ -68,15 +68,16 @@ const getIcon = (iconReference?: string): ReactNode => {
 };
 
 const navConfig = (optionForCustomerPortal: IEmployeeOptions[]) => {
-  return baseNavLinks.map((link) => {
-    const option = optionForCustomerPortal.find(
-      (opt) => opt.optionCode === link.serviceCode,
+  return optionForCustomerPortal.map((option) => {
+    const link = baseNavLinks.find(
+      (link) => link.serviceCode === option.optionCode,
     );
-
     return {
       ...link,
-      label: option?.abbreviatedName ?? link.label,
-      icon: getIcon(option?.iconReference),
+      id: option.optionCode,
+      path: link?.path ?? "/",
+      label: option.abbreviatedName ?? link?.label ?? "",
+      icon: getIcon(option.iconReference),
       isEnabled: true,
     };
   });

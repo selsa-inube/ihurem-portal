@@ -65,6 +65,11 @@ export function ProtectedRoutes() {
     businessUnitData.publicCode ?? "",
   );
 
+  if (employeeCode && !employeeLoading) {
+    signOut(`/error?code=${employeeCode ?? 1004}`);
+    return;
+  }
+
   const {
     data: employeeOptions,
     loading: optionsLoading,
