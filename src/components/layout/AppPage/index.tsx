@@ -43,10 +43,9 @@ function AppPage(props: AppPageProps) {
   const { signOut } = useSignOut();
 
   const { data: employeeOptions } = useEmployeeOptions(user?.id ?? "");
-  console.log({ employeeOptions });
   if (employeeOptions && employeeOptions.length === 0) {
     signOut(`/error?code=1005`);
-    return;
+    return null;
   }
 
   const safeEmployeeOptions = employeeOptions ?? [];

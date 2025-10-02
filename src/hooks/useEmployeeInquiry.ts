@@ -40,7 +40,6 @@ export const useEmployeeByIdentification = (
           !validateContractStatus(result.employmentContracts) ||
           Object.keys(result).length === 0
         ) {
-          setError(true);
           setCodeError(1004);
           setError(true);
           return;
