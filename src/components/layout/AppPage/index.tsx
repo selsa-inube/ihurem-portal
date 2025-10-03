@@ -8,6 +8,7 @@ import {
   useConfigHeader,
 } from "@config/nav.config";
 import { useEmployeeOptions } from "@hooks/useEmployeeOptions";
+import { useSignOut } from "@hooks/useSignOut";
 import { useAppContext } from "@context/AppContext/useAppContext";
 import { useContractValidation } from "@hooks/useContractValidation";
 import { LoadingAppUI } from "@pages/login/outlets/LoadingApp/interface";
@@ -20,7 +21,6 @@ import {
   StyledMain,
   StyledMainScroll,
 } from "./styles";
-import { useSignOut } from "@hooks/useSignOut";
 
 interface AppPageProps {
   withNav?: boolean;

@@ -67,7 +67,7 @@ export function ProtectedRoutes() {
 
   if (employeeCode && !employeeLoading) {
     signOut(`/error?code=${employeeCode ?? 1004}`);
-    return;
+    return null;
   }
 
   const {
