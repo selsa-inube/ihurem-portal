@@ -8,6 +8,7 @@ import {
   useConfigHeader,
 } from "@config/nav.config";
 import { useEmployeeOptions } from "@hooks/useEmployeeOptions";
+import { useSignOut } from "@hooks/useSignOut";
 import { useAppContext } from "@context/AppContext/useAppContext";
 import { useContractValidation } from "@hooks/useContractValidation";
 import { LoadingAppUI } from "@pages/login/outlets/LoadingApp/interface";
@@ -39,10 +40,15 @@ function AppPage(props: AppPageProps) {
   const { withNav = true } = props;
   const { user, logoUrl, businessUnit, isLoadingUser } = useAppContext();
   const isTablet = useMediaQuery("(max-width: 944px)");
+  const { signOut } = useSignOut();
 
   const { data: employeeOptions } = useEmployeeOptions(user?.id ?? "");
-  const safeEmployeeOptions = employeeOptions ?? [];
+  if (employeeOptions && employeeOptions.length === 0) {
+    signOut(`/error?code=1005`);
+    return null;
+  }
 
+  const safeEmployeeOptions = employeeOptions ?? [];
   const navConfig = useNavConfig(safeEmployeeOptions);
   const configHeader = useConfigHeader(safeEmployeeOptions);
 

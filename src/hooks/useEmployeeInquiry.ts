@@ -36,17 +36,12 @@ export const useEmployeeByIdentification = (
           identificationNumber,
           businessUnit,
         );
-
-        if (Object.keys(result).length === 0) {
-          setEmployee({} as IEmployee);
-          setError(true);
+        if (
+          !validateContractStatus(result.employmentContracts) ||
+          Object.keys(result).length === 0
+        ) {
           setCodeError(1004);
-          return;
-        }
-
-        if (!validateContractStatus(result.employmentContracts)) {
           setError(true);
-          setCodeError(1004);
           return;
         }
 

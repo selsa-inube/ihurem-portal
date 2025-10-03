@@ -20,9 +20,12 @@ export const useBusinessManagers = (
         const fetchedBusinessManagers = await getBusinessManagers(
           portalPublicCode.businessManagerId,
         );
-
         if (!fetchedBusinessManagers) {
           setHasError(true);
+          return;
+        }
+        if (Object.keys(fetchedBusinessManagers).length === 0) {
+          setCodeError(1002);
           return;
         }
         setBusinessManagersData(fetchedBusinessManagers);
