@@ -26,8 +26,9 @@ export function AuthWrapper({ children }: AuthWrapperProps) {
       originatorId={environment.ORIGINATOR_ID}
       callbackUrl={environment.REDIRECT_URI}
       iAuthUrl={environment.IAUTH_URL}
-      clientId={decrypt(authConfig.clientId)}
+      clientId={"originador-id"}
       clientSecret={decrypt(authConfig.clientSecret)}
+      serviceUrl={environment.IAUTH_SERVICE_URL}
     >
       {children}
     </IAuthProvider>
