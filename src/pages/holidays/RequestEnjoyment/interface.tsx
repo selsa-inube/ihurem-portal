@@ -56,7 +56,7 @@ function RequestEnjoymentUI({
   handlePreviousStep,
   handleFinishAssisted,
 }: RequestEnjoymentUIProps) {
-  const shouldDisableNext = currentStep !== 1 && !isCurrentFormValid;
+  const shouldDisableNext = !isCurrentFormValid;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => {

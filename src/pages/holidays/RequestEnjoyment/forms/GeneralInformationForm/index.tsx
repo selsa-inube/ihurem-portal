@@ -48,7 +48,6 @@ const GeneralInformationForm = forwardRef<
       onFormValid,
       onSubmit,
       handleNextStep,
-      handlePreviousStep,
       loading,
       withNextButton = false,
     },
@@ -78,7 +77,6 @@ const GeneralInformationForm = forwardRef<
         formik={formik}
         withNextButton={withNextButton}
         validationSchema={validationSchema}
-        handlePreviousStep={handlePreviousStep}
         handleNextStep={handleNextStep}
       />
     );

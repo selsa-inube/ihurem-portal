@@ -25,18 +25,11 @@ interface GeneralInformationFormUIProps {
   loading?: boolean;
   withNextButton?: boolean;
   handleNextStep: () => void;
-  handlePreviousStep: () => void;
 }
 
 function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
-  const {
-    formik,
-    validationSchema,
-    loading,
-    withNextButton,
-    handleNextStep,
-    handlePreviousStep,
-  } = props;
+  const { formik, validationSchema, loading, withNextButton, handleNextStep } =
+    props;
   const isMobile = useMediaQuery("(max-width: 700px)");
   const { employees } = useAppContext();
 
@@ -154,14 +147,7 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
           </Stack>
         </StyledContainer>
         {withNextButton && (
-          <Stack justifyContent="flex-end" gap={spacing.s250}>
-            <Button
-              appearance="gray"
-              variant="outlined"
-              onClick={handlePreviousStep}
-            >
-              Anterior
-            </Button>
+          <Stack justifyContent="flex-end">
             <Button
               onClick={handleNextStep}
               disabled={loading ?? !formik.isValid}
