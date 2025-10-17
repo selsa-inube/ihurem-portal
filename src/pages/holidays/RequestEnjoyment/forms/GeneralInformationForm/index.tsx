@@ -33,7 +33,6 @@ interface GeneralInformationFormProps {
   loading?: boolean;
   withNextButton?: boolean;
   handleNextStep: () => void;
-  handlePreviousStep: () => void;
   onFormValid?: React.Dispatch<React.SetStateAction<boolean>>;
   onSubmit?: (values: IUnifiedHumanResourceRequestData) => void;
 }

@@ -114,7 +114,6 @@ function RequestEnjoymentUI({
                 ref={generalInformationRef}
                 initialValues={initialGeneralInformationValues}
                 withNextButton={true}
-                handlePreviousStep={handlePreviousStep}
                 onFormValid={setIsCurrentFormValid}
                 handleNextStep={handleNextStep}
               />
