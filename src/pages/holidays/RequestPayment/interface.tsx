@@ -57,7 +57,7 @@ function RequestPaymentUI(props: RequestPaymentUIProps) {
   } = props;
 
   const isTablet = useMediaQuery("(max-width: 1100px)");
-  const shouldDisableNext = currentStep !== 1 && !isCurrentFormValid;
+  const shouldDisableNext = !isCurrentFormValid;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => setIsModalOpen(true);
@@ -110,7 +110,6 @@ function RequestPaymentUI(props: RequestPaymentUIProps) {
                 ref={generalInformationRef}
                 initialValues={initialGeneralInformationValues}
                 withNextButton={true}
-                handlePreviousStep={handlePreviousStep}
                 onFormValid={setIsCurrentFormValid}
                 handleNextStep={handleNextStep}
               />

@@ -103,7 +103,9 @@ export const formatVacationHistory = (
           },
           usageMode: {
             value:
-              vacation.vacationType === "Pagadas" ? "Pagadas" : "Disfrutadas",
+              vacation.vacationType === "holiday_pay"
+                ? "Pagadas"
+                : "Disfrutadas",
           },
           days: {
             value: vacation.businessDaysOfVacation,
