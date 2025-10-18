@@ -33,5 +33,5 @@ export const headers: {
   { label: "Eliminar", key: "delete", action: true, style: { width: "60px" } },
 ];
 
-export const pageLength = 5;
+export const pageLength = 10;
 export const caption = "Tabla de Ejemplo";

@@ -21,5 +21,5 @@ export const headers: {
   { label: "Días", key: "days", style: { width: "auto" } },
 ];
 
-export const pageLength = 5;
+export const pageLength = 10;
 export const caption = "Tabla de Ejemplo";
