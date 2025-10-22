@@ -15,6 +15,7 @@ const baseNavLinks = [
     path: "/holidays",
     description:
       "Son los días de descanso remunerado que le corresponden al empleado por cada año trabajado.",
+    order: 1,
   },
   {
     id: "certifications",
@@ -23,6 +24,7 @@ const baseNavLinks = [
     path: "/certifications",
     description:
       "Son documentos que acreditan la formación o experiencia laboral de un empleado.",
+    order: 4,
   },
 ];
 
