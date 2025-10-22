@@ -17,22 +17,6 @@ const baseNavLinks = [
       "Son los días de descanso remunerado que le corresponden al empleado por cada año trabajado.",
   },
   {
-    id: "disability",
-    serviceCode: "disability",
-    label: "Incapacidades",
-    path: "/disability",
-    description:
-      "Son períodos en los que el trabajador no puede laborar debido a una enfermedad o accidente, y está respaldado por un certificado médico.",
-  },
-  {
-    id: "absences",
-    serviceCode: "absences",
-    label: "Ausencias",
-    path: "/absences",
-    description:
-      "Son períodos en los que el trabajador no se presenta a laborar, ya sea de forma justificada o injustificada.",
-  },
-  {
     id: "certifications",
     serviceCode: "certifications",
     label: "Certificaciones",
@@ -68,19 +52,24 @@ const getIcon = (iconReference?: string): ReactNode => {
 };
 
 const navConfig = (optionForCustomerPortal: IEmployeeOptions[]) => {
-  return optionForCustomerPortal.map((option) => {
-    const link = baseNavLinks.find(
-      (link) => link.serviceCode === option.optionCode,
-    );
-    return {
-      ...link,
-      id: option.optionCode,
-      path: link?.path ?? "/",
-      label: option.abbreviatedName ?? link?.label ?? "",
-      icon: getIcon(option.iconReference),
-      isEnabled: true,
-    };
-  });
+  return optionForCustomerPortal
+    .map((option) => {
+      const link = baseNavLinks.find(
+        (link) => link.serviceCode === option.optionCode,
+      );
+      if (!link) {
+        return null;
+      }
+      return {
+        ...link,
+        id: option.optionCode,
+        path: link.path,
+        label: option.abbreviatedName ?? link.label,
+        icon: getIcon(option.iconReference),
+        isEnabled: true,
+      };
+    })
+    .filter((item) => item !== null);
 };
 
 const useNavConfig = (employeeOptions: IEmployeeOptions[]) => {
