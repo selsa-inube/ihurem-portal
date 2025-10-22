@@ -18,24 +18,6 @@ const baseNavLinks = [
     order: 1,
   },
   {
-    id: "disability",
-    serviceCode: "disability",
-    label: "Incapacidades",
-    path: "/disability",
-    description:
-      "Son períodos en los que el trabajador no puede laborar debido a una enfermedad o accidente, y está respaldado por un certificado médico.",
-    order: 2,
-  },
-  {
-    id: "absences",
-    serviceCode: "absences",
-    label: "Ausencias",
-    path: "/absences",
-    description:
-      "Son períodos en los que el trabajador no se presenta a laborar, ya sea de forma justificada o injustificada.",
-    order: 3,
-  },
-  {
     id: "certifications",
     serviceCode: "certifications",
     label: "Certificaciones",
@@ -71,23 +53,25 @@ const getIcon = (iconReference?: string): ReactNode => {
   return <div style={{ width: 24, height: 24 }} />;
 };
 
-const navConfig = (employeeOptions: IEmployeeOptions[]) => {
-  return employeeOptions
+const navConfig = (optionForCustomerPortal: IEmployeeOptions[]) => {
+  return optionForCustomerPortal
     .map((option) => {
       const link = baseNavLinks.find(
         (link) => link.serviceCode === option.optionCode,
       );
+      if (!link) {
+        return null;
+      }
       return {
         ...link,
         id: option.optionCode,
-        path: link?.path ?? "/",
-        label: option.abbreviatedName ?? link?.label ?? "",
+        path: link.path,
+        label: option.abbreviatedName ?? link.label,
         icon: getIcon(option.iconReference),
         isEnabled: true,
-        order: link?.order ?? 0,
       };
     })
-    .sort((a, b) => a.order - b.order);
+    .filter((item) => item !== null);
 };
 
 const useNavConfig = (employeeOptions: IEmployeeOptions[]) => {
