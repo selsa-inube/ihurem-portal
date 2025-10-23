@@ -45,6 +45,7 @@ function CertificationsOptionsUI(props: CertificationsOptionsUIProps) {
     },
     handleDeleteRequest,
   } = props;
+
   const navigate = useNavigate();
   const [infoModal, setInfoModal] = useState<{
     open: boolean;
@@ -71,8 +72,12 @@ function CertificationsOptionsUI(props: CertificationsOptionsUIProps) {
       <Detail
         disableEnjoyment={!hasPrivilege || !hasActiveContract}
         actionDescriptions={actionDescriptions}
-        onRequestEnjoyment={addRequest}
-        onInfoIconClick={onOpenInfoModal}
+        onRequestEnjoyment={() => {
+          void addRequest();
+        }}
+        onInfoIconClick={(description) => {
+          void onOpenInfoModal(description);
+        }}
       />
     ) : (
       <Stack
@@ -87,9 +92,13 @@ function CertificationsOptionsUI(props: CertificationsOptionsUIProps) {
             iconBefore={<MdAdd />}
             fullwidth={isMobile}
             disabled={!hasActiveContract || !hasPrivilege}
-            onClick={hasActiveContract && hasPrivilege ? addRequest : undefined}
+            onClick={() => {
+              if (hasActiveContract && hasPrivilege) {
+                void addRequest();
+              }
+            }}
           >
-            Agregar solicitud
+            Agregar solicitud de certificación
           </Button>
           {(!hasActiveContract || !hasPrivilege) && (
             <Icon
@@ -97,7 +106,7 @@ function CertificationsOptionsUI(props: CertificationsOptionsUIProps) {
               appearance="primary"
               size="16px"
               cursorHover
-              onClick={() => onOpenInfoModal(actionDescriptions.enjoyment)}
+              onClick={() => onOpenInfoModal(actionDescriptions.application)}
             />
           )}
         </Stack>
