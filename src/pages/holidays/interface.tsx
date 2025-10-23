@@ -1,8 +1,12 @@
 import { useState } from "react";
-import { MdAdd, MdOutlineInfo, MdOutlineWarningAmber } from "react-icons/md";
+import {
+  MdAdd,
+  MdOutlineInfo,
+  MdOutlineWarningAmber,
+  MdOutlineBeachAccess,
+} from "react-icons/md";
 import { Button, Stack, Tabs, ITab, Text, Icon } from "@inubekit/inubekit";
 import { useNavigate } from "react-router-dom";
-import { MdOutlineBeachAccess } from "react-icons/md";
 
 import { useAppContext } from "@context/AppContext/useAppContext";
 import { AppMenu } from "@components/layout/AppMenu";
@@ -73,6 +77,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
     title: "",
     description: "",
   });
+
   const { employee, isLoading } = useEmployee(employees.employeeId);
   const contracts = employee?.employmentContracts ?? [];
 
@@ -127,9 +132,19 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
           disablePayment={!hasPaymentPrivilege || !hasActiveContract}
           actionDescriptions={actionDescriptions}
           hasTableData={tableData && tableData.length > 0}
-          onRequestEnjoyment={handleRequestEnjoyment}
-          onRequestPayment={handleRequestPayment}
-          onInfoIconClick={onOpenInfoModal}
+          onRequestEnjoyment={() => {
+            if (hasActiveContract && hasEnjoymentPrivilege) {
+              void handleRequestEnjoyment();
+            }
+          }}
+          onRequestPayment={() => {
+            if (hasActiveContract && hasPaymentPrivilege) {
+              void handleRequestPayment();
+            }
+          }}
+          onInfoIconClick={(desc) => {
+            void onOpenInfoModal(desc);
+          }}
         />
       </Stack>
     ) : (
@@ -142,13 +157,13 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
             iconBefore={<MdAdd />}
             fullwidth={isMobile}
             disabled={!hasActiveContract || !hasEnjoymentPrivilege}
-            onClick={
-              hasActiveContract && hasEnjoymentPrivilege
-                ? handleRequestEnjoyment
-                : undefined
-            }
+            onClick={() => {
+              if (hasActiveContract && hasEnjoymentPrivilege) {
+                void handleRequestEnjoyment();
+              }
+            }}
           >
-            Solicitar disfrute
+            Agregar solicitud de disfrute
           </Button>
           {(!hasActiveContract || !hasEnjoymentPrivilege) && (
             <Icon
@@ -156,7 +171,9 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
               appearance="primary"
               size="16px"
               cursorHover
-              onClick={() => onOpenInfoModal(actionDescriptions.enjoyment)}
+              onClick={() => {
+                void onOpenInfoModal(actionDescriptions.enjoyment);
+              }}
             />
           )}
         </Stack>
@@ -167,13 +184,13 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
             iconBefore={<MdAdd />}
             fullwidth={isMobile}
             disabled={!hasActiveContract || !hasPaymentPrivilege}
-            onClick={
-              hasActiveContract && hasPaymentPrivilege
-                ? handleRequestPayment
-                : undefined
-            }
+            onClick={() => {
+              if (hasActiveContract && hasPaymentPrivilege) {
+                void handleRequestPayment();
+              }
+            }}
           >
-            Solicitar pago
+            Agregar solicitud de pago
           </Button>
           {(!hasActiveContract || !hasPaymentPrivilege) && (
             <Icon
@@ -181,7 +198,9 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
               appearance="primary"
               size="16px"
               cursorHover
-              onClick={() => onOpenInfoModal(actionDescriptions.payment)}
+              onClick={() => {
+                void onOpenInfoModal(actionDescriptions.payment);
+              }}
             />
           )}
         </Stack>
