@@ -172,14 +172,14 @@ function RequestComponentDetail(props: RequestComponentDetailProps) {
             )}
           </Stack>
 
-          {showRequirementsTable && (
+          {showRequirementsTable && requirements && requirements.length > 0 && (
             <Stack direction="column" alignItems="center" gap={spacing.s100}>
               <Text type="label" weight="bold">
                 Requisitos
               </Text>
 
               <StyledTableContainer $smallScreen={isMobile}>
-                {requirements?.map((requirement, index) => (
+                {requirements.map((requirement, index) => (
                   <TableBoard
                     key={requirement.id}
                     id={requirement.id}

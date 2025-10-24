@@ -483,8 +483,8 @@ function HolidaysTable(props: HolidaysTableProps) {
           handleClose={handleClose}
           modalContent={selectedRecord}
           requirements={showRequirements ? mockRequirements : undefined}
-          showRequirementsTable={showRequirements}
-          title="Detalles"
+          showRequirementsTable
+          title="Detalles de solicitudes de vacaciones"
           buttonLabel="Cerrar"
         />
       )}

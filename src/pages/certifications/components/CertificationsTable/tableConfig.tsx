@@ -20,17 +20,26 @@ export const headers: {
   action?: boolean;
   style?: React.CSSProperties;
 }[] = [
-  { label: "Número", key: "requestNumber", style: { width: "auto" } },
-  { label: "Tipo", key: "type", style: { width: "auto" } },
-  { label: "Fecha", key: "date", style: { width: "auto" } },
-  { label: "Estado", key: "status", style: { width: "auto" } },
   {
-    label: "Detalles",
+    label: "Número de solicitud",
+    key: "requestNumber",
+    style: { width: "auto" },
+  },
+  { label: "Tipo de certificación", key: "type", style: { width: "auto" } },
+  { label: "Fecha de solicitud", key: "date", style: { width: "auto" } },
+  { label: "Estado de certificación", key: "status", style: { width: "auto" } },
+  {
+    label: "Ver detalles",
     key: "details",
     action: true,
     style: { width: "60px" },
   },
-  { label: "Eliminar", key: "delete", action: true, style: { width: "60px" } },
+  {
+    label: "Eliminar solicitud",
+    key: "delete",
+    action: true,
+    style: { width: "60px" },
+  },
 ];
 
 export const pageLength = 10;
