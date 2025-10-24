@@ -421,7 +421,9 @@ function HolidaysTable(props: HolidaysTableProps) {
   const renderEmptyState = () => (
     <Tr border="bottom">
       <Td colSpan={visibleHeaders.length} align="center" type="custom">
-        <Text size="medium">No tiene solicitudes en trámite.</Text>
+        <Text size="medium">
+          Aún no has utilizado ningún día de vacaciones.
+        </Text>
       </Td>
     </Tr>
   );
