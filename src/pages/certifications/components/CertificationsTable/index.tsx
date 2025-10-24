@@ -524,7 +524,7 @@ function CertificationsTable({
           handleClose={handleClose}
           modalContent={selectedRecord}
           requirements={mockRequirements}
-          title="Detalles"
+          title="Detalles de consulta de certificaciones"
           buttonLabel="Cerrar"
           showRequirementsTable
         />
