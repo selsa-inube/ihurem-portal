@@ -4,8 +4,11 @@ import {
   getEmployeeVacationDays,
   IVacationDaysResponse,
 } from "@services/employeeConsultation/getEmployeeVacationDays";
-import { useErrorFlag } from "@hooks/useErrorFlag";
+import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
+import { modalErrorConfig } from "@config/modalErrorConfig";
 import { useHeaders } from "@hooks/useHeaders";
+
+const ERROR_CODE_GET_VACATION_DAYS_FAILED = 1012;
 
 interface UseEmployeeVacationDaysResult {
   vacationDays: IVacationDaysResponse[];
@@ -25,7 +28,7 @@ export const useEmployeeVacationDays = (
   const lastFetchedEmployeeId = useRef<string>("");
   const isInitialMount = useRef(true);
 
-  useErrorFlag(!!error, error ?? undefined);
+  const { showErrorModal } = useErrorModal();
 
   const fetchVacationDays = useCallback(
     async (forceRefetch = false) => {
@@ -58,6 +61,12 @@ export const useEmployeeVacationDays = (
             : "Ocurrió un error desconocido al obtener los días de vacaciones pendientes";
 
         setError(errorMessage);
+        const errorConfig =
+          modalErrorConfig[ERROR_CODE_GET_VACATION_DAYS_FAILED];
+        showErrorModal({
+          descriptionText: `${errorConfig.descriptionText}: ${String(err)}`,
+          solutionText: errorConfig.solutionText,
+        });
         setVacationDays([]);
       } finally {
         setLoadingDays(false);

@@ -5,8 +5,10 @@ import {
   getEnumerators,
 } from "@services/enumerators/getEnumerators";
 import { useAppContext } from "@context/AppContext/useAppContext";
+import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
+import { modalErrorConfig } from "@config/modalErrorConfig";
 
-import { useErrorFlag } from "./useErrorFlag";
+const ERROR_CODE_GET_ENUMERATORS_FAILED = 1021;
 
 export const useEnumerators = <T>(
   enumeratorName: string,
@@ -16,22 +18,14 @@ export const useEnumerators = <T>(
   const [rawData, setRawData] = useState<EnumeratorItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-  const [flagShown, setFlagShown] = useState(false);
 
   const { businessUnit } = useAppContext();
-
-  useErrorFlag(
-    flagShown,
-    `Error al obtener enumerador "${enumeratorName}"`,
-    "Error en la solicitud",
-    false,
-  );
+  const { showErrorModal } = useErrorModal();
 
   const fetchData = async () => {
     if (!enumeratorName) return;
 
     setIsLoading(true);
-    setFlagShown(false);
 
     try {
       const headers = {
@@ -55,7 +49,11 @@ export const useEnumerators = <T>(
       setError(err instanceof Error ? err : new Error(String(err)));
       setData([]);
       setRawData([]);
-      setFlagShown(true);
+      const errorConfig = modalErrorConfig[ERROR_CODE_GET_ENUMERATORS_FAILED];
+      showErrorModal({
+        descriptionText: `${errorConfig.descriptionText}: ${String(err)}`,
+        solutionText: errorConfig.solutionText,
+      });
     } finally {
       setIsLoading(false);
     }
