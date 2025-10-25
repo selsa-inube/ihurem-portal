@@ -1,9 +1,12 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import { getEmployeeById } from "@services/employeeConsultation/getEmployeeById";
 import { Employee } from "@ptypes/employeePortalConsultation.types";
-import { useErrorFlag } from "@hooks/useErrorFlag";
+import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
+import { modalErrorConfig } from "@config/modalErrorConfig";
 import { useHeaders } from "@hooks/useHeaders";
+
+const ERROR_CODE_GET_EMPLOYEE_FAILED = 1010;
 
 interface UseEmployeeResult {
   employee: Employee;
@@ -16,46 +19,62 @@ export const useEmployee = (initialEmployeeId: string): UseEmployeeResult => {
   const [employee, setEmployee] = useState<Employee>({} as Employee);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
-  const [flagShown, setFlagShown] = useState(false);
   const [employeeId, setEmployeeId] = useState<string>(initialEmployeeId);
   const { getHeaders } = useHeaders();
+  const { showErrorModal } = useErrorModal();
+  const hasFetchedRef = useRef(false);
+  const currentEmployeeIdRef = useRef<string>("");
 
-  useErrorFlag(
-    flagShown,
-    "Error al obtener información del empleado",
-    error?.message ?? "Error en la solicitud",
-    false,
-  );
+  useEffect(() => {
+    const fetchEmployee = async () => {
+      if (
+        !employeeId ||
+        hasFetchedRef.current ||
+        currentEmployeeIdRef.current === employeeId
+      ) {
+        return;
+      }
 
-  const fetchEmployee = useCallback(
-    async (id = employeeId) => {
+      hasFetchedRef.current = true;
+      currentEmployeeIdRef.current = employeeId;
       setIsLoading(true);
       setError(null);
-      setFlagShown(false);
 
       try {
         const headers = await getHeaders();
-        const data = await getEmployeeById(id, headers);
+        const data = await getEmployeeById(employeeId, headers);
         setEmployee(data);
       } catch (err) {
         const errorObj = err instanceof Error ? err : new Error(String(err));
         setError(errorObj);
-        setFlagShown(true);
+
+        console.error("Error al obtener información del empleado:", err);
+        const errorConfig = modalErrorConfig[ERROR_CODE_GET_EMPLOYEE_FAILED];
+
+        showErrorModal({
+          descriptionText: `${errorConfig.descriptionText}: ${String(err)}`,
+          solutionText: errorConfig.solutionText,
+        });
       } finally {
         setIsLoading(false);
-        setFlagShown(false);
+        hasFetchedRef.current = false;
       }
-    },
-    [employeeId],
-  );
+    };
 
-  useEffect(() => {
-    fetchEmployee(employeeId);
-  }, [fetchEmployee, employeeId]);
+    fetchEmployee();
+  }, [employeeId, getHeaders, showErrorModal]);
 
-  const refetch = (newId: string = employeeId) => {
-    setEmployeeId(newId);
-    fetchEmployee(newId);
+  const refetch = (newId?: string) => {
+    const idToFetch = newId ?? employeeId;
+    currentEmployeeIdRef.current = "";
+    hasFetchedRef.current = false;
+
+    if (newId && newId !== employeeId) {
+      setEmployeeId(newId);
+    } else {
+      setEmployeeId("");
+      setTimeout(() => setEmployeeId(idToFetch), 0);
+    }
   };
 
   return { employee, isLoading, error, refetch };
