@@ -457,7 +457,17 @@ function CertificationsTable({
   const renderEmptyState = () => (
     <Tr border="bottom">
       <Td colSpan={visibleHeaders.length} align="center" type="custom">
-        <Text size="medium">No tiene solicitudes en trámite.</Text>
+        <Stack justifyContent="center" alignItems="center" gap={spacing.s050}>
+          <Text size="medium" appearance="gray">
+            Aún no tienes solicitudes en trámite. presiona
+          </Text>
+          <Text size="medium" appearance="gray" weight="bold">
+            “+ Agregar solicitud”
+          </Text>
+          <Text size="medium" appearance="gray">
+            para empezar.
+          </Text>
+        </Stack>
       </Td>
     </Tr>
   );
