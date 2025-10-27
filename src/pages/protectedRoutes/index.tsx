@@ -65,11 +65,6 @@ export function ProtectedRoutes() {
     businessUnitData.publicCode ?? "",
   );
 
-  if (employeeCode && !employeeLoading) {
-    signOut(`/error?code=${employeeCode ?? 1004}`);
-    return null;
-  }
-
   const {
     data: employeeOptions,
     loading: optionsLoading,
@@ -78,7 +73,7 @@ export function ProtectedRoutes() {
   } = useEmployeeOptions(user?.nickname ?? "");
 
   useEffect(() => {
-    if (portalData && portalData.externalAuthenticationProvider !== undefined) {
+    if (portalData?.externalAuthenticationProvider !== undefined) {
       const externalIAuthProvider = portalData.externalAuthenticationProvider;
       if (!externalIAuthProvider) {
         if (!isAuthenticated && !isLoading) {

@@ -1,15 +1,20 @@
 import { useState, useEffect } from "react";
+
 import {
   EContractStatus,
   IEmployee,
   IEmploymentContract,
 } from "@ptypes/employeePortalBusiness.types";
 import { employeeByIdentification } from "@services/employeePortal/getEmployeeInquiry";
+import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
+import { modalErrorConfig } from "@config/modalErrorConfig";
+
+const ERROR_CODE_INVALID_USER = 1004;
 
 const validateContractStatus = (
   employmentContracts: IEmploymentContract[],
 ): boolean => {
-  if (!employmentContracts || employmentContracts.length === 0) return false;
+  if (!employmentContracts?.length) return false;
   return employmentContracts.some(
     (contract) => contract.contractStatus === EContractStatus.formalized,
   );
@@ -24,6 +29,7 @@ export const useEmployeeByIdentification = (
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const [codeError, setCodeError] = useState<number | null>(null);
+  const { showErrorModal } = useErrorModal();
 
   useEffect(() => {
     if (!identificationType || !identificationNumber || !businessUnit) return;
@@ -36,20 +42,27 @@ export const useEmployeeByIdentification = (
           identificationNumber,
           businessUnit,
         );
+
         if (
-          !validateContractStatus(result.employmentContracts) ||
-          Object.keys(result).length === 0
+          !validateContractStatus(result?.employmentContracts) ||
+          !Object.keys(result ?? {}).length
         ) {
-          setCodeError(1004);
+          setCodeError(ERROR_CODE_INVALID_USER);
           setError(true);
           return;
         }
 
         setEmployee(result);
-      } catch {
+      } catch (error) {
         setError(true);
         setEmployee({} as IEmployee);
-        setCodeError(1004);
+        setCodeError(ERROR_CODE_INVALID_USER);
+        const errorConfig = modalErrorConfig[ERROR_CODE_INVALID_USER];
+
+        showErrorModal({
+          descriptionText: `${errorConfig.descriptionText}: ${String(error)}`,
+          solutionText: errorConfig.solutionText,
+        });
       } finally {
         setLoading(false);
       }
