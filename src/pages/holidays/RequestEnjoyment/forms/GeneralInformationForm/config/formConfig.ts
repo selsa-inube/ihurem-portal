@@ -2,7 +2,7 @@ const generalInformationRequiredFields = {
   daysOff: true,
   startDate: true,
   contract: false,
-  observations: false,
+  observations: true,
 };
 
 export { generalInformationRequiredFields };
