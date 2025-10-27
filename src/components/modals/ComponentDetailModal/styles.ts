@@ -56,6 +56,7 @@ export const StyledContainerContent = styled.div`
 
 export const StyledContainerClose = styled.div`
   cursor: pointer;
+  align-content: center;
 `;
 
 export const StyledContainerTitle = styled.div`

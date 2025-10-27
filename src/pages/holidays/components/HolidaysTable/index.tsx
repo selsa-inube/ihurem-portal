@@ -190,8 +190,12 @@ function HolidaysTable(props: HolidaysTableProps) {
     }
 
     const dataSource = isMobile ? data : currentData;
+
     const dataDe = dataSource[rowIndex].dataDetails
       ?.value as unknown as HolidayTableDataDetails;
+
+    console.log("🔍 dataDe:", dataDe);
+
     const contractLabel = dataDe.contractType
       ? contractTypeLabels[dataDe.contractType]
       : "";
@@ -210,7 +214,7 @@ function HolidaysTable(props: HolidaysTableProps) {
         value:
           dataDe.businessName && contractLabel
             ? `${dataDe.businessName} - ${contractLabel}`
-            : "",
+            : dataDe.businessName || contractLabel,
       },
       {
         label: "Observaciones",
