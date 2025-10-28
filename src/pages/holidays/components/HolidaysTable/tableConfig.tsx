@@ -20,18 +20,27 @@ export const headers: {
   action?: boolean;
   style?: React.CSSProperties;
 }[] = [
-  { label: "Tipo de solicitud", key: "description", style: { width: "auto" } },
-  { label: "Fecha", key: "date", style: { width: "auto" } },
-  { label: "Días hábiles", key: "days", style: { width: "auto" } },
-  { label: "Estado", key: "status", style: { width: "auto" } },
   {
-    label: "Detalles",
+    label: "Tipo de solicitud de vacaciones",
+    key: "description",
+    style: { width: "auto" },
+  },
+  { label: "Fecha de solicitud", key: "date", style: { width: "auto" } },
+  { label: "Cantidad de días hábiles", key: "days", style: { width: "auto" } },
+  { label: "Estado de la solicitud", key: "status", style: { width: "auto" } },
+  {
+    label: "Ver detalles de la solicitud",
     key: "details",
     action: true,
     style: { width: "60px" },
   },
-  { label: "Eliminar", key: "delete", action: true, style: { width: "60px" } },
+  {
+    label: "Eliminar solicitud",
+    key: "delete",
+    action: true,
+    style: { width: "60px" },
+  },
 ];
 
 export const pageLength = 10;
-export const caption = "Tabla de Ejemplo";
+export const caption = "Solicitudes de vacaciones en trámite";

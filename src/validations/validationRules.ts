@@ -13,7 +13,7 @@ const validationRules = {
     .typeError(validationMessages.date)
     .min(new Date(), validationMessages.notPastDate),
 
-  observations: Yup.string().max(120, validationMessages.maxCharacters(120)),
+  observations: Yup.string().max(1000, validationMessages.maxCharacters(1000)),
 
   certification: Yup.string()
     .required(validationMessages.required)

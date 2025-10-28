@@ -49,8 +49,16 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
 
   const handleContractChange = (name: string, value: string) => {
     formik.setFieldValue(name, value);
-    const found = contractOptions.find((option) => option.value === value);
-    formik.setFieldValue("contractDesc", found?.label ?? "");
+
+    const contrato = employees.employmentContracts?.find(
+      (c) => c.contractId === value,
+    );
+
+    if (contrato) {
+      formik.setFieldValue("businessName", contrato.businessName);
+      formik.setFieldValue("contractType", contrato.contractType);
+      formik.setFieldValue("contractNumber", contrato.contractNumber);
+    }
   };
 
   useEffect(() => {
@@ -59,6 +67,20 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
       handleContractChange("contractId", onlyOption.value);
     }
   }, [contractOptions, formik.values.contractId]);
+
+  useEffect(() => {
+    if (formik.values.contractId && employees.employmentContracts?.length) {
+      const contrato = employees.employmentContracts.find(
+        (c) => c.contractId === formik.values.contractId,
+      );
+
+      if (contrato) {
+        formik.setFieldValue("businessName", contrato.businessName);
+        formik.setFieldValue("contractType", contrato.contractType);
+        formik.setFieldValue("contractNumber", contrato.contractNumber);
+      }
+    }
+  }, [formik.values.contractId, employees.employmentContracts]);
 
   return (
     <form>
@@ -82,6 +104,7 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
                 onChange={formik.handleChange}
                 required={isRequired(validationSchema, "daysToPay")}
               />
+
               {contractOptions.length > 1 && (
                 <Select
                   label="Contrato"
@@ -93,27 +116,7 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
                   disabled={loading}
                   size="compact"
                   fullwidth
-                  onChange={(_, v) => {
-                    formik.setFieldValue("contractId", v);
-                    const contrato = employees.employmentContracts?.find(
-                      (c) => c.contractId === v,
-                    );
-
-                    if (contrato) {
-                      formik.setFieldValue(
-                        "businessName",
-                        contrato.businessName,
-                      );
-                      formik.setFieldValue(
-                        "contractType",
-                        contrato.contractType,
-                      );
-                      formik.setFieldValue(
-                        "contractNumber",
-                        contrato.contractNumber,
-                      );
-                    }
-                  }}
+                  onChange={(_, v) => handleContractChange("contractId", v)}
                   required={isRequired(props.validationSchema, "contractId")}
                 />
               )}
@@ -132,7 +135,12 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
               fullwidth
               required={isRequired(validationSchema, "observationEmployee")}
               onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value.length <= 1000) {
+                  formik.setFieldValue("observationEmployee", value);
+                }
+              }}
             />
           </Stack>
         </StyledContainer>
