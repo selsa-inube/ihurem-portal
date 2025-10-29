@@ -39,11 +39,13 @@ const employeeByIdentification = async (
         return {} as IEmployee;
       }
 
-      const data = (await res.json()) as IEmployee;
+      const data = await res.json();
+
       if (!res.ok) {
-        throw new Error(
-          `Error al obtener los datos del empleado. Status: ${res.status}, Detalles: ${JSON.stringify(data)}`,
-        );
+        const errorMessage =
+          data?.message ??
+          `Error al obtener los datos del empleado. Status: ${res.status}`;
+        throw new Error(errorMessage);
       }
 
       const normalizedEmployee = Array.isArray(data)
@@ -52,9 +54,10 @@ const employeeByIdentification = async (
       return normalizedEmployee;
     } catch (error) {
       if (attempt === maxRetries) {
-        throw new Error(
-          "Todos los intentos fallaron. No se pudieron obtener los datos del empleado.",
-        );
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error(String(error));
       }
       console.warn(`Intento ${attempt} fallido:`, error);
     }

@@ -40,9 +40,11 @@ const getEmployeeById = async (
       }
 
       if (!res.ok) {
-        throw new Error(
-          `Error al obtener el empleado ${employeeId}: ${res.status}`,
-        );
+        const errorData = await res.json().catch(() => ({}));
+        const errorMessage =
+          errorData?.message ??
+          `Error al obtener el empleado ${employeeId}: ${res.status}`;
+        throw new Error(errorMessage);
       }
 
       const data = await res.json();
