@@ -46,9 +46,11 @@ const getEnumerators = async (
       }
 
       if (!res.ok) {
-        throw new Error(
-          `Error al obtener el enumerador ${enumeratorName} (Status: ${res.status})`,
-        );
+        const errorData = await res.json().catch(() => ({}));
+        const errorMessage =
+          errorData?.message ??
+          `Error al obtener el enumerador ${enumeratorName} (Status: ${res.status})`;
+        throw new Error(errorMessage);
       }
 
       const data = await res.json();
@@ -60,6 +62,9 @@ const getEnumerators = async (
           `Error al obtener el enumerador ${enumeratorName}:`,
           error,
         );
+        if (error instanceof Error) {
+          throw error;
+        }
         throw new Error(
           `Todos los intentos fallaron. No se pudo obtener el enumerador ${enumeratorName}.`,
         );

@@ -42,11 +42,9 @@ const getEmployeeVacationDays = async (
       const data = await res.json();
 
       if (!res.ok) {
-        throw {
-          message: "Error al obtener los días de vacaciones pendientes",
-          status: res.status,
-          data,
-        };
+        const errorMessage =
+          data?.message ?? "Error al obtener los días de vacaciones pendientes";
+        throw new Error(errorMessage);
       }
 
       const vacationDays: IVacationDaysResponse[] = Array.isArray(data)
@@ -64,6 +62,9 @@ const getEmployeeVacationDays = async (
     } catch (error) {
       if (attempt === maxRetries) {
         console.log(error);
+        if (error instanceof Error) {
+          throw error;
+        }
         throw new Error(
           `Todos los intentos fallaron. No se pudieron obtener los días de vacaciones pendientes para el empleado ${employeeId}.`,
         );

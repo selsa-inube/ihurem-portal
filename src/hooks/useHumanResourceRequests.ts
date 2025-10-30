@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+
 import { getHumanResourceRequests } from "@services/humanResourcesRequest/getHumanResourcesRequest";
 import {
   HumanResourceRequest,
@@ -8,7 +9,10 @@ import {
 } from "@ptypes/humanResourcesRequest.types";
 import { useHeaders } from "@hooks/useHeaders";
 import { useAppContext } from "@context/AppContext/useAppContext";
-import { useErrorFlag } from "./useErrorFlag";
+import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
+import { modalErrorConfig } from "@config/modalErrorConfig";
+
+const ERROR_CODE_GET_HR_REQUESTS_FAILED = 1013;
 
 export const useHumanResourceRequests = <T>(
   formatData: (data: HumanResourceRequest[]) => T[],
@@ -19,26 +23,16 @@ export const useHumanResourceRequests = <T>(
   const [rawData, setRawData] = useState<HumanResourceRequest[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-  const [flagShown, setFlagShown] = useState(false);
 
   const { getHeaders } = useHeaders();
   const { employees } = useAppContext();
+  const { showErrorModal } = useErrorModal();
 
   const effectiveEmployeeId = employeeId ?? employees?.employeeId;
-
-  useErrorFlag(
-    flagShown,
-    typeRequest
-      ? `Error al obtener solicitudes de tipo "${requestTypeLabels[typeRequest]}"`
-      : "Error al obtener solicitudes",
-    "Error en la solicitud",
-    false,
-  );
 
   const fetchData = async () => {
     if (!effectiveEmployeeId) return;
     setIsLoading(true);
-    setFlagShown(false);
 
     try {
       const headers = await getHeaders();
@@ -58,7 +52,19 @@ export const useHumanResourceRequests = <T>(
       setError(err instanceof Error ? err : new Error(String(err)));
       setData([]);
       setRawData([]);
-      setFlagShown(true);
+
+      console.error(
+        typeRequest
+          ? `Error al obtener solicitudes de tipo "${requestTypeLabels[typeRequest]}"`
+          : "Error al obtener solicitudes",
+        err,
+      );
+      const errorConfig = modalErrorConfig[ERROR_CODE_GET_HR_REQUESTS_FAILED];
+
+      showErrorModal({
+        descriptionText: `${errorConfig.descriptionText}: ${String(err)}`,
+        solutionText: errorConfig.solutionText,
+      });
     } finally {
       setIsLoading(false);
     }
