@@ -24,7 +24,15 @@ const baseNavLinks = [
     path: "/certifications",
     description:
       "Son documentos que acreditan la formación o experiencia laboral de un empleado.",
-    order: 4,
+    order: 2,
+  },
+  {
+    id: "absences",
+    serviceCode: "absences",
+    label: "Ausencias",
+    path: "/absences",
+    description: "Gestión de ausencias y permisos laborales.",
+    order: 3,
   },
 ];
 
@@ -57,18 +65,26 @@ const navConfig = (optionForCustomerPortal: IEmployeeOptions[]) => {
   return optionForCustomerPortal
     .map((option) => {
       const link = baseNavLinks.find(
-        (link) => link.serviceCode === option.optionCode,
+        (link) => link.serviceCode === option.publicCode,
       );
       if (!link) {
         return null;
       }
       return {
         ...link,
-        id: option.optionCode,
+        id: option.publicCode,
         path: link.path,
         label: option.abbreviatedName ?? link.label,
         icon: getIcon(option.iconReference),
         isEnabled: true,
+        subOptions:
+          option.subOption?.map((sub) => ({
+            id: sub.publicCode,
+            label: sub.abbreviatedName,
+            description: sub.descriptionUse,
+            icon: getIcon(sub.iconReference),
+            nestedOptions: sub.subOption ?? [],
+          })) ?? [],
       };
     })
     .filter((item) => item !== null);

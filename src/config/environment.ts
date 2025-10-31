@@ -17,6 +17,7 @@ interface Environment {
   ORIGINATOR_ID: string;
   IAUTH_URL: string;
   IAUTH_SERVICE_URL: string;
+  MOCKOON_SERVICE: string;
 }
 
 const environment: Environment = {
@@ -33,6 +34,7 @@ const environment: Environment = {
   ORIGINATOR_ID: import.meta.env.VITE_ORIGINATOR_ID as string,
   IAUTH_URL: import.meta.env.VITE_IAUTH_URL as string,
   IAUTH_SERVICE_URL: import.meta.env.VITE_IAUTH_SERVICE_URL as string,
+  MOCKOON_SERVICE: import.meta.env.VITE_MOCKOON_SERVICE as string,
 };
 
 export {

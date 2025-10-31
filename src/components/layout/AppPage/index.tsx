@@ -42,8 +42,12 @@ function AppPage(props: AppPageProps) {
   const isTablet = useMediaQuery("(max-width: 944px)");
   const { signOut } = useSignOut();
 
-  const { data: employeeOptions } = useEmployeeOptions(user?.id ?? "");
-  if (employeeOptions && employeeOptions.length === 0) {
+  const { data: employeeOptions } = useEmployeeOptions(
+    user?.id ?? "",
+    businessUnit?.publicCode ?? "",
+  );
+
+  if (employeeOptions?.length === 0) {
     signOut(`/error?code=1005`);
     return null;
   }
