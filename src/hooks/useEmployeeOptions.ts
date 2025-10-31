@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 
 import { getEmployeeOptions } from "@services/employeePortal/getOptionsConsultation";
 import { IEmployeeOptions } from "@ptypes/employeePortalBusiness.types";
+import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
+import { modalErrorConfig } from "@config/modalErrorConfig";
 
 import { useSignOut } from "./useSignOut";
 
@@ -15,6 +17,7 @@ export const useEmployeeOptions = (
   const [codeError, setCodeError] = useState<number | undefined>(undefined);
 
   const { signOut } = useSignOut();
+  const { showErrorModal } = useErrorModal();
 
   useEffect(() => {
     const fetchOptions = async () => {
@@ -38,6 +41,12 @@ export const useEmployeeOptions = (
             : "Error al obtener las opciones del empleado";
         setError(errorMessage);
         setLoading(false);
+        const errorConfig = modalErrorConfig[1005];
+        showErrorModal({
+          descriptionText: `${errorConfig.descriptionText}: ${errorMessage}`,
+          solutionText: errorConfig.solutionText,
+          redirectOnClose: true,
+        });
       }
       if (error) {
         setCodeError(1005);

@@ -70,16 +70,17 @@ const getEmployeeOptions = async (
       const data = await res.json();
 
       if (!res.ok) {
-        throw {
-          message: "Error al obtener las opciones del empleado",
-          status: res.status,
-          data,
-        };
+        const errorMessage =
+          data?.message ?? "Error al obtener los datos del operador";
+        throw new Error(errorMessage);
       }
 
       return mapEmployeeOptionsApiToEntity(data);
-    } catch {
+    } catch (error) {
       if (attempt === maxRetries) {
+        if (error instanceof Error) {
+          throw error;
+        }
         throw new Error(
           "Todos los intentos fallaron. No se pudieron obtener las opciones del empleado.",
         );
