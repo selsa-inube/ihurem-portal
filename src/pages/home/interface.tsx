@@ -6,7 +6,8 @@ import { useAppContext } from "@context/AppContext/useAppContext";
 import { useEmployeeOptions } from "@hooks/useEmployeeOptions";
 
 export const useHome = () => {
-  const { user, logoUrl, businessUnit } = useAppContext();
+  const { user, logoUrl, businessUnit, employees, businessManagers } =
+    useAppContext();
   const { data: employeeOptions } = useEmployeeOptions(user?.id ?? "");
 
   const safeEmployeeOptions = employeeOptions ?? [];
@@ -21,7 +22,9 @@ export const useHome = () => {
       alt: businessUnit?.abbreviatedName ?? "Sin unidad seleccionada",
     },
     user: {
-      username: user?.username ?? "Nombre de usuario",
+      username: employees
+        ? `${employees.names} ${employees.surnames}`
+        : (user?.username ?? "Nombre de usuario"),
       client: businessUnit?.abbreviatedName ?? "Sin unidad seleccionada",
       breakpoint: "800px",
     },
@@ -32,9 +35,11 @@ export const useHome = () => {
 
   return {
     user,
+    logoUrl,
     headerConfig,
     isTablet,
     quickAccess,
     Outlet,
+    businessManagers,
   };
 };

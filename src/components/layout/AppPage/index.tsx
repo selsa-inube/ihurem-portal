@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import { Nav, Grid, Header, useMediaQuery } from "@inubekit/inubekit";
+import { Nav, Grid, Header, useMediaQuery, Stack } from "@inubekit/inubekit";
 
 import {
   useNavConfig,
@@ -7,6 +7,7 @@ import {
   actions,
   useConfigHeader,
 } from "@config/nav.config";
+import { spacing } from "@design/tokens/spacing";
 import { useEmployeeOptions } from "@hooks/useEmployeeOptions";
 import { useSignOut } from "@hooks/useSignOut";
 import { useAppContext } from "@context/AppContext/useAppContext";
@@ -20,6 +21,7 @@ import {
   StyledLogo,
   StyledMain,
   StyledMainScroll,
+  StyledFinalLogo,
 } from "./styles";
 
 interface AppPageProps {
@@ -38,7 +40,14 @@ const renderLogo = (imgUrl: string, clientName: string) => {
 
 function AppPage(props: AppPageProps) {
   const { withNav = true } = props;
-  const { user, logoUrl, businessUnit, isLoadingUser } = useAppContext();
+  const {
+    user,
+    logoUrl,
+    employees,
+    businessUnit,
+    isLoadingUser,
+    businessManagers,
+  } = useAppContext();
   const isTablet = useMediaQuery("(max-width: 944px)");
   const { signOut } = useSignOut();
 
@@ -49,8 +58,12 @@ function AppPage(props: AppPageProps) {
   }
 
   const safeEmployeeOptions = employeeOptions ?? [];
+
   const navConfig = useNavConfig(safeEmployeeOptions);
+
   const configHeader = useConfigHeader(safeEmployeeOptions);
+
+  const finalLogo = businessManagers?.urlLogo ?? logoUrl;
 
   useContractValidation();
 
@@ -68,7 +81,9 @@ function AppPage(props: AppPageProps) {
             businessUnit?.abbreviatedName ?? "Sin unidad seleccionada",
           )}
           user={{
-            username: user?.username ?? "Nombre de usuario",
+            username: employees
+              ? `${employees.names} ${employees.surnames}`
+              : (user?.username ?? "Nombre de usuario"),
             client: businessUnit?.abbreviatedName ?? "Sin unidad seleccionada",
             breakpoint: "800px",
           }}
@@ -81,7 +96,12 @@ function AppPage(props: AppPageProps) {
             height="95vh"
           >
             {withNav && !isTablet && (
-              <Nav navigation={navConfig} actions={actions} collapse={true} />
+              <Nav
+                navigation={navConfig}
+                actions={actions}
+                collapse={true}
+                footerLogo={finalLogo}
+              />
             )}
             <StyledMainScroll>
               <StyledMain>
@@ -91,6 +111,15 @@ function AppPage(props: AppPageProps) {
           </Grid>
         </StyledContainer>
       </Grid>
+      {isTablet && finalLogo && (
+        <Stack
+          alignItems="flex-end"
+          justifyContent="end"
+          padding={`0 ${spacing.s200} ${spacing.s100} 0`}
+        >
+          <StyledFinalLogo src={finalLogo} />
+        </Stack>
+      )}
     </StyledAppPage>
   );
 }

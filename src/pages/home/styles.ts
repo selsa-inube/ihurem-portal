@@ -88,6 +88,15 @@ const StyledCollapse = styled.div`
   z-index: 1;
 `;
 
+const StyledFinalLogo = styled.img`
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+`;
+
 export {
   StyledAppPage,
   StyledContainer,
@@ -97,4 +106,5 @@ export {
   StyledQuickAccessContainer,
   StyledCollapseIcon,
   StyledCollapse,
+  StyledFinalLogo,
 };
