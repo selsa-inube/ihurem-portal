@@ -7,7 +7,10 @@ import { useEmployeeOptions } from "@hooks/useEmployeeOptions";
 
 export const useHome = () => {
   const { user, logoUrl, businessUnit } = useAppContext();
-  const { data: employeeOptions } = useEmployeeOptions(user?.id ?? "");
+  const { data: employeeOptions } = useEmployeeOptions(
+    user?.id ?? "",
+    businessUnit?.publicCode ?? "",
+  );
 
   const safeEmployeeOptions = employeeOptions ?? [];
 

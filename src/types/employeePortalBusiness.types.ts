@@ -124,9 +124,19 @@ interface IEmployeeOptions {
   abbreviatedName: string;
   descriptionUse: string;
   iconReference: string;
-  optionCode: string;
   optionEmployeeId: string;
   parentOptionId: string;
+  publicCode: string;
+  subOption?: IEmployeeSubOption[];
+}
+
+interface IEmployeeSubOption {
+  abbreviatedName: string;
+  descriptionUse: string;
+  iconReference: string;
+  optionEmployeeId: string;
+  publicCode: string;
+  subOption?: string[];
 }
 
 interface IVacationHistory {
@@ -185,6 +195,7 @@ export type {
   PublicCodeTablesByBusinessesUnit,
   UseCasesByBusinessesUnit,
   IEmployeeOptions,
+  IEmployeeSubOption,
   IVacationHistory,
   ITraceabilityEmploymentContract,
   IContractRemunerationAssignment,
