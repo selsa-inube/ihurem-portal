@@ -8,6 +8,7 @@ import {
 } from "@inubekit/inubekit";
 
 import { spacing } from "@design/tokens/spacing";
+import { environment } from "@config/environment";
 import selsaLogo from "@assets/images/logoInube.png";
 import errorImage from "@assets/images/img-team-building-68.png";
 import { errorCodes } from "@config/errorCodes.tsx";
@@ -135,7 +136,13 @@ function ErrorPage(props: ErrorPageProps) {
                     <Button
                       appearance="primary"
                       fullwidth={isMobile}
-                      onClick={onClick}
+                      onClick={() => {
+                        if (onClick) {
+                          onClick();
+                        } else {
+                          window.location.href = environment.ERROR_REDIRECT_URI;
+                        }
+                      }}
                     >
                       {nameButton}
                     </Button>

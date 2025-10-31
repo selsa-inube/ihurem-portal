@@ -10,6 +10,7 @@ import {
   StyledLogo,
   StyledMain,
   StyledQuickAccessContainer,
+  StyledFinalLogo,
 } from "./styles";
 import { useHome } from "./interface";
 
@@ -22,7 +23,17 @@ const renderLogo = (imgUrl: string, altText: string) => {
 };
 
 function Home() {
-  const { user, headerConfig, isTablet, quickAccess, Outlet } = useHome();
+  const {
+    user,
+    logoUrl,
+    headerConfig,
+    isTablet,
+    quickAccess,
+    Outlet,
+    businessManagers,
+  } = useHome();
+
+  const finalLogo = businessManagers?.urlLogo ?? logoUrl;
 
   return (
     <StyledAppPage>
@@ -65,6 +76,7 @@ function Home() {
           </StyledMain>
         </StyledContainer>
       </Grid>
+      <StyledFinalLogo src={finalLogo} />
     </StyledAppPage>
   );
 }
