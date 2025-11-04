@@ -22,6 +22,11 @@ export async function deleteHumanResourceRequest(
     },
   );
 
-  if (!response.ok) throw new Error(`Error: ${response.status}`);
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    const errorMessage = errorData?.message ?? `Error: ${response.status}`;
+    throw new Error(errorMessage);
+  }
+
   return response.json();
 }

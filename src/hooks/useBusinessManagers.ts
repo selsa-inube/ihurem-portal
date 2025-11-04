@@ -5,6 +5,8 @@ import {
   IEmployeePortalByBusinessManager,
 } from "@ptypes/employeePortalBusiness.types";
 import { getBusinessManagers } from "@services/employeePortal/getBusinessManager";
+import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
+import { modalErrorConfig } from "@config/modalErrorConfig";
 
 export const useBusinessManagers = (
   portalPublicCode: IEmployeePortalByBusinessManager,
@@ -13,6 +15,9 @@ export const useBusinessManagers = (
     useState<IBusinessManagers>({} as IBusinessManagers);
   const [hasError, setHasError] = useState(false);
   const [codeError, setCodeError] = useState<number | undefined>(undefined);
+
+  const { showErrorModal } = useErrorModal();
+
   useEffect(() => {
     const fetchBusinessManagers = async () => {
       if (!portalPublicCode) return;
@@ -30,8 +35,16 @@ export const useBusinessManagers = (
         }
         setBusinessManagersData(fetchedBusinessManagers);
       } catch (error) {
-        console.log(error);
         setHasError(true);
+        const errorMessage =
+          error instanceof Error
+            ? error.message
+            : "Ocurrió un error al actualizar la solicitud";
+        const errorConfig = modalErrorConfig[1002];
+        showErrorModal({
+          descriptionText: `${errorConfig.descriptionText}: ${errorMessage}`,
+          solutionText: errorConfig.solutionText,
+        });
       }
       if (hasError) {
         setCodeError(1002);
