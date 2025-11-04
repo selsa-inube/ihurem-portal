@@ -4,9 +4,11 @@ import { useMediaQuery } from "@inubekit/inubekit";
 import { userMenu, useConfigHeader, navConfig } from "@config/nav.config";
 import { useAppContext } from "@context/AppContext/useAppContext";
 import { useEmployeeOptions } from "@hooks/useEmployeeOptions";
+import { capitalizeWords } from "@utils/texts";
 
 export const useHome = () => {
-  const { user, logoUrl, businessUnit } = useAppContext();
+  const { user, logoUrl, businessUnit, employees, businessManagers } =
+    useAppContext();
   const { data: employeeOptions } = useEmployeeOptions(user?.id ?? "");
 
   const safeEmployeeOptions = employeeOptions ?? [];
@@ -21,7 +23,9 @@ export const useHome = () => {
       alt: businessUnit?.abbreviatedName ?? "Sin unidad seleccionada",
     },
     user: {
-      username: user?.username ?? "Nombre de usuario",
+      username: employees
+        ? `${capitalizeWords(employees.names)} ${capitalizeWords(employees.surnames)}`
+        : (user?.username ?? "Nombre de usuario"),
       client: businessUnit?.abbreviatedName ?? "Sin unidad seleccionada",
       breakpoint: "800px",
     },
@@ -31,10 +35,11 @@ export const useHome = () => {
   const quickAccess = navConfig(safeEmployeeOptions);
 
   return {
-    user,
+    logoUrl,
     headerConfig,
     isTablet,
     quickAccess,
     Outlet,
+    businessManagers,
   };
 };
