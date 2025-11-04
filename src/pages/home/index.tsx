@@ -25,7 +25,6 @@ const renderLogo = (imgUrl: string, altText: string) => {
 
 function Home() {
   const {
-    user,
     logoUrl,
     headerConfig,
     isTablet,
@@ -35,7 +34,6 @@ function Home() {
   } = useHome();
 
   const finalLogo = businessManagers?.urlLogo ?? logoUrl;
-
   return (
     <StyledAppPage>
       <Header
@@ -49,7 +47,7 @@ function Home() {
         <StyledMain $isTablet={isTablet}>
           <Stack gap={spacing.s300} direction="column">
             <Text size={isTablet ? "medium" : "large"} type="headline">
-              Bienvenido(a), {user?.username ?? "Usuario"}
+              Bienvenido(a), {headerConfig.user?.username ?? "Usuario"}
             </Text>
             <Text
               type="title"
