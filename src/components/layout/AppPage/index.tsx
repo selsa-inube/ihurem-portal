@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import { Nav, Grid, Header, useMediaQuery, Stack } from "@inubekit/inubekit";
+import { Nav, Grid, Header, useMediaQuery } from "@inubekit/inubekit";
 
 import {
   useNavConfig,
@@ -7,7 +7,6 @@ import {
   actions,
   useConfigHeader,
 } from "@config/nav.config";
-import { spacing } from "@design/tokens/spacing";
 import { useEmployeeOptions } from "@hooks/useEmployeeOptions";
 import { useSignOut } from "@hooks/useSignOut";
 import { useAppContext } from "@context/AppContext/useAppContext";
@@ -22,6 +21,7 @@ import {
   StyledMain,
   StyledMainScroll,
   StyledFinalLogo,
+  StyledFooter,
 } from "./styles";
 
 interface AppPageProps {
@@ -107,19 +107,15 @@ function AppPage(props: AppPageProps) {
               <StyledMain>
                 <Outlet />
               </StyledMain>
+              {isTablet && finalLogo && (
+                <StyledFooter>
+                  <StyledFinalLogo src={finalLogo} />
+                </StyledFooter>
+              )}
             </StyledMainScroll>
           </Grid>
         </StyledContainer>
       </Grid>
-      {isTablet && finalLogo && (
-        <Stack
-          alignItems="flex-end"
-          justifyContent="end"
-          padding={`0 ${spacing.s200} ${spacing.s100} 0`}
-        >
-          <StyledFinalLogo src={finalLogo} />
-        </Stack>
-      )}
     </StyledAppPage>
   );
 }

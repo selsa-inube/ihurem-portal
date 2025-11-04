@@ -1,11 +1,16 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { inube } from "@inubekit/inubekit";
 
 import { spacing } from "@design/tokens/spacing";
 
 interface IStyledCollapseIcon {
   $collapse: boolean;
   $isTablet: boolean;
+}
+
+interface IStyledFooter {
+  theme?: typeof inube;
 }
 
 const StyledAppPage = styled.div`
@@ -26,16 +31,21 @@ const StyledMain = styled.main`
   box-sizing: border-box;
   width: 100%;
   max-width: 1192px;
-  padding-bottom: ${spacing.s100};
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 `;
 
-const StyledMainScroll = styled.main`
+const StyledMainScroll = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
+  height: 100%;
   overflow-y: auto;
   width: 100%;
 `;
+
 const StyledContentImg = styled(Link)`
   width: 100px;
   text-decoration: none;
@@ -64,9 +74,19 @@ const StyledCollapse = styled.div`
   z-index: 1;
 `;
 
+const StyledFooter = styled.footer<IStyledFooter>`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  background-color: ${({ theme }) =>
+    theme?.palette?.neutral?.N10 || inube.palette.neutral.N10};
+`;
+
 const StyledFinalLogo = styled.img`
   width: ${spacing.s400};
   height: ${spacing.s400};
+  padding: ${spacing.s200} ${spacing.s050};
   height: auto;
 `;
 
@@ -80,4 +100,5 @@ export {
   StyledCollapseIcon,
   StyledMainScroll,
   StyledFinalLogo,
+  StyledFooter,
 };
