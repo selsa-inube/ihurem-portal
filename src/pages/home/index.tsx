@@ -75,7 +75,12 @@ function Home() {
       </StyledContainer>
 
       <StyledFooter>
-        <StyledFinalLogo src={finalLogo} />
+        <Stack alignItems="center" gap={spacing.s050}>
+          <Text as="span" size="small" appearance="gray">
+            ®
+          </Text>
+          <StyledFinalLogo src={finalLogo} />
+        </Stack>
       </StyledFooter>
     </StyledAppPage>
   );

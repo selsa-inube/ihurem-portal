@@ -100,15 +100,15 @@ const StyledFooter = styled.footer<IStyledFooter>`
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  padding: ${spacing.s200} ${spacing.s400};
+  padding: ${spacing.s100} ${spacing.s200};
   background-color: ${({ theme }) =>
     theme?.palette?.neutral?.N10 || inube.palette.neutral.N10};
   box-sizing: border-box;
 `;
 
 const StyledFinalLogo = styled.img`
-  width: 43px;
-  height: 43px;
+  width: 34px;
+  height: 34px;
   object-fit: contain;
 `;
 
