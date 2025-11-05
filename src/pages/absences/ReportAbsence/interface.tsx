@@ -15,6 +15,8 @@ import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
 import { spacing } from "@design/tokens/spacing";
 
+import { RequirementsForm } from "./forms/RequirementsForm";
+
 interface RequestEnjoymentUIProps {
   appName: string;
   appDescription: string;
@@ -79,6 +81,11 @@ function ReportAbsenceUI(props: RequestEnjoymentUIProps) {
             onBackClick={handlePreviousStep}
             onSubmitClick={handleFinishAssisted}
           />
+          <Stack direction="column" gap={spacing.s500}>
+            {currentStep === 1 && (
+              <RequirementsForm handleNextStep={handleNextStep} />
+            )}
+          </Stack>
         </Stack>
       </AppMenu>
 
