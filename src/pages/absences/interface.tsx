@@ -87,8 +87,8 @@ function AbsencesOptionsUI(props: AbsencesOptionsUIProps) {
 
         {showModal && (
           <InfoModal
-            title="Sin privilegios"
-            titleDescription="Acción no permitida"
+            title="Información"
+            titleDescription="No tienes privilegios."
             description="No tienes permisos para realizar esta acción."
             buttonText="Entendido"
             onCloseModal={handleCloseModal}

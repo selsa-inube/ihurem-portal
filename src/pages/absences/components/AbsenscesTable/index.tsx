@@ -52,8 +52,8 @@ function AbsencesTable({
 
   const [showModal, setShowModal] = useState(false);
   const [modalInfo, setModalInfo] = useState({
-    title: "Acceso restringido",
-    titleDescription: "Permiso requerido",
+    title: "Información",
+    titleDescription: "No tienes privilegios.",
     description: "",
   });
 
@@ -79,8 +79,8 @@ function AbsencesTable({
 
   const handleRestrictedClick = (message: string) => {
     setModalInfo({
-      title: "Acceso restringido",
-      titleDescription: "Permiso requerido",
+      title: "Información",
+      titleDescription: "No tienes privilegios.",
       description: message,
     });
     setShowModal(true);
