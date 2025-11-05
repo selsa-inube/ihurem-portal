@@ -1,0 +1,13 @@
+import { Route, Routes } from "react-router-dom";
+
+import { ReportAbsence } from "@pages/absences/ReportAbsence";
+
+function AbsencesRoutes() {
+  return (
+    <Routes>
+      <Route path="/report-absence" element={<ReportAbsence />} />
+    </Routes>
+  );
+}
+
+export { AbsencesRoutes };
