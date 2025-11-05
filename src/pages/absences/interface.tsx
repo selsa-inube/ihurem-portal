@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button, Stack, useMediaQuery, Text } from "@inubekit/inubekit";
 import { MdAdd } from "react-icons/md";
 
+import { InfoModal } from "@components/modals/InfoModal";
 import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
 import { spacing } from "@design/tokens/spacing";
@@ -9,7 +10,6 @@ import { spacing } from "@design/tokens/spacing";
 import { StyledHolidaysContainer } from "./styles";
 import { AbsencesTable } from "./components/AbsenscesTable";
 import { mockAbsencesData } from "./components/tableMock/tableMock";
-import { InfoModal } from "@components/modals/InfoModal";
 
 interface AbsencesOptionsUIProps {
   appName: string;

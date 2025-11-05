@@ -1,5 +1,6 @@
 import { MdOutlineVisibility, MdOutlineFileDownload } from "react-icons/md";
 import { Icon } from "@inubekit/inubekit";
+
 import {
   IAbsencesTable,
   AbsencesTableDataDetails,
