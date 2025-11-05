@@ -1,17 +1,9 @@
-interface IOptions {
+import type { IButtonAppearance } from "@inubekit/inubekit";
+
+export interface IOptions {
   title: string;
   onClick: () => void;
   icon: JSX.Element;
   visible: boolean;
-  appearance?:
-    | "gray"
-    | "dark"
-    | "danger"
-    | "primary"
-    | "success"
-    | "warning"
-    | "help"
-    | "light";
+  appearance?: IButtonAppearance;
 }
-
-export type { IOptions };

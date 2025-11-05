@@ -14,8 +14,8 @@ import { LogOut } from "@pages/logOut";
 import { SelfRegistrationRoutes } from "./self-registration";
 import { LoginRoutes } from "./login";
 import { HolidaysRoutes } from "./holidays";
-import { AbsencesRoutes } from "./absences";
 import { CertificationsRoutes } from "./certifications";
+import { AbsencesRoutes } from "./absences";
 
 function ContractValidationWrapper() {
   const { contracts, areAllContractsFinalized } = useContractValidation();
