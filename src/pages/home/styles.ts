@@ -14,8 +14,14 @@ interface IStyledCollapseIcon {
   $isTablet: boolean;
 }
 
+interface IStyledFooter {
+  theme?: typeof inube;
+}
+
 const StyledAppPage = styled.div`
-  display: inherit;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   box-sizing: border-box;
 `;
 
@@ -23,6 +29,7 @@ const StyledContainer = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
+  flex: 1;
   box-sizing: border-box;
 `;
 
@@ -88,6 +95,23 @@ const StyledCollapse = styled.div`
   z-index: 1;
 `;
 
+const StyledFooter = styled.footer<IStyledFooter>`
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: ${spacing.s100} ${spacing.s200};
+  background-color: ${({ theme }) =>
+    theme?.palette?.neutral?.N10 || inube.palette.neutral.N10};
+  box-sizing: border-box;
+`;
+
+const StyledFinalLogo = styled.img`
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+`;
+
 export {
   StyledAppPage,
   StyledContainer,
@@ -97,4 +121,6 @@ export {
   StyledQuickAccessContainer,
   StyledCollapseIcon,
   StyledCollapse,
+  StyledFooter,
+  StyledFinalLogo,
 };
