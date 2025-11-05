@@ -18,13 +18,22 @@ const baseNavLinks = [
     order: 1,
   },
   {
+    id: "absences",
+    serviceCode: "absences",
+    label: "Ausencias",
+    path: "/absences",
+    description:
+      "Son los días de descanso remunerado que le corresponden al empleado por cada año trabajado.",
+    order: 2,
+  },
+  {
     id: "certifications",
     serviceCode: "certifications",
     label: "Certificaciones",
     path: "/certifications",
     description:
       "Son documentos que acreditan la formación o experiencia laboral de un empleado.",
-    order: 4,
+    order: 3,
   },
 ];
 
