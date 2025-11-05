@@ -20,8 +20,9 @@ function ProtectedRoute({
   useEffect(() => {
     if (optionCode && employeeOptions) {
       const hasPrivilege = employeeOptions.some(
-        (opt) => opt.optionCode === optionCode,
+        (opt) => opt.publicCode === optionCode,
       );
+
       if (!hasPrivilege) {
         setShowModal(true);
       }
