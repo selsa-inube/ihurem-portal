@@ -15,6 +15,7 @@ import { SelfRegistrationRoutes } from "./self-registration";
 import { LoginRoutes } from "./login";
 import { HolidaysRoutes } from "./holidays";
 import { CertificationsRoutes } from "./certifications";
+import { AbsencesRoutes } from "./absences";
 
 function ContractValidationWrapper() {
   const { contracts, areAllContractsFinalized } = useContractValidation();
@@ -59,7 +60,12 @@ const protectedRouter = createBrowserRouter(
         />
         <Route
           path="absences/*"
-          element={<ProtectedRoute element={<></>} optionCode="absences" />}
+          element={
+            <ProtectedRoute
+              element={<AbsencesRoutes />}
+              optionCode="absences"
+            />
+          }
         />
         <Route
           path="*"
