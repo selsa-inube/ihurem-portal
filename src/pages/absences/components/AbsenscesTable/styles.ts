@@ -31,3 +31,8 @@ export const TooltipWrapper = styled.div`
     visibility: visible;
   }
 `;
+
+export const StyledMenuWrapper = styled.div`
+  position: absolute;
+  z-index: 1000;
+`;

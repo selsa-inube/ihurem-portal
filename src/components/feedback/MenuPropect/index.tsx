@@ -16,7 +16,7 @@ export const MenuPropect = (props: MenuPropectProps) => {
   return (
     <StyledMenu onMouseLeave={onMouseLeave}>
       <Stack direction="column">
-        <Stack justifyContent="end" padding=" 0px 10px">
+        <Stack justifyContent="end" padding="0px 10px">
           <StyledCloseIcon onClick={onClose}>
             <Icon
               icon={<MdClose />}
@@ -26,13 +26,14 @@ export const MenuPropect = (props: MenuPropectProps) => {
             />
           </StyledCloseIcon>
         </Stack>
+
         {options?.map((option, index) =>
           option.visible ? (
             <StyledContainerLabel key={index} onClick={option.onClick}>
               <Stack alignItems="center" gap="8px">
                 <Icon
                   icon={option.icon}
-                  appearance={index === 0 ? "gray" : "danger"}
+                  appearance={option.appearance ?? "gray"}
                   size="24px"
                 />
                 <Text size="small" weight="normal">

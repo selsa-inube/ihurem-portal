@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Stack, useMediaQuery } from "@inubekit/inubekit";
+import { Button, Stack, useMediaQuery, Text } from "@inubekit/inubekit";
 import { MdAdd } from "react-icons/md";
 
 import { AppMenu } from "@components/layout/AppMenu";
@@ -8,8 +8,7 @@ import { spacing } from "@design/tokens/spacing";
 
 import { StyledHolidaysContainer } from "./styles";
 import { AbsencesTable } from "./components/AbsenscesTable";
-import { generateData } from "./components/AbsenscesTable/tableConfig";
-import { usePrivileges } from "@hooks/usePrivileges";
+import { mockAbsencesData } from "./components/tableMock/tableMock";
 import { InfoModal } from "@components/modals/InfoModal";
 
 interface AbsencesOptionsUIProps {
@@ -17,19 +16,37 @@ interface AbsencesOptionsUIProps {
   appDescription?: string;
   navigatePage: string;
   appRoute: IRoute[];
+  hasActiveContract?: boolean;
+  hasPrivilege?: boolean;
+  hasPaymentPrivilege?: boolean;
+  handleDeleteRequest: (requestId: string, justification: string) => void;
 }
 
 function AbsencesOptionsUI(props: AbsencesOptionsUIProps) {
-  const { appName, appDescription, navigatePage, appRoute } = props;
-  const { hasPrivilege } = usePrivileges();
-  const isMobile = useMediaQuery("(max-width: 768px)");
+  const {
+    appName,
+    appDescription,
+    navigatePage,
+    appRoute,
+    hasActiveContract = true,
+    hasPrivilege = true,
+  } = props;
 
+  const isMobile = useMediaQuery("(max-width: 768px)");
   const [showModal, setShowModal] = useState(false);
 
-  const handleNoPrivilege = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
 
-  const canReport = hasPrivilege("reportAbsencesHR");
+  const handleReportAbsence = () => {
+    if (!hasActiveContract || !hasPrivilege) {
+      setShowModal(true);
+      return;
+    }
+  };
+
+  const handleRestrictedAction = () => {
+    setShowModal(true);
+  };
 
   return (
     <AppMenu
@@ -40,30 +57,32 @@ function AbsencesOptionsUI(props: AbsencesOptionsUIProps) {
     >
       <StyledHolidaysContainer $isMobile={isMobile}>
         <Stack
-          gap={spacing.s150}
-          justifyContent="end"
-          width="100%"
           direction={isMobile ? "column" : "row"}
+          justifyContent={isMobile ? "start" : "space-between"}
+          alignItems="center"
+          width="100%"
+          gap={spacing.s150}
         >
+          <Text type="title" size="medium">
+            Consulta de ausencias del empleado
+          </Text>
+
           <Button
             spacing="wide"
             variant="filled"
             iconBefore={<MdAdd />}
             fullwidth={isMobile}
-            disabled={!canReport}
-            onClick={
-              canReport
-                ? () => console.log("Reportar ausencia")
-                : handleNoPrivilege
-            }
+            onClick={handleReportAbsence}
           >
             Reportar ausencia
           </Button>
         </Stack>
 
         <AbsencesTable
-          data={generateData()}
-          onNoPrivilege={handleNoPrivilege} // ✅ pasamos callback
+          data={mockAbsencesData}
+          hasViewDetailsPrivilege={hasPrivilege}
+          hasUploadPrivilege={hasPrivilege}
+          handleRestrictedClick={handleRestrictedAction}
         />
 
         {showModal && (

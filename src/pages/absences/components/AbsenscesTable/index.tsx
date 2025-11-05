@@ -14,49 +14,55 @@ import {
   SkeletonLine,
   Stack,
 } from "@inubekit/inubekit";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   MdOutlineVisibility,
   MdOutlineFileUpload,
   MdMoreVert,
 } from "react-icons/md";
 
-import { usePrivileges } from "@hooks/usePrivileges";
 import { InfoModal } from "@components/modals/InfoModal";
+import { MenuPropect } from "@components/feedback/MenuPropect";
+import { IOptions } from "@components/feedback/MenuPropect/types";
+import { spacing } from "@design/tokens/spacing";
 
 import { usePagination } from "./usePagination";
 import { IAbsencesTable, AbsencesTableDataDetails } from "./types";
-import { StyledTd, StyledTh } from "./styles";
+import { StyledTd, StyledTh, StyledMenuWrapper } from "./styles";
 import { columns, headers } from "./tableConfig";
 
 interface AbsencesTableProps {
   data: IAbsencesTable[];
   loading?: boolean;
-  onNoPrivilege?: () => void;
+  hasViewDetailsPrivilege?: boolean;
+  hasUploadPrivilege?: boolean;
+  handleRestrictedClick?: (message: string) => void;
 }
 
-function AbsencesTable({ data, loading = false }: AbsencesTableProps) {
+function AbsencesTable({
+  data,
+  loading = false,
+  hasViewDetailsPrivilege = false,
+  hasUploadPrivilege = false,
+}: AbsencesTableProps) {
   const mediaQueries = useMediaQueries([
     "(max-width: 1024px)",
     "(max-width: 542px)",
   ]);
-  const { hasPrivilege } = usePrivileges();
 
   const [showModal, setShowModal] = useState(false);
   const [modalInfo, setModalInfo] = useState({
     title: "Acceso restringido",
-    titleDescription: "",
+    titleDescription: "Permiso requerido",
     description: "",
   });
 
-  const handleRestrictedClick = (message: string) => {
-    setModalInfo({
-      title: "Acceso restringido",
-      titleDescription: "Permiso requerido",
-      description: message,
-    });
-    setShowModal(true);
-  };
+  const [showMenu, setShowMenu] = useState(false);
+  const [menuPosition, setMenuPosition] = useState<{
+    top: number;
+    left: number;
+  } | null>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const isMobile = mediaQueries["(max-width: 542px)"];
 
@@ -71,19 +77,84 @@ function AbsencesTable({ data, loading = false }: AbsencesTableProps) {
     currentData,
   } = usePagination(data);
 
-  const determineVisibleHeaders = () => {
-    if (isMobile) {
-      return [
-        { label: "Motivo", key: "reason" },
-        { label: "M/A", key: "duration" },
-        { label: "Acciones", key: "actions", action: true },
-      ];
+  const handleRestrictedClick = (message: string) => {
+    setModalInfo({
+      title: "Acceso restringido",
+      titleDescription: "Permiso requerido",
+      description: message,
+    });
+    setShowModal(true);
+  };
+
+  const handleViewDetails = () => {
+    if (!hasViewDetailsPrivilege) {
+      handleRestrictedClick(
+        "No tienes privilegios para ver los detalles de esta ausencia.",
+      );
+      return;
+    }
+    console.log("Ver detalles de la ausencia");
+  };
+
+  const handleUploadDocuments = () => {
+    if (!hasUploadPrivilege) {
+      handleRestrictedClick(
+        "No tienes privilegios para cargar documentos en esta ausencia.",
+      );
+      return;
+    }
+    console.log("Cargar documentos de la ausencia");
+  };
+
+  const handleMenuClick = (event: React.MouseEvent<Element, MouseEvent>) => {
+    const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
+    setMenuPosition({
+      top: rect.bottom + window.scrollY + 0,
+      left: rect.left + window.scrollX + 45,
+    });
+    setShowMenu(true);
+  };
+
+  const handleCloseMenu = () => setShowMenu(false);
+
+  const menuOptions: IOptions[] = [
+    {
+      title: "Detalles",
+      icon: <MdOutlineVisibility />,
+      visible: true,
+      onClick: () => {
+        handleCloseMenu();
+        handleViewDetails();
+      },
+      appearance: "gray",
+    },
+    {
+      title: "Documentos",
+      icon: <MdOutlineFileUpload />,
+      visible: true,
+      onClick: () => {
+        handleCloseMenu();
+        handleUploadDocuments();
+      },
+      appearance: "primary",
+    },
+  ];
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setShowMenu(false);
+      }
+    };
+
+    if (showMenu) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
     }
 
-    return headers.filter((header) =>
-      ["reason", "date", "duration", "actions"].includes(header.key),
-    );
-  };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [showMenu]);
 
   const getHeaderAlignment = (key: string) => {
     if (mediaQueries["(max-width: 1024px)"]) return "center";
@@ -106,12 +177,28 @@ function AbsencesTable({ data, loading = false }: AbsencesTableProps) {
 
     switch (key) {
       case "duration":
+        return "left";
       case "date":
+        return "left";
       case "actions":
         return "center";
       default:
         return "left";
     }
+  };
+
+  const determineVisibleHeaders = () => {
+    if (isMobile) {
+      return [
+        { label: "Motivo", key: "reason" },
+        { label: "Duración", key: "duration" },
+        { label: "Acciones", key: "actions", action: true },
+      ];
+    }
+
+    return headers.filter((header) =>
+      ["reason", "date", "duration", "actions"].includes(header.key),
+    );
   };
 
   const visibleHeaders = determineVisibleHeaders();
@@ -130,43 +217,43 @@ function AbsencesTable({ data, loading = false }: AbsencesTableProps) {
             appearance="dark"
             size="20px"
             cursorHover
-            onClick={() => console.log("Acciones móviles")}
+            onClick={handleMenuClick}
           />
         </Stack>
       );
     }
 
-    const canView = hasPrivilege("viewDetailsReportAbsencesHR");
-    const canUpload = hasPrivilege("uploadDocumentsReportAbsences");
-
     return (
       <Stack justifyContent="center" gap="8px">
         <Icon
           icon={<MdOutlineVisibility />}
-          appearance={canView ? "dark" : "gray"}
+          appearance={hasViewDetailsPrivilege ? "dark" : "gray"}
           size="16px"
-          cursorHover={canView}
-          onClick={() =>
-            canView
-              ? console.log("Ver detalles de ausencia")
-              : handleRestrictedClick(
-                  "No tienes privilegios para ver los detalles del reporte de ausencia.",
-                )
-          }
+          cursorHover={hasViewDetailsPrivilege}
+          onClick={() => {
+            if (hasViewDetailsPrivilege) {
+              handleViewDetails();
+            } else {
+              handleRestrictedClick(
+                "No tienes privilegios para ver los detalles de esta ausencia.",
+              );
+            }
+          }}
         />
-
         <Icon
           icon={<MdOutlineFileUpload />}
-          appearance={canUpload ? "primary" : "gray"}
+          appearance={hasUploadPrivilege ? "primary" : "gray"}
           size="16px"
-          cursorHover={canUpload}
-          onClick={() =>
-            canUpload
-              ? console.log("Subir documentos de ausencia")
-              : handleRestrictedClick(
-                  "No tienes privilegios para cargar documentos en esta ausencia.",
-                )
-          }
+          cursorHover={hasUploadPrivilege}
+          onClick={() => {
+            if (hasUploadPrivilege) {
+              handleUploadDocuments();
+            } else {
+              handleRestrictedClick(
+                "No tienes privilegios para cargar documentos en esta ausencia.",
+              );
+            }
+          }}
         />
       </Stack>
     );
@@ -176,13 +263,19 @@ function AbsencesTable({ data, loading = false }: AbsencesTableProps) {
     headerKey: string,
     cellData?: {
       value?: string | number | JSX.Element | AbsencesTableDataDetails;
-      type?: string;
-      onClick?: () => void;
     },
+    row?: IAbsencesTable,
+    rowIndex?: number,
   ) => {
     if (loading) return <SkeletonLine width="100%" animated />;
 
-    if (headerKey === "actions") return renderActionIcons();
+    if (
+      headerKey === "actions" &&
+      row !== undefined &&
+      rowIndex !== undefined
+    ) {
+      return renderActionIcons();
+    }
 
     return typeof cellData?.value === "object"
       ? JSON.stringify(cellData.value)
@@ -193,22 +286,20 @@ function AbsencesTable({ data, loading = false }: AbsencesTableProps) {
     headerKey: string,
     cellData: {
       value?: string | number | JSX.Element | AbsencesTableDataDetails;
-      type?: string;
-      onClick?: () => void;
     },
     rowIndex: number,
+    row: IAbsencesTable,
   ) => {
     const cellType = headerKey === "actions" || loading ? "custom" : "text";
-    const cellAlign = getCellAlignment(headerKey);
 
     return (
       <StyledTd
         key={headerKey}
         appearance={rowIndex % 2 === 1 ? "dark" : "light"}
         type={cellType}
-        align={cellAlign}
+        align={getCellAlignment(headerKey)}
       >
-        {renderCellContent(headerKey, cellData)}
+        {renderCellContent(headerKey, cellData, row, rowIndex)}
       </StyledTd>
     );
   };
@@ -218,7 +309,7 @@ function AbsencesTable({ data, loading = false }: AbsencesTableProps) {
       {visibleHeaders.map((header, index) => (
         <StyledTh
           key={index}
-          align={isMobile ? "center" : getHeaderAlignment(header.key)}
+          align={getHeaderAlignment(header.key)}
           action={header.key === "actions"}
         >
           <b>{header.label}</b>
@@ -232,22 +323,29 @@ function AbsencesTable({ data, loading = false }: AbsencesTableProps) {
       <Tr key={rowIndex} border="bottom">
         {visibleHeaders.map((header) => {
           const cellData = row[header.key as keyof IAbsencesTable] as {
-            type?: string;
             value?: string | number | JSX.Element | AbsencesTableDataDetails;
-            onClick?: () => void;
           };
           return renderTableCell(
             header.key,
             cellData ?? { value: "" },
             rowIndex,
+            row,
           );
         })}
       </Tr>
     ));
+
   const renderEmptyState = () => (
     <Tr border="bottom">
       <Td colSpan={visibleHeaders.length} align="center" type="custom">
-        <Text size="medium">No hay ausencias registradas.</Text>
+        <Stack justifyContent="center" alignItems="center" gap={spacing.s050}>
+          <Text size="medium" appearance="gray">
+            Aún no hay ninguna ausencia registrada. Para agregar una presiona
+          </Text>
+          <Text size="medium" appearance="gray" weight="bold">
+            “+ Reportar ausencia”.
+          </Text>
+        </Stack>
       </Td>
     </Tr>
   );
@@ -255,13 +353,8 @@ function AbsencesTable({ data, loading = false }: AbsencesTableProps) {
   const renderLoadingRows = () =>
     Array.from({ length: 3 }).map((_, idx) => (
       <Tr key={idx} border="bottom">
-        {visibleHeaders.map((header, index) => (
-          <Td
-            key={index}
-            colSpan={1}
-            align={getCellAlignment(header.key)}
-            type="custom"
-          >
+        {visibleHeaders.map((_, index) => (
+          <Td key={index} colSpan={1} align="center" type="custom">
             <SkeletonLine width="100%" animated />
           </Td>
         ))}
@@ -273,10 +366,9 @@ function AbsencesTable({ data, loading = false }: AbsencesTableProps) {
       <Table>
         <Colgroup>
           {visibleColumns.map((col, index) => (
-            <Col key={index} span={col.span} />
+            <Col key={index} span={col.span} style={col.style} />
           ))}
         </Colgroup>
-
         <Thead>{renderHeaderRow()}</Thead>
 
         <Tbody>
@@ -313,6 +405,23 @@ function AbsencesTable({ data, loading = false }: AbsencesTableProps) {
           description={modalInfo.description}
           onCloseModal={() => setShowModal(false)}
         />
+      )}
+
+      {showMenu && menuPosition && (
+        <StyledMenuWrapper
+          ref={menuRef}
+          style={{
+            position: "absolute",
+            top: `${menuPosition.top}px`,
+            left: `${menuPosition.left}px`,
+          }}
+        >
+          <MenuPropect
+            options={menuOptions}
+            onClose={handleCloseMenu}
+            onMouseLeave={handleCloseMenu}
+          />
+        </StyledMenuWrapper>
       )}
     </>
   );
