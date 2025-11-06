@@ -3,18 +3,19 @@ import { MdOutlineCheckCircle } from "react-icons/md";
 
 import { AlertCard } from "@components/data/AlertCard";
 import { spacing } from "@design/tokens/spacing/";
+import { AlertCardProps } from "@components/data/AlertCard";
 
 import { StyledContainer } from "./styles";
-import { alerts } from "./config/alertConfig";
 
 interface RequirementsFormProps {
   handleNextStep: () => void;
-  noRestriction?: boolean;
+  alerts: AlertCardProps[];
 }
 
 const RequirementsForm = (props: RequirementsFormProps) => {
-  const { handleNextStep, noRestriction = false } = props;
+  const { handleNextStep, alerts } = props;
   const isMobile = useMediaQuery("(max-width: 700px)");
+  const noRestriction = alerts.length === 0;
 
   return (
     <Stack

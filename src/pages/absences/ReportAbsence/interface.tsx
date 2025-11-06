@@ -83,7 +83,10 @@ function ReportAbsenceUI(props: RequestEnjoymentUIProps) {
           />
           <Stack direction="column" gap={spacing.s500}>
             {currentStep === 1 && (
-              <RequirementsForm handleNextStep={handleNextStep} />
+              <RequirementsForm
+                handleNextStep={handleNextStep}
+                alerts={mockAlertCards}
+              />
             )}
           </Stack>
         </Stack>
