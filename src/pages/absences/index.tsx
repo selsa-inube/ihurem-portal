@@ -9,6 +9,7 @@ function AbsencesOptions() {
   return (
     <AbsencesOptionsUI
       appName={breadcrumbs.label}
+      appDescription={breadcrumbs.description}
       appRoute={breadcrumbs.crumbs}
       navigatePage={breadcrumbs.url}
       handleDeleteRequest={handleDeleteRequest}

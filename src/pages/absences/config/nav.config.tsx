@@ -1,5 +1,6 @@
 export const breadcrumbs = {
   label: "Ausencias",
+  description: "Descripción ausencias (pendiente)",
   crumbs: [
     {
       path: "/",

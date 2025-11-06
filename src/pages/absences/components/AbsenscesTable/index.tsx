@@ -24,6 +24,7 @@ import {
 import { InfoModal } from "@components/modals/InfoModal";
 import { MenuPropect } from "@components/feedback/MenuPropect";
 import { IOptions } from "@components/feedback/MenuPropect/types";
+import { formatDate, formatMobileDate } from "@utils/date";
 import { spacing } from "@design/tokens/spacing";
 
 import { usePagination } from "./usePagination";
@@ -158,12 +159,9 @@ function AbsencesTable({
 
   const getHeaderAlignment = (key: string) => {
     if (mediaQueries["(max-width: 1024px)"]) return "center";
-
     switch (key) {
       case "reason":
-        return "center";
       case "date":
-        return "right";
       case "duration":
       case "actions":
         return "center";
@@ -174,10 +172,8 @@ function AbsencesTable({
 
   const getCellAlignment = (key: string) => {
     if (isMobile || mediaQueries["(max-width: 1024px)"]) return "center";
-
     switch (key) {
       case "duration":
-        return "left";
       case "date":
         return "left";
       case "actions":
@@ -190,20 +186,33 @@ function AbsencesTable({
   const determineVisibleHeaders = () => {
     if (isMobile) {
       return [
-        { label: "Motivo", key: "reason" },
-        { label: "Duración", key: "duration" },
-        { label: "Acciones", key: "actions", action: true },
+        { label: "Motivo", key: "reason", style: { width: "50%" } },
+        {
+          label: "M/A",
+          key: "date",
+          style: { width: "30%", textAlign: "center" },
+        },
+        {
+          label: "Acciones",
+          key: "actions",
+          style: { width: "20%", textAlign: "center" },
+          action: true,
+        },
       ];
     }
-
     return headers.filter((header) =>
       ["reason", "date", "duration", "actions"].includes(header.key),
     );
   };
 
   const visibleHeaders = determineVisibleHeaders();
+
   const visibleColumns = isMobile
-    ? columns.slice(1, 3)
+    ? [
+        { span: 1, style: { width: "40%" } },
+        { span: 1, style: { width: "20%" } },
+        { span: 1, style: { width: "20%" } },
+      ]
     : mediaQueries["(max-width: 1024px)"]
       ? columns.slice(0, 3)
       : columns;
@@ -214,46 +223,44 @@ function AbsencesTable({
         <Stack justifyContent="center">
           <Icon
             icon={<MdMoreVert />}
-            appearance="dark"
-            size="20px"
+            appearance="primary"
+            size="16px"
             cursorHover
             onClick={handleMenuClick}
+            variant="filled"
+            shape="circle"
           />
         </Stack>
       );
     }
 
     return (
-      <Stack justifyContent="center" gap="8px">
+      <Stack justifyContent="center" gap={spacing.s600}>
         <Icon
           icon={<MdOutlineVisibility />}
           appearance={hasViewDetailsPrivilege ? "dark" : "gray"}
           size="16px"
           cursorHover={hasViewDetailsPrivilege}
-          onClick={() => {
-            if (hasViewDetailsPrivilege) {
-              handleViewDetails();
-            } else {
-              handleRestrictedClick(
-                "No tienes privilegios para ver los detalles de esta ausencia.",
-              );
-            }
-          }}
+          onClick={() =>
+            hasViewDetailsPrivilege
+              ? handleViewDetails()
+              : handleRestrictedClick(
+                  "No tienes privilegios para ver los detalles de esta ausencia.",
+                )
+          }
         />
         <Icon
           icon={<MdOutlineFileUpload />}
           appearance={hasUploadPrivilege ? "primary" : "gray"}
           size="16px"
           cursorHover={hasUploadPrivilege}
-          onClick={() => {
-            if (hasUploadPrivilege) {
-              handleUploadDocuments();
-            } else {
-              handleRestrictedClick(
-                "No tienes privilegios para cargar documentos en esta ausencia.",
-              );
-            }
-          }}
+          onClick={() =>
+            hasUploadPrivilege
+              ? handleUploadDocuments()
+              : handleRestrictedClick(
+                  "No tienes privilegios para cargar documentos en esta ausencia.",
+                )
+          }
         />
       </Stack>
     );
@@ -277,6 +284,15 @@ function AbsencesTable({
       return renderActionIcons();
     }
 
+    if (headerKey === "date" && typeof cellData?.value === "string") {
+      const dateText = cellData.value;
+      if (isMobile) {
+        return formatMobileDate(dateText);
+      }
+      if (dateText.includes(":")) return dateText;
+      return formatDate(dateText);
+    }
+
     return typeof cellData?.value === "object"
       ? JSON.stringify(cellData.value)
       : cellData?.value;
@@ -291,7 +307,6 @@ function AbsencesTable({
     row: IAbsencesTable,
   ) => {
     const cellType = headerKey === "actions" || loading ? "custom" : "text";
-
     return (
       <StyledTd
         key={headerKey}
@@ -369,6 +384,7 @@ function AbsencesTable({
             <Col key={index} span={col.span} style={col.style} />
           ))}
         </Colgroup>
+
         <Thead>{renderHeaderRow()}</Thead>
 
         <Tbody>

@@ -4,7 +4,7 @@ export const columns = [
   { span: 1, style: { width: "auto" } },
   { span: 1, style: { width: "auto" } },
   { span: 1, style: { width: "auto" } },
-  { span: 1, style: { width: "110px" } },
+  { span: 1, style: { width: "140px" } },
 ];
 
 export interface ExtendedIAbsencesTable extends IAbsencesTable {

@@ -18,6 +18,14 @@ const baseNavLinks = [
     order: 1,
   },
   {
+    id: "absences",
+    serviceCode: "absences",
+    label: "Ausencias",
+    path: "/absences",
+    description: "Son documentos que acreditan fallas o faltas.",
+    order: 2,
+  },
+  {
     id: "certifications",
     serviceCode: "certifications",
     label: "Certificaciones",
