@@ -4,9 +4,6 @@ import { Th, Td } from "@inubekit/inubekit";
 export const StyledTh = styled(Th)<{ align?: string }>`
   & > p {
     text-align: ${(props) => props.align ?? "left"};
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 `;
 
@@ -15,8 +12,6 @@ export const StyledTd = styled(Td)<{ align?: string }>`
     text-align: ${(props) => props.align ?? "left"};
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
-    vertical-align: middle;
   }
 `;
 export const TooltipWrapper = styled.div`

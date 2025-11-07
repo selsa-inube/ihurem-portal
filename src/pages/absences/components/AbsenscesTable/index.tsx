@@ -182,7 +182,7 @@ function AbsencesTable({
 
   const getCellAlignment = (key: string) => {
     if (isMobile) {
-      if (key === "reason") return "center";
+      if (key === "reason") return "left";
       return "center";
     }
 
