@@ -1,10 +1,10 @@
 import { IAbsencesTable } from "./types";
 
 export const columns = [
-  { span: 1, style: { width: "auto" } },
-  { span: 1, style: { width: "auto" } },
-  { span: 1, style: { width: "auto" } },
-  { span: 1, style: { width: "140px" } },
+  { span: 1, style: { width: "40%" } },
+  { span: 1, style: { width: "20%" } },
+  { span: 1, style: { width: "20%" } },
+  { span: 1, style: { width: "10%" } },
 ];
 
 export interface ExtendedIAbsencesTable extends IAbsencesTable {
@@ -19,12 +19,9 @@ export const headers: {
   style?: React.CSSProperties;
 }[] = [
   { label: "Motivo", key: "reason", style: { width: "auto" } },
-  { label: "Fecha en que se produjo", key: "date", style: { width: "auto" } },
-  { label: "Duración", key: "duration", style: { width: "auto" } },
-  {
-    label: "Acciones",
-    key: "actions",
-  },
+  { label: "Fecha en que se produjo", key: "date", style: { width: "20%" } },
+  { label: "Duración", key: "duration", style: { width: "20%" } },
+  { label: "Acciones", key: "actions", style: { width: "10%" } },
 ];
 
 export const pageLength = 10;

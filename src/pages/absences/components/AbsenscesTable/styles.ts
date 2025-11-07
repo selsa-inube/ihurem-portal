@@ -1,18 +1,24 @@
 import styled from "styled-components";
 import { Th, Td } from "@inubekit/inubekit";
 
-export const StyledTh = styled(Th)`
+export const StyledTh = styled(Th)<{ align?: string }>`
   & > p {
-    text-align: center;
+    text-align: ${(props) => props.align ?? "left"};
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 `;
 
-export const StyledTd = styled(Td)`
+export const StyledTd = styled(Td)<{ align?: string }>`
   & > p {
-    text-align: center;
+    text-align: ${(props) => props.align ?? "left"};
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
   }
 `;
-
 export const TooltipWrapper = styled.div`
   position: relative;
   display: inline-block;

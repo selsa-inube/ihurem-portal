@@ -118,6 +118,32 @@ function AbsencesTable({
 
   const handleCloseMenu = () => setShowMenu(false);
 
+  useEffect(() => {
+    const handleOutsideTouch = (event: Event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setShowMenu(false);
+      }
+    };
+
+    const handleScrollOrMove = () => {
+      setShowMenu(false);
+    };
+
+    if (showMenu) {
+      document.addEventListener("mousedown", handleOutsideTouch);
+      document.addEventListener("touchstart", handleOutsideTouch);
+      window.addEventListener("scroll", handleScrollOrMove, true);
+      window.addEventListener("touchmove", handleScrollOrMove, true);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideTouch);
+      document.removeEventListener("touchstart", handleOutsideTouch);
+      window.removeEventListener("scroll", handleScrollOrMove, true);
+      window.removeEventListener("touchmove", handleScrollOrMove, true);
+    };
+  }, [showMenu]);
+
   const menuOptions: IOptions[] = [
     {
       title: "Detalles",
@@ -141,22 +167,6 @@ function AbsencesTable({
     },
   ];
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setShowMenu(false);
-      }
-    };
-
-    if (showMenu) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [showMenu]);
-
   const getHeaderAlignment = (key: string) => {
     if (mediaQueries["(max-width: 1024px)"]) return "center";
     switch (key) {
@@ -171,13 +181,29 @@ function AbsencesTable({
   };
 
   const getCellAlignment = (key: string) => {
-    if (isMobile || mediaQueries["(max-width: 1024px)"]) return "center";
+    if (isMobile) {
+      if (key === "reason") return "center";
+      return "center";
+    }
+
+    if (mediaQueries["(max-width: 1024px)"]) {
+      switch (key) {
+        case "reason":
+        case "duration":
+        case "date":
+        case "actions":
+          return "left";
+        default:
+          return "left";
+      }
+    }
+
     switch (key) {
+      case "reason":
       case "duration":
       case "date":
-        return "left";
       case "actions":
-        return "center";
+        return "left";
       default:
         return "left";
     }
@@ -187,15 +213,11 @@ function AbsencesTable({
     if (isMobile) {
       return [
         { label: "Motivo", key: "reason", style: { width: "50%" } },
-        {
-          label: "M/A",
-          key: "date",
-          style: { width: "30%", textAlign: "center" },
-        },
+        { label: "M/A", key: "date", style: { width: "30%" } },
         {
           label: "Acciones",
           key: "actions",
-          style: { width: "20%", textAlign: "center" },
+          style: { width: "20%" },
           action: true,
         },
       ];
@@ -209,9 +231,9 @@ function AbsencesTable({
 
   const visibleColumns = isMobile
     ? [
-        { span: 1, style: { width: "40%" } },
-        { span: 1, style: { width: "20%" } },
-        { span: 1, style: { width: "20%" } },
+        { span: 1, style: { width: "auto" } },
+        { span: 1, style: { width: "22%" } },
+        { span: 1, style: { width: "25%" } },
       ]
     : mediaQueries["(max-width: 1024px)"]
       ? columns.slice(0, 3)
@@ -275,20 +297,12 @@ function AbsencesTable({
     rowIndex?: number,
   ) => {
     if (loading) return <SkeletonLine width="100%" animated />;
-
-    if (
-      headerKey === "actions" &&
-      row !== undefined &&
-      rowIndex !== undefined
-    ) {
+    if (headerKey === "actions" && row !== undefined && rowIndex !== undefined)
       return renderActionIcons();
-    }
 
     if (headerKey === "date" && typeof cellData?.value === "string") {
       const dateText = cellData.value;
-      if (isMobile) {
-        return formatMobileDate(dateText);
-      }
+      if (isMobile) return formatMobileDate(dateText);
       if (dateText.includes(":")) return dateText;
       return formatDate(dateText);
     }
@@ -333,8 +347,9 @@ function AbsencesTable({
     </Tr>
   );
 
-  const renderDataRows = () =>
-    currentData.map((row: IAbsencesTable, rowIndex: number) => (
+  const renderDataRows = () => {
+    const visibleData = isMobile ? data : currentData;
+    return visibleData.map((row: IAbsencesTable, rowIndex: number) => (
       <Tr key={rowIndex} border="bottom">
         {visibleHeaders.map((header) => {
           const cellData = row[header.key as keyof IAbsencesTable] as {
@@ -349,6 +364,7 @@ function AbsencesTable({
         })}
       </Tr>
     ));
+  };
 
   const renderEmptyState = () => (
     <Tr border="bottom">
