@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button, Stack, useMediaQuery, Text, Icon } from "@inubekit/inubekit";
 import { MdAdd, MdOutlineInfo } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 import { InfoModal } from "@components/modals/InfoModal";
 import { AppMenu } from "@components/layout/AppMenu";
@@ -37,6 +38,7 @@ function AbsencesOptionsUI(props: AbsencesOptionsUIProps) {
     },
   } = props;
 
+  const navigate = useNavigate();
   const isMobile = useMediaQuery("(max-width: 768px)");
   const [infoModal, setInfoModal] = useState({
     open: false,
@@ -44,16 +46,11 @@ function AbsencesOptionsUI(props: AbsencesOptionsUIProps) {
     description: "",
   });
 
-  const handleReportAbsence = () => {
-    if (!hasActiveContract || !hasPrivilege) {
-      onOpenInfoModal(actionDescriptions.absence);
-      return;
-    }
-  };
-
   const handleRestrictedAction = () => {
     onOpenInfoModal("No tienes permisos para realizar esta acción.");
   };
+
+  const addRequest = () => navigate("/absences/report-absence");
 
   const onOpenInfoModal = (description: string) => {
     setInfoModal({
@@ -70,7 +67,9 @@ function AbsencesOptionsUI(props: AbsencesOptionsUIProps) {
           disableAbsence={!hasPrivilege || !hasActiveContract}
           actionDescriptions={actionDescriptions}
           hasTableData={mockAbsencesData.length > 0}
-          onRequestAbsence={handleReportAbsence}
+          onRequestAbsence={() => {
+            void addRequest();
+          }}
           onInfoIconClick={(desc) => onOpenInfoModal(desc)}
         />
       </Stack>
@@ -83,7 +82,11 @@ function AbsencesOptionsUI(props: AbsencesOptionsUIProps) {
             iconBefore={<MdAdd />}
             fullwidth={isMobile}
             disabled={!hasActiveContract || !hasPrivilege}
-            onClick={handleReportAbsence}
+            onClick={() => {
+              if (hasActiveContract && hasPrivilege) {
+                void addRequest();
+              }
+            }}
           >
             Reportar ausencia
           </Button>
