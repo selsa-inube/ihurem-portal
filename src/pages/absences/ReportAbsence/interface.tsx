@@ -5,6 +5,7 @@ import {
   Assisted,
   IAssistedStep,
 } from "@inubekit/inubekit";
+import { FormikProps } from "formik";
 import { MdRule } from "react-icons/md";
 
 import { RequirementsModal } from "@components/modals/RequirementsModal";
@@ -15,6 +16,10 @@ import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
 import { spacing } from "@design/tokens/spacing";
 
+import { IAbsenceMotiveEntry } from "./forms/AbsenceMotiveForm/types";
+import { RequirementsForm } from "./forms/RequirementsForm";
+import { AbsenceMotiveForm } from "./forms/AbsenceMotiveForm";
+
 interface RequestEnjoymentUIProps {
   appName: string;
   appDescription: string;
@@ -22,6 +27,10 @@ interface RequestEnjoymentUIProps {
   navigatePage: string;
   steps: IAssistedStep[];
   currentStep: number;
+  absenceMotiveRef: React.RefObject<FormikProps<IAbsenceMotiveEntry>>;
+  initialAbsenceMotiveValues: IAbsenceMotiveEntry;
+  isCurrentFormValid: boolean;
+  setIsCurrentFormValid: React.Dispatch<React.SetStateAction<boolean>>;
   handleNextStep: () => void;
   handlePreviousStep: () => void;
   handleFinishAssisted: () => void;
@@ -35,10 +44,16 @@ function ReportAbsenceUI(props: RequestEnjoymentUIProps) {
     navigatePage,
     steps,
     currentStep,
+    absenceMotiveRef,
+    initialAbsenceMotiveValues,
+    isCurrentFormValid,
+    setIsCurrentFormValid,
     handleNextStep,
     handlePreviousStep,
     handleFinishAssisted,
   } = props;
+
+  const shouldDisableNext = !isCurrentFormValid && currentStep != 1;
 
   const isTablet = useMediaQuery("(max-width: 1100px)");
 
@@ -69,6 +84,7 @@ function ReportAbsenceUI(props: RequestEnjoymentUIProps) {
           <Assisted
             step={steps[currentStep - 1]}
             totalSteps={steps.length}
+            disableNext={shouldDisableNext}
             size={isTablet ? "small" : "large"}
             controls={{
               goBackText: "Anterior",
@@ -79,6 +95,24 @@ function ReportAbsenceUI(props: RequestEnjoymentUIProps) {
             onBackClick={handlePreviousStep}
             onSubmitClick={handleFinishAssisted}
           />
+          <Stack direction="column" gap={spacing.s500}>
+            {currentStep === 1 && (
+              <RequirementsForm
+                handleNextStep={handleNextStep}
+                alerts={mockAlertCards}
+              />
+            )}
+            {currentStep === 2 && (
+              <AbsenceMotiveForm
+                ref={absenceMotiveRef}
+                initialValues={initialAbsenceMotiveValues}
+                withNextButton={true}
+                onFormValid={setIsCurrentFormValid}
+                handleNextStep={handleNextStep}
+                handlePreviousStep={handlePreviousStep}
+              />
+            )}
+          </Stack>
         </Stack>
       </AppMenu>
 
