@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { FormikProps } from "formik";
 import { useMediaQuery } from "@inubekit/inubekit";
 
 import { SendRequestModal } from "@components/modals/SendRequestModal";
@@ -6,6 +7,33 @@ import { SendRequestModal } from "@components/modals/SendRequestModal";
 import { ReportAbsenceUI } from "./interface";
 import { reportAbsenceSteps } from "./config/assisted.config";
 import { ModalState } from "./types";
+import { IAbsenceMotiveEntry } from "./forms/AbsenceMotiveForm/types";
+
+function useFormManagement() {
+  const [formValues, setFormValues] = useState<IAbsenceMotiveEntry>({
+    motive: "",
+    subMotive: "",
+    motiveDetails: "",
+  });
+
+  const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
+  const absenceMotiveRef = useRef<FormikProps<IAbsenceMotiveEntry>>(null);
+
+  const updateFormValues = () => {
+    if (absenceMotiveRef.current) {
+      setFormValues(absenceMotiveRef.current.values);
+      setIsCurrentFormValid(absenceMotiveRef.current.isValid);
+    }
+  };
+
+  return {
+    formValues,
+    isCurrentFormValid,
+    setIsCurrentFormValid,
+    absenceMotiveRef,
+    updateFormValues,
+  };
+}
 
 function useModalManagement() {
   const [modalState, setModalState] = useState<ModalState>({
@@ -37,16 +65,26 @@ function useModalManagement() {
 function ReportAbsence() {
   const [currentStep, setCurrentStep] = useState(1);
 
+  const {
+    formValues,
+    isCurrentFormValid,
+    setIsCurrentFormValid,
+    absenceMotiveRef,
+    updateFormValues,
+  } = useFormManagement();
+
   const { modalState, openSendModal, closeSendModal } = useModalManagement();
 
   const handleNextStep = () => {
-    if (currentStep < reportAbsenceSteps.length) {
+    if (currentStep) {
+      updateFormValues();
       setCurrentStep(currentStep + 1);
     }
   };
 
   const handlePreviousStep = () => {
     if (currentStep > 1) {
+      updateFormValues();
       setCurrentStep(currentStep - 1);
     }
   };
@@ -91,6 +129,10 @@ function ReportAbsence() {
         navigatePage={breadcrumbs.url}
         steps={reportAbsenceSteps}
         currentStep={currentStep}
+        absenceMotiveRef={absenceMotiveRef}
+        initialAbsenceMotiveValues={formValues}
+        isCurrentFormValid={isCurrentFormValid}
+        setIsCurrentFormValid={setIsCurrentFormValid}
         handleNextStep={handleNextStep}
         handlePreviousStep={handlePreviousStep}
         handleFinishAssisted={handleFinishAssisted}
