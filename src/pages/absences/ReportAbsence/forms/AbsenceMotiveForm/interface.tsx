@@ -90,7 +90,7 @@ function AbsenceMotiveFormUI(props: AbsenceMotiveFormUIProps) {
               name="motiveDetails"
               id="motiveDetails"
               value={formik.values.motiveDetails}
-              maxLength={200}
+              maxLength={250}
               disabled={loading}
               status={getFieldState(formik, "motiveDetails")}
               message={formik.errors.motiveDetails}
@@ -99,7 +99,7 @@ function AbsenceMotiveFormUI(props: AbsenceMotiveFormUIProps) {
               onBlur={formik.handleBlur}
               onChange={(e) => {
                 const value = e.target.value;
-                if (value.length <= 200) {
+                if (value.length <= 250) {
                   formik.setFieldValue("motiveDetails", value);
                 }
               }}
