@@ -1,6 +1,8 @@
 import { MdClose } from "react-icons/md";
 import { Stack, Text, Icon } from "@inubekit/inubekit";
 
+import { spacing } from "@design/tokens/spacing";
+
 import { StyledMenu, StyledContainerLabel, StyledCloseIcon } from "./styles";
 import { IOptions } from "./types";
 
@@ -16,7 +18,7 @@ export const MenuPropect = (props: MenuPropectProps) => {
   return (
     <StyledMenu onMouseLeave={onMouseLeave}>
       <Stack direction="column">
-        <Stack justifyContent="end" padding=" 0px 10px">
+        <Stack justifyContent="end" padding={`${spacing.s0} ${spacing.s150}`}>
           <StyledCloseIcon onClick={onClose}>
             <Icon
               icon={<MdClose />}
@@ -26,13 +28,14 @@ export const MenuPropect = (props: MenuPropectProps) => {
             />
           </StyledCloseIcon>
         </Stack>
+
         {options?.map((option, index) =>
           option.visible ? (
             <StyledContainerLabel key={index} onClick={option.onClick}>
-              <Stack alignItems="center" gap="8px">
+              <Stack alignItems="center" gap={spacing.s100}>
                 <Icon
                   icon={option.icon}
-                  appearance={index === 0 ? "gray" : "danger"}
+                  appearance={option.appearance ?? "gray"}
                   size="24px"
                 />
                 <Text size="small" weight="normal">
