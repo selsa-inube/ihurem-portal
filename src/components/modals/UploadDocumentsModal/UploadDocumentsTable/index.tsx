@@ -21,6 +21,8 @@ export interface UploadDocumentsTableProps {
 export function UploadDocumentsTable(props: UploadDocumentsTableProps) {
   const { documents } = props;
 
+  const hasDocuments = documents && documents.length > 0;
+
   return (
     <StyledTableContainer>
       <Table>
@@ -46,28 +48,42 @@ export function UploadDocumentsTable(props: UploadDocumentsTableProps) {
         </Thead>
 
         <Tbody>
-          {documents.map((doc, index) => {
-            const isRequired = doc.name.toLowerCase().includes("requerido");
+          {hasDocuments ? (
+            documents.map((doc, index) => {
+              const isRequired = doc.name.toLowerCase().includes("requerido");
 
-            return (
-              <Tr key={doc.id} border="bottom">
-                <StyledTd $isOdd={index % 2 === 1} align="left">
-                  <Text as="span" type="body" size="small">
-                    {doc.name}
-                  </Text>
-                </StyledTd>
+              return (
+                <Tr key={doc.id} border="bottom">
+                  <StyledTd $isOdd={index % 2 === 1} align="left">
+                    <Text as="span" type="body" size="small">
+                      {doc.name}
+                    </Text>
+                  </StyledTd>
 
-                <StyledTd $isOdd={index % 2 === 1} align="center" type="custom">
-                  <Icon
-                    icon={<MdOutlineAttachFile />}
-                    appearance={isRequired ? "gray" : "primary"}
-                    size={spacing.s200}
-                    cursorHover={!isRequired}
-                  />
-                </StyledTd>
-              </Tr>
-            );
-          })}
+                  <StyledTd
+                    $isOdd={index % 2 === 1}
+                    align="center"
+                    type="custom"
+                  >
+                    <Icon
+                      icon={<MdOutlineAttachFile />}
+                      appearance={isRequired ? "gray" : "primary"}
+                      size={spacing.s200}
+                      cursorHover={!isRequired}
+                    />
+                  </StyledTd>
+                </Tr>
+              );
+            })
+          ) : (
+            <Tr>
+              <StyledTd colSpan={headers.length} align="center">
+                <Text type="body" size="small">
+                  No hay documentos para mostrar
+                </Text>
+              </StyledTd>
+            </Tr>
+          )}
         </Tbody>
       </Table>
     </StyledTableContainer>
