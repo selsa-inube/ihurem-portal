@@ -22,6 +22,7 @@ import {
 } from "react-icons/md";
 
 import { InfoModal } from "@components/modals/InfoModal";
+import { UploadDocumentsModal } from "@components/modals/UploadDocumentsModal";
 import { MenuPropect } from "@components/feedback/MenuPropect";
 import { IOptions } from "@components/feedback/MenuPropect/types";
 import { formatDate, formatMobileDate } from "@utils/date";
@@ -31,6 +32,7 @@ import { usePagination } from "./usePagination";
 import { IAbsencesTable, AbsencesTableDataDetails } from "./types";
 import { StyledTd, StyledTh, StyledMenuWrapper } from "./styles";
 import { columns, headers } from "./tableConfig";
+import { mockDocuments } from "../tableMock/tableMock";
 
 interface AbsencesTableProps {
   data: IAbsencesTable[];
@@ -52,6 +54,7 @@ function AbsencesTable({
   ]);
 
   const [showModal, setShowModal] = useState(false);
+  const [showUploadModal, setShowUploadModal] = useState(false);
   const [modalInfo, setModalInfo] = useState({
     title: "Información",
     titleDescription: "No tienes privilegios.",
@@ -104,7 +107,7 @@ function AbsencesTable({
       );
       return;
     }
-    console.log("Cargar documentos de la ausencia");
+    setShowUploadModal(true);
   };
 
   const handleMenuClick = (event: React.MouseEvent<Element, MouseEvent>) => {
@@ -436,6 +439,13 @@ function AbsencesTable({
           titleDescription={modalInfo.titleDescription}
           description={modalInfo.description}
           onCloseModal={() => setShowModal(false)}
+        />
+      )}
+
+      {showUploadModal && (
+        <UploadDocumentsModal
+          handleClose={() => setShowUploadModal(false)}
+          documents={mockDocuments}
         />
       )}
 
