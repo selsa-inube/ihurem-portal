@@ -50,7 +50,6 @@ function RequestComponentDetail(props: RequestComponentDetailProps) {
     buttonLabel,
     modalContent,
     portalId = "portal",
-    stackDirection,
     requirements,
     showRequirementsTable = false,
     handleClose,
@@ -141,20 +140,9 @@ function RequestComponentDetail(props: RequestComponentDetailProps) {
           <Stack gap={spacing.s150} direction="column">
             {Array.isArray(filteredContent) ? (
               filteredContent.map((item, index) => {
-                const isLongContent = item.value
-                  ? item.value.length > 42
-                  : false;
-
                 return (
                   <StyledBoxAttribute key={index} $smallScreen={isMobile}>
-                    <Stack
-                      direction={
-                        isLongContent || isMobile || showRequirementsTable
-                          ? "column"
-                          : (stackDirection ?? "row")
-                      }
-                      justifyContent="space-between"
-                    >
+                    <Stack direction="column" justifyContent="space-between">
                       <Text type="label" size="medium" weight="bold">
                         {item.label}:
                       </Text>

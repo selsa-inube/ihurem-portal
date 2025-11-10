@@ -22,6 +22,8 @@ import {
 } from "react-icons/md";
 
 import { InfoModal } from "@components/modals/InfoModal";
+import { RequestComponentDetail } from "@components/modals/ComponentDetailModal";
+import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
 import { MenuPropect } from "@components/feedback/MenuPropect";
 import { IOptions } from "@components/feedback/MenuPropect/types";
 import { formatDate, formatMobileDate } from "@utils/date";
@@ -52,6 +54,8 @@ function AbsencesTable({
   ]);
 
   const [showModal, setShowModal] = useState(false);
+  const [showRequestDetail, setShowRequestDetail] = useState(false);
+
   const [modalInfo, setModalInfo] = useState({
     title: "Información",
     titleDescription: "No tienes privilegios.",
@@ -94,8 +98,10 @@ function AbsencesTable({
       );
       return;
     }
-    console.log("Ver detalles de la ausencia");
+    setShowRequestDetail(true);
   };
+
+  const handleCloseRequestDetail = () => setShowRequestDetail(false);
 
   const handleUploadDocuments = () => {
     if (!hasUploadPrivilege) {
@@ -436,6 +442,24 @@ function AbsencesTable({
           titleDescription={modalInfo.titleDescription}
           description={modalInfo.description}
           onCloseModal={() => setShowModal(false)}
+        />
+      )}
+
+      {showRequestDetail && (
+        <RequestComponentDetail
+          title="Detalle de Solicitud"
+          buttonLabel="Cerrar"
+          modalContent={[
+            { label: "Motivo", value: "Ausencia médica" },
+            {
+              label: "Detalles del motivo",
+              value:
+                "El empleado se tuvo que ausentar debido a una diligencia personal relacionada con el pago de un servicio urgente que requirió su asistencia personal.",
+            },
+          ]}
+          requirements={mockRequirements}
+          handleClose={handleCloseRequestDetail}
+          showRequirementsTable={true}
         />
       )}
 
