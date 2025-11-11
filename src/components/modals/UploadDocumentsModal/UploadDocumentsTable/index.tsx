@@ -11,11 +11,12 @@ import {
 import { MdOutlineAttachFile } from "react-icons/md";
 import { spacing } from "@design/tokens/spacing";
 
+import { Document } from "./types";
 import { StyledTh, StyledTd, StyledTableContainer } from "./styles";
 import { columns, headers } from "./tableConfig";
 
 export interface UploadDocumentsTableProps {
-  documents: { id: number; name: string }[];
+  documents: Document[];
 }
 
 export function UploadDocumentsTable(props: UploadDocumentsTableProps) {
@@ -35,10 +36,7 @@ export function UploadDocumentsTable(props: UploadDocumentsTableProps) {
         <Thead>
           <Tr border="bottom">
             {headers.map((header, index) => (
-              <StyledTh
-                key={index}
-                $isAttachmentColumn={header.label === "Adjuntar"}
-              >
+              <StyledTh key={index} $isGray={index === headers.length - 1}>
                 <Text as="span" type="label" size="small" weight="bold">
                   {header.label}
                 </Text>
@@ -49,22 +47,18 @@ export function UploadDocumentsTable(props: UploadDocumentsTableProps) {
 
         <Tbody>
           {hasDocuments ? (
-            documents.map((doc, index) => {
+            documents.map((doc) => {
               const isRequired = doc.name.toLowerCase().includes("requerido");
 
               return (
                 <Tr key={doc.id} border="bottom">
-                  <StyledTd $isOdd={index % 2 === 1} align="left">
+                  <StyledTd align="left">
                     <Text as="span" type="body" size="small">
                       {doc.name}
                     </Text>
                   </StyledTd>
 
-                  <StyledTd
-                    $isOdd={index % 2 === 1}
-                    align="center"
-                    type="custom"
-                  >
+                  <StyledTd align="center" type="custom">
                     <Icon
                       icon={<MdOutlineAttachFile />}
                       appearance={isRequired ? "gray" : "primary"}

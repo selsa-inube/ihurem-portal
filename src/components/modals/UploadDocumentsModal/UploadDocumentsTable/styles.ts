@@ -6,19 +6,12 @@ export const StyledTableContainer = styled.div`
   width: 100%;
 `;
 
-export const StyledTh = styled(Th)<{ $isAttachmentColumn?: boolean }>`
-  background-color: ${({ $isAttachmentColumn }) =>
-    $isAttachmentColumn
-      ? inube.palette.neutral.N30
-      : inube.palette.neutral.N10};
+export const StyledTh = styled(Th)<{ $isGray?: boolean }>`
+  background-color: ${({ $isGray }) =>
+    $isGray ? inube.palette.neutral.N30 : "transparent"};
   text-align: left;
 `;
 
-export const StyledTd = styled(Td)<{ $isOdd?: boolean }>`
-  background-color: ${({ $isOdd, theme }) =>
-    $isOdd
-      ? (theme as typeof inube)?.palette?.neutral?.N0 ||
-        inube.palette.neutral.N0
-      : (theme as typeof inube)?.palette?.neutral?.N10 ||
-        inube.palette.neutral.N10};
+export const StyledTd = styled(Td)`
+  background-color: ${inube.palette.neutral.N0};
 `;

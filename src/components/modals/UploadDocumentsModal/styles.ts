@@ -37,3 +37,12 @@ export const StyledContainerTitle = styled.div`
   margin: 0;
   padding: 0;
 `;
+
+export const StyledMessageContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${spacing.s200};
+  padding: ${spacing.s250};
+  border-radius: ${spacing.s100};
+  background-color: ${inube.palette.purple.P50};
+`;

@@ -7,7 +7,7 @@ import {
   Divider,
   useMediaQuery,
 } from "@inubekit/inubekit";
-import { MdClear } from "react-icons/md";
+import { MdClear, MdInfoOutline } from "react-icons/md";
 import { createPortal } from "react-dom";
 
 import { spacing } from "@design/tokens/spacing";
@@ -17,18 +17,15 @@ import {
   StyledContainerContent,
   StyledModal,
   StyledContainerTitle,
+  StyledMessageContainer,
 } from "./styles";
+import { Document } from "./UploadDocumentsTable/types";
 import { UploadDocumentsTable } from "./UploadDocumentsTable";
 
 export interface UploadDocumentsModalProps {
   portalId?: string;
   handleClose: () => void;
-}
-
-export interface UploadDocumentsModalProps {
-  portalId?: string;
-  handleClose: () => void;
-  documents: { id: number; name: string }[];
+  documents: Document[];
 }
 
 export function UploadDocumentsModal(props: UploadDocumentsModalProps) {
@@ -66,11 +63,20 @@ export function UploadDocumentsModal(props: UploadDocumentsModalProps) {
         <Divider />
 
         <StyledContainerContent>
-          <UploadDocumentsTable documents={documents} />
+          {documents.length > 0 ? (
+            <UploadDocumentsTable documents={documents} />
+          ) : (
+            <StyledMessageContainer>
+              <Icon icon={<MdInfoOutline />} size="20px" appearance="help" />
+              <Text type="body" size="medium" weight="bold">
+                La ausencia no incluyó requisitos.
+              </Text>
+            </StyledMessageContainer>
+          )}
         </StyledContainerContent>
 
         <Stack justifyContent="flex-end" gap={spacing.s100}>
-          <Button appearance="primary" onClick={handleClose}>
+          <Button appearance="primary" onClick={handleClose} cursorHover>
             Cerrar
           </Button>
         </Stack>
