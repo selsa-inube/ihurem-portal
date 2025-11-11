@@ -14,16 +14,15 @@ export const StyledModal = styled.div<IStyledModal>`
   width: ${({ $smallScreen }) => ($smallScreen ? "303px" : "502px")};
   background-color: ${inube.palette.neutral.N0};
   padding: ${({ $smallScreen }) =>
-    $smallScreen ? spacing.s200 : spacing.s300};
-  gap: ${({ $smallScreen }) => ($smallScreen ? spacing.s200 : spacing.s300)};
-  border-radius: ${spacing.s150};
+    $smallScreen ? spacing.s150 : spacing.s300};
+  gap: ${({ $smallScreen }) => ($smallScreen ? spacing.s300 : spacing.s300)};
+  border-radius: ${spacing.s100};
 `;
 
 export const StyledContainerContent = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${spacing.s200};
-  padding: ${spacing.s075};
 `;
 
 export const StyledContainerClose = styled.div`
@@ -42,7 +41,7 @@ export const StyledMessageContainer = styled.div`
   display: flex;
   align-items: center;
   gap: ${spacing.s200};
-  padding: ${spacing.s250};
-  border-radius: ${spacing.s100};
+  padding: ${spacing.s200};
+  border-radius: ${spacing.s050};
   background-color: ${inube.palette.purple.P50};
 `;

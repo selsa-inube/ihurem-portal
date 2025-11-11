@@ -67,10 +67,12 @@ export function UploadDocumentsModal(props: UploadDocumentsModalProps) {
             <UploadDocumentsTable documents={documents} />
           ) : (
             <StyledMessageContainer>
-              <Icon icon={<MdInfoOutline />} size="20px" appearance="help" />
-              <Text type="body" size="medium" weight="bold">
-                La ausencia no incluyó requisitos.
-              </Text>
+              <Stack>
+                <Icon icon={<MdInfoOutline />} size="20px" appearance="help" />
+                <Text type="body" size="medium" weight="bold">
+                  La ausencia no incluyó requisitos.
+                </Text>
+              </Stack>
             </StyledMessageContainer>
           )}
         </StyledContainerContent>
