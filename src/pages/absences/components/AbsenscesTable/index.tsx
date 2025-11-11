@@ -450,7 +450,7 @@ function AbsencesTable({
         <RequestComponentDetail
           title="Detalle de Solicitud"
           buttonLabel="Cerrar"
-          modalContent={mockRequestDetail.modalContent}
+          modalContent={mockRequestDetail}
           requirements={mockRequirements}
           handleClose={handleCloseRequestDetail}
           showRequirementsTable
