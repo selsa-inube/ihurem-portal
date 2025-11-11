@@ -43,6 +43,12 @@ function AbsenceDurationFormUI(props: AbsenceDurationFormUIProps) {
   const [isInfoOpen, setIsInfoOpen] = useState(false);
 
   const handleChange = (name: string, value: string) => {
+    if ((name === "daysDuration" || name === "hoursDuration") && value) {
+      const numValue = Number(value);
+      if (numValue < 0) {
+        return;
+      }
+    }
     formik.setFieldValue(name, value);
   };
 

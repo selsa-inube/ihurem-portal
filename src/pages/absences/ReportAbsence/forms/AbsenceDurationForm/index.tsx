@@ -34,11 +34,59 @@ const createValidationSchema = (restrictFutureDates: boolean) =>
           )
       : string(),
     daysDuration: absenceDurationFormRequiredFields.daysDuration
-      ? string().required(validationMessages.required)
-      : string(),
+      ? string()
+          .required(validationMessages.required)
+          .test(
+            "is-valid-number",
+            "La duración en días debe ser un número positivo",
+            (value) => {
+              if (!value) return false;
+              if (value === "-" || value === "+" || isNaN(Number(value))) {
+                return false;
+              }
+              const numValue = Number(value);
+              return numValue >= 0;
+            },
+          )
+      : string().test(
+          "is-valid-number",
+          "La duración en días debe ser un número positivo",
+          (value) => {
+            if (!value) return true;
+            if (value === "-" || value === "+" || isNaN(Number(value))) {
+              return false;
+            }
+            const numValue = Number(value);
+            return numValue >= 0;
+          },
+        ),
     hoursDuration: absenceDurationFormRequiredFields.hoursDuration
-      ? string().required(validationMessages.required)
-      : string(),
+      ? string()
+          .required(validationMessages.required)
+          .test(
+            "is-valid-number",
+            "La duración en horas debe ser un número positivo",
+            (value) => {
+              if (!value) return false;
+              if (value === "-" || value === "+" || isNaN(Number(value))) {
+                return false;
+              }
+              const numValue = Number(value);
+              return numValue >= 0;
+            },
+          )
+      : string().test(
+          "is-valid-number",
+          "La duración en horas debe ser un número positivo",
+          (value) => {
+            if (!value) return true;
+            if (value === "-" || value === "+" || isNaN(Number(value))) {
+              return false;
+            }
+            const numValue = Number(value);
+            return numValue >= 0;
+          },
+        ),
     startTime: absenceDurationFormRequiredFields.hoursDuration
       ? string().required(validationMessages.required)
       : string(),
