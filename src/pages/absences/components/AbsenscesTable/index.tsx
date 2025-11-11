@@ -26,6 +26,7 @@ import { RequestComponentDetail } from "@components/modals/ComponentDetailModal"
 import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
 import { MenuPropect } from "@components/feedback/MenuPropect";
 import { IOptions } from "@components/feedback/MenuPropect/types";
+import { mockRequestDetail } from "../tableMock/tableMock";
 import { formatDate, formatMobileDate } from "@utils/date";
 import { spacing } from "@design/tokens/spacing";
 
@@ -449,17 +450,10 @@ function AbsencesTable({
         <RequestComponentDetail
           title="Detalle de Solicitud"
           buttonLabel="Cerrar"
-          modalContent={[
-            { label: "Motivo", value: "Ausencia médica" },
-            {
-              label: "Detalles del motivo",
-              value:
-                "El empleado se tuvo que ausentar debido a una diligencia personal relacionada con el pago de un servicio urgente que requirió su asistencia personal.",
-            },
-          ]}
+          modalContent={mockRequestDetail.modalContent}
           requirements={mockRequirements}
           handleClose={handleCloseRequestDetail}
-          showRequirementsTable={true}
+          showRequirementsTable
         />
       )}
 

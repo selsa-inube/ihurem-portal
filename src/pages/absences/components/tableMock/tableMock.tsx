@@ -102,3 +102,20 @@ export const mockAbsencesData: IAbsencesTable[] = [
     dataDetails: { value: dataDetails[2] },
   },
 ];
+
+export const mockRequestDetail = {
+  title: "Detalle de Solicitud",
+  buttonLabel: "Cerrar",
+  modalContent: [
+    { label: "Motivo", value: "Ausencia médica" },
+    {
+      label: "Detalles del motivo",
+      value:
+        "El empleado se tuvo que ausentar debido a una diligencia personal relacionada con el pago de un servicio urgente que requirió su asistencia personal.",
+    },
+  ],
+  requirements: [
+    { label: "Documento requerido", value: "Incapacidad médica" },
+    { label: "Formato", value: "PDF" },
+  ],
+};
