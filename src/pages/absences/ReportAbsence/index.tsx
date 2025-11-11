@@ -8,21 +8,40 @@ import { ReportAbsenceUI } from "./interface";
 import { reportAbsenceSteps } from "./config/assisted.config";
 import { ModalState } from "./types";
 import { IAbsenceMotiveEntry } from "./forms/AbsenceMotiveForm/types";
+import { IAbsenceDurationEntry } from "./forms/AbsenceDurationForm/types";
 
 function useFormManagement() {
-  const [formValues, setFormValues] = useState<IAbsenceMotiveEntry>({
+  const [formValues, setFormValues] = useState<
+    IAbsenceMotiveEntry & IAbsenceDurationEntry
+  >({
     motive: "",
     subMotive: "",
     motiveDetails: "",
+    startDate: "",
+    daysDuration: "",
+    hoursDuration: "",
+    startTime: "",
   });
 
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
   const absenceMotiveRef = useRef<FormikProps<IAbsenceMotiveEntry>>(null);
+  const absenceDurationRef = useRef<FormikProps<IAbsenceDurationEntry>>(null);
 
   const updateFormValues = () => {
     if (absenceMotiveRef.current) {
-      setFormValues(absenceMotiveRef.current.values);
+      setFormValues((prev) => ({
+        ...prev,
+        ...absenceMotiveRef.current!.values,
+      }));
       setIsCurrentFormValid(absenceMotiveRef.current.isValid);
+    }
+
+    if (absenceDurationRef.current) {
+      setFormValues((prev) => ({
+        ...prev,
+        ...absenceDurationRef.current!.values,
+      }));
+      setIsCurrentFormValid(absenceDurationRef.current.isValid);
     }
   };
 
@@ -31,6 +50,7 @@ function useFormManagement() {
     isCurrentFormValid,
     setIsCurrentFormValid,
     absenceMotiveRef,
+    absenceDurationRef,
     updateFormValues,
   };
 }
@@ -64,18 +84,31 @@ function useModalManagement() {
 
 function ReportAbsence() {
   const [currentStep, setCurrentStep] = useState(1);
+  const [showStartTimeErrorModal, setShowStartTimeErrorModal] = useState(false);
 
   const {
     formValues,
     isCurrentFormValid,
     setIsCurrentFormValid,
     absenceMotiveRef,
+    absenceDurationRef,
     updateFormValues,
   } = useFormManagement();
 
   const { modalState, openSendModal, closeSendModal } = useModalManagement();
 
   const handleNextStep = () => {
+    if (currentStep === 3 && absenceDurationRef.current) {
+      const values = absenceDurationRef.current.values;
+      const hasHoursDuration =
+        values.hoursDuration && Number(values.hoursDuration) > 0;
+
+      if (hasHoursDuration && !values.startTime) {
+        setShowStartTimeErrorModal(true);
+        return;
+      }
+    }
+
     if (currentStep) {
       updateFormValues();
       setCurrentStep(currentStep + 1);
@@ -130,9 +163,12 @@ function ReportAbsence() {
         steps={reportAbsenceSteps}
         currentStep={currentStep}
         absenceMotiveRef={absenceMotiveRef}
-        initialAbsenceMotiveValues={formValues}
+        absenceDurationRef={absenceDurationRef}
+        initialValues={formValues}
         isCurrentFormValid={isCurrentFormValid}
+        showStartTimeErrorModal={showStartTimeErrorModal}
         setIsCurrentFormValid={setIsCurrentFormValid}
+        setShowStartTimeErrorModal={setShowStartTimeErrorModal}
         handleNextStep={handleNextStep}
         handlePreviousStep={handlePreviousStep}
         handleFinishAssisted={handleFinishAssisted}

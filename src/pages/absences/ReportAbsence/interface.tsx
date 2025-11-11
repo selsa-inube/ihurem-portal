@@ -9,6 +9,7 @@ import { FormikProps } from "formik";
 import { MdRule } from "react-icons/md";
 
 import { RequirementsModal } from "@components/modals/RequirementsModal";
+import { ErrorModal } from "@components/modals/ErrorModal";
 import { ButtonRequirements } from "@components/inputs/ButtonWithCounter";
 import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
 import { mockAlertCards } from "@mocks/requirements/requirements-2.mock";
@@ -17,8 +18,10 @@ import { IRoute } from "@components/layout/AppMenu/types";
 import { spacing } from "@design/tokens/spacing";
 
 import { IAbsenceMotiveEntry } from "./forms/AbsenceMotiveForm/types";
+import { IAbsenceDurationEntry } from "./forms/AbsenceDurationForm/types";
 import { RequirementsForm } from "./forms/RequirementsForm";
 import { AbsenceMotiveForm } from "./forms/AbsenceMotiveForm";
+import { AbsenceDurationForm } from "./forms/AbsenceDurationForm";
 
 interface RequestEnjoymentUIProps {
   appName: string;
@@ -28,9 +31,12 @@ interface RequestEnjoymentUIProps {
   steps: IAssistedStep[];
   currentStep: number;
   absenceMotiveRef: React.RefObject<FormikProps<IAbsenceMotiveEntry>>;
-  initialAbsenceMotiveValues: IAbsenceMotiveEntry;
+  absenceDurationRef: React.RefObject<FormikProps<IAbsenceDurationEntry>>;
+  initialValues: IAbsenceMotiveEntry & IAbsenceDurationEntry;
   isCurrentFormValid: boolean;
+  showStartTimeErrorModal: boolean;
   setIsCurrentFormValid: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowStartTimeErrorModal: React.Dispatch<React.SetStateAction<boolean>>;
   handleNextStep: () => void;
   handlePreviousStep: () => void;
   handleFinishAssisted: () => void;
@@ -45,9 +51,12 @@ function ReportAbsenceUI(props: RequestEnjoymentUIProps) {
     steps,
     currentStep,
     absenceMotiveRef,
-    initialAbsenceMotiveValues,
+    absenceDurationRef,
+    initialValues,
     isCurrentFormValid,
+    showStartTimeErrorModal,
     setIsCurrentFormValid,
+    setShowStartTimeErrorModal,
     handleNextStep,
     handlePreviousStep,
     handleFinishAssisted,
@@ -105,8 +114,19 @@ function ReportAbsenceUI(props: RequestEnjoymentUIProps) {
             {currentStep === 2 && (
               <AbsenceMotiveForm
                 ref={absenceMotiveRef}
-                initialValues={initialAbsenceMotiveValues}
+                initialValues={initialValues}
                 withNextButton={true}
+                onFormValid={setIsCurrentFormValid}
+                handleNextStep={handleNextStep}
+                handlePreviousStep={handlePreviousStep}
+              />
+            )}
+            {currentStep === 3 && (
+              <AbsenceDurationForm
+                ref={absenceDurationRef}
+                initialValues={initialValues}
+                withNextButton={true}
+                motive={initialValues.motive}
                 onFormValid={setIsCurrentFormValid}
                 handleNextStep={handleNextStep}
                 handlePreviousStep={handlePreviousStep}
@@ -122,6 +142,16 @@ function ReportAbsenceUI(props: RequestEnjoymentUIProps) {
           buttonLabel="Cerrar"
           requirements={mockRequirements}
           handleClose={handleCloseModal}
+        />
+      )}
+
+      {showStartTimeErrorModal && (
+        <ErrorModal
+          title="Alerta"
+          descriptionText="Incluiste una duración en horas."
+          solutionText='Para continuar primero debes seleccionar la "Hora de inicio aproximada" para la ausencia.'
+          onCloseModal={() => setShowStartTimeErrorModal(false)}
+          onSubmitButtonClick={() => setShowStartTimeErrorModal(false)}
         />
       )}
     </>
