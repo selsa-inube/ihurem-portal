@@ -12,6 +12,7 @@ import {
   MdClear,
   MdAddCircleOutline,
   MdOutlineCheckCircle,
+  MdOutlineVisibility,
 } from "react-icons/md";
 import { createPortal } from "react-dom";
 
@@ -77,6 +78,25 @@ function RequestComponentDetail(props: RequestComponentDetailProps) {
     } else {
       return null;
     }
+  };
+
+  const getActionsViewIcon = () => {
+    return [
+      {
+        id: "ver",
+        actionName: "",
+        content: () => (
+          <Stack>
+            <Icon
+              icon={<MdOutlineVisibility />}
+              size="20px"
+              appearance="dark"
+              cursorHover
+            />
+          </Stack>
+        ),
+      },
+    ];
   };
 
   const getActionsMobileIcon = () => {
@@ -173,8 +193,8 @@ function RequestComponentDetail(props: RequestComponentDetailProps) {
                     id={requirement.id}
                     titles={requirement.titles}
                     entries={requirement.entries}
-                    actions={[]}
-                    actionMobile={[]}
+                    actions={getActionsViewIcon()}
+                    actionMobile={getActionsViewIcon()}
                     actionMobileIcon={getActionsMobileIcon()}
                     appearanceTable={{
                       widthTd: "75%",

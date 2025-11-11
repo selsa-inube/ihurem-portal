@@ -60,7 +60,12 @@ export const StyledThactions = styled.th<IStyledThactions>`
 `;
 
 export const StyledTdactions = styled.td<IStyledTdactions>`
+  display: flex;
   align-items: center;
+  justify-content: ${({ $isTablet }) => ($isTablet ? "flex-end" : "center")};
+  padding-right: ${({ $isTablet }) =>
+    $isTablet ? spacing.s100 : spacing.s050};
+  gap: ${spacing.s050};
 `;
 
 export const StyledDivactions = styled.div<IStyledTdactions>`
