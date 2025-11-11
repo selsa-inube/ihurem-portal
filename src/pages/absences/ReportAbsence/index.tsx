@@ -1,6 +1,5 @@
 import { useRef, useState } from "react";
 import { FormikProps } from "formik";
-import { useMediaQuery } from "@inubekit/inubekit";
 
 import { SendRequestModal } from "@components/modals/SendRequestModal";
 
@@ -130,8 +129,6 @@ function ReportAbsence() {
     closeSendModal();
   };
 
-  const isTablet = useMediaQuery("(max-width: 1100px)");
-
   const breadcrumbs = {
     label: "Reportar ausencia",
     description: "Completa el asistido para reportar una ausencia.",
@@ -139,7 +136,7 @@ function ReportAbsence() {
       { path: "/", label: "Inicio", id: "/", isActive: false },
       {
         path: "/absences",
-        label: isTablet ? "..." : "Ausencias",
+        label: "Ausencias",
         id: "/absences",
         isActive: false,
       },
