@@ -60,12 +60,26 @@ export const StyledThactions = styled.th<IStyledThactions>`
 `;
 
 export const StyledTdactions = styled.td<IStyledTdactions>`
-  display: flex;
-  align-items: center;
-  justify-content: ${({ $isTablet }) => ($isTablet ? "flex-end" : "center")};
-  padding-right: ${({ $isTablet }) =>
-    $isTablet ? spacing.s100 : spacing.s050};
-  gap: ${spacing.s050};
+  padding: ${spacing.s100};
+  padding-right: ${spacing.s150};
+  vertical-align: middle;
+  text-align: center;
+  position: relative;
+
+  ${({ $isTablet }) =>
+    $isTablet &&
+    `
+      text-align: right;
+      padding: ${spacing.s050};
+      padding-right: ${spacing.s150};
+
+      & > * {
+        position: absolute;
+        right: ${spacing.s100};
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    `}
 `;
 
 export const StyledDivactions = styled.div<IStyledTdactions>`
