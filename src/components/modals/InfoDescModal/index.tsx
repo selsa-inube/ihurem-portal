@@ -66,7 +66,7 @@ export function InfoDescModal(props: InfoDescModalProps) {
         <Divider dashed />
         <Text size="medium">{description}</Text>
         <Stack justifyContent="end">
-          <Button onClick={onCloseModal} fullwidth={isMobile} cursorHover>
+          <Button onClick={onCloseModal} cursorHover>
             {buttonText}
           </Button>
         </Stack>
