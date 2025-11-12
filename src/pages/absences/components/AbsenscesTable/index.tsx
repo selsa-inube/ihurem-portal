@@ -22,8 +22,11 @@ import {
 } from "react-icons/md";
 
 import { InfoModal } from "@components/modals/InfoModal";
+import { RequestComponentDetail } from "@components/modals/ComponentDetailModal";
+import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
 import { MenuPropect } from "@components/feedback/MenuPropect";
 import { IOptions } from "@components/feedback/MenuPropect/types";
+import { mockRequestDetail } from "../tableMock/tableMock";
 import { formatDate, formatMobileDate } from "@utils/date";
 import { spacing } from "@design/tokens/spacing";
 
@@ -52,6 +55,8 @@ function AbsencesTable({
   ]);
 
   const [showModal, setShowModal] = useState(false);
+  const [showRequestDetail, setShowRequestDetail] = useState(false);
+
   const [modalInfo, setModalInfo] = useState({
     title: "Información",
     titleDescription: "No tienes privilegios.",
@@ -94,8 +99,10 @@ function AbsencesTable({
       );
       return;
     }
-    console.log("Ver detalles de la ausencia");
+    setShowRequestDetail(true);
   };
+
+  const handleCloseRequestDetail = () => setShowRequestDetail(false);
 
   const handleUploadDocuments = () => {
     if (!hasUploadPrivilege) {
@@ -436,6 +443,17 @@ function AbsencesTable({
           titleDescription={modalInfo.titleDescription}
           description={modalInfo.description}
           onCloseModal={() => setShowModal(false)}
+        />
+      )}
+
+      {showRequestDetail && (
+        <RequestComponentDetail
+          title="Detalle de Solicitud"
+          buttonLabel="Cerrar"
+          modalContent={mockRequestDetail}
+          requirements={mockRequirements}
+          handleClose={handleCloseRequestDetail}
+          showRequirementsTable
         />
       )}
 
