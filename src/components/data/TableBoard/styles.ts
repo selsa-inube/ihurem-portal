@@ -60,7 +60,26 @@ export const StyledThactions = styled.th<IStyledThactions>`
 `;
 
 export const StyledTdactions = styled.td<IStyledTdactions>`
-  align-items: center;
+  padding: ${spacing.s100};
+  padding-right: ${spacing.s150};
+  vertical-align: middle;
+  text-align: center;
+  position: relative;
+
+  ${({ $isTablet }) =>
+    $isTablet &&
+    `
+      text-align: right;
+      padding: ${spacing.s050};
+      padding-right: ${spacing.s150};
+
+      & > * {
+        position: absolute;
+        right: ${spacing.s100};
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    `}
 `;
 
 export const StyledDivactions = styled.div<IStyledTdactions>`
