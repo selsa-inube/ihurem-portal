@@ -12,6 +12,7 @@ import {
   MdClear,
   MdAddCircleOutline,
   MdOutlineCheckCircle,
+  MdOutlineVisibility,
 } from "react-icons/md";
 import { createPortal } from "react-dom";
 
@@ -50,7 +51,6 @@ function RequestComponentDetail(props: RequestComponentDetailProps) {
     buttonLabel,
     modalContent,
     portalId = "portal",
-    stackDirection,
     requirements,
     showRequirementsTable = false,
     handleClose,
@@ -78,6 +78,25 @@ function RequestComponentDetail(props: RequestComponentDetailProps) {
     } else {
       return null;
     }
+  };
+
+  const getActionsViewIcon = () => {
+    return [
+      {
+        id: "ver",
+        actionName: "",
+        content: () => (
+          <Stack>
+            <Icon
+              icon={<MdOutlineVisibility />}
+              size="20px"
+              appearance="dark"
+              cursorHover
+            />
+          </Stack>
+        ),
+      },
+    ];
   };
 
   const getActionsMobileIcon = () => {
@@ -141,20 +160,9 @@ function RequestComponentDetail(props: RequestComponentDetailProps) {
           <Stack gap={spacing.s150} direction="column">
             {Array.isArray(filteredContent) ? (
               filteredContent.map((item, index) => {
-                const isLongContent = item.value
-                  ? item.value.length > 42
-                  : false;
-
                 return (
                   <StyledBoxAttribute key={index} $smallScreen={isMobile}>
-                    <Stack
-                      direction={
-                        isLongContent || isMobile || showRequirementsTable
-                          ? "column"
-                          : (stackDirection ?? "row")
-                      }
-                      justifyContent="space-between"
-                    >
+                    <Stack direction="column" justifyContent="space-between">
                       <Text type="label" size="medium" weight="bold">
                         {item.label}:
                       </Text>
@@ -185,8 +193,8 @@ function RequestComponentDetail(props: RequestComponentDetailProps) {
                     id={requirement.id}
                     titles={requirement.titles}
                     entries={requirement.entries}
-                    actions={[]}
-                    actionMobile={[]}
+                    actions={getActionsViewIcon()}
+                    actionMobile={getActionsViewIcon()}
                     actionMobileIcon={getActionsMobileIcon()}
                     appearanceTable={{
                       widthTd: "75%",
