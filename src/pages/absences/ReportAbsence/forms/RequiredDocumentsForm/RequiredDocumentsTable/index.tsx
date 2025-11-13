@@ -10,6 +10,7 @@ import {
   Icon,
 } from "@inubekit/inubekit";
 import { MdOutlineAttachFile } from "react-icons/md";
+import { RiPencilLine } from "react-icons/ri";
 
 import { spacing } from "@design/tokens/spacing";
 import { AttachDocumentModal } from "@components/modals/AttachDocumentModal";
@@ -91,14 +92,14 @@ export function RequiredDocumentsTable(props: RequiredDocumentsTableProps) {
 
                     <StyledTd align="center" type="custom">
                       <Icon
-                        icon={<MdOutlineAttachFile />}
-                        appearance={
-                          doc.disabled
-                            ? "gray"
-                            : filesCount > 0
-                              ? "success"
-                              : "primary"
+                        icon={
+                          filesCount > 0 ? (
+                            <RiPencilLine />
+                          ) : (
+                            <MdOutlineAttachFile />
+                          )
                         }
+                        appearance={doc.disabled ? "gray" : "primary"}
                         size={spacing.s200}
                         cursorHover={!doc.disabled}
                         onClick={() => handleAttachClick(doc)}
