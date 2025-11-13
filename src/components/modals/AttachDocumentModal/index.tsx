@@ -57,25 +57,27 @@ export function AttachDocumentModal(props: AttachDocumentModalProps) {
     }
   }, [existingFiles]);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      addFile(file);
-    }
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
+  const addFiles = (filesLike: FileList | globalThis.File[]) => {
+    const filesArray = Array.from(filesLike);
+    const validFiles = filesArray.filter(
+      (file) =>
+        file.type === "application/pdf" &&
+        file.size <= MAX_FILE_SIZE &&
+        !selectedFiles.some(
+          (f) => `${f.name}-${f.size}` === `${file.name}-${file.size}`,
+        ),
+    );
+    if (validFiles.length > 0) {
+      setSelectedFiles((prev) => [...prev, ...validFiles]);
     }
   };
 
-  const addFile = (file: globalThis.File) => {
-    if (file.type === "application/pdf") {
-      if (file.size <= MAX_FILE_SIZE) {
-        setSelectedFiles((prev) => [...prev, file]);
-      } else {
-        alert("El archivo supera el tamaño máximo permitido de 2.5MB.");
-      }
-    } else {
-      alert("Solo se permiten archivos PDF.");
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      addFiles(e.target.files);
+    }
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
     }
   };
 
@@ -86,17 +88,13 @@ export function AttachDocumentModal(props: AttachDocumentModalProps) {
   const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     dragCounter.current++;
-    if (dragCounter.current === 1) {
-      setIsDragging(true);
-    }
+    if (dragCounter.current === 1) setIsDragging(true);
   };
 
   const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     dragCounter.current--;
-    if (dragCounter.current === 0) {
-      setIsDragging(false);
-    }
+    if (dragCounter.current === 0) setIsDragging(false);
   };
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
@@ -108,8 +106,7 @@ export function AttachDocumentModal(props: AttachDocumentModalProps) {
     dragCounter.current = 0;
     setIsDragging(false);
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      const file = e.dataTransfer.files[0];
-      addFile(file);
+      addFiles(e.dataTransfer.files);
       e.dataTransfer.clearData();
     }
   };
@@ -121,9 +118,7 @@ export function AttachDocumentModal(props: AttachDocumentModalProps) {
   };
 
   const handleAttachFiles = () => {
-    if (onAttach) {
-      onAttach(selectedFiles);
-    }
+    onAttach?.(selectedFiles);
   };
 
   const handleViewFile = (file: globalThis.File) => {
@@ -181,6 +176,7 @@ export function AttachDocumentModal(props: AttachDocumentModalProps) {
           <input
             type="file"
             accept="application/pdf"
+            multiple
             style={{ display: "none" }}
             ref={fileInputRef}
             onChange={handleFileChange}
@@ -203,7 +199,7 @@ export function AttachDocumentModal(props: AttachDocumentModalProps) {
               >
                 {selectedFiles.map((file, index) => (
                   <File
-                    key={index}
+                    key={`${file.name}-${file.size}-${index}`}
                     name={file.name}
                     size={formatFileSize(file.size)}
                     onDelete={() => removeFile(index)}
