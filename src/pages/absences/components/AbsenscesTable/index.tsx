@@ -22,14 +22,14 @@ import {
 } from "react-icons/md";
 
 import { InfoModal } from "@components/modals/InfoModal";
+import { UploadDocumentsModal } from "@components/modals/UploadDocumentsModal";
 import { RequestComponentDetail } from "@components/modals/ComponentDetailModal";
 import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
 import { MenuPropect } from "@components/feedback/MenuPropect";
 import { IOptions } from "@components/feedback/MenuPropect/types";
-import { mockRequestDetail } from "../tableMock/tableMock";
+import { mockRequestDetail, mockDocuments } from "../tableMock/tableMock";
 import { formatDate, formatMobileDate } from "@utils/date";
 import { spacing } from "@design/tokens/spacing";
-
 import { usePagination } from "./usePagination";
 import { IAbsencesTable, AbsencesTableDataDetails } from "./types";
 import { StyledTd, StyledTh, StyledMenuWrapper } from "./styles";
@@ -55,6 +55,7 @@ function AbsencesTable({
   ]);
 
   const [showModal, setShowModal] = useState(false);
+  const [showUploadModal, setShowUploadModal] = useState(false);
   const [showRequestDetail, setShowRequestDetail] = useState(false);
 
   const [modalInfo, setModalInfo] = useState({
@@ -111,13 +112,13 @@ function AbsencesTable({
       );
       return;
     }
-    console.log("Cargar documentos de la ausencia");
+    setShowUploadModal(true);
   };
 
   const handleMenuClick = (event: React.MouseEvent<Element, MouseEvent>) => {
     const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
     setMenuPosition({
-      top: rect.bottom + window.scrollY + 0,
+      top: rect.bottom + window.scrollY,
       left: rect.left + window.scrollX + 45,
     });
     setShowMenu(true);
@@ -189,31 +190,18 @@ function AbsencesTable({
 
   const getCellAlignment = (key: string) => {
     if (isMobile) {
-      if (key === "reason") return "left";
-      return "center";
+      return key === "reason" ? "left" : "center";
     }
 
     if (mediaQueries["(max-width: 1024px)"]) {
-      switch (key) {
-        case "reason":
-        case "duration":
-        case "date":
-        case "actions":
-          return "left";
-        default:
-          return "left";
-      }
+      return ["reason", "duration", "date", "actions"].includes(key)
+        ? "left"
+        : "left";
     }
 
-    switch (key) {
-      case "reason":
-      case "duration":
-      case "date":
-      case "actions":
-        return "left";
-      default:
-        return "left";
-    }
+    return ["reason", "duration", "date", "actions"].includes(key)
+      ? "left"
+      : "left";
   };
 
   const determineVisibleHeaders = () => {
@@ -300,12 +288,9 @@ function AbsencesTable({
     cellData?: {
       value?: string | number | JSX.Element | AbsencesTableDataDetails;
     },
-    row?: IAbsencesTable,
-    rowIndex?: number,
   ) => {
     if (loading) return <SkeletonLine width="100%" animated />;
-    if (headerKey === "actions" && row !== undefined && rowIndex !== undefined)
-      return renderActionIcons();
+    if (headerKey === "actions") return renderActionIcons();
 
     if (headerKey === "date" && typeof cellData?.value === "string") {
       const dateText = cellData.value;
@@ -325,20 +310,16 @@ function AbsencesTable({
       value?: string | number | JSX.Element | AbsencesTableDataDetails;
     },
     rowIndex: number,
-    row: IAbsencesTable,
-  ) => {
-    const cellType = headerKey === "actions" || loading ? "custom" : "text";
-    return (
-      <StyledTd
-        key={headerKey}
-        appearance={rowIndex % 2 === 1 ? "dark" : "light"}
-        type={cellType}
-        align={getCellAlignment(headerKey)}
-      >
-        {renderCellContent(headerKey, cellData, row, rowIndex)}
-      </StyledTd>
-    );
-  };
+  ) => (
+    <StyledTd
+      key={headerKey}
+      appearance={rowIndex % 2 === 1 ? "dark" : "light"}
+      type={headerKey === "actions" || loading ? "custom" : "text"}
+      align={getCellAlignment(headerKey)}
+    >
+      {renderCellContent(headerKey, cellData)}
+    </StyledTd>
+  );
 
   const renderHeaderRow = () => (
     <Tr border="bottom">
@@ -356,7 +337,7 @@ function AbsencesTable({
 
   const renderDataRows = () => {
     const visibleData = isMobile ? data : currentData;
-    return visibleData.map((row: IAbsencesTable, rowIndex: number) => (
+    return visibleData.map((row, rowIndex) => (
       <Tr key={rowIndex} border="bottom">
         {visibleHeaders.map((header) => {
           const cellData = row[header.key as keyof IAbsencesTable] as {
@@ -366,7 +347,6 @@ function AbsencesTable({
             header.key,
             cellData ?? { value: "" },
             rowIndex,
-            row,
           );
         })}
       </Tr>
@@ -409,7 +389,6 @@ function AbsencesTable({
         </Colgroup>
 
         <Thead>{renderHeaderRow()}</Thead>
-
         <Tbody>
           {loading
             ? renderLoadingRows()
@@ -443,6 +422,13 @@ function AbsencesTable({
           titleDescription={modalInfo.titleDescription}
           description={modalInfo.description}
           onCloseModal={() => setShowModal(false)}
+        />
+      )}
+
+      {showUploadModal && (
+        <UploadDocumentsModal
+          handleClose={() => setShowUploadModal(false)}
+          documents={mockDocuments}
         />
       )}
 
