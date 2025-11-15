@@ -144,7 +144,7 @@ export function AttachDocumentModal(props: AttachDocumentModalProps) {
       >
         <Stack alignItems="center" justifyContent="space-between">
           <Text type="headline" size="small">
-            {ellipsisText(title, 60)}
+            {ellipsisText(title, isMobile ? 30 : 60)}
           </Text>
           <StyledContainerClose onClick={onCloseModal}>
             <Stack alignItems="center" gap={spacing.s100}>
@@ -190,7 +190,7 @@ export function AttachDocumentModal(props: AttachDocumentModalProps) {
             <Divider dashed />
             <Stack direction="column" gap={spacing.s300}>
               <Text type="title" size="medium" weight="bold" appearance="gray">
-                Documentos adjuntos ({selectedFiles.length})
+                Archivos adjuntos ({selectedFiles.length})
               </Text>
               <Grid
                 templateColumns={`repeat(${isMobile ? 1 : 2}, 1fr)`}
