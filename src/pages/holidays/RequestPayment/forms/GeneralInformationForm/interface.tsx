@@ -111,7 +111,7 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
                   name="contractId"
                   options={contractOptions}
                   placeholder="Selecciona de la lista"
-                  value={formik.values.contractId}
+                  value={formik.values.contractId ?? ""}
                   message={formik.errors.contractId}
                   disabled={loading}
                   size="compact"

@@ -115,8 +115,7 @@ function AbsencesProcedureTable({
         typeof rawRequestData === "string"
           ? JSON.parse(rawRequestData)
           : (rawRequestData ?? {});
-    } catch (error) {
-      console.error("🔥 ERROR al parsear humanResourceRequestData:", error);
+    } catch {
       parsedData = {};
     }
 
