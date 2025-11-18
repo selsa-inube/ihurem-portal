@@ -22,6 +22,7 @@ import { RequestComponentDetail } from "@components/modals/ComponentDetailModal"
 import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
 import { formatDate } from "@utils/date";
 import { spacing } from "@design/tokens/spacing";
+import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
 
 import { usePagination } from "./usePagination";
 import {
@@ -104,17 +105,29 @@ function AbsencesProcedureTable({
     }
 
     const details = row.dataDetails?.value;
+    const rawRequestData = details?.humanResourceRequestData;
+
+    let parsedData: IUnifiedHumanResourceRequestData =
+      {} as IUnifiedHumanResourceRequestData;
+
+    try {
+      parsedData =
+        typeof rawRequestData === "string"
+          ? JSON.parse(rawRequestData)
+          : (rawRequestData ?? {});
+    } catch (error) {
+      console.error("🔥 ERROR al parsear humanResourceRequestData:", error);
+      parsedData = {};
+    }
+
+    const fechaSolicitud = formatDate(
+      parsedData.startDate ?? "Sin fecha registrada",
+    );
+    const detalleMotivo = parsedData.motifDetail ?? "Sin motivo";
+
     const detailsData = [
-      {
-        label: "Fecha de solicitud",
-        value: details?.humanResourceRequestDate
-          ? formatDate(details.humanResourceRequestDate)
-          : "Sin fecha registrada",
-      },
-      {
-        label: "Detalles del motivo",
-        value: details?.humanResourceRequestDescription ?? "Sin descripción",
-      },
+      { label: "Fecha de solicitud", value: fechaSolicitud },
+      { label: "Detalles del motivo", value: detalleMotivo },
     ];
 
     setSelectedRecord(detailsData);

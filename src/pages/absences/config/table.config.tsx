@@ -1,6 +1,8 @@
 import {
   HumanResourceRequest,
   ERequestStatus,
+  EAbsenceReason,
+  absenceReasonLabels,
   IUnifiedHumanResourceRequestData,
 } from "@ptypes/humanResourcesRequest.types";
 import { IAbsencesProcedureTable } from "../components/AbsencesProcedureTable/types";
@@ -22,11 +24,22 @@ export const formatAbsenceRequests = (
       console.warn("Error al parsear humanResourceRequestData:", error);
     }
 
+    const formattedReason = (() => {
+      const code = parsedData.subReason ?? parsedData.reason;
+
+      if (!code) return "Sin motivo";
+      return (
+        absenceReasonLabels[code as EAbsenceReason] ?? code.replace(/_/g, " ")
+      );
+    })();
+
     return {
-      reason: { value: item.humanResourceRequestDescription ?? "Sin motivo" },
+      reason: { value: formattedReason },
       date: { value: formatDate(item.humanResourceRequestDate) },
       duration: {
-        value: parsedData?.daysOff ? `${parsedData.daysOff} días` : "-",
+        value: parsedData.durationOfDays
+          ? `${parsedData.durationOfDays} días`
+          : "-",
       },
       state: {
         value:
@@ -34,6 +47,7 @@ export const formatAbsenceRequests = (
             item.humanResourceRequestStatus as unknown as keyof typeof ERequestStatus
           ] ?? "En trámite",
       },
+
       dataDetails: {
         value: {
           humanResourceRequestId: item.humanResourceRequestId,
@@ -41,6 +55,10 @@ export const formatAbsenceRequests = (
           humanResourceRequestDate: formatDate(item.humanResourceRequestDate),
           humanResourceRequestDescription:
             item.humanResourceRequestDescription ?? "Sin descripción",
+          humanResourceRequestData: {
+            ...parsedData,
+            reason: parsedData.reason,
+          },
         },
       },
       view: {

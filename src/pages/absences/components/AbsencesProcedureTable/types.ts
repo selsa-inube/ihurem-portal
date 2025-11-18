@@ -1,3 +1,10 @@
+import {
+  EAbsenceReason,
+  ERequestType,
+  HumanResourceRequestStatus,
+  ETaskStatus,
+} from "@ptypes/humanResourcesRequest.types";
+
 export interface IAbsencesProcedureTable {
   requestId?: string;
   reason: AbsencesTableField<string>;
@@ -23,21 +30,27 @@ interface AbsencesTableAction
 export interface AbsencesProcedureTableDataDetails {
   humanResourceRequestId: string;
   humanResourceRequestNumber: string;
-  humanResourceRequestType: string;
+  humanResourceRequestType: ERequestType;
   humanResourceRequestDescription: string;
   humanResourceRequestDate: string;
-  humanResourceRequestStatus: string;
+  humanResourceRequestStatus: HumanResourceRequestStatus;
+  humanResourceRequestData?: {
+    reason?: EAbsenceReason;
+    subReason?: string;
+    motifDetail?: string;
+    startDate?: string;
+    durationOfDays?: number;
+  };
   employeeId: string;
   staffName: string;
   staffLastName: string;
   positionName: string;
-  department?: string;
   identificationDocumentNumber: string;
   taskCode: string;
   taskName: string;
-  taskStatus: string;
+  taskStatus: ETaskStatus;
   taskManagingId: string;
-  description: string;
+  department?: string;
   approvedBy?: string;
   observationEmployee?: string;
 }
