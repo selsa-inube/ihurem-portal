@@ -206,6 +206,7 @@ function ReportAbsence() {
         isCurrentFormValid={isCurrentFormValid}
         showStartTimeErrorModal={showStartTimeErrorModal}
         showRequiredDocsErrorModal={showRequiredDocsErrorModal}
+        setCurrentStep={setCurrentStep}
         setIsCurrentFormValid={setIsCurrentFormValid}
         setShowStartTimeErrorModal={setShowStartTimeErrorModal}
         setShowRequiredDocsErrorModal={setShowRequiredDocsErrorModal}

@@ -24,6 +24,7 @@ import { RequirementsForm } from "./forms/RequirementsForm";
 import { AbsenceMotiveForm } from "./forms/AbsenceMotiveForm";
 import { AbsenceDurationForm } from "./forms/AbsenceDurationForm";
 import { RequiredDocumentsForm } from "./forms/RequiredDocumentsForm";
+import { VerificationForm } from "./forms/VerificationForm/VerificationBoxes";
 
 interface RequestEnjoymentUIProps {
   appName: string;
@@ -41,6 +42,7 @@ interface RequestEnjoymentUIProps {
   isCurrentFormValid: boolean;
   showStartTimeErrorModal: boolean;
   showRequiredDocsErrorModal: boolean;
+  setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
   setIsCurrentFormValid: React.Dispatch<React.SetStateAction<boolean>>;
   setShowStartTimeErrorModal: React.Dispatch<React.SetStateAction<boolean>>;
   setShowRequiredDocsErrorModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -64,6 +66,7 @@ function ReportAbsenceUI(props: RequestEnjoymentUIProps) {
     isCurrentFormValid,
     showStartTimeErrorModal,
     showRequiredDocsErrorModal,
+    setCurrentStep,
     setIsCurrentFormValid,
     setShowStartTimeErrorModal,
     setShowRequiredDocsErrorModal,
@@ -81,6 +84,23 @@ function ReportAbsenceUI(props: RequestEnjoymentUIProps) {
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
+
+  const absenceMotiveEntry: IAbsenceMotiveEntry = {
+    motive: initialValues.motive ?? "",
+    motiveDetails: initialValues.motiveDetails ?? "",
+    subMotive: initialValues.subMotive,
+  };
+
+  const absenceDurationEntry: IAbsenceDurationEntry = {
+    startDate: initialValues.startDate ?? "",
+    daysDuration: initialValues.daysDuration ?? "",
+    hoursDuration: initialValues.hoursDuration ?? "",
+    startTime: initialValues.startTime ?? "",
+  };
+
+  const requiredDocumentsEntry: IRequiredDocumentsEntry = {
+    documents: initialValues.documents ?? [],
+  };
 
   return (
     <>
@@ -151,6 +171,27 @@ function ReportAbsenceUI(props: RequestEnjoymentUIProps) {
                 onFormValid={setIsCurrentFormValid}
                 handleNextStep={handleNextStep}
                 handlePreviousStep={handlePreviousStep}
+              />
+            )}
+            {currentStep === 5 && (
+              <VerificationForm
+                updatedData={{
+                  absenceMotiveInformation: {
+                    isValid: isCurrentFormValid,
+                    values: absenceMotiveEntry,
+                  },
+                  absenceDurationInformation: {
+                    isValid: isCurrentFormValid,
+                    values: absenceDurationEntry,
+                  },
+                  requiredDocumentsInformation: {
+                    isValid: isCurrentFormValid,
+                    values: requiredDocumentsEntry,
+                  },
+                }}
+                handleStepChange={(stepId) => setCurrentStep(stepId)}
+                handlePreviousStep={handlePreviousStep}
+                handleSubmit={handleFinishAssisted}
               />
             )}
           </Stack>
