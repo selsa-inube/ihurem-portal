@@ -21,19 +21,32 @@ import {
   MdMoreVert,
 } from "react-icons/md";
 
+import {
+  AbsenceReasonES,
+  AbsenceSubReasonES,
+} from "@ptypes/employeeAbsence.types";
 import { InfoModal } from "@components/modals/InfoModal";
 import { UploadDocumentsModal } from "@components/modals/UploadDocumentsModal";
 import { RequestComponentDetail } from "@components/modals/ComponentDetailModal";
 import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
 import { MenuPropect } from "@components/feedback/MenuPropect";
 import { IOptions } from "@components/feedback/MenuPropect/types";
-import { mockRequestDetail, mockDocuments } from "../tableMock/tableMock";
 import { formatDate, formatMobileDate } from "@utils/date";
 import { spacing } from "@design/tokens/spacing";
+
 import { usePagination } from "./usePagination";
 import { IAbsencesTable, AbsencesTableDataDetails } from "./types";
 import { StyledTd, StyledTh, StyledMenuWrapper } from "./styles";
 import { columns, headers } from "./tableConfig";
+
+import { mockDocuments } from "../tableMock/tableMock";
+
+interface ModalDetailItem {
+  label: string;
+  value: string;
+}
+
+type SelectedModalContent = AbsencesTableDataDetails | null;
 
 interface AbsencesTableProps {
   data: IAbsencesTable[];
@@ -42,6 +55,42 @@ interface AbsencesTableProps {
   hasUploadPrivilege?: boolean;
   handleRestrictedClick?: (message: string) => void;
 }
+
+const formatDetailsForModal = (
+  details: AbsencesTableDataDetails | null,
+): ModalDetailItem[] => {
+  if (!details) return [];
+
+  const reasonES =
+    AbsenceReasonES[details.absenceReason] ?? details.absenceReason ?? "N/A";
+
+  const subReasonES =
+    AbsenceSubReasonES[details.subReason] ?? details.subReason ?? "N/A";
+
+  return [
+    { label: "Tipo de Ausencia", value: reasonES },
+
+    {
+      label: "Descripción del Motivo",
+      value: details.absenceReasonDetails ?? "N/A",
+    },
+
+    {
+      label: "Fecha de Inicio",
+      value: details.absenceStartDate
+        ? formatDate(details.absenceStartDate)
+        : "N/A",
+    },
+
+    { label: "Empleado ID", value: String(details.employeeId) },
+    { label: "Contrato ID", value: String(details.contractId) },
+
+    { label: "Subrazón", value: subReasonES },
+
+    { label: "Empleado ID", value: details.employeeId },
+    { label: "Contrato ID", value: details.contractId },
+  ];
+};
 
 function AbsencesTable({
   data,
@@ -57,6 +106,8 @@ function AbsencesTable({
   const [showModal, setShowModal] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [showRequestDetail, setShowRequestDetail] = useState(false);
+  const [selectedAbsenceDetails, setSelectedAbsenceDetails] =
+    useState<SelectedModalContent>(null);
 
   const [modalInfo, setModalInfo] = useState({
     title: "Información",
@@ -100,10 +151,15 @@ function AbsencesTable({
       );
       return;
     }
-    setShowRequestDetail(true);
+    if (selectedAbsenceDetails) {
+      setShowRequestDetail(true);
+    }
   };
 
-  const handleCloseRequestDetail = () => setShowRequestDetail(false);
+  const handleCloseRequestDetail = () => {
+    setShowRequestDetail(false);
+    setSelectedAbsenceDetails(null);
+  };
 
   const handleUploadDocuments = () => {
     if (!hasUploadPrivilege) {
@@ -115,7 +171,12 @@ function AbsencesTable({
     setShowUploadModal(true);
   };
 
-  const handleMenuClick = (event: React.MouseEvent<Element, MouseEvent>) => {
+  const handleMenuClick = (
+    event: React.MouseEvent<Element, MouseEvent>,
+    details: AbsencesTableDataDetails,
+  ) => {
+    setSelectedAbsenceDetails(details);
+
     const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
     setMenuPosition({
       top: rect.bottom + window.scrollY,
@@ -124,7 +185,9 @@ function AbsencesTable({
     setShowMenu(true);
   };
 
-  const handleCloseMenu = () => setShowMenu(false);
+  const handleCloseMenu = () => {
+    setShowMenu(false);
+  };
 
   useEffect(() => {
     const handleOutsideTouch = (event: Event) => {
@@ -234,7 +297,7 @@ function AbsencesTable({
       ? columns.slice(0, 3)
       : columns;
 
-  const renderActionIcons = () => {
+  const renderActionIcons = (details: AbsencesTableDataDetails) => {
     if (isMobile) {
       return (
         <Stack justifyContent="center">
@@ -243,7 +306,7 @@ function AbsencesTable({
             appearance="primary"
             size="16px"
             cursorHover
-            onClick={handleMenuClick}
+            onClick={(e) => handleMenuClick(e, details)}
             variant="filled"
             shape="circle"
           />
@@ -258,25 +321,29 @@ function AbsencesTable({
           appearance={hasViewDetailsPrivilege ? "dark" : "gray"}
           size="16px"
           cursorHover={hasViewDetailsPrivilege}
-          onClick={() =>
-            hasViewDetailsPrivilege
-              ? handleViewDetails()
-              : handleRestrictedClick(
-                  "No tienes privilegios para ver los detalles de esta ausencia.",
-                )
-          }
+          onClick={() => {
+            if (!hasViewDetailsPrivilege) {
+              handleRestrictedClick(
+                "No tienes privilegios para ver los detalles de esta ausencia.",
+              );
+              return;
+            }
+            setSelectedAbsenceDetails(details);
+            setShowRequestDetail(true);
+          }}
         />
         <Icon
           icon={<MdOutlineFileUpload />}
           appearance={hasUploadPrivilege ? "primary" : "gray"}
           size="16px"
           cursorHover={hasUploadPrivilege}
-          onClick={() =>
+          onClick={
             hasUploadPrivilege
-              ? handleUploadDocuments()
-              : handleRestrictedClick(
-                  "No tienes privilegios para cargar documentos en esta ausencia.",
-                )
+              ? handleUploadDocuments
+              : () =>
+                  handleRestrictedClick(
+                    "No tienes privilegios para cargar documentos en esta ausencia.",
+                  )
           }
         />
       </Stack>
@@ -285,17 +352,29 @@ function AbsencesTable({
 
   const renderCellContent = (
     headerKey: string,
+    rowData: IAbsencesTable,
     cellData?: {
       value?: string | number | JSX.Element | AbsencesTableDataDetails;
     },
   ) => {
     if (loading) return <SkeletonLine width="100%" animated />;
-    if (headerKey === "actions") return renderActionIcons();
+
+    if (headerKey === "actions") {
+      const details = rowData.dataDetails?.value;
+
+      if (!details) {
+        return renderActionIcons({} as AbsencesTableDataDetails);
+      }
+
+      return renderActionIcons(details as AbsencesTableDataDetails);
+    }
 
     if (headerKey === "date" && typeof cellData?.value === "string") {
       const dateText = cellData.value;
+
       if (isMobile) return formatMobileDate(dateText);
       if (dateText.includes(":")) return dateText;
+
       return formatDate(dateText);
     }
 
@@ -310,6 +389,7 @@ function AbsencesTable({
       value?: string | number | JSX.Element | AbsencesTableDataDetails;
     },
     rowIndex: number,
+    rowData: IAbsencesTable,
   ) => (
     <StyledTd
       key={headerKey}
@@ -317,7 +397,7 @@ function AbsencesTable({
       type={headerKey === "actions" || loading ? "custom" : "text"}
       align={getCellAlignment(headerKey)}
     >
-      {renderCellContent(headerKey, cellData)}
+      {renderCellContent(headerKey, rowData, cellData)}
     </StyledTd>
   );
 
@@ -347,6 +427,7 @@ function AbsencesTable({
             header.key,
             cellData ?? { value: "" },
             rowIndex,
+            row,
           );
         })}
       </Tr>
@@ -432,11 +513,11 @@ function AbsencesTable({
         />
       )}
 
-      {showRequestDetail && (
+      {showRequestDetail && selectedAbsenceDetails && (
         <RequestComponentDetail
           title="Detalle de Solicitud"
           buttonLabel="Cerrar"
-          modalContent={mockRequestDetail}
+          modalContent={formatDetailsForModal(selectedAbsenceDetails)}
           requirements={mockRequirements}
           handleClose={handleCloseRequestDetail}
           showRequirementsTable

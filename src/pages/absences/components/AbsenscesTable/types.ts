@@ -19,12 +19,14 @@ interface AbsencesTableAction
 }
 
 export interface AbsencesTableDataDetails {
-  absenceType: string;
-  employeeName: string;
-  department: string;
-  startDate: string;
-  endDate: string;
-  reasonDescription: string;
-  approvedBy: string;
-  observationEmployee: string;
+  absenceDays: number;
+  absenceId: string;
+  absenceReason: string;
+  absenceReasonDetails: string;
+  absenceStartDate: string;
+  absenceStartHour: number;
+  contractId: string;
+  employeeId: string;
+  hoursAbsent: number;
+  subReason: string;
 }
