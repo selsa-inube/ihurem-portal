@@ -23,6 +23,12 @@ import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
 import { formatDate } from "@utils/date";
 import { spacing } from "@design/tokens/spacing";
 import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
+import {
+  absenceReasonLabels,
+  EAbsenceReason,
+  EContractType,
+  ELeaveReason,
+} from "@ptypes/humanResourcesRequest.types";
 
 import { usePagination } from "./usePagination";
 import {
@@ -119,14 +125,50 @@ function AbsencesProcedureTable({
       parsedData = {};
     }
 
-    const fechaSolicitud = formatDate(
-      parsedData.startDate ?? "Sin fecha registrada",
-    );
-    const detalleMotivo = parsedData.motifDetail ?? "Sin motivo";
-
     const detailsData = [
-      { label: "Fecha de solicitud", value: fechaSolicitud },
-      { label: "Detalles del motivo", value: detalleMotivo },
+      {
+        label: "Motivo",
+        value: parsedData.reason
+          ? (ELeaveReason[parsedData.reason as keyof typeof ELeaveReason] ??
+            parsedData.reason)
+          : "Sin dato",
+      },
+      {
+        label: "Submotivo",
+        value: parsedData.subReason
+          ? (absenceReasonLabels[parsedData.subReason as EAbsenceReason] ??
+            parsedData.subReason)
+          : "Sin dato",
+      },
+      {
+        label: "Tipo de contrato",
+        value: parsedData.contractType
+          ? (EContractType[
+              parsedData.contractType as keyof typeof EContractType
+            ] ?? parsedData.contractType)
+          : "Sin dato",
+      },
+      { label: "ID del contrato", value: parsedData.contractId ?? "Sin dato" },
+      {
+        label: "Número de contrato",
+        value: parsedData.contractNumber ?? "Sin dato",
+      },
+      {
+        label: "Nombre del negocio",
+        value: parsedData.businessName ?? "Sin dato",
+      },
+      {
+        label: "Detalles del motivo",
+        value: parsedData.motifDetail ?? "Sin dato",
+      },
+      { label: "Fecha de inicio", value: parsedData.startDate ?? "Sin dato" },
+      {
+        label: "Duración (días)",
+        value:
+          parsedData.durationOfDays !== undefined
+            ? parsedData.durationOfDays.toString()
+            : "Sin dato",
+      },
     ];
 
     setSelectedRecord(detailsData);

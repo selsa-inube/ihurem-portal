@@ -12,6 +12,25 @@ export enum ERequestType {
   unpaid_leave = "Licencia no remunerada",
   vacations_enjoyed = "Vacaciones Disfrutadas",
 }
+
+export enum EContractType {
+  FixedTermContract = "Término Fijo",
+  PermanentContract = "Término Indefinido",
+  ByWorkOrLabor = "Por Obra o Labor",
+  CivilContract = "Contrato civil por prestación de servicios",
+  Apprentice = "Aprendiz",
+  ContingentWorker = "Contrato ocasional de trabajo",
+}
+
+export enum ELeaveReason {
+  leave = "Permiso",
+  vacation = "Vacaciones",
+  personal_leave = "Permiso personal",
+  family_emergency = "Emergencia familiar",
+  medical_appointment = "Cita médica",
+  personal_or_family_medical_appointment = "Cita médica personal o familiar",
+}
+
 export const requestTypeMap: Record<ERequestType, string> = {
   [ERequestType.absence]: "absence",
   [ERequestType.certification]: "certification",
