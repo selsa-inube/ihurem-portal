@@ -161,7 +161,12 @@ function AbsencesProcedureTable({
         label: "Detalles del motivo",
         value: parsedData.motifDetail ?? "Sin dato",
       },
-      { label: "Fecha de inicio", value: parsedData.startDate ?? "Sin dato" },
+      {
+        label: "Fecha de inicio",
+        value: parsedData.startDate
+          ? formatDate(parsedData.startDate)
+          : "Sin dato",
+      },
       {
         label: "Duración (días)",
         value:
