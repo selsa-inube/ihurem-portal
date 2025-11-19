@@ -19,9 +19,11 @@ import { spacing } from "@design/tokens/spacing";
 
 import { IAbsenceMotiveEntry } from "./forms/AbsenceMotiveForm/types";
 import { IAbsenceDurationEntry } from "./forms/AbsenceDurationForm/types";
+import { IRequiredDocumentsEntry } from "./forms/RequiredDocumentsForm/types";
 import { RequirementsForm } from "./forms/RequirementsForm";
 import { AbsenceMotiveForm } from "./forms/AbsenceMotiveForm";
 import { AbsenceDurationForm } from "./forms/AbsenceDurationForm";
+import { RequiredDocumentsForm } from "./forms/RequiredDocumentsForm";
 
 interface RequestEnjoymentUIProps {
   appName: string;
@@ -32,11 +34,16 @@ interface RequestEnjoymentUIProps {
   currentStep: number;
   absenceMotiveRef: React.RefObject<FormikProps<IAbsenceMotiveEntry>>;
   absenceDurationRef: React.RefObject<FormikProps<IAbsenceDurationEntry>>;
-  initialValues: IAbsenceMotiveEntry & IAbsenceDurationEntry;
+  requiredDocumentsRef: React.RefObject<FormikProps<IRequiredDocumentsEntry>>;
+  initialValues: IAbsenceMotiveEntry &
+    IAbsenceDurationEntry &
+    IRequiredDocumentsEntry;
   isCurrentFormValid: boolean;
   showStartTimeErrorModal: boolean;
+  showRequiredDocsErrorModal: boolean;
   setIsCurrentFormValid: React.Dispatch<React.SetStateAction<boolean>>;
   setShowStartTimeErrorModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowRequiredDocsErrorModal: React.Dispatch<React.SetStateAction<boolean>>;
   handleNextStep: () => void;
   handlePreviousStep: () => void;
   handleFinishAssisted: () => void;
@@ -52,17 +59,21 @@ function ReportAbsenceUI(props: RequestEnjoymentUIProps) {
     currentStep,
     absenceMotiveRef,
     absenceDurationRef,
+    requiredDocumentsRef,
     initialValues,
     isCurrentFormValid,
     showStartTimeErrorModal,
+    showRequiredDocsErrorModal,
     setIsCurrentFormValid,
     setShowStartTimeErrorModal,
+    setShowRequiredDocsErrorModal,
     handleNextStep,
     handlePreviousStep,
     handleFinishAssisted,
   } = props;
 
-  const shouldDisableNext = !isCurrentFormValid && currentStep != 1;
+  const shouldDisableNext =
+    !isCurrentFormValid && currentStep !== 1 && currentStep !== 4;
 
   const isTablet = useMediaQuery("(max-width: 1100px)");
 
@@ -132,6 +143,16 @@ function ReportAbsenceUI(props: RequestEnjoymentUIProps) {
                 handlePreviousStep={handlePreviousStep}
               />
             )}
+            {currentStep === 4 && (
+              <RequiredDocumentsForm
+                ref={requiredDocumentsRef}
+                initialValues={initialValues}
+                withNextButton={true}
+                onFormValid={setIsCurrentFormValid}
+                handleNextStep={handleNextStep}
+                handlePreviousStep={handlePreviousStep}
+              />
+            )}
           </Stack>
         </Stack>
       </AppMenu>
@@ -152,6 +173,16 @@ function ReportAbsenceUI(props: RequestEnjoymentUIProps) {
           solutionText='Para continuar primero debes seleccionar la "Hora de inicio aproximada" para la ausencia.'
           onCloseModal={() => setShowStartTimeErrorModal(false)}
           onSubmitButtonClick={() => setShowStartTimeErrorModal(false)}
+        />
+      )}
+
+      {showRequiredDocsErrorModal && (
+        <ErrorModal
+          title="Alerta"
+          solutionText="Para continuar debes cargar los documentos que sean obligatorios."
+          onCloseModal={() => setShowRequiredDocsErrorModal(false)}
+          onSubmitButtonClick={() => setShowRequiredDocsErrorModal(false)}
+          onSolutionOnly
         />
       )}
     </>
