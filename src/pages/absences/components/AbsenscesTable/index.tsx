@@ -74,21 +74,24 @@ const formatDetailsForModal = (
       label: "Descripción del Motivo",
       value: details.absenceReasonDetails ?? "N/A",
     },
-
     {
       label: "Fecha de Inicio",
       value: details.absenceStartDate
         ? formatDate(details.absenceStartDate)
         : "N/A",
     },
-
+    {
+      label: "Hora de Inicio",
+      value: details.absenceStartHour
+        ? String(details.absenceStartHour)
+        : "N/A",
+    },
+    {
+      label: "Horas de Ausencia",
+      value: details.hoursAbsent ? String(details.hoursAbsent) : "N/A",
+    },
     { label: "Empleado ID", value: String(details.employeeId) },
-    { label: "Contrato ID", value: String(details.contractId) },
-
-    { label: "Subrazón", value: subReasonES },
-
-    { label: "Empleado ID", value: details.employeeId },
-    { label: "Contrato ID", value: details.contractId },
+    { label: "Sub Razón", value: subReasonES },
   ];
 };
 
