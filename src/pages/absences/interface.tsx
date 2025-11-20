@@ -79,12 +79,13 @@ function AbsencesOptionsUI(props: AbsencesOptionsUIProps) {
   };
 
   const tabs: ITab[] = [
-    { id: "reportadas", label: "Ausencias reportadas" },
+    {
+      id: "reportadas",
+      label: isMobile ? "Reportadas" : "Ausencias reportadas",
+    },
     {
       id: "solicitudes",
-      label: isMobile
-        ? "Solicitudes en trámite"
-        : "Solicitudes de ausencias en trámite",
+      label: isMobile ? "En trámite" : "Solicitudes de ausencias en trámite",
       icon: {
         appearance: "warning",
         icon: <MdOutlineWarningAmber />,
