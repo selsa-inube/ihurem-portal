@@ -9,7 +9,7 @@ import {
   IButtonAppearance,
 } from "@inubekit/inubekit";
 import { createPortal } from "react-dom";
-import { MdClear, MdOutlineReport } from "react-icons/md";
+import { MdClear, MdOutlineReportProblem } from "react-icons/md";
 
 import { spacing } from "@design/tokens/spacing";
 
@@ -22,6 +22,7 @@ export interface ErrorModalProps {
   appearance?: IButtonAppearance;
   descriptionText?: string;
   solutionText?: string;
+  onSolutionOnly?: boolean;
   onCloseModal?: () => void;
   onSubmitButtonClick?: () => void;
 }
@@ -34,6 +35,7 @@ export function ErrorModal(props: ErrorModalProps) {
     appearance = "warning",
     descriptionText = "*Descripción general del error. Incluye código identificador.",
     solutionText = "*Cómo solucionarlo: Instrucciones generales que podrían conducir a la solución del error.",
+    onSolutionOnly,
     onCloseModal,
     onSubmitButtonClick,
   } = props;
@@ -70,15 +72,19 @@ export function ErrorModal(props: ErrorModalProps) {
         <Stack direction="column" gap={spacing.s200}>
           <Stack justifyContent="center">
             <Icon
-              icon={<MdOutlineReport />}
+              icon={<MdOutlineReportProblem />}
               size="68px"
               appearance={appearance}
             />
           </Stack>
-          <Text size="medium" appearance="gray">
-            {descriptionText}
-          </Text>
-          <Divider dashed />
+          {!onSolutionOnly && (
+            <>
+              <Text size="medium" appearance="gray">
+                {descriptionText}
+              </Text>
+              <Divider dashed />
+            </>
+          )}
           <Text size="medium">{solutionText}</Text>
         </Stack>
         <Stack justifyContent="end">

@@ -8,10 +8,13 @@ import { reportAbsenceSteps } from "./config/assisted.config";
 import { ModalState } from "./types";
 import { IAbsenceMotiveEntry } from "./forms/AbsenceMotiveForm/types";
 import { IAbsenceDurationEntry } from "./forms/AbsenceDurationForm/types";
+import { IRequiredDocumentsEntry } from "./forms/RequiredDocumentsForm/types";
+import { IDocument } from "./forms/RequiredDocumentsForm/RequiredDocumentsTable/types";
+import { mockDocuments } from "./forms/RequiredDocumentsForm/config/formConfig";
 
 function useFormManagement() {
   const [formValues, setFormValues] = useState<
-    IAbsenceMotiveEntry & IAbsenceDurationEntry
+    IAbsenceMotiveEntry & IAbsenceDurationEntry & IRequiredDocumentsEntry
   >({
     motive: "",
     subMotive: "",
@@ -20,11 +23,14 @@ function useFormManagement() {
     daysDuration: "",
     hoursDuration: "",
     startTime: "",
+    documents: mockDocuments,
   });
 
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
   const absenceMotiveRef = useRef<FormikProps<IAbsenceMotiveEntry>>(null);
   const absenceDurationRef = useRef<FormikProps<IAbsenceDurationEntry>>(null);
+  const requiredDocumentsRef =
+    useRef<FormikProps<IRequiredDocumentsEntry>>(null);
 
   const updateFormValues = () => {
     if (absenceMotiveRef.current) {
@@ -42,6 +48,14 @@ function useFormManagement() {
       }));
       setIsCurrentFormValid(absenceDurationRef.current.isValid);
     }
+
+    if (requiredDocumentsRef.current) {
+      setFormValues((prev) => ({
+        ...prev,
+        ...requiredDocumentsRef.current!.values,
+      }));
+      setIsCurrentFormValid(requiredDocumentsRef.current.isValid);
+    }
   };
 
   return {
@@ -50,6 +64,7 @@ function useFormManagement() {
     setIsCurrentFormValid,
     absenceMotiveRef,
     absenceDurationRef,
+    requiredDocumentsRef,
     updateFormValues,
   };
 }
@@ -84,6 +99,8 @@ function useModalManagement() {
 function ReportAbsence() {
   const [currentStep, setCurrentStep] = useState(1);
   const [showStartTimeErrorModal, setShowStartTimeErrorModal] = useState(false);
+  const [showRequiredDocsErrorModal, setShowRequiredDocsErrorModal] =
+    useState(false);
 
   const {
     formValues,
@@ -91,10 +108,25 @@ function ReportAbsence() {
     setIsCurrentFormValid,
     absenceMotiveRef,
     absenceDurationRef,
+    requiredDocumentsRef,
     updateFormValues,
   } = useFormManagement();
 
   const { modalState, openSendModal, closeSendModal } = useModalManagement();
+
+  const validateRequiredDocuments = () => {
+    if (!requiredDocumentsRef.current) return true;
+
+    const documents = requiredDocumentsRef.current.values.documents || [];
+
+    if (documents.length === 0) return true;
+
+    const requiredDocs = documents.filter((doc: IDocument) => doc.required);
+    const allRequiredHaveFiles = requiredDocs.every(
+      (doc: IDocument) => doc.attachedFiles && doc.attachedFiles.length > 0,
+    );
+    return allRequiredHaveFiles;
+  };
 
   const handleNextStep = () => {
     if (currentStep === 3 && absenceDurationRef.current) {
@@ -104,6 +136,14 @@ function ReportAbsence() {
 
       if (hasHoursDuration && !values.startTime) {
         setShowStartTimeErrorModal(true);
+        return;
+      }
+    }
+
+    if (currentStep === 4) {
+      const isValid = validateRequiredDocuments();
+      if (!isValid) {
+        setShowRequiredDocsErrorModal(true);
         return;
       }
     }
@@ -161,11 +201,15 @@ function ReportAbsence() {
         currentStep={currentStep}
         absenceMotiveRef={absenceMotiveRef}
         absenceDurationRef={absenceDurationRef}
+        requiredDocumentsRef={requiredDocumentsRef}
         initialValues={formValues}
         isCurrentFormValid={isCurrentFormValid}
         showStartTimeErrorModal={showStartTimeErrorModal}
+        showRequiredDocsErrorModal={showRequiredDocsErrorModal}
+        setCurrentStep={setCurrentStep}
         setIsCurrentFormValid={setIsCurrentFormValid}
         setShowStartTimeErrorModal={setShowStartTimeErrorModal}
+        setShowRequiredDocsErrorModal={setShowRequiredDocsErrorModal}
         handleNextStep={handleNextStep}
         handlePreviousStep={handlePreviousStep}
         handleFinishAssisted={handleFinishAssisted}
