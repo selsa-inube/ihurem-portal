@@ -161,6 +161,19 @@ function AbsencesOptionsUI(props: AbsencesOptionsUIProps) {
         <Text type="title" size="medium">
           Solicitudes de ausencias en trámite
         </Text>
+        {isMobile && (
+          <Stack direction="column" gap={spacing.s150}>
+            <AbsenceDetail
+              disableAbsence={!hasPrivilege || !hasActiveContract}
+              actionDescriptions={actionDescriptions}
+              hasTableData={mockAbsencesData.length > 0}
+              onRequestAbsence={() => {
+                void addRequest();
+              }}
+              onInfoIconClick={(desc) => onOpenInfoModal(desc)}
+            />
+          </Stack>
+        )}
       </Stack>
 
       <AbsencesProcedureTable

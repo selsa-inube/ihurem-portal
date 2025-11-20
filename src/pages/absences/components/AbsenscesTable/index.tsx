@@ -27,9 +27,10 @@ import { RequestComponentDetail } from "@components/modals/ComponentDetailModal"
 import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
 import { MenuPropect } from "@components/feedback/MenuPropect";
 import { IOptions } from "@components/feedback/MenuPropect/types";
-import { mockRequestDetail, mockDocuments } from "../tableMock/tableMock";
 import { formatDate, formatMobileDate } from "@utils/date";
 import { spacing } from "@design/tokens/spacing";
+
+import { mockRequestDetail, mockDocuments } from "../tableMock/tableMock";
 import { usePagination } from "./usePagination";
 import { IAbsencesTable, AbsencesTableDataDetails } from "./types";
 import { StyledTd, StyledTh, StyledMenuWrapper } from "./styles";
