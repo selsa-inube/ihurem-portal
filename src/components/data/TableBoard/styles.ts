@@ -99,11 +99,6 @@ export const StyledTable = styled.table<IStyledTable>`
         : theme?.palette?.neutral?.N10 || inube.palette.neutral.N10};
   }
 
-  thead th {
-    background-color: ${({ theme }) =>
-      theme?.palette?.neutral?.N10 || inube.palette.neutral.N10};
-  }
-
   ${({ $zebraEffect, theme, $background }) =>
     $zebraEffect &&
     !$background &&
@@ -132,8 +127,6 @@ export const StyledThead = styled.thead<IStyledWithTheme>`
 `;
 
 export const StyledTh = styled.th<IStyledWithTheme>`
-  background-color: ${({ theme }) =>
-    theme?.palette?.neutral?.N10 || inube.palette.neutral.N10};
   padding: ${spacing.s050};
 `;
 

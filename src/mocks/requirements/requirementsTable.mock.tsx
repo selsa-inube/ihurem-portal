@@ -78,7 +78,7 @@ export const mockRequirements: Requirement[] = [
       {
         id: "hv-2",
         "Validaciones humanas": "Proponer un codeudor",
-        tag: <BorderedTag appearance="danger">No Cumple</BorderedTag>,
+        tag: <BorderedTag appearance="warning">Sin Evaluar</BorderedTag>,
       },
     ],
   },
