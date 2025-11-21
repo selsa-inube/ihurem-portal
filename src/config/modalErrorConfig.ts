@@ -120,6 +120,11 @@ const modalErrorConfig: Record<number, ModalErrorDetail> = {
     solutionText:
       "Verifica tu conexión a internet e intenta nuevamente. Si el problema persiste, contacta al soporte técnico.",
   },
+  1022: {
+    descriptionText: "No se pudieron obtener las ausencias del empleado.",
+    solutionText:
+      "Intenta nuevamente más tarde. Si el problema persiste, contacta al soporte técnico.",
+  },
 };
 
 export { modalErrorConfig };

@@ -15,15 +15,13 @@ import { InfoModal } from "@components/modals/InfoModal";
 import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
 import { spacing } from "@design/tokens/spacing";
-import { ERequestType } from "@ptypes/humanResourcesRequest.types";
-import { useHumanResourceRequests } from "@hooks/useHumanResourceRequests";
 
 import { StyledHolidaysContainer } from "./styles";
 import { AbsencesTable } from "./components/AbsenscesTable";
 import { AbsencesProcedureTable } from "./components/AbsencesProcedureTable";
-import { mockAbsencesData } from "./components/tableMock/tableMock";
 import { AbsenceDetail } from "./components/Detail";
-import { formatAbsenceRequests } from "./config/table.config";
+import { IAbsencesTable } from "./components/AbsenscesTable/types";
+import { IAbsencesProcedureTable } from "./components/AbsencesProcedureTable/types";
 
 interface AbsencesOptionsUIProps {
   appName: string;
@@ -34,6 +32,12 @@ interface AbsencesOptionsUIProps {
   hasPrivilege?: boolean;
   actionDescriptions?: Record<string, string>;
   handleDeleteRequest: (requestId: string, justification: string) => void;
+
+  data: IAbsencesTable[];
+  loading: boolean;
+
+  requestsData: IAbsencesProcedureTable[];
+  requestsLoading: boolean;
 }
 
 function AbsencesOptionsUI(props: AbsencesOptionsUIProps) {
@@ -49,6 +53,10 @@ function AbsencesOptionsUI(props: AbsencesOptionsUIProps) {
         "No se puede reportar ausencia, ya que no tiene un contrato activo o no cuenta con los privilegios necesarios.",
     },
     handleDeleteRequest,
+    data,
+    loading,
+    requestsData,
+    requestsLoading,
   } = props;
 
   const navigate = useNavigate();
@@ -60,9 +68,6 @@ function AbsencesOptionsUI(props: AbsencesOptionsUIProps) {
     title: "",
     description: "",
   });
-
-  const { data: absencesRequests, isLoading: isLoadingRequests } =
-    useHumanResourceRequests(formatAbsenceRequests, ERequestType.absence);
 
   const handleRestrictedAction = () => {
     onOpenInfoModal("No tienes permisos para realizar esta acción.");
@@ -100,7 +105,6 @@ function AbsencesOptionsUI(props: AbsencesOptionsUIProps) {
         <AbsenceDetail
           disableAbsence={!hasPrivilege || !hasActiveContract}
           actionDescriptions={actionDescriptions}
-          hasTableData={mockAbsencesData.length > 0}
           onRequestAbsence={() => {
             void addRequest();
           }}
@@ -143,11 +147,13 @@ function AbsencesOptionsUI(props: AbsencesOptionsUIProps) {
         <Text type="title" size="medium">
           Ausencias reportadas
         </Text>
+
         {renderActions()}
       </Stack>
 
       <AbsencesTable
-        data={mockAbsencesData}
+        data={data}
+        loading={loading}
         hasViewDetailsPrivilege={hasPrivilege}
         hasUploadPrivilege={hasPrivilege}
         handleRestrictedClick={handleRestrictedAction}
@@ -161,12 +167,13 @@ function AbsencesOptionsUI(props: AbsencesOptionsUIProps) {
         <Text type="title" size="medium">
           Solicitudes de ausencias en trámite
         </Text>
+
         {isMobile && (
           <Stack direction="column" gap={spacing.s150}>
             <AbsenceDetail
               disableAbsence={!hasPrivilege || !hasActiveContract}
               actionDescriptions={actionDescriptions}
-              hasTableData={mockAbsencesData.length > 0}
+              hasTableData={requestsData.length > 0}
               onRequestAbsence={() => {
                 void addRequest();
               }}
@@ -177,8 +184,8 @@ function AbsencesOptionsUI(props: AbsencesOptionsUIProps) {
       </Stack>
 
       <AbsencesProcedureTable
-        data={absencesRequests}
-        loading={isLoadingRequests}
+        data={requestsData}
+        loading={requestsLoading}
         hasViewDetailsPrivilege={hasPrivilege}
         hasUploadPrivilege={hasPrivilege}
         handleDeleteRequest={handleDeleteRequest}
