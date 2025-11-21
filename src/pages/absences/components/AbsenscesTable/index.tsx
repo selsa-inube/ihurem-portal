@@ -23,7 +23,8 @@ import {
 
 import {
   AbsenceReasonES,
-  AbsenceSubReasonES,
+  ESubReason,
+  ESubReasonES,
 } from "@ptypes/employeeAbsence.types";
 import { InfoModal } from "@components/modals/InfoModal";
 import { UploadDocumentsModal } from "@components/modals/UploadDocumentsModal";
@@ -38,7 +39,6 @@ import { usePagination } from "./usePagination";
 import { IAbsencesTable, AbsencesTableDataDetails } from "./types";
 import { StyledTd, StyledTh, StyledMenuWrapper } from "./styles";
 import { columns, headers } from "./tableConfig";
-
 import { mockDocuments } from "../tableMock/tableMock";
 
 interface ModalDetailItem {
@@ -65,11 +65,10 @@ const formatDetailsForModal = (
     AbsenceReasonES[details.absenceReason] ?? details.absenceReason ?? "N/A";
 
   const subReasonES =
-    AbsenceSubReasonES[details.subReason] ?? details.subReason ?? "N/A";
+    ESubReasonES[details.subReason as ESubReason] ?? details.subReason ?? "N/A";
 
-  return [
+  const items: ModalDetailItem[] = [
     { label: "Tipo de Ausencia", value: reasonES },
-
     {
       label: "Descripción del Motivo",
       value: details.absenceReasonDetails ?? "N/A",
@@ -80,19 +79,42 @@ const formatDetailsForModal = (
         ? formatDate(details.absenceStartDate)
         : "N/A",
     },
-    {
-      label: "Hora de Inicio",
-      value: details.absenceStartHour
-        ? String(details.absenceStartHour)
-        : "N/A",
-    },
-    {
-      label: "Horas de Ausencia",
-      value: details.hoursAbsent ? String(details.hoursAbsent) : "N/A",
-    },
+  ];
+
+  const isAbsenceByDays =
+    typeof details.absenceDays === "number" && details.absenceDays > 0;
+
+  if (isAbsenceByDays) {
+    items.push({
+      label: "Días de Ausencia",
+      value: String(details.absenceDays),
+    });
+  } else {
+    items.push(
+      {
+        label: "Hora de Inicio",
+        value:
+          details.absenceStartHour !== undefined &&
+          details.absenceStartHour !== null
+            ? String(details.absenceStartHour)
+            : "N/A",
+      },
+      {
+        label: "Horas de Ausencia",
+        value:
+          details.hoursAbsent !== undefined && details.hoursAbsent !== null
+            ? String(details.hoursAbsent)
+            : "N/A",
+      },
+    );
+  }
+
+  items.push(
     { label: "Empleado ID", value: String(details.employeeId) },
     { label: "Sub Razón", value: subReasonES },
-  ];
+  );
+
+  return items;
 };
 
 function AbsencesTable({

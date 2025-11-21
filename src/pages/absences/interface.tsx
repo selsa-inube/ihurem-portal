@@ -1,15 +1,27 @@
 import { useState } from "react";
-import { Button, Stack, useMediaQuery, Text, Icon } from "@inubekit/inubekit";
-import { MdAdd, MdOutlineInfo } from "react-icons/md";
+import {
+  Button,
+  Stack,
+  useMediaQuery,
+  Text,
+  Icon,
+  Tabs,
+  ITab,
+} from "@inubekit/inubekit";
+import { MdAdd, MdOutlineInfo, MdOutlineWarningAmber } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 
 import { InfoModal } from "@components/modals/InfoModal";
 import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
 import { spacing } from "@design/tokens/spacing";
+
 import { StyledHolidaysContainer } from "./styles";
 import { AbsencesTable } from "./components/AbsenscesTable";
+import { AbsencesProcedureTable } from "./components/AbsencesProcedureTable";
+import { AbsenceDetail } from "./components/Detail";
 import { IAbsencesTable } from "./components/AbsenscesTable/types";
+import { IAbsencesProcedureTable } from "./components/AbsencesProcedureTable/types";
 
 interface AbsencesOptionsUIProps {
   appName: string;
@@ -20,8 +32,12 @@ interface AbsencesOptionsUIProps {
   hasPrivilege?: boolean;
   actionDescriptions?: Record<string, string>;
   handleDeleteRequest: (requestId: string, justification: string) => void;
+
   data: IAbsencesTable[];
   loading: boolean;
+
+  requestsData: IAbsencesProcedureTable[];
+  requestsLoading: boolean;
 }
 
 function AbsencesOptionsUI(props: AbsencesOptionsUIProps) {
@@ -36,12 +52,16 @@ function AbsencesOptionsUI(props: AbsencesOptionsUIProps) {
       absence:
         "No se puede reportar ausencia, ya que no tiene un contrato activo o no cuenta con los privilegios necesarios.",
     },
+    handleDeleteRequest,
     data,
     loading,
+    requestsData,
+    requestsLoading,
   } = props;
 
   const navigate = useNavigate();
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const [selectedTab, setSelectedTab] = useState("reportadas");
 
   const [infoModal, setInfoModal] = useState({
     open: false,
@@ -63,17 +83,33 @@ function AbsencesOptionsUI(props: AbsencesOptionsUIProps) {
     });
   };
 
+  const tabs: ITab[] = [
+    {
+      id: "reportadas",
+      label: isMobile ? "Reportadas" : "Ausencias reportadas",
+    },
+    {
+      id: "solicitudes",
+      label: isMobile ? "En trámite" : "Solicitudes de ausencias en trámite",
+      icon: {
+        appearance: "warning",
+        icon: <MdOutlineWarningAmber />,
+        size: "14px",
+      },
+    },
+  ];
+
   const renderActions = () =>
     isMobile ? (
       <Stack direction="column" gap={spacing.s150}>
-        <Button
-          spacing="wide"
-          variant="filled"
-          iconBefore={<MdAdd />}
-          fullwidth
-        >
-          Reportar ausencia
-        </Button>
+        <AbsenceDetail
+          disableAbsence={!hasPrivilege || !hasActiveContract}
+          actionDescriptions={actionDescriptions}
+          onRequestAbsence={() => {
+            void addRequest();
+          }}
+          onInfoIconClick={(desc) => onOpenInfoModal(desc)}
+        />
       </Stack>
     ) : (
       <Stack gap={spacing.s150} justifyContent="end" direction="row">
@@ -105,6 +141,58 @@ function AbsencesOptionsUI(props: AbsencesOptionsUIProps) {
       </Stack>
     );
 
+  const renderReportedAbsences = () => (
+    <StyledHolidaysContainer $isMobile={isMobile}>
+      <Stack alignItems="center" justifyContent="space-between">
+        <Text type="title" size="medium">
+          Ausencias reportadas
+        </Text>
+
+        {renderActions()}
+      </Stack>
+
+      <AbsencesTable
+        data={data}
+        loading={loading}
+        hasViewDetailsPrivilege={hasPrivilege}
+        hasUploadPrivilege={hasPrivilege}
+        handleRestrictedClick={handleRestrictedAction}
+      />
+    </StyledHolidaysContainer>
+  );
+
+  const renderAbsenceRequests = () => (
+    <StyledHolidaysContainer $isMobile={isMobile}>
+      <Stack alignItems="center" justifyContent="space-between">
+        <Text type="title" size="medium">
+          Solicitudes de ausencias en trámite
+        </Text>
+
+        {isMobile && (
+          <Stack direction="column" gap={spacing.s150}>
+            <AbsenceDetail
+              disableAbsence={!hasPrivilege || !hasActiveContract}
+              actionDescriptions={actionDescriptions}
+              hasTableData={requestsData.length > 0}
+              onRequestAbsence={() => {
+                void addRequest();
+              }}
+              onInfoIconClick={(desc) => onOpenInfoModal(desc)}
+            />
+          </Stack>
+        )}
+      </Stack>
+
+      <AbsencesProcedureTable
+        data={requestsData}
+        loading={requestsLoading}
+        hasViewDetailsPrivilege={hasPrivilege}
+        hasUploadPrivilege={hasPrivilege}
+        handleDeleteRequest={handleDeleteRequest}
+      />
+    </StyledHolidaysContainer>
+  );
+
   return (
     <>
       <AppMenu
@@ -113,22 +201,16 @@ function AbsencesOptionsUI(props: AbsencesOptionsUIProps) {
         appRoute={appRoute}
         navigatePage={navigatePage}
       >
-        <StyledHolidaysContainer $isMobile={isMobile}>
-          <Stack alignItems="center" justifyContent="space-between">
-            <Text type="title" size="medium">
-              Consulta de ausencias del empleado
-            </Text>
-            {renderActions()}
-          </Stack>
+        <Tabs
+          tabs={tabs}
+          selectedTab={selectedTab}
+          onChange={(tabId) => setSelectedTab(tabId)}
+          scroll={false}
+        />
 
-          <AbsencesTable
-            data={data}
-            loading={loading}
-            hasViewDetailsPrivilege={hasPrivilege}
-            hasUploadPrivilege={hasPrivilege}
-            handleRestrictedClick={handleRestrictedAction}
-          />
-        </StyledHolidaysContainer>
+        {selectedTab === "reportadas"
+          ? renderReportedAbsences()
+          : renderAbsenceRequests()}
       </AppMenu>
 
       {infoModal.open && (
