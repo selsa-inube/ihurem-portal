@@ -4,8 +4,9 @@ import {
   environment,
 } from "@config/environment";
 
-import { mapEmployeeAbsenceApiToEntity } from "./mappers";
 import { EmployeeAbsence } from "@ptypes/employeeAbsence.types";
+
+import { mapEmployeeAbsenceApiToEntity } from "./mappers";
 
 const getEmployeeAbsences = async (
   employeeId: string,

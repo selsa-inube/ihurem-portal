@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 
 import { getEmployeeAbsences } from "@services/employeeAbsences";
 import { EmployeeAbsence } from "@ptypes/employeeAbsence.types";
-
 import { useHeaders } from "@hooks/useHeaders";
 import { useAppContext } from "@context/AppContext/useAppContext";
 import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
