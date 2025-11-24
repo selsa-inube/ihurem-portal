@@ -24,10 +24,7 @@ export const useEmployeeOptions = (
       setLoading(true);
       setError(null);
       try {
-        const options = await getEmployeeOptions({
-          employeePortalId: employeeId ?? undefined,
-          businessUnitPublicCode: businessUnitPublicCode ?? undefined,
-        });
+        const options = await getEmployeeOptions();
         if (options.length === 0) {
           setError("No existen opciones para el empleado");
           signOut("/error?code=1005");

@@ -7,10 +7,7 @@ import {
 import { mapEmployeeOptionsApiToEntity } from "./mappers";
 
 interface IGetOptionsParams {
-  employeePortalId?: string;
   employeePortalPublicCode?: string;
-  businessUnit?: string;
-  businessUnitPublicCode?: string;
   page?: number;
   per_page?: number;
 }
@@ -27,23 +24,14 @@ const getEmployeeOptions = async (
       const timeoutId = setTimeout(() => controller.abort(), fetchTimeout);
 
       const url = new URL(
-        `${environment.MOCKOON_SERVICE}/employee-portals-by-business-managers`,
+        `${environment.IVITE_ISAAS_QUERY_PROCESS_SERVICE}/employee-portals-by-business-managers`,
       );
       const searchParams = new URLSearchParams();
 
-      if (params.employeePortalId)
-        searchParams.append("employeePortalId", params.employeePortalId);
       if (params.employeePortalPublicCode)
         searchParams.append(
           "employeePortalPublicCode",
           params.employeePortalPublicCode,
-        );
-      if (params.businessUnit)
-        searchParams.append("businessUnit", params.businessUnit);
-      if (params.businessUnitPublicCode)
-        searchParams.append(
-          "businessUnitPublicCode",
-          params.businessUnitPublicCode,
         );
       searchParams.append("page", String(params.page ?? 1));
       searchParams.append("per_page", String(params.per_page ?? 50));
