@@ -8,7 +8,7 @@ import {
 import { FormikProps } from "formik";
 import { MdRule } from "react-icons/md";
 
-import { RequirementsModal } from "@components/modals/RequirementsModal";
+import { AbsenceRequirementsModal } from "@components/modals/AbsenceRequirementsModal";
 import { ErrorModal } from "@components/modals/ErrorModal";
 import { ButtonRequirements } from "@components/inputs/ButtonWithCounter";
 import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
@@ -206,7 +206,7 @@ function ReportAbsenceUI(props: RequestEnjoymentUIProps) {
       </AppMenu>
 
       {isModalOpen && (
-        <RequirementsModal
+        <AbsenceRequirementsModal
           title="Requisitos"
           buttonLabel="Cerrar"
           requirements={mockRequirements}

@@ -184,9 +184,9 @@ export const TableBoardUI = (props: ITableBoardUIProps) => {
               <StyledTh key={title.id + id}>
                 <Text
                   appearance={appearanceTable!.title}
-                  type="title"
-                  size="medium"
-                  padding={isTablet ? "0px" : "0px 4px"}
+                  type="label"
+                  weight="bold"
+                  padding={isTablet ? "0px" : spacing.s050}
                 >
                   {title.titleName}
                 </Text>
