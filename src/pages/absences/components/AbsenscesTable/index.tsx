@@ -40,13 +40,12 @@ import { IAbsencesTable, AbsencesTableDataDetails } from "./types";
 import { StyledTd, StyledTh, StyledMenuWrapper } from "./styles";
 import { columns, headers } from "./tableConfig";
 import { mockDocuments } from "../tableMock/tableMock";
+import { SelectedModalContent } from "./types";
 
-interface ModalDetailItem {
+interface IModalDetailItem {
   label: string;
   value: string;
 }
-
-type SelectedModalContent = AbsencesTableDataDetails | null;
 
 interface AbsencesTableProps {
   data: IAbsencesTable[];
@@ -58,7 +57,7 @@ interface AbsencesTableProps {
 
 const formatDetailsForModal = (
   details: AbsencesTableDataDetails | null,
-): ModalDetailItem[] => {
+): IModalDetailItem[] => {
   if (!details) return [];
 
   const reasonES =
@@ -67,7 +66,7 @@ const formatDetailsForModal = (
   const subReasonES =
     ESubReasonES[details.subReason as ESubReason] ?? details.subReason ?? "N/A";
 
-  const items: ModalDetailItem[] = [
+  const items: IModalDetailItem[] = [
     { label: "Tipo de Ausencia", value: reasonES },
     {
       label: "Descripción del Motivo",

@@ -12,6 +12,8 @@ interface AbsencesTableField<T> {
   value: T;
 }
 
+export type SelectedModalContent = AbsencesTableDataDetails | null;
+
 interface AbsencesTableAction
   extends AbsencesTableField<string | number | JSX.Element> {
   type?: "icon" | "text" | "toggle" | "custom";
