@@ -115,7 +115,7 @@ const GeneralInformationFormUI = ({
               id="contractId"
               options={contractOptions}
               placeholder="Selecciona de la lista"
-              value={formik.values.contractId}
+              value={formik.values.contractId ?? ""}
               message={
                 typeof formik.errors.contractId === "string"
                   ? formik.errors.contractId

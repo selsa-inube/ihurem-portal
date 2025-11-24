@@ -19,11 +19,11 @@ export const StyledModal = styled.div<IStyledModal>`
   flex-direction: column;
   max-height: "auto";
   width: ${({ $smallScreen }) => ($smallScreen ? "303px" : "502px")};
-  max-height: ${({ $smallScreen }) => ($smallScreen ? "476px" : "484px")};
+  max-height: ${({ $smallScreen }) => ($smallScreen ? "626px" : "484px")};
   background-color: ${inube.palette.neutral.N0};
   padding: ${({ $smallScreen }) =>
-    $smallScreen ? spacing.s200 : spacing.s300};
-  gap: ${({ $smallScreen }) => ($smallScreen ? spacing.s200 : spacing.s300)};
+    $smallScreen ? spacing.s150 : spacing.s300};
+  gap: ${({ $smallScreen }) => ($smallScreen ? spacing.s300 : spacing.s300)};
   border-radius: ${spacing.s100};
 
   ::-webkit-scrollbar {
