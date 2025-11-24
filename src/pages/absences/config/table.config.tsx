@@ -5,8 +5,9 @@ import {
   absenceReasonLabels,
   IUnifiedHumanResourceRequestData,
 } from "@ptypes/humanResourcesRequest.types";
-import { IAbsencesProcedureTable } from "../components/AbsencesProcedureTable/types";
 import { formatDate } from "@utils/date";
+
+import { IAbsencesProcedureTable } from "../components/AbsencesProcedureTable/types";
 
 export const formatAbsenceRequests = (
   requests: HumanResourceRequest[],
