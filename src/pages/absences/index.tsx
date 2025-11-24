@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import { useHumanResourceRequests } from "@hooks/useHumanResourceRequests";
 import { ERequestType } from "@ptypes/humanResourcesRequest.types";
@@ -11,6 +12,9 @@ import { AbsencesOptionsUI } from "./interface";
 import { IAbsencesProcedureTable } from "./components/AbsencesProcedureTable/types";
 
 function AbsencesOptions() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const { data: fetchedData, error } =
     useHumanResourceRequests<IAbsencesProcedureTable>(
       formatAbsenceRequests,
@@ -44,6 +48,22 @@ function AbsencesOptions() {
       });
     }
   }, [error]);
+
+  useEffect(() => {
+    if (location.state?.showFlag) {
+      setFlagConfig({
+        showFlag: location.state.showFlag,
+        flagMessage: location.state.flagMessage,
+        flagTitle: location.state.flagTitle,
+        isSuccess: location.state.isSuccess,
+      });
+
+      const timer = setTimeout(() => {
+        navigate(location.pathname, { replace: true });
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [location.state?.showFlag, navigate, location.pathname]);
 
   const { handleDelete } = useDeleteRequest<IAbsencesProcedureTable>(
     (filterFn) => {

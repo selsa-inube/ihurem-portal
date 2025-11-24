@@ -1,3 +1,5 @@
+import { IDocument } from "@pages/absences/ReportAbsence/forms/RequiredDocumentsForm/RequiredDocumentsTable/types";
+
 export enum ERequestType {
   absence = "Ausencia",
   certification = "Certificación",
@@ -13,23 +15,34 @@ export enum ERequestType {
   vacations_enjoyed = "Vacaciones Disfrutadas",
 }
 
-export enum EContractType {
-  FixedTermContract = "Término Fijo",
-  PermanentContract = "Término Indefinido",
-  ByWorkOrLabor = "Por Obra o Labor",
-  CivilContract = "Contrato civil por prestación de servicios",
-  Apprentice = "Aprendiz",
-  ContingentWorker = "Contrato ocasional de trabajo",
+export enum ELeaveReason {
+  paid_leaves = "paid_leaves",
+  unpaid_leaves = "unpaid_leaves",
+  personal_illness = "personal_illness",
+  personal_accident = "personal_accident",
+  calamity = "calamity",
+  leave = "leave",
+  vacation = "vacation",
+  personal_leave = "personal_leave",
+  family_emergency = "family_emergency",
+  medical_appointment = "medical_appointment",
+  personal_or_family_medical_appointment = "personal_or_family_medical_appointment",
 }
 
-export enum ELeaveReason {
-  leave = "Permiso",
-  vacation = "Vacaciones",
-  personal_leave = "Permiso personal",
-  family_emergency = "Emergencia familiar",
-  medical_appointment = "Cita médica",
-  personal_or_family_medical_appointment = "Cita médica personal o familiar",
-}
+export const leaveReasonLabels: Record<ELeaveReason, string> = {
+  [ELeaveReason.paid_leaves]: "Permisos remunerados",
+  [ELeaveReason.unpaid_leaves]: "Licencias no remuneradas",
+  [ELeaveReason.personal_illness]: "Enfermedad personal",
+  [ELeaveReason.personal_accident]: "Accidente personal",
+  [ELeaveReason.calamity]: "Calamidad",
+  [ELeaveReason.leave]: "Permiso",
+  [ELeaveReason.vacation]: "Vacaciones",
+  [ELeaveReason.personal_leave]: "Permiso personal",
+  [ELeaveReason.family_emergency]: "Emergencia familiar",
+  [ELeaveReason.medical_appointment]: "Cita médica",
+  [ELeaveReason.personal_or_family_medical_appointment]:
+    "Cita médica personal o familiar",
+};
 
 export const requestTypeMap: Record<ERequestType, string> = {
   [ERequestType.absence]: "absence",
@@ -193,6 +206,13 @@ export interface IUnifiedHumanResourceRequestData {
   subReason?: string;
   motifDetail?: string;
   startDate?: string;
+  motive?: string;
+  subMotive?: string;
+  motiveDetails?: string;
+  daysDuration?: string;
+  hoursDuration?: string;
+  startTime?: string;
+  documents?: IDocument[];
 }
 
 export interface HumanResourceRequestTraceability {

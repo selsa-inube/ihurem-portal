@@ -4,6 +4,7 @@ import { forwardRef, useEffect, useImperativeHandle } from "react";
 
 import { validationMessages } from "@validations/validationMessages";
 import { validationRules } from "@validations/validationRules";
+import { useAppContext } from "@context/AppContext/useAppContext";
 
 import { IAbsenceMotiveEntry } from "./types";
 import { absenceMotiveFormRequiredFields } from "./config/formConfig";
@@ -50,6 +51,8 @@ const AbsenceMotiveForm = forwardRef<
     },
     ref,
   ) => {
+    const { employees } = useAppContext();
+
     const formik = useFormik<IAbsenceMotiveEntry>({
       initialValues,
       validationSchema,
@@ -58,6 +61,19 @@ const AbsenceMotiveForm = forwardRef<
     });
 
     useImperativeHandle(ref, () => formik);
+
+    useEffect(() => {
+      const contracts = employees.employmentContracts ?? [];
+
+      if (contracts.length === 1 && !formik.values.contractId) {
+        const contract = contracts[0];
+
+        formik.setFieldValue("contractId", contract.contractId);
+        formik.setFieldValue("businessName", contract.businessName);
+        formik.setFieldValue("contractType", contract.contractType);
+        formik.setFieldValue("contractNumber", contract.contractNumber);
+      }
+    }, [employees.employmentContracts, formik.values.contractId]);
 
     useEffect(() => {
       if (onFormValid) {

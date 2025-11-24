@@ -25,6 +25,7 @@ import { AbsenceMotiveForm } from "./forms/AbsenceMotiveForm";
 import { AbsenceDurationForm } from "./forms/AbsenceDurationForm";
 import { RequiredDocumentsForm } from "./forms/RequiredDocumentsForm";
 import { VerificationForm } from "./forms/VerificationForm/VerificationBoxes";
+import { ERequestType } from "@ptypes/humanResourcesRequest.types";
 
 interface RequestEnjoymentUIProps {
   appName: string;
@@ -42,6 +43,8 @@ interface RequestEnjoymentUIProps {
   isCurrentFormValid: boolean;
   showStartTimeErrorModal: boolean;
   showRequiredDocsErrorModal: boolean;
+  humanResourceRequestType: ERequestType;
+  humanResourceRequestDate: string;
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
   setIsCurrentFormValid: React.Dispatch<React.SetStateAction<boolean>>;
   setShowStartTimeErrorModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -89,6 +92,10 @@ function ReportAbsenceUI(props: RequestEnjoymentUIProps) {
     motive: initialValues.motive ?? "",
     motiveDetails: initialValues.motiveDetails ?? "",
     subMotive: initialValues.subMotive,
+    contractId: initialValues.contractId ?? "",
+    contractNumber: initialValues.contractNumber ?? "",
+    businessName: initialValues.businessName ?? "",
+    contractType: initialValues.contractType ?? "",
   };
 
   const absenceDurationEntry: IAbsenceDurationEntry = {
