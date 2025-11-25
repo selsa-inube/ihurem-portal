@@ -125,6 +125,11 @@ const modalErrorConfig: Record<number, ModalErrorDetail> = {
     solutionText:
       "Intenta nuevamente más tarde. Si el problema persiste, contacta al soporte técnico.",
   },
+  1023: {
+    descriptionText: "Error al enviar la solicitud. Intente nuevamente.",
+    solutionText:
+      "Verifica tu conexión a internet e intenta nuevamente. Si el problema persiste, contacta al soporte técnico.",
+  },
 };
 
 export { modalErrorConfig };

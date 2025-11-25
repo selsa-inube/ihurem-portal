@@ -2,6 +2,10 @@ import { useRef, useState } from "react";
 import { FormikProps } from "formik";
 
 import { SendRequestModal } from "@components/modals/SendRequestModal";
+import { RequestInfoModal } from "@components/modals/RequestInfoModal";
+import { useErrorFlag } from "@hooks/useErrorFlag";
+import { useRequestSubmission } from "@hooks/usePostHumanResourceRequest";
+import { ERequestType } from "@ptypes/humanResourcesRequest.types";
 
 import { ReportAbsenceUI } from "./interface";
 import { reportAbsenceSteps } from "./config/assisted.config";
@@ -16,6 +20,10 @@ function useFormManagement() {
   const [formValues, setFormValues] = useState<
     IAbsenceMotiveEntry & IAbsenceDurationEntry & IRequiredDocumentsEntry
   >({
+    contractId: "",
+    contractNumber: "",
+    businessName: "",
+    contractType: "",
     motive: "",
     subMotive: "",
     motiveDetails: "",
@@ -112,7 +120,32 @@ function ReportAbsence() {
     updateFormValues,
   } = useFormManagement();
 
-  const { modalState, openSendModal, closeSendModal } = useModalManagement();
+  const {
+    modalState,
+    openSendModal,
+    closeSendModal,
+    openInfoModal,
+    closeInfoModal,
+  } = useModalManagement();
+
+  const userCodeInCharge = "User 1";
+  const userNameInCharge = "Johan Daniel Garcia Nova";
+
+  const {
+    requestNum,
+    submitRequestHandler,
+    navigateAfterSubmission,
+    showErrorFlag,
+    errorMessage,
+    setShowErrorFlag,
+  } = useRequestSubmission(
+    formValues,
+    ERequestType.absence,
+    userCodeInCharge,
+    userNameInCharge,
+  );
+
+  useErrorFlag(showErrorFlag, errorMessage, "Error", false, 10000);
 
   const validateRequiredDocuments = () => {
     if (!requiredDocumentsRef.current) return true;
@@ -165,8 +198,21 @@ function ReportAbsence() {
     openSendModal();
   };
 
-  const handleConfirmSendModal = () => {
-    closeSendModal();
+  const handleConfirmSendModal = async () => {
+    setShowErrorFlag(false);
+    const isSuccess = await submitRequestHandler();
+
+    if (isSuccess) {
+      closeSendModal();
+      openInfoModal();
+    } else {
+      closeSendModal();
+    }
+  };
+
+  const handleSubmitRequestInfoModal = () => {
+    closeInfoModal();
+    navigateAfterSubmission("absences");
   };
 
   const breadcrumbs = {
@@ -190,6 +236,9 @@ function ReportAbsence() {
     url: "/absences",
   };
 
+  const humanResourceRequestType = ERequestType.absence;
+  const humanResourceRequestDate = new Date().toISOString();
+
   return (
     <>
       <ReportAbsenceUI
@@ -206,6 +255,8 @@ function ReportAbsence() {
         isCurrentFormValid={isCurrentFormValid}
         showStartTimeErrorModal={showStartTimeErrorModal}
         showRequiredDocsErrorModal={showRequiredDocsErrorModal}
+        humanResourceRequestType={humanResourceRequestType}
+        humanResourceRequestDate={humanResourceRequestDate}
         setCurrentStep={setCurrentStep}
         setIsCurrentFormValid={setIsCurrentFormValid}
         setShowStartTimeErrorModal={setShowStartTimeErrorModal}
@@ -217,10 +268,20 @@ function ReportAbsence() {
 
       {modalState.isSendModalVisible && (
         <SendRequestModal
-          descriptionText="¿Realmente deseas enviar esta solicitud?"
+          descriptionText="¿Realmente deseas enviar esta solicitud de ausencia?"
           onSubmitButtonClick={handleConfirmSendModal}
           onCloseModal={closeSendModal}
           onSecondaryButtonClick={closeSendModal}
+        />
+      )}
+
+      {modalState.isRequestInfoModalVisible && (
+        <RequestInfoModal
+          requestId={requestNum}
+          staffName={userNameInCharge ?? ""}
+          onCloseModal={handleSubmitRequestInfoModal}
+          onSubmitButtonClick={handleSubmitRequestInfoModal}
+          iconAppearance="success"
         />
       )}
     </>

@@ -19,7 +19,9 @@ export async function postHumanResourceRequest(
   );
 
   if (!response.ok) {
-    throw new Error(`Error: ${response.status}`);
+    const errorData = await response.json().catch(() => ({}));
+    const errorMessage = errorData?.message ?? `Error: ${response.status}`;
+    throw new Error(errorMessage);
   }
 
   const data = (await response.json()) as IHumanResourceResponse;

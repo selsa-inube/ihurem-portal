@@ -122,8 +122,8 @@ const AbsenceDurationForm = forwardRef<
   ) => {
     const [showDateErrorModal, setShowDateErrorModal] = useState(false);
 
-    const shouldShowMotiveText = motive !== "unpaidLeaves";
-    const restrictFutureDates = motive === "unpaidLeaves";
+    const shouldShowMotiveText = motive !== "unpaid_leaves";
+    const restrictFutureDates = motive === "unpaid_leaves";
 
     const validationSchema = useMemo(
       () => createValidationSchema(restrictFutureDates),

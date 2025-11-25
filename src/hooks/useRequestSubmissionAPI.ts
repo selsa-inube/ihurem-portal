@@ -4,6 +4,10 @@ import { IRequestBody } from "@services/humanResourcesRequest/postHumanResourceR
 import { postHumanResourceRequest } from "@services/humanResourcesRequest/postHumanResourceRequest";
 import { useHeaders } from "@hooks/useHeaders";
 import { useContractValidation } from "@hooks/useContractValidation";
+import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
+import { modalErrorConfig } from "@config/modalErrorConfig";
+
+const ERROR_CODE_POST_HR_REQUESTS_FAILED = 1023;
 
 export function useRequestSubmissionAPI() {
   const [showErrorFlag, setShowErrorFlag] = useState(false);
@@ -12,6 +16,7 @@ export function useRequestSubmissionAPI() {
     string | null
   >(null);
   const { getHeaders } = useHeaders();
+  const { showErrorModal } = useErrorModal();
 
   useContractValidation();
 
@@ -28,12 +33,15 @@ export function useRequestSubmissionAPI() {
       setErrorMessage("Error al enviar la solicitud. Intente nuevamente.");
       setShowErrorFlag(true);
       return { success: false };
-    } catch (error) {
-      console.error("Error sending request:", error);
-      setErrorMessage(
-        "Error al enviar la solicitud de vacaciones o certificación. Intente nuevamente.",
-      );
+    } catch (err) {
+      console.error("Error sending request:", err);
+      setErrorMessage("Error al enviar la solicitud. Intente nuevamente.");
+      const errorConfig = modalErrorConfig[ERROR_CODE_POST_HR_REQUESTS_FAILED];
       setShowErrorFlag(true);
+      showErrorModal({
+        descriptionText: `${errorConfig.descriptionText}: ${String(err)}`,
+        solutionText: errorConfig.solutionText,
+      });
       return { success: false };
     }
   };
