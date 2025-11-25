@@ -25,10 +25,11 @@ import { spacing } from "@design/tokens/spacing";
 import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
 import {
   absenceReasonLabels,
+  leaveReasonLabels,
   EAbsenceReason,
-  EContractType,
   ELeaveReason,
 } from "@ptypes/humanResourcesRequest.types";
+import { contractTypeLabels } from "@mocks/contracts/enums";
 
 import { usePagination } from "./usePagination";
 import {
@@ -129,8 +130,9 @@ function AbsencesProcedureTable({
       {
         label: "Motivo",
         value: parsedData.reason
-          ? (ELeaveReason[parsedData.reason as keyof typeof ELeaveReason] ??
-            parsedData.reason)
+          ? (leaveReasonLabels[
+              parsedData.reason as keyof typeof ELeaveReason
+            ] ?? parsedData.reason)
           : "Sin dato",
       },
       {
@@ -143,8 +145,8 @@ function AbsencesProcedureTable({
       {
         label: "Tipo de contrato",
         value: parsedData.contractType
-          ? (EContractType[
-              parsedData.contractType as keyof typeof EContractType
+          ? (contractTypeLabels[
+              parsedData.contractType as keyof typeof contractTypeLabels
             ] ?? parsedData.contractType)
           : "Sin dato",
       },

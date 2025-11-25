@@ -4,17 +4,32 @@ import { BoxAttribute } from "@components/cards/BoxAttribute";
 import { spacing } from "@design/tokens/spacing";
 import { formatDate } from "@utils/date";
 import { mockAlertCards } from "@mocks/requirements/requirements-2.mock";
+import {
+  absenceReasonLabels,
+  EAbsenceReason,
+  leaveReasonLabels,
+  ELeaveReason,
+} from "@ptypes/humanResourcesRequest.types";
 
 import { IAbsenceMotiveEntry } from "../../forms/AbsenceMotiveForm/types";
 import { IAbsenceDurationEntry } from "../../forms/AbsenceDurationForm/types";
 import { IRequiredDocumentsEntry } from "../../forms/RequiredDocumentsForm/types";
 import { IFormsUpdateData } from "../../types";
-import { labelsAbsenceMap } from "../AbsenceMotiveForm/config/formConfig";
 
 const getLabel = (value?: string, fallback = "N/A") => {
   if (!value) return fallback;
-  return labelsAbsenceMap[value] ?? value;
+
+  if (value in absenceReasonLabels) {
+    return absenceReasonLabels[value as EAbsenceReason];
+  }
+
+  if (value in leaveReasonLabels) {
+    return leaveReasonLabels[value as ELeaveReason];
+  }
+
+  return value;
 };
+
 const renderRequirementsVerification = (isTablet: boolean) => {
   if (mockAlertCards.length === 0) return null;
 
