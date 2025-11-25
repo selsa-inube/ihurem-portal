@@ -80,6 +80,18 @@ export function useRequestSubmission(
           contractType: formValues.contractType ?? "",
           observationEmployee: formValues.observationEmployee ?? "",
         });
+      } else if (typeRequest === ERequestType.absence) {
+        humanResourceRequestData = JSON.stringify({
+          reason: formValues.motive ?? "",
+          subReason: formValues.subMotive ?? "",
+          motifDetail: formValues.motiveDetails ?? "",
+          startDate: formValues.startDate ?? "",
+          durationOfDays: formValues.daysDuration ?? "",
+          contractId: formValues.contractId ?? "",
+          contractNumber: formValues.contractNumber ?? "",
+          businessName: formValues.businessName ?? "",
+          contractType: formValues.contractType ?? "",
+        });
       } else {
         throw new Error("Tipo de solicitud no reconocido.");
       }
@@ -92,7 +104,8 @@ export function useRequestSubmission(
         employeeId: employees.employeeId,
         humanResourceRequestData,
         humanResourceRequestDate: new Date().toISOString(),
-        humanResourceRequestDescription: formValues.observationEmployee ?? "",
+        humanResourceRequestDescription:
+          formValues.observationEmployee ?? formValues.motiveDetails ?? "",
         humanResourceRequestStatus: "supervisor_approval",
         humanResourceRequestType: typeRequestKey as ERequestType,
         userCodeInCharge,

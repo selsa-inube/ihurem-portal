@@ -2,7 +2,7 @@ export const contractTypeLabels: Record<string, string> = {
   apprentice: "Aprendiz",
   by_work_or_labor: "Por obra o labor",
   civil_contract: "Contrato civil por prestacion de servicios",
-  contingent_worker: "Contrato ocasional de trabajol",
+  contingent_worker: "Contrato ocasional de trabajo",
   fixed_term_contract: "Termino Fijo",
   permanent_job: "Trabajo permanente",
 };

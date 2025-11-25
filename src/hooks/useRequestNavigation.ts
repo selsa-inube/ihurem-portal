@@ -23,6 +23,15 @@ export function useRequestNavigation() {
           isSuccess: true,
         },
       });
+    } else if (typeRequest === "absences") {
+      navigate("/absences", {
+        state: {
+          showFlag: true,
+          flagTitle: "Solicitud enviada",
+          flagMessage: "La solicitud de ausencia fue enviada exitosamente.",
+          isSuccess: true,
+        },
+      });
     }
   };
 
