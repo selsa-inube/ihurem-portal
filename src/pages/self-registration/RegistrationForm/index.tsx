@@ -11,6 +11,7 @@ import { Formik, Form, Field, FieldProps, FormikHelpers } from "formik";
 import { MdTag } from "react-icons/md";
 import * as Yup from "yup";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { spacing } from "@design/tokens/spacing";
 import { useIdentificationTypesForSelect } from "@hooks/enumerators/useIdentificationTypesForSelect";
@@ -33,6 +34,8 @@ export function RegistrationForm(props: RegistrationFormProps) {
 
   const [showModal, setShowModal] = useState(false);
   const [isRequestSuccessful, setIsRequestSuccessful] = useState(false);
+
+  const navigate = useNavigate();
 
   const validationSchema = Yup.object({
     idType: Yup.string().required("El tipo de identificación es obligatorio"),
@@ -76,6 +79,7 @@ export function RegistrationForm(props: RegistrationFormProps) {
 
   const handleCloseModal = () => {
     setShowModal(false);
+    navigate("/");
   };
 
   return (
