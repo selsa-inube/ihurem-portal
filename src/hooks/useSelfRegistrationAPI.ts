@@ -2,7 +2,6 @@ import { useState } from "react";
 
 import { postSelfRegistration } from "@services/employeePortal/postSelfRegistration";
 import { ISelfRegistrationRequestBody } from "@services/employeePortal/postSelfRegistration/types";
-import { useHeaders } from "@hooks/useHeaders";
 import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
 import { modalErrorConfig } from "@config/modalErrorConfig";
 
@@ -13,7 +12,6 @@ export function useSelfRegistrationAPI() {
     string | null
   >(null);
   const [isLoading, setIsLoading] = useState(false);
-  const { getHeaders } = useHeaders();
   const { showErrorModal } = useErrorModal();
   const [error, setError] = useState<Error | null>(null);
 
@@ -24,7 +22,10 @@ export function useSelfRegistrationAPI() {
     setError(null);
 
     try {
-      const headers = await getHeaders();
+      const headers = {
+        "Content-type": "application/json; charset=UTF-8",
+        "X-Business-unit": "test",
+      };
       const response = await postSelfRegistration(requestBody, headers);
 
       if (response?.humanResourceRequestId) {
