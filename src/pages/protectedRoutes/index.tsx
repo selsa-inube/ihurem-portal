@@ -70,7 +70,10 @@ export function ProtectedRoutes() {
     loading: optionsLoading,
     error: optionsError,
     codeError: optionsCode,
-  } = useEmployeeOptions(user?.nickname ?? "");
+  } = useEmployeeOptions(
+    user?.nickname ?? "",
+    businessUnitData.publicCode ?? "",
+  );
 
   useEffect(() => {
     if (portalData?.externalAuthenticationProvider !== undefined) {

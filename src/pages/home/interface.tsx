@@ -9,7 +9,10 @@ import { capitalizeWords } from "@utils/texts";
 export const useHome = () => {
   const { user, logoUrl, businessUnit, employees, businessManagers } =
     useAppContext();
-  const { data: employeeOptions } = useEmployeeOptions(user?.id ?? "");
+  const { data: employeeOptions } = useEmployeeOptions(
+    user?.id ?? "",
+    businessUnit?.publicCode ?? "",
+  );
 
   const safeEmployeeOptions = employeeOptions ?? [];
 
