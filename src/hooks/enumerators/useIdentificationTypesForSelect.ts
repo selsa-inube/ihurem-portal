@@ -1,8 +1,8 @@
 import { IOption } from "@inubekit/inubekit";
 
-import { EnumeratorItem } from "@services/enumerators/getEnumerators";
+import { IEnumeratorItem } from "@services/enumerators/types";
 
-import { useEnumerators } from "../useEnumerators";
+import { useEnumeratorsIsaas } from "../useEnumeratorsIsaas";
 
 const idTypeTranslations: Record<string, string> = {
   CitizenshipCard: "Cédula de Ciudadanía",
@@ -20,7 +20,7 @@ const idTypeTranslations: Record<string, string> = {
 };
 
 export const formatIdTypesToSelectOptions = (
-  data: EnumeratorItem[],
+  data: IEnumeratorItem[],
 ): IOption[] => {
   return data.map((item) => ({
     id: item.code,
@@ -30,7 +30,7 @@ export const formatIdTypesToSelectOptions = (
 };
 
 export const useIdentificationTypesForSelect = () => {
-  return useEnumerators(
+  return useEnumeratorsIsaas(
     "identificationtypenaturalperson",
     formatIdTypesToSelectOptions,
   );

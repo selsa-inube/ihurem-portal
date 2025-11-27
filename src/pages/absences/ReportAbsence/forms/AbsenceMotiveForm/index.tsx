@@ -1,10 +1,18 @@
 import { FormikProps, useFormik } from "formik";
 import { object, string } from "yup";
-import { forwardRef, useEffect, useImperativeHandle } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useMemo } from "react";
 
+import {
+  transformEnumsToOptions,
+  getSubMotivesForMotive,
+  EnumItem,
+  AbsenceReasonRelation,
+} from "@utils/absenceMotiveUtils";
 import { validationMessages } from "@validations/validationMessages";
 import { validationRules } from "@validations/validationRules";
 import { useAppContext } from "@context/AppContext/useAppContext";
+import { useAbsenceReasons } from "@hooks/useAbsenceReasons";
+import { useEnumeratorsIhurem } from "@hooks/useEnumeratorsIhurem";
 
 import { IAbsenceMotiveEntry } from "./types";
 import { absenceMotiveFormRequiredFields } from "./config/formConfig";
@@ -62,6 +70,36 @@ const AbsenceMotiveForm = forwardRef<
 
     useImperativeHandle(ref, () => formik);
 
+    const { data: absenceRelations, isLoading: isLoadingAbsenceReasons } =
+      useAbsenceReasons({
+        regulatoryFramework: "Marco legal",
+        company: "SISTEMAS ENLINEA S.A.",
+      });
+
+    const { data: subReasonEnums, isLoading: isLoadingSubReasonEnums } =
+      useEnumeratorsIhurem("subreason");
+
+    const { data: absenceReasonEnums, isLoading: isLoadingAbsenceReasonEnums } =
+      useEnumeratorsIhurem("absencereason");
+
+    const motiveOptions = useMemo(() => {
+      if (!absenceReasonEnums || isLoadingAbsenceReasonEnums) {
+        return [];
+      }
+      return transformEnumsToOptions(absenceReasonEnums as EnumItem[]);
+    }, [absenceReasonEnums, isLoadingAbsenceReasonEnums]);
+
+    const subMotiveOptions = useMemo(() => {
+      if (!formik.values.motive || !absenceRelations || !subReasonEnums) {
+        return [];
+      }
+      return getSubMotivesForMotive(
+        formik.values.motive,
+        absenceRelations as AbsenceReasonRelation[],
+        subReasonEnums as EnumItem[],
+      );
+    }, [formik.values.motive, absenceRelations, subReasonEnums]);
+
     useEffect(() => {
       const contracts = employees.employmentContracts ?? [];
 
@@ -84,12 +122,20 @@ const AbsenceMotiveForm = forwardRef<
       }
     }, [formik.values, onFormValid]);
 
+    const isLoading =
+      isLoadingAbsenceReasons ??
+      isLoadingSubReasonEnums ??
+      isLoadingAbsenceReasonEnums ??
+      loading;
+
     return (
       <AbsenceMotiveFormUI
-        loading={loading}
+        loading={isLoading}
         formik={formik}
         withNextButton={withNextButton}
         validationSchema={validationSchema}
+        motiveOptions={motiveOptions}
+        subMotiveOptions={subMotiveOptions}
         handleNextStep={handleNextStep}
         handlePreviousStep={handlePreviousStep}
       />

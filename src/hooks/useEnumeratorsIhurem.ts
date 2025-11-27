@@ -1,21 +1,19 @@
 import { useState, useEffect } from "react";
 
-import {
-  EnumeratorItem,
-  getEnumerators,
-} from "@services/enumerators/getEnumerators";
+import { getEnumeratorsIhurem } from "@services/enumerators/getEnumeratorsIhurem";
+import { IEnumeratorItem } from "@services/enumerators/types";
 import { useAppContext } from "@context/AppContext/useAppContext";
 import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
 import { modalErrorConfig } from "@config/modalErrorConfig";
 
 const ERROR_CODE_GET_ENUMERATORS_FAILED = 1021;
 
-export const useEnumerators = <T>(
+export const useEnumeratorsIhurem = <T>(
   enumeratorName: string,
-  formatData?: (data: EnumeratorItem[]) => T[],
+  formatData?: (data: IEnumeratorItem[]) => T[],
 ) => {
   const [data, setData] = useState<T[]>([]);
-  const [rawData, setRawData] = useState<EnumeratorItem[]>([]);
+  const [rawData, setRawData] = useState<IEnumeratorItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -33,7 +31,10 @@ export const useEnumerators = <T>(
         "X-Business-unit": businessUnit.publicCode,
       };
 
-      const enumeratorData = await getEnumerators(enumeratorName, headers);
+      const enumeratorData = await getEnumeratorsIhurem(
+        enumeratorName,
+        headers,
+      );
 
       const responseData = enumeratorData ?? [];
       setRawData(responseData);

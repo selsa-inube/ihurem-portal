@@ -4,17 +4,12 @@ import {
   environment,
 } from "@config/environment";
 
-interface EnumeratorItem {
-  id: string;
-  name: string;
-  description: string;
-  code: string;
-}
+import { IEnumeratorItem } from "../types";
 
-const getEnumerators = async (
+const getEnumeratorsIsaas = async (
   enumeratorName: string,
   headers: Record<string, string>,
-): Promise<EnumeratorItem[]> => {
+): Promise<IEnumeratorItem[]> => {
   const maxRetries = maxRetriesServices;
   const fetchTimeout = fetchTimeoutServices;
 
@@ -75,5 +70,4 @@ const getEnumerators = async (
   return [];
 };
 
-export { getEnumerators };
-export type { EnumeratorItem };
+export { getEnumeratorsIsaas };
