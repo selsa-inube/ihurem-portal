@@ -6,7 +6,15 @@ import {
 } from "@config/environment";
 import { mapEmployeeOptionsApiToEntity } from "./mappers";
 
-const getEmployeeOptions = async (): Promise<IEmployeeOptions[]> => {
+interface IGetOptionsParams {
+  employeePortalPublicCode?: string;
+  page?: number;
+  per_page?: number;
+}
+
+const getEmployeeOptions = async (
+  params: IGetOptionsParams = {},
+): Promise<IEmployeeOptions[]> => {
   const maxRetries = maxRetriesServices;
   const fetchTimeout = fetchTimeoutServices;
 
@@ -15,18 +23,31 @@ const getEmployeeOptions = async (): Promise<IEmployeeOptions[]> => {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), fetchTimeout);
 
+      const url = new URL(
+        `${environment.IVITE_ISAAS_QUERY_PROCESS_SERVICE}/employee-portals-by-business-managers`,
+      );
+      const searchParams = new URLSearchParams();
+
+      if (params.employeePortalPublicCode)
+        searchParams.append(
+          "employeePortalPublicCode",
+          params.employeePortalPublicCode,
+        );
+      searchParams.append("page", String(params.page ?? 1));
+      searchParams.append("per_page", String(params.per_page ?? 50));
+
+      url.search = searchParams.toString();
+
       const options: RequestInit = {
         method: "GET",
         headers: {
-          "X-Action": "SearchAllCatalogOfOptionsForEmployeePortals",
+          "X-Action": "SearchOptionsEmployeePortalByBusinessUnit",
           "Content-Type": "application/json; charset=UTF-8",
         },
         signal: controller.signal,
       };
 
-      const url = `${environment.IVITE_ISAAS_QUERY_PROCESS_SERVICE}/catalog-of-options-for-employee-portals/`;
-
-      const res = await fetch(url, options);
+      const res = await fetch(url.toString(), options);
 
       clearTimeout(timeoutId);
 
@@ -37,16 +58,17 @@ const getEmployeeOptions = async (): Promise<IEmployeeOptions[]> => {
       const data = await res.json();
 
       if (!res.ok) {
-        throw {
-          message: "Error al obtener las opciones del empleado",
-          status: res.status,
-          data,
-        };
+        const errorMessage =
+          data?.message ?? "Error al obtener los datos del operador";
+        throw new Error(errorMessage);
       }
 
       return mapEmployeeOptionsApiToEntity(data);
     } catch (error) {
       if (attempt === maxRetries) {
+        if (error instanceof Error) {
+          throw error;
+        }
         throw new Error(
           "Todos los intentos fallaron. No se pudieron obtener las opciones del empleado.",
         );

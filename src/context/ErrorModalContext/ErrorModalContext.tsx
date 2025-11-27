@@ -22,12 +22,15 @@ interface InternalOptions {
   solutionText: string;
   buttonText?: string;
   appearance?: ISpinnerAppearance;
+  redirectOnClose?: boolean;
   onSubmitButtonClick?: () => void;
 }
 
 interface ErrorModalContextType {
-  showErrorModal: (opts: ErrorModalOptions) => void;
-  closeErrorModal: () => void;
+  showErrorModal: (
+    opts: ErrorModalOptions & { redirectOnClose?: boolean },
+  ) => void;
+  closeErrorModal: (redirect?: boolean) => void;
 }
 
 const ErrorModalContext = createContext<ErrorModalContextType | undefined>(
@@ -60,37 +63,45 @@ export const ErrorModalProvider: React.FC<ErrorModalProviderProps> = ({
   }, [ensurePortalNode]);
 
   useEffect(() => {
-    registerErrorModalShow((opts: ErrorModalOptions) => {
+    registerErrorModalShow(
+      (opts: ErrorModalOptions & { redirectOnClose?: boolean }) => {
+        setOptions({
+          title: opts.title,
+          descriptionText: opts.descriptionText,
+          solutionText: opts.solutionText,
+          buttonText: opts.buttonText,
+          appearance: opts.appearance!,
+          redirectOnClose: opts.redirectOnClose ?? false,
+          onSubmitButtonClick: opts.onSubmitButtonClick,
+        });
+        setOpen(true);
+      },
+    );
+    return () => {
+      unregisterErrorModalShow();
+    };
+  }, []);
+
+  const showErrorModal = useCallback(
+    (opts: ErrorModalOptions & { redirectOnClose?: boolean }) => {
       setOptions({
         title: opts.title,
         descriptionText: opts.descriptionText,
         solutionText: opts.solutionText,
         buttonText: opts.buttonText,
         appearance: opts.appearance!,
+        redirectOnClose: opts.redirectOnClose ?? false,
         onSubmitButtonClick: opts.onSubmitButtonClick,
       });
       setOpen(true);
-    });
-    return () => {
-      unregisterErrorModalShow();
-    };
-  }, []);
+    },
+    [],
+  );
 
-  const showErrorModal = useCallback((opts: ErrorModalOptions) => {
-    setOptions({
-      title: opts.title,
-      descriptionText: opts.descriptionText,
-      solutionText: opts.solutionText,
-      buttonText: opts.buttonText,
-      appearance: opts.appearance!,
-      onSubmitButtonClick: opts.onSubmitButtonClick,
-    });
-    setOpen(true);
-  }, []);
-
-  const closeErrorModal = useCallback(() => {
+  const closeErrorModal = useCallback((redirect = false) => {
     setOpen(false);
     setOptions(null);
+    if (redirect) window.location.assign("/logout");
   }, []);
 
   return (
@@ -103,9 +114,10 @@ export const ErrorModalProvider: React.FC<ErrorModalProviderProps> = ({
           solutionText={options.solutionText}
           buttonText={options.buttonText}
           appearance={options.appearance}
-          onCloseModal={closeErrorModal}
+          onCloseModal={() => closeErrorModal(options.redirectOnClose)}
           onSubmitButtonClick={() => {
-            closeErrorModal();
+            if (options.onSubmitButtonClick) options.onSubmitButtonClick();
+            closeErrorModal(options.redirectOnClose);
           }}
         />
       )}
