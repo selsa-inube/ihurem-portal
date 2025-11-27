@@ -40,7 +40,7 @@ export function RegistrationForm(props: RegistrationFormProps) {
   const validationSchema = Yup.object({
     idType: Yup.string().required("El tipo de identificación es obligatorio"),
     idNumber: Yup.string()
-      .matches(/^\d{6,10}$/, "Debe tener entre 6 y 10 dígitos numéricos")
+      .matches(/^\d{8,20}$/, "Debe tener entre 8 y 20 dígitos numéricos")
       .required("El número de identificación es obligatorio"),
   });
 
