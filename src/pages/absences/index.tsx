@@ -6,6 +6,7 @@ import { useHumanResourceRequests } from "@hooks/useHumanResourceRequests";
 import { useDeleteRequest } from "@hooks/useDeleteRequest";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 import { formatDate } from "@utils/date";
+
 import {
   EmployeeAbsence,
   AbsenceReasonES,
@@ -22,81 +23,70 @@ import { formatAbsenceRequests } from "./config/table.config";
 const formatAbsences = (items: EmployeeAbsence[]): IAbsencesTable[] => {
   if (!items) return [];
 
-  const sorted = [...items].sort((a, b) => {
-    const d1 = new Date(a.absenceStartDate).getTime();
-    const d2 = new Date(b.absenceStartDate).getTime();
-    return d2 - d1;
-  });
-
-  return sorted.map((item) => {
-    const formattedDate = item.absenceStartDate
-      ? formatDate(item.absenceStartDate)
-      : "Sin dato";
-
-    const motivo =
-      AbsenceReasonES[item.absenceReason] ?? item.absenceReason ?? "Sin dato";
-    const submotivo =
-      AbsenceSubReasonES[item.subReason] ?? item.absenceReasonDetails ?? motivo;
-
-    const durationLabel = item.hoursAbsent
-      ? `${item.hoursAbsent} horas`
-      : item.absenceDays
-        ? `${item.absenceDays} días`
+  return [...items]
+    .sort(
+      (a, b) =>
+        new Date(b.absenceStartDate).getTime() -
+        new Date(a.absenceStartDate).getTime(),
+    )
+    .map((item): IAbsencesTable => {
+      const formattedDate = item.absenceStartDate
+        ? formatDate(item.absenceStartDate)
         : "Sin dato";
 
-    const detailStartHour = item.absenceStartHour ?? null;
-    const detailHoursAbsent = item.hoursAbsent ?? null;
-    const detailDaysAbsent = item.absenceDays ?? null;
+      const motivo =
+        AbsenceReasonES[item.absenceReason] ?? item.absenceReason ?? "Sin dato";
 
-    const startHourDisplay =
-      detailStartHour !== null ? `${detailStartHour}:00` : "Día completo";
+      const submotivo =
+        AbsenceSubReasonES[item.subReason] ??
+        item.absenceReasonDetails ??
+        motivo;
 
-    const hoursAbsentDisplay =
-      detailHoursAbsent !== null ? detailHoursAbsent.toString() : "N/A";
+      const durationLabel = item.hoursAbsent
+        ? `${item.hoursAbsent} horas`
+        : item.absenceDays
+          ? `${item.absenceDays} días`
+          : "Sin dato";
 
-    const daysAbsentDisplay =
-      detailDaysAbsent !== null ? detailDaysAbsent.toString() : "N/A";
+      return {
+        reason: { value: submotivo },
+        date: { value: formattedDate },
+        duration: { value: durationLabel },
 
-    return {
-      reason: { value: submotivo },
-      date: { value: formattedDate },
-      duration: { value: durationLabel },
-      view: {
-        value: "",
-        type: "icon",
-        onClick: () => console.log("Ver detalles", item.absenceId),
-      },
-      download: {
-        value: "",
-        type: "icon",
-        onClick: () => console.log("Descargar", item.absenceId),
-      },
-      dataDetails: {
-        value: {
-          ...item,
-          motivo,
-          submotivo,
-          formattedDate,
-          duration: durationLabel,
-
-          absenceStartHour: detailStartHour,
-          hoursAbsent: detailHoursAbsent,
-          absenceDays: detailDaysAbsent,
-
-          startHourDisplay: startHourDisplay,
-          hoursAbsentDisplay: hoursAbsentDisplay,
-          daysAbsentDisplay: daysAbsentDisplay,
-          durationDisplay: durationLabel,
+        view: {
+          value: "",
+          type: "icon",
+          onClick: () => {
+            console.log("Ver detalle ausencia", item.absenceId);
+          },
         },
-      },
-    };
-  });
+
+        download: {
+          value: "",
+          type: "icon",
+          onClick: () => {
+            console.log("Descargar soporte ausencia", item.absenceId);
+          },
+        },
+
+        dataDetails: {
+          value: {
+            ...item,
+            motivo,
+            submotivo,
+            formattedDate,
+            duration: durationLabel,
+          },
+        },
+      };
+    });
 };
 
 function AbsencesOptions() {
-  const { data, isLoading } = useEmployeeAbsences(formatAbsences, 1, 50);
   const navigate = useNavigate();
   const location = useLocation();
+
+  const { data, isLoading } = useEmployeeAbsences(formatAbsences, 1, 50);
 
   const {
     data: fetchedData,
@@ -109,12 +99,19 @@ function AbsencesOptions() {
 
   const [tableData, setTableData] = useState<IAbsencesProcedureTable[]>([]);
 
-  const [flagConfig, setFlagConfig] = useState({
-    showFlag: false,
-    flagMessage: "",
-    flagTitle: "",
-    isSuccess: false,
+  const [flagState, setFlagState] = useState({
+    show: false,
+    message: "",
+    title: "",
+    success: false,
   });
+
+  useErrorFlag(
+    flagState.show,
+    flagState.message,
+    flagState.title,
+    flagState.success,
+  );
 
   useEffect(() => {
     setTableData(fetchedData);
@@ -122,70 +119,66 @@ function AbsencesOptions() {
 
   useEffect(() => {
     if (error) {
-      setFlagConfig({
-        showFlag: true,
-        flagMessage: "Error al obtener las solicitudes de ausencias.",
-        flagTitle: "Error",
-        isSuccess: false,
+      setFlagState({
+        show: true,
+        title: "Error",
+        message: "Error al obtener las solicitudes de ausencias.",
+        success: false,
       });
     }
   }, [error]);
 
   useEffect(() => {
     if (location.state?.showFlag) {
-      setFlagConfig({
-        showFlag: location.state.showFlag,
-        flagMessage: location.state.flagMessage,
-        flagTitle: location.state.flagTitle,
-        isSuccess: location.state.isSuccess,
-      });
+      navigate(location.pathname, { replace: true });
+    }
+  }, [location.state, navigate, location.pathname]);
 
+  useEffect(() => {
+    if (flagState.show) {
       const timer = setTimeout(() => {
-        navigate(location.pathname, { replace: true });
-      }, 5000);
+        setFlagState((prev) => ({ ...prev, show: false }));
+      }, 100);
       return () => clearTimeout(timer);
     }
-  }, [location.state?.showFlag, navigate, location.pathname]);
+  }, [flagState.show]);
 
-  const { handleDelete } = useDeleteRequest<IAbsencesProcedureTable>(
-    (filterFn) => {
-      setTableData((prev) => prev.filter(filterFn));
-    },
-  );
-
-  useErrorFlag(
-    flagConfig.showFlag,
-    flagConfig.flagMessage,
-    flagConfig.flagTitle,
-    flagConfig.isSuccess,
-  );
+  const { handleDelete } = useDeleteRequest();
 
   const handleDeleteRequest = async (
     requestId: string,
     justification: string,
   ) => {
-    try {
-      const request = tableData.find(
-        (item) => item.dataDetails?.value?.humanResourceRequestId === requestId,
-      );
+    const request = tableData.find(
+      (item) => item.dataDetails?.value?.humanResourceRequestId === requestId,
+    );
 
-      const requestNumber =
-        request?.dataDetails?.value?.humanResourceRequestNumber ?? "";
+    const requestNumber =
+      request?.dataDetails?.value?.humanResourceRequestNumber ?? "";
 
-      await handleDelete(requestId, justification, requestNumber);
+    setTableData((prev) =>
+      prev.filter(
+        (item) => item.dataDetails?.value?.humanResourceRequestId !== requestId,
+      ),
+    );
 
-      setFlagConfig({
-        showFlag: true,
-        flagMessage: "La ausencia fue eliminada correctamente.",
-        flagTitle: "Eliminación exitosa",
-        isSuccess: true,
+    const success = await handleDelete(requestId, justification, requestNumber);
+
+    if (success) {
+      setFlagState({
+        show: true,
+        title: "Solicitud eliminada",
+        message: "La ausencia fue eliminada correctamente.",
+        success: true,
       });
-    } catch {
-      setFlagConfig({
-        showFlag: true,
-        flagMessage: "Ocurrió un error al eliminar la ausencia.",
-        flagTitle: "Error al eliminar",
-        isSuccess: false,
+    } else {
+      setTableData(fetchedData);
+
+      setFlagState({
+        show: true,
+        title: "Error",
+        message: "No fue posible eliminar la ausencia.",
+        success: false,
       });
     }
   };

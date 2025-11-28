@@ -199,19 +199,10 @@ function AbsencesProcedureTable({
   };
 
   const handleSubmitDelete = (justification: string) => {
-    if (selectedAbsenceId) {
-      handleDeleteRequest(selectedAbsenceId, justification);
+    if (!selectedAbsenceId) return;
 
-      setLocalAbsences((prev) =>
-        prev.filter(
-          (absence) =>
-            absence.dataDetails?.value?.humanResourceRequestId !==
-            selectedAbsenceId,
-        ),
-      );
-
-      handleCloseDeleteModal();
-    }
+    handleDeleteRequest(selectedAbsenceId, justification);
+    handleCloseDeleteModal();
   };
 
   const getHeaderAlignment = (key: string) => {
