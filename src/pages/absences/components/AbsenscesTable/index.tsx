@@ -383,6 +383,14 @@ function AbsencesTable({
   ) => {
     if (loading) return <SkeletonLine width="100%" animated />;
 
+    if (headerKey === "reason") {
+      const details = rowData.dataDetails?.value as AbsencesTableDataDetails;
+
+      if (!details?.absenceReason) return "N/A";
+
+      return AbsenceReasonES[details.absenceReason] ?? details.absenceReason;
+    }
+
     if (headerKey === "actions") {
       const details = rowData.dataDetails?.value;
 

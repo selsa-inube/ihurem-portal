@@ -143,7 +143,11 @@ function AbsencesOptionsUI(props: AbsencesOptionsUIProps) {
 
   const renderReportedAbsences = () => (
     <StyledHolidaysContainer $isMobile={isMobile}>
-      <Stack alignItems="center" justifyContent="space-between">
+      <Stack
+        alignItems="center"
+        justifyContent="space-between"
+        padding={spacing.s200}
+      >
         <Text type="title" size="medium">
           Ausencias reportadas
         </Text>
@@ -163,7 +167,11 @@ function AbsencesOptionsUI(props: AbsencesOptionsUIProps) {
 
   const renderAbsenceRequests = () => (
     <StyledHolidaysContainer $isMobile={isMobile}>
-      <Stack alignItems="center" justifyContent="space-between">
+      <Stack
+        alignItems="center"
+        justifyContent="space-between"
+        padding={spacing.s200}
+      >
         <Text type="title" size="medium">
           Solicitudes de ausencias en trámite
         </Text>
