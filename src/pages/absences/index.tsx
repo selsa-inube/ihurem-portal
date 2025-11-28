@@ -143,7 +143,11 @@ function AbsencesOptions() {
     }
   }, [flagState.show]);
 
-  const { handleDelete } = useDeleteRequest();
+  const { handleDelete } = useDeleteRequest<IAbsencesProcedureTable>(
+    (filterFn) => {
+      setTableData((prev) => prev.filter(filterFn));
+    },
+  );
 
   const handleDeleteRequest = async (
     requestId: string,
