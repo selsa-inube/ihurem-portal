@@ -86,7 +86,7 @@ function AbsenceMotiveFormUI(props: AbsenceMotiveFormUIProps) {
                 placeholder="Selecciona de la lista"
                 value={formik.values.motive}
                 message={formik.errors.motive}
-                disabled={loading}
+                disabled={loading ?? motiveOptions.length === 0}
                 size="compact"
                 fullwidth
                 onChange={(_, v) => handleChange("motive", v)}
@@ -139,7 +139,7 @@ function AbsenceMotiveFormUI(props: AbsenceMotiveFormUIProps) {
             </Button>
             <Button
               onClick={handleNextStep}
-              disabled={loading ?? !formik.isValid}
+              disabled={loading ? true : !formik.isValid}
             >
               Siguiente
             </Button>

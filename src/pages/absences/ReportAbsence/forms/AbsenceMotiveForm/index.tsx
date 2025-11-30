@@ -1,18 +1,14 @@
 import { FormikProps, useFormik } from "formik";
 import { object, string } from "yup";
 import { forwardRef, useEffect, useImperativeHandle, useMemo } from "react";
+import { IOption } from "@inubekit/inubekit";
 
-import {
-  transformEnumsToOptions,
-  getSubMotivesForMotive,
-  EnumItem,
-  AbsenceReasonRelation,
-} from "@utils/absenceMotiveUtils";
 import { validationMessages } from "@validations/validationMessages";
 import { validationRules } from "@validations/validationRules";
 import { useAppContext } from "@context/AppContext/useAppContext";
 import { useAbsenceReasons } from "@hooks/useAbsenceReasons";
 import { useEnumeratorsIhurem } from "@hooks/useEnumeratorsIhurem";
+import { EnumItem, AbsenceReasonRelation } from "@utils/absenceMotiveUtils";
 
 import { IAbsenceMotiveEntry } from "./types";
 import { absenceMotiveFormRequiredFields } from "./config/formConfig";
@@ -32,6 +28,40 @@ const createValidationSchema = () =>
   });
 
 const validationSchema = createValidationSchema();
+
+const getDescriptionForCode = (code: string, enums: EnumItem[]): string => {
+  const found = enums.find((item) => item.code === code);
+  return found?.description ?? code;
+};
+
+const transformAbsenceReasonsToOptions = (
+  relations: AbsenceReasonRelation[],
+  enums: EnumItem[],
+): IOption[] => {
+  return relations.map((relation, index) => ({
+    id: String(index + 1),
+    label: getDescriptionForCode(relation.absenceReason, enums),
+    value: relation.absenceReason,
+  }));
+};
+
+const getSubMotivesForMotive = (
+  motiveValue: string,
+  relations: AbsenceReasonRelation[],
+  enums: EnumItem[],
+): IOption[] => {
+  const relation = relations.find((r) => r.absenceReason === motiveValue);
+
+  if (!relation?.subReason) {
+    return [];
+  }
+
+  return relation.subReason.map((subReasonCode, index) => ({
+    id: String(index + 1),
+    label: getDescriptionForCode(subReasonCode, enums),
+    value: subReasonCode,
+  }));
+};
 
 interface AbsenceMotiveFormProps {
   initialValues: IAbsenceMotiveEntry;
@@ -76,21 +106,39 @@ const AbsenceMotiveForm = forwardRef<
         company: "SISTEMAS ENLINEA S.A.",
       });
 
-    const { data: subReasonEnums, isLoading: isLoadingSubReasonEnums } =
-      useEnumeratorsIhurem("subreason");
-
     const { data: absenceReasonEnums, isLoading: isLoadingAbsenceReasonEnums } =
       useEnumeratorsIhurem("absencereason");
 
+    const { data: subReasonEnums, isLoading: isLoadingSubReasonEnums } =
+      useEnumeratorsIhurem("subreason");
+
     const motiveOptions = useMemo(() => {
-      if (!absenceReasonEnums || isLoadingAbsenceReasonEnums) {
+      if (
+        !absenceRelations ||
+        !absenceReasonEnums ||
+        isLoadingAbsenceReasons ||
+        isLoadingAbsenceReasonEnums
+      ) {
         return [];
       }
-      return transformEnumsToOptions(absenceReasonEnums as EnumItem[]);
-    }, [absenceReasonEnums, isLoadingAbsenceReasonEnums]);
+      return transformAbsenceReasonsToOptions(
+        absenceRelations as AbsenceReasonRelation[],
+        absenceReasonEnums as EnumItem[],
+      );
+    }, [
+      absenceRelations,
+      absenceReasonEnums,
+      isLoadingAbsenceReasons,
+      isLoadingAbsenceReasonEnums,
+    ]);
 
     const subMotiveOptions = useMemo(() => {
-      if (!formik.values.motive || !absenceRelations || !subReasonEnums) {
+      if (
+        !formik.values.motive ||
+        !absenceRelations ||
+        !subReasonEnums ||
+        isLoadingSubReasonEnums
+      ) {
         return [];
       }
       return getSubMotivesForMotive(
@@ -98,7 +146,12 @@ const AbsenceMotiveForm = forwardRef<
         absenceRelations as AbsenceReasonRelation[],
         subReasonEnums as EnumItem[],
       );
-    }, [formik.values.motive, absenceRelations, subReasonEnums]);
+    }, [
+      formik.values.motive,
+      absenceRelations,
+      subReasonEnums,
+      isLoadingSubReasonEnums,
+    ]);
 
     useEffect(() => {
       const contracts = employees.employmentContracts ?? [];
