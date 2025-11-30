@@ -18,11 +18,17 @@ import { StyledModal, StyledContainerClose } from "./styles";
 export interface ResponseModalProps {
   isRequestSent?: boolean;
   portalId?: string;
+  description?: string;
   onCloseModal?: () => void;
 }
 
 export function ResponseModal(props: ResponseModalProps) {
-  const { isRequestSent = true, portalId = "portal", onCloseModal } = props;
+  const {
+    isRequestSent = true,
+    portalId = "portal",
+    onCloseModal,
+    description,
+  } = props;
 
   const isMobile = useMediaQuery("(max-width: 700px)");
   const portalNode = document.getElementById(portalId);
@@ -67,7 +73,9 @@ export function ResponseModal(props: ResponseModalProps) {
                 : "Lo sentimos"}
             </b>
           </Text>
-          <Text appearance="gray">{message}</Text>
+          <Text appearance="gray">
+            {!isRequestSent ? message : (description ?? message)}
+          </Text>
         </Stack>
         <Stack justifyContent="end">
           <Button onClick={onCloseModal}>Entendido</Button>

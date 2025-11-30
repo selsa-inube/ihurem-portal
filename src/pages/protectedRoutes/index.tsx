@@ -79,7 +79,11 @@ export function ProtectedRoutes() {
     if (portalData?.externalAuthenticationProvider !== undefined) {
       const externalIAuthProvider = portalData.externalAuthenticationProvider;
       if (!externalIAuthProvider) {
-        if (!isAuthenticated && !isLoading) {
+        if (
+          !isAuthenticated &&
+          !isLoading &&
+          window.location.pathname !== "/self-registration"
+        ) {
           loginWithRedirect({
             authorizationParams: {
               connection: "google-oauth2",
@@ -102,7 +106,8 @@ export function ProtectedRoutes() {
       !isAuthenticated &&
       !hasPortalError &&
       !pathStart.includes(window.location.pathname) &&
-      !portalData.externalAuthenticationProvider
+      !portalData.externalAuthenticationProvider &&
+      window.location.pathname !== "/self-registration"
     ) {
       loginWithRedirect({
         authorizationParams: {
