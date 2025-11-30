@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 
 import { getEnumeratorsIhurem } from "@services/enumerators/getEnumeratorsIhurem";
 import { IEnumeratorItem } from "@services/enumerators/types";
-import { useAppContext } from "@context/AppContext/useAppContext";
 import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
 import { modalErrorConfig } from "@config/modalErrorConfig";
+
+import { useHeaders } from "./useHeaders";
 
 const ERROR_CODE_GET_ENUMERATORS_FAILED = 1021;
 
@@ -17,8 +18,9 @@ export const useEnumeratorsIhurem = <T>(
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
-  const { businessUnit } = useAppContext();
   const { showErrorModal } = useErrorModal();
+
+  const { getHeaders } = useHeaders();
 
   const fetchData = async () => {
     if (!enumeratorName) return;
@@ -26,11 +28,7 @@ export const useEnumeratorsIhurem = <T>(
     setIsLoading(true);
 
     try {
-      const headers = {
-        "Content-type": "application/json; charset=UTF-8",
-        "X-Business-unit": businessUnit.publicCode,
-      };
-
+      const headers = await getHeaders();
       const enumeratorData = await getEnumeratorsIhurem(
         enumeratorName,
         headers,
