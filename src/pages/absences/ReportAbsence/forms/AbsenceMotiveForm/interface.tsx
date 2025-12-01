@@ -3,16 +3,17 @@ import {
   Button,
   Select,
   Textarea,
+  Spinner,
   useMediaQuery,
 } from "@inubekit/inubekit";
 import { FormikProps } from "formik";
 import * as Yup from "yup";
+import { IOption } from "@inubekit/inubekit";
 
 import { isRequired, getFieldState } from "@utils/forms/forms";
 import { spacing } from "@design/tokens/spacing";
 
 import { IAbsenceMotiveEntry } from "./types";
-import { motiveSelectMock, suvMotiveSelectMock } from "./config/formConfig";
 import { StyledContainer } from "./styles";
 
 interface AbsenceMotiveFormUIProps {
@@ -20,6 +21,8 @@ interface AbsenceMotiveFormUIProps {
   validationSchema: Yup.ObjectSchema<Yup.AnyObject>;
   loading?: boolean;
   withNextButton?: boolean;
+  motiveOptions: IOption[];
+  subMotiveOptions: IOption[];
   handleNextStep: () => void;
   handlePreviousStep: () => void;
 }
@@ -30,22 +33,40 @@ function AbsenceMotiveFormUI(props: AbsenceMotiveFormUIProps) {
     validationSchema,
     loading,
     withNextButton,
+    motiveOptions,
+    subMotiveOptions,
     handleNextStep,
     handlePreviousStep,
   } = props;
+
   const isMobile = useMediaQuery("(max-width: 700px)");
 
   const handleChange = (name: string, value: string) => {
     formik.setFieldValue(name, value);
+
     if (name === "motive") {
       formik.setFieldValue("subMotive", "");
     }
   };
 
   const motiveHasOptions =
-    Array.isArray(motiveSelectMock) && motiveSelectMock.length > 0;
+    Array.isArray(motiveOptions) && motiveOptions.length > 0;
+  const subMotiveHasOptions =
+    Array.isArray(subMotiveOptions) && subMotiveOptions.length > 0;
+
   const isSubMotiveDisabled =
-    Boolean(loading) || !motiveHasOptions || !formik.values.motive;
+    Boolean(loading) ||
+    !motiveHasOptions ||
+    !formik.values.motive ||
+    !subMotiveHasOptions;
+
+  if (loading) {
+    return (
+      <Stack alignItems="center" direction="column">
+        <Spinner size="large" />
+      </Stack>
+    );
+  }
 
   return (
     <form>
@@ -61,11 +82,11 @@ function AbsenceMotiveFormUI(props: AbsenceMotiveFormUIProps) {
               <Select
                 label="Motivo"
                 name="motive"
-                options={motiveSelectMock}
+                options={motiveOptions}
                 placeholder="Selecciona de la lista"
                 value={formik.values.motive}
                 message={formik.errors.motive}
-                disabled={loading}
+                disabled={loading ?? motiveOptions.length === 0}
                 size="compact"
                 fullwidth
                 onChange={(_, v) => handleChange("motive", v)}
@@ -73,7 +94,7 @@ function AbsenceMotiveFormUI(props: AbsenceMotiveFormUIProps) {
               <Select
                 label="Submotivo"
                 name="subMotive"
-                options={suvMotiveSelectMock}
+                options={subMotiveOptions}
                 placeholder="Selecciona de la lista"
                 value={formik.values.subMotive}
                 message={formik.errors.subMotive}
@@ -106,6 +127,7 @@ function AbsenceMotiveFormUI(props: AbsenceMotiveFormUIProps) {
             />
           </Stack>
         </StyledContainer>
+
         {withNextButton && (
           <Stack justifyContent="flex-end" gap={spacing.s250}>
             <Button
@@ -117,7 +139,7 @@ function AbsenceMotiveFormUI(props: AbsenceMotiveFormUIProps) {
             </Button>
             <Button
               onClick={handleNextStep}
-              disabled={loading ?? !formik.isValid}
+              disabled={loading ? true : !formik.isValid}
             >
               Siguiente
             </Button>

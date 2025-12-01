@@ -17,7 +17,7 @@ export enum ERequestType {
 
 export enum ELeaveReason {
   paid_leaves = "paid_leaves",
-  unpaid_leaves = "unpaid_leaves",
+  unpaid_leave = "unpaid_leave",
   personal_illness = "personal_illness",
   personal_accident = "personal_accident",
   calamity = "calamity",
@@ -27,11 +27,12 @@ export enum ELeaveReason {
   family_emergency = "family_emergency",
   medical_appointment = "medical_appointment",
   personal_or_family_medical_appointment = "personal_or_family_medical_appointment",
+  mourning = "mourning",
 }
 
 export const leaveReasonLabels: Record<ELeaveReason, string> = {
   [ELeaveReason.paid_leaves]: "Permisos remunerados",
-  [ELeaveReason.unpaid_leaves]: "Licencias no remuneradas",
+  [ELeaveReason.unpaid_leave]: "Licencias no remuneradas",
   [ELeaveReason.personal_illness]: "Enfermedad personal",
   [ELeaveReason.personal_accident]: "Accidente personal",
   [ELeaveReason.calamity]: "Calamidad",
@@ -42,6 +43,7 @@ export const leaveReasonLabels: Record<ELeaveReason, string> = {
   [ELeaveReason.medical_appointment]: "Cita médica",
   [ELeaveReason.personal_or_family_medical_appointment]:
     "Cita médica personal o familiar",
+  [ELeaveReason.mourning]: "Luto",
 };
 
 export const requestTypeMap: Record<ERequestType, string> = {

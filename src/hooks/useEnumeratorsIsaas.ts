@@ -1,26 +1,26 @@
 import { useState, useEffect } from "react";
 
-import {
-  EnumeratorItem,
-  getEnumerators,
-} from "@services/enumerators/getEnumerators";
-import { useAppContext } from "@context/AppContext/useAppContext";
+import { getEnumeratorsIsaas } from "@services/enumerators/getEnumeratorsIsaas";
+import { IEnumeratorItem } from "@services/enumerators/types";
 import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
 import { modalErrorConfig } from "@config/modalErrorConfig";
 
+import { useHeaders } from "./useHeaders";
+
 const ERROR_CODE_GET_ENUMERATORS_FAILED = 1021;
 
-export const useEnumerators = <T>(
+export const useEnumeratorsIsaas = <T>(
   enumeratorName: string,
-  formatData?: (data: EnumeratorItem[]) => T[],
+  formatData?: (data: IEnumeratorItem[]) => T[],
 ) => {
   const [data, setData] = useState<T[]>([]);
-  const [rawData, setRawData] = useState<EnumeratorItem[]>([]);
+  const [rawData, setRawData] = useState<IEnumeratorItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
-  const { businessUnit } = useAppContext();
   const { showErrorModal } = useErrorModal();
+
+  const { getHeaders } = useHeaders();
 
   const fetchData = async () => {
     if (!enumeratorName) return;
@@ -28,12 +28,9 @@ export const useEnumerators = <T>(
     setIsLoading(true);
 
     try {
-      const headers = {
-        "Content-type": "application/json; charset=UTF-8",
-        "X-Business-unit": businessUnit.publicCode,
-      };
+      const headers = await getHeaders(false);
 
-      const enumeratorData = await getEnumerators(enumeratorName, headers);
+      const enumeratorData = await getEnumeratorsIsaas(enumeratorName, headers);
 
       const responseData = enumeratorData ?? [];
       setRawData(responseData);
