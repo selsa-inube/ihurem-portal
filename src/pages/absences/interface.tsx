@@ -16,7 +16,7 @@ import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
 import { spacing } from "@design/tokens/spacing";
 
-import { StyledHolidaysContainer } from "./styles";
+import { StyledAbsencesContainer } from "./styles";
 import { AbsencesTable } from "./components/AbsenscesTable";
 import { AbsencesProcedureTable } from "./components/AbsencesProcedureTable";
 import { AbsenceDetail } from "./components/Detail";
@@ -142,7 +142,7 @@ function AbsencesOptionsUI(props: AbsencesOptionsUIProps) {
     );
 
   const renderReportedAbsences = () => (
-    <StyledHolidaysContainer $isMobile={isMobile}>
+    <StyledAbsencesContainer $isMobile={isMobile}>
       <Stack
         alignItems="center"
         justifyContent="space-between"
@@ -162,11 +162,11 @@ function AbsencesOptionsUI(props: AbsencesOptionsUIProps) {
         hasUploadPrivilege={hasPrivilege}
         handleRestrictedClick={handleRestrictedAction}
       />
-    </StyledHolidaysContainer>
+    </StyledAbsencesContainer>
   );
 
   const renderAbsenceRequests = () => (
-    <StyledHolidaysContainer $isMobile={isMobile}>
+    <StyledAbsencesContainer $isMobile={isMobile}>
       <Stack
         alignItems="center"
         justifyContent="space-between"
@@ -198,7 +198,7 @@ function AbsencesOptionsUI(props: AbsencesOptionsUIProps) {
         hasUploadPrivilege={hasPrivilege}
         handleDeleteRequest={handleDeleteRequest}
       />
-    </StyledHolidaysContainer>
+    </StyledAbsencesContainer>
   );
 
   return (

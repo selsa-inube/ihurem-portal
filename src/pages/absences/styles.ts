@@ -11,13 +11,12 @@ interface Theme {
   };
 }
 
-interface StyledHolidaysContainerProps {
+interface StyledAbsencesContainerProps {
   $isMobile: boolean;
   theme?: Theme;
 }
 
-const StyledHolidaysContainer = styled.div<StyledHolidaysContainerProps>`
-  gap: ${spacing.s250};
+const StyledAbsencesContainer = styled.div<StyledAbsencesContainerProps>`
   border-radius: ${spacing.s100};
   border: 1px solid
     ${({ theme }) =>
@@ -30,4 +29,4 @@ const StyledHolidaysContainer = styled.div<StyledHolidaysContainerProps>`
   }
 `;
 
-export { StyledHolidaysContainer };
+export { StyledAbsencesContainer };
