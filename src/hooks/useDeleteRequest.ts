@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
+import { Logger } from "@utils/logger";
 import { useHeaders } from "@hooks/useHeaders";
 import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
 import { modalErrorConfig } from "@config/modalErrorConfig";
@@ -45,7 +46,11 @@ export function useDeleteRequest<T extends { requestId?: string }>(
 
       return true;
     } catch (error) {
-      console.error("Error al eliminar la solicitud:", error);
+      Logger.error("Error al eliminar la solicitud", error as Error, {
+        id,
+        justification,
+        number,
+      });
       const errorConfig = modalErrorConfig[ERROR_CODE_DELETE_FAILED];
 
       showErrorModal({

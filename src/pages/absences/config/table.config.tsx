@@ -6,6 +6,7 @@ import {
   IUnifiedHumanResourceRequestData,
 } from "@ptypes/humanResourcesRequest.types";
 import { formatDate } from "@utils/date";
+import { Logger } from "@utils/logger";
 
 import { IAbsencesProcedureTable } from "../components/AbsencesProcedureTable/types";
 
@@ -22,7 +23,13 @@ export const formatAbsenceRequests = (
           ? JSON.parse(item.humanResourceRequestData)
           : (item.humanResourceRequestData ?? {});
     } catch (error) {
-      console.warn("Error al parsear humanResourceRequestData:", error);
+      Logger.error(
+        "Error al parsear humanResourceRequestData",
+        error as Error,
+        {
+          humanResourceRequestId: item.humanResourceRequestId,
+        },
+      );
     }
 
     const formattedReason = (() => {
@@ -66,13 +73,17 @@ export const formatAbsenceRequests = (
         value: "Ver",
         type: "icon",
         onClick: () =>
-          console.log("Ver detalle de solicitud:", item.humanResourceRequestId),
+          Logger.info("Ver detalle de solicitud", {
+            humanResourceRequestId: item.humanResourceRequestId,
+          }),
       },
       download: {
         value: "Descargar",
         type: "icon",
         onClick: () =>
-          console.log("Descargar solicitud:", item.humanResourceRequestId),
+          Logger.info("Descargar solicitud", {
+            humanResourceRequestId: item.humanResourceRequestId,
+          }),
       },
     };
   });

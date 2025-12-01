@@ -11,6 +11,7 @@ import { useHeaders } from "@hooks/useHeaders";
 import { useAppContext } from "@context/AppContext/useAppContext";
 import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
 import { modalErrorConfig } from "@config/modalErrorConfig";
+import { Logger } from "@utils/logger";
 
 const ERROR_CODE_GET_HR_REQUESTS_FAILED = 1013;
 
@@ -49,16 +50,19 @@ export const useHumanResourceRequests = <T>(
       setData(formatData(requestsData));
       setError(null);
     } catch (err) {
-      setError(err instanceof Error ? err : new Error(String(err)));
+      const errorObj = err instanceof Error ? err : new Error(String(err));
+      setError(errorObj);
       setData([]);
       setRawData([]);
 
-      console.error(
+      Logger.error(
         typeRequest
           ? `Error al obtener solicitudes de tipo "${requestTypeLabels[typeRequest]}"`
           : "Error al obtener solicitudes",
-        err,
+        errorObj,
+        { effectiveEmployeeId, typeRequest },
       );
+
       const errorConfig = modalErrorConfig[ERROR_CODE_GET_HR_REQUESTS_FAILED];
 
       showErrorModal({

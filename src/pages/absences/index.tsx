@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
+import { Logger } from "@utils/logger";
 import { useEmployeeAbsences } from "@hooks/useEmployeeAbsences";
 import { useHumanResourceRequests } from "@hooks/useHumanResourceRequests";
 import { useDeleteRequest } from "@hooks/useDeleteRequest";
@@ -64,12 +65,16 @@ const formatAbsences = (items: EmployeeAbsence[]): IAbsencesTable[] => {
       view: {
         value: "",
         type: "icon",
-        onClick: () => console.log("Ver detalles", item.absenceId),
+        onClick: () =>
+          Logger.info("Ver detalles de ausencia", {
+            absenceId: item.absenceId,
+          }),
       },
       download: {
         value: "",
         type: "icon",
-        onClick: () => console.log("Descargar", item.absenceId),
+        onClick: () =>
+          Logger.info("Descargar ausencia", { absenceId: item.absenceId }),
       },
       dataDetails: {
         value: {

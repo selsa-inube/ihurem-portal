@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 
+import { Logger } from "@utils/logger";
 import { getEmployeeById } from "@services/employeeConsultation/getEmployeeById";
 import { Employee } from "@ptypes/employeePortalConsultation.types";
 import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
@@ -48,7 +49,9 @@ export const useEmployee = (initialEmployeeId: string): UseEmployeeResult => {
         const errorObj = err instanceof Error ? err : new Error(String(err));
         setError(errorObj);
 
-        console.error("Error al obtener información del empleado:", err);
+        Logger.error("Error al obtener información del empleado", errorObj, {
+          employeeId,
+        });
         const errorConfig = modalErrorConfig[ERROR_CODE_GET_EMPLOYEE_FAILED];
 
         showErrorModal({

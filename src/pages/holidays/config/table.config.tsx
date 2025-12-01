@@ -1,5 +1,6 @@
 import { MdOutlineVisibility, MdDeleteOutline } from "react-icons/md";
 
+import { Logger } from "@utils/logger";
 import {
   ERequestType,
   HumanResourceRequest,
@@ -55,7 +56,7 @@ export const formatHolidaysData = (holidays: HumanResourceRequest[]) =>
         value: <MdOutlineVisibility />,
         type: "icon" as const,
         onClick: () =>
-          console.log(
+          Logger.info(
             `Ver detalles de la solicitud ${holiday.humanResourceRequestId}`,
           ),
       },
@@ -63,7 +64,7 @@ export const formatHolidaysData = (holidays: HumanResourceRequest[]) =>
         value: <MdDeleteOutline />,
         type: "icon" as const,
         onClick: () =>
-          console.log(`Eliminar solicitud ${holiday.humanResourceRequestId}`),
+          Logger.info(`Eliminar solicitud ${holiday.humanResourceRequestId}`),
       },
       dataDetails: {
         value: {
