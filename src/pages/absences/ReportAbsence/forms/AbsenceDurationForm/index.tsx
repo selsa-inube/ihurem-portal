@@ -12,44 +12,44 @@ import { validationMessages } from "@validations/validationMessages";
 import { ErrorModal } from "@components/modals/ErrorModal";
 
 import { IAbsenceDurationEntry } from "./types";
-import { absenceDurationFormRequiredFields } from "./config/formConfig";
 import { AbsenceDurationFormUI } from "./interface";
+import { fullDayMotives } from "./config/formConfig";
 
-const createValidationSchema = (restrictFutureDates: boolean) =>
+const createValidationSchema = (
+  restrictFutureDates: boolean,
+  showDaysField: boolean,
+  showHoursFields: boolean,
+) =>
   object().shape({
-    startDate: absenceDurationFormRequiredFields.startDate
+    startDate: string().test(
+      "startDate-validation",
+      "Las licencias deben solicitarse con anticipación.",
+      (value) => {
+        if (!value) return false;
+        if (!restrictFutureDates) return true;
+        const selected = new Date(value);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        return selected > today;
+      },
+    ),
+    daysDuration: showDaysField
       ? string()
           .required(validationMessages.required)
           .test(
-            "is-after-today",
-            "Las licencias deben solicitarse con anticipación.",
-            (value) => {
-              if (!value) return false;
-              if (!restrictFutureDates) return true;
-              const selected = new Date(value);
-              const today = new Date();
-              today.setHours(0, 0, 0, 0);
-              return selected > today;
-            },
-          )
-      : string(),
-    daysDuration: absenceDurationFormRequiredFields.daysDuration
-      ? string()
-          .required(validationMessages.required)
-          .test(
-            "is-valid-number",
-            "La duración en días debe ser un número positivo",
+            "is-valid-number-days",
+            "La duración en días debe ser un número mayor a cero",
             (value) => {
               if (!value) return false;
               if (value === "-" || value === "+" || isNaN(Number(value))) {
                 return false;
               }
               const numValue = Number(value);
-              return numValue >= 0;
+              return numValue > 0;
             },
           )
       : string().test(
-          "is-valid-number",
+          "is-valid-number-days-optional",
           "La duración en días debe ser un número positivo",
           (value) => {
             if (!value) return true;
@@ -60,23 +60,23 @@ const createValidationSchema = (restrictFutureDates: boolean) =>
             return numValue >= 0;
           },
         ),
-    hoursDuration: absenceDurationFormRequiredFields.hoursDuration
+    hoursDuration: showHoursFields
       ? string()
           .required(validationMessages.required)
           .test(
-            "is-valid-number",
-            "La duración en horas debe ser un número positivo",
+            "is-valid-number-hours",
+            "La duración en horas debe ser un número mayor a cero",
             (value) => {
               if (!value) return false;
               if (value === "-" || value === "+" || isNaN(Number(value))) {
                 return false;
               }
               const numValue = Number(value);
-              return numValue >= 0;
+              return numValue > 0;
             },
           )
       : string().test(
-          "is-valid-number",
+          "is-valid-number-hours-optional",
           "La duración en horas debe ser un número positivo",
           (value) => {
             if (!value) return true;
@@ -87,7 +87,7 @@ const createValidationSchema = (restrictFutureDates: boolean) =>
             return numValue >= 0;
           },
         ),
-    startTime: absenceDurationFormRequiredFields.hoursDuration
+    startTime: showHoursFields
       ? string().required(validationMessages.required)
       : string(),
   });
@@ -122,12 +122,19 @@ const AbsenceDurationForm = forwardRef<
   ) => {
     const [showDateErrorModal, setShowDateErrorModal] = useState(false);
 
-    const shouldShowMotiveText = motive !== "unpaid_leave";
+    const isFullDayMotive = fullDayMotives.includes(motive);
+    const showDaysField = isFullDayMotive;
+    const showHoursFields = !isFullDayMotive;
     const restrictFutureDates = motive === "unpaid_leave";
 
     const validationSchema = useMemo(
-      () => createValidationSchema(restrictFutureDates),
-      [restrictFutureDates],
+      () =>
+        createValidationSchema(
+          restrictFutureDates,
+          showDaysField,
+          showHoursFields,
+        ),
+      [restrictFutureDates, showDaysField, showHoursFields],
     );
 
     const formik = useFormik<IAbsenceDurationEntry>({
@@ -198,7 +205,8 @@ const AbsenceDurationForm = forwardRef<
           loading={loading}
           formik={formik}
           withNextButton={withNextButton}
-          shouldShowMotiveText={shouldShowMotiveText}
+          showDaysField={showDaysField}
+          showHoursFields={showHoursFields}
           handleNextStep={handleNextStep}
           handlePreviousStep={handlePreviousStep}
         />
