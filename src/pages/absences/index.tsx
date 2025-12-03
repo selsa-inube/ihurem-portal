@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import { Logger } from "@utils/logger";
-import { labels } from "@config/labels";
 import { useEmployeeAbsences } from "@hooks/useEmployeeAbsences";
 import { useHumanResourceRequests } from "@hooks/useHumanResourceRequests";
 import { useDeleteRequest } from "@hooks/useDeleteRequest";
@@ -34,12 +33,10 @@ const formatAbsences = (items: EmployeeAbsence[]): IAbsencesTable[] => {
     .map((item): IAbsencesTable => {
       const formattedDate = item.absenceStartDate
         ? formatDate(item.absenceStartDate)
-        : labels.absences.common.noData;
+        : "Sin dato";
 
       const motivo =
-        AbsenceReasonES[item.absenceReason] ??
-        item.absenceReason ??
-        labels.absences.common.noData;
+        AbsenceReasonES[item.absenceReason] ?? item.absenceReason ?? "Sin dato";
 
       const submotivo =
         AbsenceSubReasonES[item.subReason] ??
@@ -47,10 +44,10 @@ const formatAbsences = (items: EmployeeAbsence[]): IAbsencesTable[] => {
         motivo;
 
       const durationLabel = item.hoursAbsent
-        ? `${item.hoursAbsent} ${labels.absences.common.hours}`
+        ? `${item.hoursAbsent} horas`
         : item.absenceDays
-          ? `${item.absenceDays} ${labels.absences.common.days}`
-          : labels.absences.common.noData;
+          ? `${item.absenceDays} días`
+          : "Sin dato";
 
       return {
         reason: { value: submotivo },
@@ -61,7 +58,7 @@ const formatAbsences = (items: EmployeeAbsence[]): IAbsencesTable[] => {
           value: "",
           type: "icon",
           onClick: () =>
-            Logger.info(labels.absences.actions.viewDetails, {
+            Logger.info("Ver detalles de ausencia", {
               absenceId: item.absenceId,
             }),
         },
@@ -70,7 +67,7 @@ const formatAbsences = (items: EmployeeAbsence[]): IAbsencesTable[] => {
           value: "",
           type: "icon",
           onClick: () =>
-            Logger.info(labels.absences.actions.download, {
+            Logger.info("Descargar ausencia", {
               absenceId: item.absenceId,
             }),
         },
@@ -127,8 +124,8 @@ function AbsencesOptions() {
     if (error) {
       setFlagState({
         show: true,
-        title: labels.absences.flags.errorTitle,
-        message: labels.absences.flags.fetchError,
+        title: "Error",
+        message: "Error al obtener las solicitudes de ausencias.",
         success: false,
       });
     }
@@ -177,8 +174,8 @@ function AbsencesOptions() {
     if (success) {
       setFlagState({
         show: true,
-        title: labels.absences.flags.deleteSuccessTitle,
-        message: labels.absences.flags.deleteSuccessMessage,
+        title: "Solicitud eliminada",
+        message: "La ausencia fue eliminada correctamente.",
         success: true,
       });
     } else {
@@ -186,8 +183,8 @@ function AbsencesOptions() {
 
       setFlagState({
         show: true,
-        title: labels.absences.flags.errorTitle,
-        message: labels.absences.flags.deleteErrorMessage,
+        title: "Error",
+        message: "No fue posible eliminar la ausencia.",
         success: false,
       });
     }

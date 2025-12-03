@@ -16,7 +16,6 @@ import { mockAlertCards } from "@mocks/requirements/requirements-2.mock";
 import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
 import { spacing } from "@design/tokens/spacing";
-import { labels } from "@config/labels";
 
 import { IAbsenceMotiveEntry } from "./forms/AbsenceMotiveForm/types";
 import { IAbsenceDurationEntry } from "./forms/AbsenceDurationForm/types";
@@ -121,7 +120,7 @@ function ReportAbsenceUI(props: RequestEnjoymentUIProps) {
           <ButtonRequirements
             counter={mockAlertCards.length}
             buttonIcon={<MdRule />}
-            buttonText={labels.absences.actions.requirements}
+            buttonText="Requisitos"
             isMobile={isTablet}
             onClick={handleOpenModal}
           />
@@ -135,9 +134,9 @@ function ReportAbsenceUI(props: RequestEnjoymentUIProps) {
             disableNext={shouldDisableNext}
             size={isTablet ? "small" : "large"}
             controls={{
-              goBackText: labels.absences.wizard.back,
-              goNextText: labels.absences.wizard.next,
-              submitText: labels.absences.wizard.submit,
+              goBackText: "Anterior",
+              goNextText: "Siguiente",
+              submitText: "Enviar",
             }}
             onNextClick={handleNextStep}
             onBackClick={handlePreviousStep}
@@ -208,8 +207,8 @@ function ReportAbsenceUI(props: RequestEnjoymentUIProps) {
 
       {isModalOpen && (
         <AbsenceRequirementsModal
-          title={labels.absences.actions.requirements}
-          buttonLabel={labels.absences.common.close}
+          title="Requisitos"
+          buttonLabel="Cerrar"
           requirements={mockRequirements}
           handleClose={handleCloseModal}
         />
@@ -217,9 +216,9 @@ function ReportAbsenceUI(props: RequestEnjoymentUIProps) {
 
       {showStartTimeErrorModal && (
         <ErrorModal
-          title={labels.absences.common.alertTitle}
-          descriptionText={labels.absences.modals.startTimeError.description}
-          solutionText={labels.absences.modals.startTimeError.solution}
+          title="Alerta"
+          descriptionText="Incluiste una duración en horas."
+          solutionText='Para continuar primero debes seleccionar la "Hora de inicio aproximada" para la ausencia.'
           onCloseModal={() => setShowStartTimeErrorModal(false)}
           onSubmitButtonClick={() => setShowStartTimeErrorModal(false)}
         />
@@ -227,8 +226,8 @@ function ReportAbsenceUI(props: RequestEnjoymentUIProps) {
 
       {showRequiredDocsErrorModal && (
         <ErrorModal
-          title={labels.absences.common.alertTitle}
-          solutionText={labels.absences.modals.requiredDocumentsError.solution}
+          title="Alerta"
+          solutionText="Para continuar debes cargar los documentos que sean obligatorios."
           onCloseModal={() => setShowRequiredDocsErrorModal(false)}
           onSubmitButtonClick={() => setShowRequiredDocsErrorModal(false)}
           onSolutionOnly

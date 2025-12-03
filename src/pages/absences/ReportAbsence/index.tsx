@@ -1,7 +1,6 @@
 import { useRef, useState } from "react";
 import { FormikProps } from "formik";
 
-import { labels } from "@config/labels";
 import { SendRequestModal } from "@components/modals/SendRequestModal";
 import { RequestInfoModal } from "@components/modals/RequestInfoModal";
 import { useErrorFlag } from "@hooks/useErrorFlag";
@@ -146,13 +145,7 @@ function ReportAbsence() {
     userNameInCharge,
   );
 
-  useErrorFlag(
-    showErrorFlag,
-    errorMessage,
-    labels.absences.flags.errorTitle,
-    false,
-    10000,
-  );
+  useErrorFlag(showErrorFlag, errorMessage, "Error", false, 10000);
 
   const validateRequiredDocuments = () => {
     if (!requiredDocumentsRef.current) return true;
@@ -223,24 +216,19 @@ function ReportAbsence() {
   };
 
   const breadcrumbs = {
-    label: labels.absences.breadcrumbs.appName,
-    description: labels.absences.breadcrumbs.description,
+    label: "Reportar ausencia",
+    description: "Completa el asistido para reportar una ausencia.",
     crumbs: [
-      {
-        path: "/",
-        label: labels.absences.breadcrumbs.home,
-        id: "/",
-        isActive: false,
-      },
+      { path: "/", label: "Inicio", id: "/", isActive: false },
       {
         path: "/absences",
-        label: labels.absences.breadcrumbs.absences,
+        label: "Ausencias",
         id: "/absences",
         isActive: false,
       },
       {
         path: "/absences/report-absence",
-        label: labels.absences.breadcrumbs.report,
+        label: "Reportar",
         id: "/absences/report-absence",
         isActive: true,
       },
@@ -280,7 +268,7 @@ function ReportAbsence() {
 
       {modalState.isSendModalVisible && (
         <SendRequestModal
-          descriptionText={labels.absences.modals.sendConfirmation}
+          descriptionText="¿Realmente deseas enviar esta solicitud de ausencia?"
           onSubmitButtonClick={handleConfirmSendModal}
           onCloseModal={closeSendModal}
           onSecondaryButtonClick={closeSendModal}
