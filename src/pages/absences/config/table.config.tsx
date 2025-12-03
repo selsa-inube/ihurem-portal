@@ -1,12 +1,11 @@
 import {
   HumanResourceRequest,
   ERequestStatus,
-  EAbsenceReason,
-  absenceReasonLabels,
   IUnifiedHumanResourceRequestData,
 } from "@ptypes/humanResourcesRequest.types";
 import { formatDate } from "@utils/date";
 import { Logger } from "@utils/logger";
+import { AbsenceReasonES } from "@ptypes/employeeAbsence.types";
 
 import { IAbsencesProcedureTable } from "../components/AbsencesProcedureTable/types";
 
@@ -33,12 +32,11 @@ export const formatAbsenceRequests = (
     }
 
     const formattedReason = (() => {
-      const code = parsedData.subReason ?? parsedData.reason;
+      const code = parsedData.reason;
 
       if (!code) return "Sin motivo";
-      return (
-        absenceReasonLabels[code as EAbsenceReason] ?? code.replace(/_/g, " ")
-      );
+
+      return AbsenceReasonES[code] ?? code.replace(/_/g, " ");
     })();
 
     return {
@@ -69,6 +67,7 @@ export const formatAbsenceRequests = (
           },
         },
       },
+
       view: {
         value: "Ver",
         type: "icon",
