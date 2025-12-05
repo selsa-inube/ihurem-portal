@@ -4,6 +4,9 @@ import {
   fetchTimeoutServices,
   maxRetriesServices,
 } from "@config/environment";
+
+import { Logger } from "@utils/logger";
+
 import { mapEmployeeApiToEntity } from "./mappers";
 
 const employeeByIdentification = async (
@@ -59,7 +62,17 @@ const employeeByIdentification = async (
         }
         throw new Error(String(error));
       }
-      console.warn(`Intento ${attempt} fallido:`, error);
+
+      Logger.warn(`Intento ${attempt} fallido al obtener empleado`, {
+        identificationType,
+        identificationNumber,
+        businessUnits,
+        attempt,
+        error:
+          error instanceof Error
+            ? { name: error.name, message: error.message }
+            : error,
+      });
     }
   }
 

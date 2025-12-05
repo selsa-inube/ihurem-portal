@@ -4,6 +4,7 @@ import {
   environment,
 } from "@config/environment";
 
+import { Logger } from "@utils/logger";
 import { EmployeeAbsence } from "@ptypes/employeeAbsence.types";
 
 import { mapEmployeeAbsenceApiToEntity } from "./mappers";
@@ -61,7 +62,15 @@ const getEmployeeAbsences = async (
         : [];
     } catch (error) {
       if (attempt === maxRetries) {
-        console.error("Error al obtener las ausencias del empleado:", error);
+        Logger.error(
+          "Error al obtener las ausencias del empleado",
+          error as Error,
+          {
+            employeeId,
+            page,
+            perPage,
+          },
+        );
 
         if (error instanceof Error) {
           throw error;

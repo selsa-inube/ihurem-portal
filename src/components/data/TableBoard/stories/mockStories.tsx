@@ -8,6 +8,8 @@ import {
 import { isValidElement } from "react";
 import { Icon, Stack, Tag } from "@inubekit/inubekit";
 
+import { Logger } from "@utils/logger";
+
 import { IAction, IEntries } from "../types";
 
 const appearanceIcon = (tag: string) => {
@@ -74,7 +76,7 @@ export const titlesMock = [
 ];
 
 const receiveData = (data: IEntries) => {
-  console.log(data);
+  Logger.info("Datos recibidos desde la acción", { data });
 };
 
 export const actionsMock: IAction[] = [
@@ -119,7 +121,7 @@ export const actionsMock: IAction[] = [
 ];
 
 const resiveDataMobile = (data: IEntries) => {
-  console.log(data, "function que recibe data");
+  Logger.info("Datos recibidos desde la acción móvil", { data });
 };
 
 const iconActionsMobile = (tag: string) => {

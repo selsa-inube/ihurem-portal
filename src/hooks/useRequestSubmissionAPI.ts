@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import { Logger } from "@utils/logger";
 import { IRequestBody } from "@services/humanResourcesRequest/postHumanResourceRequest/types";
 import { postHumanResourceRequest } from "@services/humanResourcesRequest/postHumanResourceRequest";
 import { useHeaders } from "@hooks/useHeaders";
@@ -34,7 +35,7 @@ export function useRequestSubmissionAPI() {
       setShowErrorFlag(true);
       return { success: false };
     } catch (err) {
-      console.error("Error sending request:", err);
+      Logger.error("Error sending request", err as Error, { requestBody });
       setErrorMessage("Error al enviar la solicitud. Intente nuevamente.");
       const errorConfig = modalErrorConfig[ERROR_CODE_POST_HR_REQUESTS_FAILED];
       setShowErrorFlag(true);

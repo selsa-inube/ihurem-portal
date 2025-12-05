@@ -2,6 +2,8 @@ import { Meta, StoryFn } from "@storybook/react";
 import { BrowserRouter } from "react-router-dom";
 import { MdOutlineVisibility, MdDeleteOutline } from "react-icons/md";
 
+import { Logger } from "@utils/logger";
+
 import { IHolidaysTable } from "../types";
 import { HolidaysTable } from "..";
 
@@ -18,12 +20,12 @@ const holidaysData: IHolidaysTable[] = [
     details: {
       value: <MdOutlineVisibility />,
       type: "icon",
-      onClick: () => console.log("View details clicked for row 0"),
+      onClick: () => Logger.info("View details clicked for row 0"),
     },
     delete: {
       value: <MdDeleteOutline />,
       type: "icon",
-      onClick: () => console.log("Delete clicked for row 0"),
+      onClick: () => Logger.info("Delete clicked for row 0"),
     },
     dataDetails: {
       value: {
@@ -46,12 +48,12 @@ const holidaysData: IHolidaysTable[] = [
     details: {
       value: <MdOutlineVisibility />,
       type: "icon",
-      onClick: () => console.log("View details clicked for row 1"),
+      onClick: () => Logger.info("View details clicked for row 1"),
     },
     delete: {
       value: <MdDeleteOutline />,
       type: "icon",
-      onClick: () => console.log("Delete clicked for row 1"),
+      onClick: () => Logger.info("Delete clicked for row 1"),
     },
     dataDetails: {
       value: {

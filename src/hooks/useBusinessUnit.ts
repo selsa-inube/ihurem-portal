@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 
+import { Logger } from "@utils/logger";
 import {
   IBusinessUnitsPortalEmployee,
   IEmployeePortalByBusinessManager,
@@ -36,7 +37,9 @@ export const useBusinessUnit = (
           setCodeError(undefined);
         }
       } catch (error) {
-        console.log(error);
+        Logger.error("Error obteniendo la unidad de negocio", error as Error, {
+          portalPublicCode,
+        });
         if (isMounted) {
           setHasError(true);
           setCodeError(1003);

@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import { Logger } from "@utils/logger";
 import { formatWithOffset } from "@utils/date";
 import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
 import { ERequestType } from "@ptypes/humanResourcesRequest.types";
@@ -126,7 +127,12 @@ export function useRequestSubmission(
 
       return false;
     } catch (error) {
-      console.error("Error al enviar la solicitud:", error);
+      Logger.error("Error al enviar la solicitud", error as Error, {
+        formValues,
+        typeRequest,
+        userCodeInCharge,
+        userNameInCharge,
+      });
       return false;
     }
   };

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 
+import { Logger } from "@utils/logger";
 import { encrypt } from "@utils/encrypt";
 import { employeePortalByBusinessManager } from "@services/employeePortal/getEmployeePortalByBusinessManager";
 import { IEmployeePortalByBusinessManager } from "@ptypes/employeePortalBusiness.types";
@@ -28,7 +29,9 @@ export const usePortalData = (codeParame: string) => {
         setPortalData(employeePortalData);
         setHasError(false);
       } catch (error) {
-        console.error(error);
+        Logger.error("Error fetching portal data", error as Error, {
+          codeParame,
+        });
         setHasError(true);
       }
     };
