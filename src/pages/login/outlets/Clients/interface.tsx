@@ -6,14 +6,7 @@ function ClientsUI() {
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      loginWithRedirect({
-        authorizationParams: {
-          connection: "google-oauth2",
-        },
-        appState: {
-          returnTo: "/",
-        },
-      });
+      loginWithRedirect();
     }
   }, [isLoading, isAuthenticated, loginWithRedirect]);
 

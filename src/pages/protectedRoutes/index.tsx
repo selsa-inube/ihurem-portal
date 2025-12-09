@@ -84,14 +84,7 @@ export function ProtectedRoutes() {
           !isLoading &&
           window.location.pathname !== "/self-registration"
         ) {
-          loginWithRedirect({
-            authorizationParams: {
-              connection: "google-oauth2",
-            },
-            appState: {
-              returnTo: window.location.pathname,
-            },
-          });
+          loginWithRedirect();
         }
       } else {
         setExternalIAuthProvider(externalIAuthProvider);
@@ -109,14 +102,7 @@ export function ProtectedRoutes() {
       !portalData.externalAuthenticationProvider &&
       window.location.pathname !== "/self-registration"
     ) {
-      loginWithRedirect({
-        authorizationParams: {
-          connection: "google-oauth2",
-        },
-        appState: {
-          returnTo: window.location.pathname,
-        },
-      });
+      loginWithRedirect();
     } else {
       setIsReady(true);
     }
