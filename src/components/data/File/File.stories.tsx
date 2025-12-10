@@ -1,5 +1,7 @@
 import { Meta, StoryObj } from "@storybook/react";
 
+import { Logger } from "@utils/logger";
+
 import { File } from ".";
 
 const meta: Meta<typeof File> = {
@@ -16,6 +18,7 @@ export const Default: Story = {
     withBorder: false,
     name: "Hoja_de_vida_Javier.pdf",
     size: "840 KB",
-    onDelete: () => console.log("Archivo eliminado"),
+    onDelete: () =>
+      Logger.info("Archivo eliminado", { fileName: "Hoja_de_vida_Javier.pdf" }),
   },
 };

@@ -3,6 +3,7 @@ import {
   fetchTimeoutServices,
   maxRetriesServices,
 } from "@config/environment";
+import { Logger } from "@utils/logger";
 
 import { IVacationDaysResponse } from "./types";
 
@@ -61,7 +62,11 @@ const getEmployeeVacationDays = async (
       return vacationDays;
     } catch (error) {
       if (attempt === maxRetries) {
-        console.log(error);
+        Logger.error(
+          "Error obteniendo días de vacaciones",
+          error instanceof Error ? error : undefined,
+          { employeeId },
+        );
         if (error instanceof Error) {
           throw error;
         }

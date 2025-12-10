@@ -2,6 +2,8 @@ import { Meta, StoryFn } from "@storybook/react";
 import { BrowserRouter } from "react-router-dom";
 import { MdOutlineVisibility, MdOutlineFileDownload } from "react-icons/md";
 
+import { Logger } from "@utils/logger";
+
 import { IAbsencesTable } from "../types";
 import { AbsencesTable } from "..";
 
@@ -13,12 +15,12 @@ const absencesData: IAbsencesTable[] = [
     view: {
       value: <MdOutlineVisibility />,
       type: "icon",
-      onClick: () => console.log("Ver detalles de la ausencia 0"),
+      onClick: () => Logger.info("Ver detalles de la ausencia", { index: 0 }),
     },
     download: {
       value: <MdOutlineFileDownload />,
       type: "icon",
-      onClick: () => console.log("Descargar ausencia 0"),
+      onClick: () => Logger.info("Descargar ausencia", { index: 0 }),
     },
   },
   {
@@ -28,12 +30,12 @@ const absencesData: IAbsencesTable[] = [
     view: {
       value: <MdOutlineVisibility />,
       type: "icon",
-      onClick: () => console.log("Ver detalles de la ausencia 1"),
+      onClick: () => Logger.info("Ver detalles de la ausencia", { index: 1 }),
     },
     download: {
       value: <MdOutlineFileDownload />,
       type: "icon",
-      onClick: () => console.log("Descargar ausencia 1"),
+      onClick: () => Logger.info("Descargar ausencia", { index: 1 }),
     },
   },
   {
@@ -43,12 +45,12 @@ const absencesData: IAbsencesTable[] = [
     view: {
       value: <MdOutlineVisibility />,
       type: "icon",
-      onClick: () => console.log("Ver detalles de la ausencia 2"),
+      onClick: () => Logger.info("Ver detalles de la ausencia", { index: 2 }),
     },
     download: {
       value: <MdOutlineFileDownload />,
       type: "icon",
-      onClick: () => console.log("Descargar ausencia 2"),
+      onClick: () => Logger.info("Descargar ausencia", { index: 2 }),
     },
   },
 ];

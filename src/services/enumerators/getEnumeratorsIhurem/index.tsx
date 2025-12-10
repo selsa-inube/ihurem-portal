@@ -3,6 +3,7 @@ import {
   maxRetriesServices,
   environment,
 } from "@config/environment";
+import { Logger } from "@utils/logger";
 
 import { IEnumeratorItem } from "../types";
 
@@ -53,9 +54,12 @@ const getEnumeratorsIhurem = async (
       return Array.isArray(data) ? data : [];
     } catch (error) {
       if (attempt === maxRetries) {
-        console.error(
-          `Error al obtener el enumerador ${enumeratorName}:`,
-          error,
+        Logger.error(
+          `Error al obtener el enumerador ${enumeratorName}`,
+          error as Error,
+          {
+            enumeratorName,
+          },
         );
         if (error instanceof Error) {
           throw error;

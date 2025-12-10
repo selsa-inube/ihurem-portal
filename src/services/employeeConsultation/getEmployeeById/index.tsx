@@ -4,6 +4,7 @@ import {
   maxRetriesServices,
 } from "@config/environment";
 import { Employee } from "@ptypes/employeePortalConsultation.types";
+import { Logger } from "@utils/logger";
 
 import { mapEmployeeApiToEntity } from "../mappers";
 
@@ -59,7 +60,12 @@ const getEmployeeById = async (
         );
       }
 
-      console.warn(`Intento ${attempt} falló, reintentando...`);
+      Logger.warn(`Intento ${attempt} falló, reintentando...`, {
+        employeeId,
+        attempt,
+        error:
+          err instanceof Error ? { name: err.name, message: err.message } : err,
+      });
     }
   }
   throw new Error(`No se pudo obtener el empleado ${employeeId}.`);
