@@ -32,14 +32,7 @@ export const useAuthRedirect = (
       ) {
         const encryptedParamValue = encrypt(portalCode!);
         localStorage.setItem("portalCode", encryptedParamValue);
-        loginWithRedirect({
-          authorizationParams: {
-            connection: "google-oauth2",
-          },
-          appState: {
-            returnTo: window.location.pathname,
-          },
-        });
+        loginWithRedirect();
         setHasRedirected(true);
       } else if (isAuthenticated) {
         setHasRedirected(true);
