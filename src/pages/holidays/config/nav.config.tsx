@@ -1,15 +1,17 @@
+import { labels } from "@i18n/labels";
+
 export const breadcrumbs = {
-  label: "Vacaciones",
+  label: labels.holidays.breadcrumbs.vacations,
   crumbs: [
     {
       path: "/",
-      label: "Inicio",
+      label: labels.holidays.breadcrumbs.home,
       id: "/",
       isActive: false,
     },
     {
       path: "/holidays",
-      label: "Vacaciones",
+      label: labels.holidays.breadcrumbs.vacations,
       id: "/holidays",
       isActive: true,
     },

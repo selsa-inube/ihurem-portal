@@ -1,5 +1,6 @@
 import { Grid, useMediaQueries, Stack, Text } from "@inubekit/inubekit";
 
+import { labels } from "@i18n/labels";
 import selsa from "@assets/images/selsa.png";
 import teamSuccess from "@assets/images/teamSuccess.png";
 import { spacing } from "@design/tokens/spacing";
@@ -20,7 +21,9 @@ function SelfRegistrationUI() {
   const { logoUrl, businessUnit } = useAppContext();
 
   const logoSrc = businessUnit?.urlLogo ?? logoUrl ?? selsa;
-  const logoAlt = businessUnit?.abbreviatedName ?? "logo selsa";
+  const logoAlt =
+    businessUnit?.abbreviatedName ??
+    labels.selfRegistrationLabels.defaultLogoAlt;
 
   return (
     <Grid
@@ -42,14 +45,14 @@ function SelfRegistrationUI() {
             <StyledLogo src={logoSrc} alt={logoAlt} />
             <Stack direction="column" alignItems="center">
               <Text type="headline" size="small" weight="bold">
-                ¡Bienvenido!
+                {labels.selfRegistrationLabels.welcomeText}
               </Text>
               <Text
                 as="h1"
                 type="headline"
                 size={screenMobile ? "medium" : "large"}
               >
-                Portal de empleados
+                {labels.selfRegistrationLabels.mainTitle}
               </Text>
             </Stack>
             <StyledImg

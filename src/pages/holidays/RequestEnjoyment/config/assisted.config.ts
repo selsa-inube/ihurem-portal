@@ -1,5 +1,6 @@
 import { IAssistedStep, IOption } from "@inubekit/inubekit";
 
+import { labels } from "@i18n/labels";
 import { showRequirements } from "@pages/holidays/config/requirements";
 
 export const requestEnjoymentSteps: IAssistedStep[] = showRequirements
@@ -7,69 +8,72 @@ export const requestEnjoymentSteps: IAssistedStep[] = showRequirements
       {
         id: 1,
         number: 1,
-        name: "Requisitos no cumplidos",
-        description: "Revisa los requisitos para el disfrute de vacaciones.",
+        name: labels.holidays.assisted.steps.unmetRequirements.name,
+        description:
+          labels.holidays.assisted.steps.unmetRequirements.description,
       },
       {
         id: 2,
         number: 2,
-        name: "Información general",
-        description: "Proporciona información acerca de tu solicitud.",
+        name: labels.holidays.assisted.steps.generalInformation.name,
+        description:
+          labels.holidays.assisted.steps.generalInformation.description,
       },
       {
         id: 3,
         number: 3,
-        name: "Verificación",
-        description: "Verifica la información proporcionada.",
+        name: labels.holidays.assisted.steps.verification.name,
+        description: labels.holidays.assisted.steps.verification.description,
       },
     ]
   : [
       {
         id: 1,
         number: 1,
-        name: "Información general",
-        description: "Proporciona información acerca de tu solicitud.",
+        name: labels.holidays.assisted.steps.generalInformation.name,
+        description:
+          labels.holidays.assisted.steps.generalInformation.description,
       },
       {
         id: 2,
         number: 2,
-        name: "Verificación",
-        description: "Verifica la información proporcionada.",
+        name: labels.holidays.assisted.steps.verification.name,
+        description: labels.holidays.assisted.steps.verification.description,
       },
     ];
 
 export const certificationOptions: IOption[] = [
   {
     id: "1",
-    label: "Certificado de servidor",
-    value: "certificado de servidor",
+    label: labels.holidays.certificationOptions.serverCertificate,
+    value: labels.holidays.certificationOptions.serverCertificate,
   },
   {
     id: "2",
-    label: "Certificado de pertenencia a empresa",
-    value: "certificado de pertenencia a empresa",
+    label: labels.holidays.certificationOptions.companyMembership,
+    value: labels.holidays.certificationOptions.companyMembership,
   },
   {
     id: "3",
-    label: "Certificado de representante",
-    value: "certificado de representante",
+    label: labels.holidays.certificationOptions.representativeCertificate,
+    value: labels.holidays.certificationOptions.representativeCertificate,
   },
 ];
 
 export const contractOptions: IOption[] = [
   {
     id: "1",
-    label: "Contrato por obra o labor",
-    value: "contrato por obra o labor.",
+    label: labels.holidays.contractOptions.workContract,
+    value: labels.holidays.contractOptions.workContract,
   },
   {
     id: "2",
-    label: "Contrato de trabajo a término fijo",
-    value: "contrato de trabajo a término fijo.",
+    label: labels.holidays.contractOptions.fixedContract,
+    value: labels.holidays.contractOptions.fixedContract,
   },
   {
     id: "3",
-    label: "Contrato de trabajo a término indefinido",
-    value: "contrato de trabajo a término indefinido.",
+    label: labels.holidays.contractOptions.indefiniteContract,
+    value: labels.holidays.contractOptions.indefiniteContract,
   },
 ];

@@ -1,6 +1,7 @@
 import { Stack, Button, useMediaQuery, Text, Icon } from "@inubekit/inubekit";
 import { MdOutlineCheckCircle } from "react-icons/md";
 
+import { labels } from "@i18n/labels";
 import { AlertCard } from "@components/data/AlertCard";
 import { spacing } from "@design/tokens/spacing/";
 import { AlertCardProps } from "@components/data/AlertCard";
@@ -39,8 +40,10 @@ const RequirementsForm = (props: RequirementsFormProps) => {
               size="54px"
             />
             <Text type="title" size="medium" textAlign="center">
-              El empleado no presenta restricción por requisitos en este
-              momento.
+              {
+                labels.absences.reportAbsence.ui.requirementsForm
+                  .noRestrictionsMessage
+              }
             </Text>
           </Stack>
         ) : (
@@ -49,7 +52,7 @@ const RequirementsForm = (props: RequirementsFormProps) => {
       </StyledContainer>
       <Stack justifyContent="flex-end" alignItems="flex-end">
         <Button appearance="primary" onClick={handleNextStep}>
-          Siguiente
+          {labels.absences.reportAbsence.ui.requirementsForm.nextButton}
         </Button>
       </Stack>
     </Stack>

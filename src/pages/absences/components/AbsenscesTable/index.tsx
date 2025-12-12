@@ -34,6 +34,7 @@ import { MenuPropect } from "@components/feedback/MenuPropect";
 import { IOptions } from "@components/feedback/MenuPropect/types";
 import { formatDate, formatMobileDate } from "@utils/date";
 import { spacing } from "@design/tokens/spacing";
+import { labels } from "@i18n/labels";
 
 import { usePagination } from "./usePagination";
 import { IAbsencesTable, AbsencesTableDataDetails } from "./types";
@@ -67,13 +68,16 @@ const formatDetailsForModal = (
     ESubReasonES[details.subReason as ESubReason] ?? details.subReason ?? "N/A";
 
   const items: IModalDetailItem[] = [
-    { label: "Tipo de Ausencia", value: reasonES },
     {
-      label: "Descripción del Motivo",
+      label: labels.absences.reportAbsence.form.absenceTypeLabel,
+      value: reasonES,
+    },
+    {
+      label: labels.absences.reportAbsence.form.descriptionMotive,
       value: details.absenceReasonDetails ?? "N/A",
     },
     {
-      label: "Fecha de Inicio",
+      label: labels.absences.procedure.details.startDate,
       value: details.absenceStartDate
         ? formatDate(details.absenceStartDate)
         : "N/A",
@@ -85,13 +89,13 @@ const formatDetailsForModal = (
 
   if (isAbsenceByDays) {
     items.push({
-      label: "Días de Ausencia",
+      label: labels.absences.procedure.detailModal.fields.days,
       value: String(details.absenceDays),
     });
   } else {
     items.push(
       {
-        label: "Hora de Inicio",
+        label: labels.absences.procedure.detailModal.fields.startHour,
         value:
           details.absenceStartHour !== undefined &&
           details.absenceStartHour !== null
@@ -99,7 +103,7 @@ const formatDetailsForModal = (
             : "N/A",
       },
       {
-        label: "Horas de Ausencia",
+        label: labels.absences.procedure.detailModal.fields.hours,
         value:
           details.hoursAbsent !== undefined && details.hoursAbsent !== null
             ? String(details.hoursAbsent)
@@ -109,8 +113,14 @@ const formatDetailsForModal = (
   }
 
   items.push(
-    { label: "Empleado ID", value: String(details.employeeId) },
-    { label: "Sub Razón", value: subReasonES },
+    {
+      label: labels.absences.procedure.detailModal.fields.employeeId,
+      value: String(details.employeeId),
+    },
+    {
+      label: labels.absences.procedure.detailModal.fields.subReason,
+      value: subReasonES,
+    },
   );
 
   return items;
@@ -161,8 +171,8 @@ function AbsencesTable({
 
   const handleRestrictedClick = (message: string) => {
     setModalInfo({
-      title: "Información",
-      titleDescription: "No tienes privilegios.",
+      title: labels.absences.procedure.modals.info.title,
+      titleDescription: labels.absences.procedure.modals.info.noPrivilegesTitle,
       description: message,
     });
     setShowModal(true);
@@ -171,7 +181,7 @@ function AbsencesTable({
   const handleViewDetails = () => {
     if (!hasViewDetailsPrivilege) {
       handleRestrictedClick(
-        "No tienes privilegios para ver los detalles de esta ausencia.",
+        labels.absences.procedure.modals.info.noPrivilegesView,
       );
       return;
     }
@@ -188,7 +198,7 @@ function AbsencesTable({
   const handleUploadDocuments = () => {
     if (!hasUploadPrivilege) {
       handleRestrictedClick(
-        "No tienes privilegios para cargar documentos en esta ausencia.",
+        labels.absences.procedure.modals.info.noPrivilegesUpload,
       );
       return;
     }
@@ -348,7 +358,7 @@ function AbsencesTable({
           onClick={() => {
             if (!hasViewDetailsPrivilege) {
               handleRestrictedClick(
-                "No tienes privilegios para ver los detalles de esta ausencia.",
+                labels.absences.procedure.modals.info.noPrivilegesView,
               );
               return;
             }
@@ -366,7 +376,7 @@ function AbsencesTable({
               ? handleUploadDocuments
               : () =>
                   handleRestrictedClick(
-                    "No tienes privilegios para cargar documentos en esta ausencia.",
+                    labels.absences.procedure.modals.info.noPrivilegesUpload,
                   )
           }
         />
@@ -471,10 +481,10 @@ function AbsencesTable({
       <Td colSpan={visibleHeaders.length} align="center" type="custom">
         <Stack justifyContent="center" alignItems="center" gap={spacing.s050}>
           <Text size="medium" appearance="gray">
-            Aún no hay ninguna ausencia registrada. Para agregar una presiona
+            {labels.absences.procedure.emptyState.noAbsences}
           </Text>
           <Text size="medium" appearance="gray" weight="bold">
-            “+ Reportar ausencia”.
+            {labels.absences.procedure.emptyState.hint}
           </Text>
         </Stack>
       </Td>
@@ -547,7 +557,7 @@ function AbsencesTable({
 
       {showRequestDetail && selectedAbsenceDetails && (
         <RequestComponentDetail
-          title="Detalle de Solicitud"
+          title={labels.absences.procedure.detailModal.requestTitle}
           buttonLabel="Cerrar"
           modalContent={formatDetailsForModal(selectedAbsenceDetails)}
           requirements={mockRequirements}

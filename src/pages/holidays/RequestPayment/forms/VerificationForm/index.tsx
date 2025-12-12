@@ -3,6 +3,7 @@ import { Stack, Button, useMediaQuery } from "@inubekit/inubekit";
 
 import { Accordion } from "@components/data/Accordion";
 import { spacing } from "@design/tokens/spacing";
+import { labels } from "@i18n/labels";
 
 import { requestPaymentSteps } from "../../config/assisted.config";
 import { VerificationBoxes } from "./VerificationBoxes";
@@ -44,7 +45,7 @@ function VerificationForm(props: VerificationFormProps) {
                 variant="none"
                 appearance="dark"
               >
-                Regresar a este paso
+                {labels.holidays.verificationForm.backToStep}
               </Button>
             </Stack>
           </Accordion>
@@ -60,10 +61,10 @@ function VerificationForm(props: VerificationFormProps) {
           variant="outlined"
           appearance="gray"
         >
-          Anterior
+          {labels.holidays.verificationForm.previous}
         </Button>
         <Button onClick={handleSubmit} appearance="primary">
-          Enviar
+          {labels.holidays.verificationForm.submit}
         </Button>
       </Stack>
     </Stack>

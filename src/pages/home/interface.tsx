@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import { useMediaQuery } from "@inubekit/inubekit";
 
+import { labels } from "@i18n/labels";
 import { userMenu, useConfigHeader, navConfig } from "@config/nav.config";
 import { useAppContext } from "@context/AppContext/useAppContext";
 import { useEmployeeOptions } from "@hooks/useEmployeeOptions";
@@ -23,13 +24,17 @@ export const useHome = () => {
     navigation: { nav: configHeader, breakpoint: "800px" },
     logoURL: {
       url: businessUnit?.urlLogo ?? logoUrl,
-      alt: businessUnit?.abbreviatedName ?? "Sin unidad seleccionada",
+      alt:
+        businessUnit?.abbreviatedName ??
+        labels.home.placeholders.noBusinessUnit,
     },
     user: {
       username: employees
         ? `${capitalizeWords(employees.names)} ${capitalizeWords(employees.surnames)}`
         : (user?.username ?? "Nombre de usuario"),
-      client: businessUnit?.abbreviatedName ?? "Sin unidad seleccionada",
+      client:
+        businessUnit?.abbreviatedName ??
+        labels.home.placeholders.noBusinessUnit,
       breakpoint: "800px",
     },
     menu: userMenu,

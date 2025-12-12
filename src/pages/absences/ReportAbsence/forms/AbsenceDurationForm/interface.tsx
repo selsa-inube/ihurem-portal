@@ -13,6 +13,7 @@ import {
 import { FormikProps } from "formik";
 import { MdOutlineInfo } from "react-icons/md";
 
+import { labels } from "@i18n/labels";
 import { getFieldState } from "@utils/forms/forms";
 import { spacing } from "@design/tokens/spacing";
 import { InfoDescModal } from "@components/modals/InfoDescModal";
@@ -71,12 +72,13 @@ function AbsenceDurationFormUI(props: AbsenceDurationFormUIProps) {
           <Stack direction="column" width="100%" gap={spacing.s200}>
             {!showDaysField && (
               <Text>
-                • La duración de ausencia puede darse solo en días, solo en
-                horas o incluir tanto días como horas. (Ej: 2 días, 3 horas)
+                {labels.absences.reportAbsence.ui.durationForm.motiveInfoText}
               </Text>
             )}
             <Date
-              label="Fecha de inicio"
+              label={
+                labels.absences.reportAbsence.ui.durationForm.labels.startDate
+              }
               name="startDate"
               id="startDate"
               value={formik.values.startDate}
@@ -96,8 +98,14 @@ function AbsenceDurationFormUI(props: AbsenceDurationFormUIProps) {
             >
               {showDaysField && (
                 <Textfield
-                  label="Duración en días"
-                  placeholder="Ej: 2"
+                  label={
+                    labels.absences.reportAbsence.ui.durationForm.labels
+                      .daysDuration
+                  }
+                  placeholder={
+                    labels.absences.reportAbsence.ui.durationForm.placeholders
+                      .days
+                  }
                   name="daysDuration"
                   id="daysDuration"
                   type="number"
@@ -121,7 +129,10 @@ function AbsenceDurationFormUI(props: AbsenceDurationFormUIProps) {
                         size="medium"
                         padding={`${spacing.s0}  ${spacing.s0} ${spacing.s0} ${spacing.s200}`}
                       >
-                        Duración en horas
+                        {
+                          labels.absences.reportAbsence.ui.durationForm.labels
+                            .hoursDuration
+                        }
                       </Text>
                       <Icon
                         appearance="primary"
@@ -132,7 +143,10 @@ function AbsenceDurationFormUI(props: AbsenceDurationFormUIProps) {
                       />
                     </Stack>
                     <Textfield
-                      placeholder="Ej: 5"
+                      placeholder={
+                        labels.absences.reportAbsence.ui.durationForm
+                          .placeholders.hours
+                      }
                       name="hoursDuration"
                       id="hoursDuration"
                       type="number"
@@ -147,10 +161,16 @@ function AbsenceDurationFormUI(props: AbsenceDurationFormUIProps) {
                     />
                   </Stack>
                   <Select
-                    label="Hora de inicio aproximada"
+                    label={
+                      labels.absences.reportAbsence.ui.durationForm.labels
+                        .startTime
+                    }
                     name="startTime"
                     options={startTimeSelectMock}
-                    placeholder="Selecciona de la lista"
+                    placeholder={
+                      labels.absences.reportAbsence.ui.durationForm.placeholders
+                        .startTime
+                    }
                     value={formik.values.startTime}
                     message={formik.errors.startTime}
                     disabled={!hasHoursDuration || loading}
@@ -170,13 +190,13 @@ function AbsenceDurationFormUI(props: AbsenceDurationFormUIProps) {
               variant="outlined"
               appearance="gray"
             >
-              Anterior
+              {labels.absences.reportAbsence.ui.durationForm.buttons.previous}
             </Button>
             <Button
               onClick={handleNextStep}
               disabled={loading ? true : !formik.isValid}
             >
-              Siguiente
+              {labels.absences.reportAbsence.ui.durationForm.buttons.next}
             </Button>
           </Stack>
         )}
@@ -184,23 +204,37 @@ function AbsenceDurationFormUI(props: AbsenceDurationFormUIProps) {
 
       {isInfoOpen && (
         <InfoDescModal
-          title="Información"
-          description="Si escribes una duración en horas se te solicitará una “Hora de inicio aproximada”."
+          title={labels.absences.reportAbsence.ui.durationForm.infoModal.title}
+          description={
+            labels.absences.reportAbsence.ui.durationForm.infoModal.description
+          }
           onCloseModal={() => setIsInfoOpen(false)}
         >
           <Stack direction="column" gap={spacing.s200}>
             <Text size="medium" appearance="gray">
-              Puedes incluir decimales en la “Duración en horas”.
+              {
+                labels.absences.reportAbsence.ui.durationForm.infoModal
+                  .decimalsAdvice
+              }
             </Text>
             <Stack direction="column">
               <Text size="medium" appearance="gray">
-                Por ejemplo:
+                {
+                  labels.absences.reportAbsence.ui.durationForm.infoModal
+                    .examplesTitle
+                }
               </Text>
               <Text size="medium" appearance="gray">
-                • 0.2 horas representan 12 minutos.
+                {
+                  labels.absences.reportAbsence.ui.durationForm.infoModal
+                    .example1
+                }
               </Text>
               <Text size="medium" appearance="gray">
-                • 1.5 horas representa 1 hora y 30 minutos.
+                {
+                  labels.absences.reportAbsence.ui.durationForm.infoModal
+                    .example2
+                }
               </Text>
             </Stack>
           </Stack>

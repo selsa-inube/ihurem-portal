@@ -3,6 +3,7 @@ import { object, string } from "yup";
 import { forwardRef, useEffect, useImperativeHandle, useMemo } from "react";
 import { IOption } from "@inubekit/inubekit";
 
+import { labels } from "@i18n/labels";
 import { validationMessages } from "@validations/validationMessages";
 import { validationRules } from "@validations/validationRules";
 import { useAppContext } from "@context/AppContext/useAppContext";
@@ -102,8 +103,9 @@ const AbsenceMotiveForm = forwardRef<
 
     const { data: absenceRelations, isLoading: isLoadingAbsenceReasons } =
       useAbsenceReasons({
-        regulatoryFramework: "Marco legal",
-        company: "SISTEMAS ENLINEA S.A.",
+        regulatoryFramework:
+          labels.absences.reportAbsence.motive.regulatoryFramework,
+        company: labels.absences.reportAbsence.motive.companyName,
       });
 
     const { data: absenceReasonEnums, isLoading: isLoadingAbsenceReasonEnums } =

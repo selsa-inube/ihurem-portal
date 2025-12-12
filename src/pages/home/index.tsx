@@ -2,6 +2,7 @@ import { Text, Stack, Header } from "@inubekit/inubekit";
 
 import { AppCard } from "@components/feedback/AppCard";
 import { spacing } from "@design/tokens/spacing";
+import { labels } from "@i18n/labels";
 
 import {
   StyledAppPage,
@@ -47,14 +48,18 @@ function Home() {
         <StyledMain $isTablet={isTablet}>
           <Stack gap={spacing.s300} direction="column">
             <Text size={isTablet ? "medium" : "large"} type="headline">
-              Bienvenido(a), {headerConfig.user?.username ?? "Usuario"}
+              {labels.home.titles.welcome.replace(
+                "{username}",
+                headerConfig.user?.username ??
+                  labels.home.placeholders.username,
+              )}
             </Text>
             <Text
               type="title"
               appearance="gray"
               size={isTablet ? "medium" : "large"}
             >
-              Aquí tienes las funcionalidades disponibles.
+              {labels.home.titles.functionalities}
             </Text>
             <StyledQuickAccessContainer $isTablet={isTablet}>
               {quickAccess.map((link, index) => (
@@ -75,7 +80,7 @@ function Home() {
       <StyledFooter>
         <Stack alignItems="center" gap={spacing.s050}>
           <Text as="span" size="small" appearance="gray">
-            ®
+            {labels.home.footer.registeredSymbol}
           </Text>
           <StyledFinalLogo src={finalLogo} />
         </Stack>

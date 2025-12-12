@@ -4,6 +4,7 @@ import { BoxAttribute } from "@components/cards/BoxAttribute";
 import { contractTypeLabels } from "@mocks/contracts/enums";
 import { useAppContext } from "@context/AppContext/useAppContext";
 import { spacing } from "@design/tokens/spacing";
+import { labels } from "@i18n/labels";
 
 import { alerts } from "../../RequirementsForm/config/alertConfig";
 import { IGeneralInformationEntry } from "../../GeneralInformationForm/types";
@@ -51,18 +52,18 @@ const renderPersonalInfoVerification = (
         width="100%"
       >
         <BoxAttribute
-          label="Tipo de solicitud:"
+          label={`${labels.certifications.assisted.requestType}:`}
           value={values.certification}
           direction="column"
         />
         <BoxAttribute
-          label="Destinatario:"
+          label={`${labels.certifications.assisted.addressee}:`}
           value={values.addressee}
           direction="column"
         />
         {hasMultipleContracts && (
           <BoxAttribute
-            label="Contrato:"
+            label={`${labels.certifications.assisted.contract}:`}
             value={contractDisplay}
             direction="column"
           />
@@ -71,7 +72,7 @@ const renderPersonalInfoVerification = (
 
       <Stack width="100%" direction="column">
         <BoxAttribute
-          label="Observaciones:"
+          label={`${labels.certifications.assisted.observations}:`}
           value={values.observations}
           direction="column"
         />

@@ -7,6 +7,7 @@ import { useHumanResourceRequests } from "@hooks/useHumanResourceRequests";
 import { useDeleteRequest } from "@hooks/useDeleteRequest";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 import { formatDate } from "@utils/date";
+import { labels } from "@i18n/labels";
 
 import {
   EmployeeAbsence,
@@ -31,12 +32,14 @@ const formatAbsences = (items: EmployeeAbsence[]): IAbsencesTable[] => {
         new Date(a.absenceStartDate).getTime(),
     )
     .map((item): IAbsencesTable => {
+      const noData = labels.absences.general.noData;
+
       const formattedDate = item.absenceStartDate
         ? formatDate(item.absenceStartDate)
-        : "Sin dato";
+        : noData;
 
       const motivo =
-        AbsenceReasonES[item.absenceReason] ?? item.absenceReason ?? "Sin dato";
+        AbsenceReasonES[item.absenceReason] ?? item.absenceReason ?? noData;
 
       const submotivo =
         AbsenceSubReasonES[item.subReason] ??
@@ -44,10 +47,10 @@ const formatAbsences = (items: EmployeeAbsence[]): IAbsencesTable[] => {
         motivo;
 
       const durationLabel = item.hoursAbsent
-        ? `${item.hoursAbsent} horas`
+        ? `${item.hoursAbsent} ${labels.absences.general.hours}`
         : item.absenceDays
-          ? `${item.absenceDays} días`
-          : "Sin dato";
+          ? `${item.absenceDays} ${labels.absences.general.days}`
+          : noData;
 
       return {
         reason: { value: submotivo },
@@ -124,8 +127,8 @@ function AbsencesOptions() {
     if (error) {
       setFlagState({
         show: true,
-        title: "Error",
-        message: "Error al obtener las solicitudes de ausencias.",
+        title: labels.absences.flags.errorFetchTitle,
+        message: labels.absences.flags.errorFetchMessage,
         success: false,
       });
     }
@@ -174,8 +177,8 @@ function AbsencesOptions() {
     if (success) {
       setFlagState({
         show: true,
-        title: "Solicitud eliminada",
-        message: "La ausencia fue eliminada correctamente.",
+        title: labels.absences.flags.deletedTitle,
+        message: labels.absences.flags.deletedMessage,
         success: true,
       });
     } else {
@@ -183,8 +186,8 @@ function AbsencesOptions() {
 
       setFlagState({
         show: true,
-        title: "Error",
-        message: "No fue posible eliminar la ausencia.",
+        title: labels.absences.flags.deleteErrorTitle,
+        message: labels.absences.flags.deleteErrorMessage,
         success: false,
       });
     }
@@ -192,8 +195,8 @@ function AbsencesOptions() {
 
   return (
     <AbsencesOptionsUI
-      appName={breadcrumbs.label}
-      appDescription={breadcrumbs.description}
+      appName={labels.absences.breadcrumbs.appName}
+      appDescription={labels.absences.breadcrumbs.description}
       appRoute={breadcrumbs.crumbs}
       navigatePage={breadcrumbs.url}
       data={data}

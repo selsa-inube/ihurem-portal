@@ -13,6 +13,7 @@ import * as Yup from "yup";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { labels } from "@i18n/labels";
 import { spacing } from "@design/tokens/spacing";
 import { useIdentificationTypesForSelect } from "@hooks/enumerators/useIdentificationTypesForSelect";
 import { useSelfRegistrationAPI } from "@hooks/useSelfRegistrationAPI";
@@ -38,10 +39,17 @@ export function RegistrationForm(props: RegistrationFormProps) {
   const navigate = useNavigate();
 
   const validationSchema = Yup.object({
-    idType: Yup.string().required("El tipo de identificación es obligatorio"),
+    idType: Yup.string().required(
+      labels.selfRegistrationLabels.registrationForm.idTypeRequired,
+    ),
     idNumber: Yup.string()
-      .matches(/^\d{8,20}$/, "Debe tener entre 8 y 20 dígitos numéricos")
-      .required("El número de identificación es obligatorio"),
+      .matches(
+        /^\d{8,20}$/,
+        labels.selfRegistrationLabels.registrationForm.idNumberInvalid,
+      )
+      .required(
+        labels.selfRegistrationLabels.registrationForm.idNumberRequired,
+      ),
   });
 
   const isMobile = useMediaQuery("(max-width: 700px)");
@@ -87,7 +95,7 @@ export function RegistrationForm(props: RegistrationFormProps) {
       <StyledContainerForm $smallScreen={isMobile}>
         <Stack alignItems="center" justifyContent="space-between">
           <Text type="title" size="medium" appearance="gray">
-            Para registrarte debes suministrar la siguiente información.
+            {labels.selfRegistrationLabels.registrationForm.infoText}
           </Text>
         </Stack>
         <Divider dashed />
@@ -113,8 +121,14 @@ export function RegistrationForm(props: RegistrationFormProps) {
                       {...field}
                       id="idType"
                       name="idType"
-                      label="Tipo de Identificación"
-                      placeholder="Selecciona de la lista"
+                      label={
+                        labels.selfRegistrationLabels.registrationForm
+                          .idTypeLabel
+                      }
+                      placeholder={
+                        labels.selfRegistrationLabels.registrationForm
+                          .idTypePlaceholder
+                      }
                       options={idTypeOptions}
                       value={values.idType}
                       onChange={(name: string, value: string) => {
@@ -132,8 +146,14 @@ export function RegistrationForm(props: RegistrationFormProps) {
                       id="idNumber"
                       name="idNumber"
                       iconBefore={<MdTag />}
-                      label="Número de Identificación"
-                      placeholder="No. de identificación"
+                      label={
+                        labels.selfRegistrationLabels.registrationForm
+                          .idNumberLabel
+                      }
+                      placeholder={
+                        labels.selfRegistrationLabels.registrationForm
+                          .idNumberPlaceholder
+                      }
                       value={values.idNumber}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setFieldValue("idNumber", e.target.value);
@@ -176,7 +196,9 @@ export function RegistrationForm(props: RegistrationFormProps) {
         <ResponseModal
           isRequestSent={isRequestSuccessful}
           onCloseModal={handleCloseModal}
-          description="En breve, enviaremos un correo con la información necesaria para continuar con el registro o las instrucciones pertinentes."
+          description={
+            labels.selfRegistrationLabels.registrationForm.modalDescription
+          }
         />
       )}
     </>

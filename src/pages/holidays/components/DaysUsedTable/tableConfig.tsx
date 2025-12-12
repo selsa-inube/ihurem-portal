@@ -1,3 +1,5 @@
+import { labels } from "@i18n/labels";
+
 import { IDaysUsedTable } from "./types";
 
 export const columns = [
@@ -13,12 +15,20 @@ export const headers: {
   style?: React.CSSProperties;
 }[] = [
   {
-    label: "Fecha de inicio o pago",
+    label: labels.holidays.daysUsed.headers.startDate,
     key: "startDate",
     style: { width: "auto" },
   },
-  { label: "Modalidad de uso", key: "usageMode", style: { width: "auto" } },
-  { label: "Días", key: "days", style: { width: "auto" } },
+  {
+    label: labels.holidays.daysUsed.headers.usageMode,
+    key: "usageMode",
+    style: { width: "auto" },
+  },
+  {
+    label: labels.holidays.daysUsed.headers.days,
+    key: "days",
+    style: { width: "auto" },
+  },
 ];
 
 export const pageLength = 10;

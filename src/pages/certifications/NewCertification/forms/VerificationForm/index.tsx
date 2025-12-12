@@ -3,6 +3,7 @@ import { Stack, Button, useMediaQuery } from "@inubekit/inubekit";
 
 import { Accordion } from "@components/data/Accordion";
 import { spacing } from "@design/tokens/spacing";
+import { labels } from "@i18n/labels";
 
 import { newCCertificationApplication } from "../../config/assisted.config";
 import { IFormsUpdateData } from "../../types";
@@ -24,6 +25,7 @@ function VerificationForm(props: VerificationFormProps) {
     handleSubmit,
     contractOptions,
   } = props;
+
   const isTablet = useMediaQuery("(max-width: 1224px)");
 
   return (
@@ -51,11 +53,12 @@ function VerificationForm(props: VerificationFormProps) {
                 variant="none"
                 appearance="dark"
               >
-                Regresar a este paso
+                {labels.certifications.assisted.returnToStep}
               </Button>
             </Stack>
           </Accordion>
         ))}
+
       <Stack
         direction="row"
         justifyContent="flex-end"
@@ -67,10 +70,11 @@ function VerificationForm(props: VerificationFormProps) {
           variant="outlined"
           appearance="gray"
         >
-          Anterior
+          {labels.certifications.assisted.previous}
         </Button>
+
         <Button onClick={handleSubmit} appearance="primary">
-          Enviar
+          {labels.certifications.assisted.submit}
         </Button>
       </Stack>
     </Stack>

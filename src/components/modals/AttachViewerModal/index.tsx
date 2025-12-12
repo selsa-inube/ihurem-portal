@@ -10,6 +10,7 @@ import {
   Button,
 } from "@inubekit/inubekit";
 
+import { labels } from "@i18n/labels";
 import { spacing } from "@design/tokens/spacing";
 import { ellipsisText } from "@utils/texts";
 
@@ -53,7 +54,7 @@ export function AttachViewerModal(props: AttachViewerModalProps) {
           </Text>
           <StyledContainerClose onClick={onCloseModal}>
             <Stack alignItems="center" gap={spacing.s100}>
-              <Text>Cerrar</Text>
+              <Text>{labels.modals.close}</Text>
               <Icon
                 icon={<MdClear />}
                 size="24px"
@@ -74,7 +75,7 @@ export function AttachViewerModal(props: AttachViewerModalProps) {
             appearance="gray"
             variant="outlined"
           >
-            Cerrar
+            {labels.modals.close}
           </Button>
         </Stack>
       </StyledModal>

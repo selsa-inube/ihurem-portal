@@ -30,6 +30,7 @@ import {
   ELeaveReason,
 } from "@ptypes/humanResourcesRequest.types";
 import { contractTypeLabels } from "@mocks/contracts/enums";
+import { labels } from "@i18n/labels";
 
 import { usePagination } from "./usePagination";
 import {
@@ -96,8 +97,8 @@ function AbsencesProcedureTable({
 
   const handleRestrictedClick = (message: string) => {
     setModalInfo({
-      title: "Información",
-      titleDescription: "No tienes privilegios.",
+      title: labels.absences.procedure.modals.info.title,
+      titleDescription: labels.absences.procedure.modals.info.noPrivilegesTitle,
       description: message,
     });
     setShowModal(true);
@@ -106,7 +107,7 @@ function AbsencesProcedureTable({
   const handleViewDetails = (row: IAbsencesProcedureTable) => {
     if (!hasViewDetailsPrivilege) {
       handleRestrictedClick(
-        "No tienes privilegios para ver los detalles de esta ausencia.",
+        labels.absences.procedure.modals.info.noPrivilegesView,
       );
       return;
     }
@@ -128,53 +129,56 @@ function AbsencesProcedureTable({
 
     const detailsData = [
       {
-        label: "Motivo",
+        label: labels.absences.procedure.details.motive,
         value: parsedData.reason
           ? (leaveReasonLabels[
               parsedData.reason as keyof typeof ELeaveReason
             ] ?? parsedData.reason)
-          : "Sin dato",
+          : labels.absences.general.noData,
       },
       {
-        label: "Submotivo",
+        label: labels.absences.procedure.details.submotive,
         value: parsedData.subReason
           ? (absenceReasonLabels[parsedData.subReason as EAbsenceReason] ??
             parsedData.subReason)
-          : "Sin dato",
+          : labels.absences.general.noData,
       },
       {
-        label: "Tipo de contrato",
+        label: labels.absences.procedure.details.contractType,
         value: parsedData.contractType
           ? (contractTypeLabels[
               parsedData.contractType as keyof typeof contractTypeLabels
             ] ?? parsedData.contractType)
-          : "Sin dato",
-      },
-      { label: "ID del contrato", value: parsedData.contractId ?? "Sin dato" },
-      {
-        label: "Número de contrato",
-        value: parsedData.contractNumber ?? "Sin dato",
+          : labels.absences.general.noData,
       },
       {
-        label: "Nombre del negocio",
-        value: parsedData.businessName ?? "Sin dato",
+        label: labels.absences.procedure.details.contractId,
+        value: parsedData.contractId ?? labels.absences.general.noData,
       },
       {
-        label: "Detalles del motivo",
-        value: parsedData.motifDetail ?? "Sin dato",
+        label: labels.absences.procedure.details.contractNumber,
+        value: parsedData.contractNumber ?? labels.absences.general.noData,
       },
       {
-        label: "Fecha de inicio",
+        label: labels.absences.procedure.details.businessName,
+        value: parsedData.businessName ?? labels.absences.general.noData,
+      },
+      {
+        label: labels.absences.procedure.details.motiveDetails,
+        value: parsedData.motifDetail ?? labels.absences.general.noData,
+      },
+      {
+        label: labels.absences.procedure.details.startDate,
         value: parsedData.startDate
           ? formatDate(parsedData.startDate)
-          : "Sin dato",
+          : labels.absences.general.noData,
       },
       {
-        label: "Duración (días)",
+        label: labels.absences.procedure.details.durationDays,
         value:
           parsedData.durationOfDays !== undefined
             ? parsedData.durationOfDays.toString()
-            : "Sin dato",
+            : labels.absences.general.noData,
       },
     ];
 
@@ -185,7 +189,7 @@ function AbsencesProcedureTable({
   const handleOpenDeleteModal = (absenceId: string) => {
     if (!hasUploadPrivilege) {
       handleRestrictedClick(
-        "No tienes privilegios para descartar esta ausencia.",
+        labels.absences.procedure.modals.info.noPrivilegesDelete,
       );
       return;
     }
@@ -227,10 +231,18 @@ function AbsencesProcedureTable({
   const determineVisibleHeaders = () => {
     if (isMobile) {
       return [
-        { label: "Fecha inicio", key: "date", style: { width: "30%" } },
-        { label: "Estado", key: "state", style: { width: "40%" } },
         {
-          label: "Acciones",
+          label: labels.absences.procedure.headers.startDate,
+          key: "date",
+          style: { width: "30%" },
+        },
+        {
+          label: labels.absences.procedure.headers.status,
+          key: "state",
+          style: { width: "40%" },
+        },
+        {
+          label: labels.absences.procedure.headers.actions,
           key: "actions",
           style: { width: "20%" },
           action: true,
@@ -397,7 +409,7 @@ function AbsencesProcedureTable({
             <Tr border="bottom">
               <Td colSpan={visibleHeaders.length} align="center" type="custom">
                 <Text size="medium" appearance="gray">
-                  Aún no hay ninguna ausencia registrada.
+                  {labels.absences.procedure.emptyState.noAbsences}
                 </Text>
               </Td>
             </Tr>
@@ -431,8 +443,8 @@ function AbsencesProcedureTable({
           modalContent={selectedRecord}
           requirements={mockRequirements}
           showRequirementsTable
-          title="Detalles de la ausencia"
-          buttonLabel="Cerrar"
+          title={labels.absences.procedure.detailModal.title}
+          buttonLabel={labels.absences.procedure.detailModal.closeButton}
         />
       )}
 
@@ -448,11 +460,13 @@ function AbsencesProcedureTable({
 
       {isDeleteModalOpen && (
         <TextAreaModal
-          title="Descartar ausencia"
-          buttonText="Descartar"
-          inputLabel="Justificación"
-          inputPlaceholder="Ingresa la razón para descartar esta ausencia"
-          description="Al descartar una ausencia esta no podrá continuar su trámite. ¿Deseas continuar?"
+          title={labels.absences.procedure.modals.delete.title}
+          buttonText={labels.absences.procedure.modals.delete.confirmButton}
+          inputLabel={labels.absences.procedure.modals.delete.reasonLabel}
+          inputPlaceholder={
+            labels.absences.procedure.modals.delete.reasonPlaceholder
+          }
+          description={labels.absences.procedure.modals.delete.warning}
           maxLength={500}
           onSubmit={(values) => {
             handleSubmitDelete(values.textarea);

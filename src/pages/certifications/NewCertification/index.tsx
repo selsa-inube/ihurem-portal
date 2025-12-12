@@ -8,13 +8,12 @@ import { ERequestType } from "@ptypes/humanResourcesRequest.types";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 import { useRequestSubmission } from "@hooks/usePostHumanResourceRequest";
 import { useAppContext } from "@context/AppContext/useAppContext";
+import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
+import { labels } from "@i18n/labels";
 
 import { NewCertificationUI } from "./interface";
 import { newCCertificationApplication } from "./config/assisted.config";
 import { ModalState } from "./types";
-
-import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
-
 function useFormManagement() {
   const { employees } = useAppContext();
 
@@ -172,18 +171,23 @@ function NewCertification() {
   const isTablet = useMediaQuery("(max-width: 1100px)");
 
   const breadcrumbs = {
-    label: "Agregar solicitud",
+    label: labels.certifications.pages.addRequest,
     crumbs: [
-      { path: "/", label: "Inicio", id: "/", isActive: false },
+      {
+        path: "/",
+        label: labels.certifications.pages.home,
+        id: "/",
+        isActive: false,
+      },
       {
         path: "/certifications",
-        label: isTablet ? "..." : "Certificaciones",
+        label: isTablet ? "..." : labels.certifications.pages.certifications,
         id: "/certifications",
         isActive: false,
       },
       {
         path: "/certifications/new-certification",
-        label: "Agregar solicitud",
+        label: labels.certifications.pages.addRequest,
         id: "/certifications/new-certification",
         isActive: true,
       },
@@ -211,7 +215,7 @@ function NewCertification() {
 
       {modalState.isSendModalVisible && (
         <SendRequestModal
-          descriptionText="¿Realmente deseas enviar la solicitud de certificación?"
+          descriptionText={labels.certifications.messages.confirmSend}
           onSubmitButtonClick={handleConfirmSendModal}
           onCloseModal={closeSendModal}
           onSecondaryButtonClick={closeSendModal}

@@ -12,6 +12,7 @@ import {
 import { MdOutlineAttachFile } from "react-icons/md";
 import { RiPencilLine } from "react-icons/ri";
 
+import { labels } from "@i18n/labels";
 import { spacing } from "@design/tokens/spacing";
 import { AttachDocumentModal } from "@components/modals/AttachDocumentModal";
 
@@ -82,11 +83,22 @@ export function RequiredDocumentsTable(props: RequiredDocumentsTableProps) {
             {hasDocuments ? (
               documents.map((doc) => {
                 const filesCount = getAttachedFilesCount(doc);
+
+                const requiredSuffix =
+                  labels.absences.reportAbsence.ui.requirementsForm.table
+                    .requiredSuffix;
+
+                const optionalSuffix =
+                  labels.absences.reportAbsence.ui.requirementsForm.table
+                    .optionalSuffix;
+
                 return (
                   <Tr key={doc.id} border="bottom">
                     <StyledTd align="left">
                       <Text as="span" size="small">
-                        {`${doc.name} ${doc.required ? "- *Requerido*" : "- (Opcional)"}`}
+                        {`${doc.name} ${
+                          doc.required ? requiredSuffix : optionalSuffix
+                        }`}
                       </Text>
                     </StyledTd>
 
@@ -112,7 +124,12 @@ export function RequiredDocumentsTable(props: RequiredDocumentsTableProps) {
             ) : (
               <Tr>
                 <StyledTd colSpan={headers.length} align="center">
-                  <Text size="small">No hay documentos para mostrar</Text>
+                  <Text size="small">
+                    {
+                      labels.absences.reportAbsence.ui.requirementsForm
+                        .emptyStates.noDocuments
+                    }
+                  </Text>
                 </StyledTd>
               </Tr>
             )}

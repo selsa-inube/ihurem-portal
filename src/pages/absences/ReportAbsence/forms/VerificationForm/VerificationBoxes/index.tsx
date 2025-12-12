@@ -1,6 +1,7 @@
 import { MdOutlineArrowBack } from "react-icons/md";
 import { Stack, Button, useMediaQuery } from "@inubekit/inubekit";
 
+import { labels } from "@i18n/labels";
 import { Accordion } from "@components/data/Accordion";
 import { spacing } from "@design/tokens/spacing";
 import { reportAbsenceSteps } from "@pages/absences/ReportAbsence/config/assisted.config";
@@ -45,7 +46,7 @@ function VerificationForm(props: VerificationFormProps) {
                 variant="none"
                 appearance="dark"
               >
-                Regresar a este paso
+                {labels.absences.reportAbsence.ui.assisted.returnToStep}
               </Button>
             </Stack>
           </Accordion>
@@ -61,10 +62,10 @@ function VerificationForm(props: VerificationFormProps) {
           variant="outlined"
           appearance="gray"
         >
-          Anterior
+          {labels.absences.reportAbsence.ui.assisted.back}
         </Button>
         <Button onClick={handleSubmit} appearance="primary">
-          Enviar
+          {labels.absences.reportAbsence.ui.assisted.submit}
         </Button>
       </Stack>
     </Stack>

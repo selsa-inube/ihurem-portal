@@ -15,6 +15,7 @@ import { mockAlertCards } from "@mocks/requirements/requirements-2.mock";
 import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
 import { spacing } from "@design/tokens/spacing";
+import { labels } from "@i18n/labels";
 
 import { GeneralInformationForm } from "./forms/GeneralInformationForm";
 import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
@@ -86,7 +87,7 @@ function NewCertificationUI(
           <ButtonRequirements
             counter={mockAlertCards.length}
             buttonIcon={<MdRule />}
-            buttonText="Solicitar Pago"
+            buttonText={labels.certifications.actions.requestPayment}
             isMobile={isTablet}
             onClick={handleOpenModal}
           />
@@ -100,9 +101,9 @@ function NewCertificationUI(
             disableNext={shouldDisableNext}
             size={isTablet ? "small" : "large"}
             controls={{
-              goBackText: "Anterior",
-              goNextText: "Siguiente",
-              submitText: "Enviar",
+              goBackText: labels.certifications.assisted.previous,
+              goNextText: labels.certifications.assisted.next,
+              submitText: labels.certifications.assisted.submit,
             }}
             onNextClick={handleNextStep}
             onBackClick={handlePreviousStep}
@@ -124,6 +125,7 @@ function NewCertificationUI(
                 />
               )}
             </Stack>
+
             {currentStep === 3 && (
               <VerificationForm
                 updatedData={{
@@ -144,8 +146,8 @@ function NewCertificationUI(
 
       {isModalOpen && (
         <RequirementsModal
-          title="Requisitos"
-          buttonLabel="Cerrar"
+          title={labels.certifications.titles.requirements}
+          buttonLabel={labels.certifications.actions.close}
           requirements={mockRequirements}
           handleClose={handleCloseModal}
         />

@@ -18,6 +18,7 @@ import {
   Stack,
 } from "@inubekit/inubekit";
 
+import { labels } from "@i18n/labels";
 import { TextAreaModal } from "@components/modals/TextAreaModal";
 import { RequestComponentDetail } from "@components/modals/ComponentDetailModal";
 import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
@@ -200,7 +201,9 @@ function CertificationsTable({
         <Icon {...iconProps} />
         <Tooltip
           text={
-            hasViewDetailsPrivilege ? "Ver más detalles" : "Sin privilegios"
+            hasViewDetailsPrivilege
+              ? labels.certifications.actions.seeMoreDetails
+              : labels.certifications.actions.noPrivileges
           }
         />
       </TooltipWrapper>
@@ -221,8 +224,8 @@ function CertificationsTable({
         <Tooltip
           text={
             !disableDeleteAction && hasDeletePrivilege
-              ? "Descartar solicitud"
-              : "Sin privilegios"
+              ? labels.certifications.actions.discardRequest
+              : labels.certifications.actions.noPrivileges
           }
         />
       </TooltipWrapper>
@@ -232,8 +235,8 @@ function CertificationsTable({
   const handleOpenDetailsModal = (rowIndex: number) => {
     if (!hasViewDetailsPrivilege) {
       showInfoModal(
-        "No tienes privilegios",
-        "No tienes privilegios para ver detalles.",
+        labels.certifications.messages.noViewPrivilegesTitle,
+        labels.certifications.messages.noViewPrivilegesDesc,
       );
       return;
     }
@@ -459,13 +462,13 @@ function CertificationsTable({
       <Td colSpan={visibleHeaders.length} align="center" type="custom">
         <Stack justifyContent="center" alignItems="center" gap={spacing.s050}>
           <Text size="medium" appearance="gray">
-            Aún no tienes solicitudes en trámite. presiona
+            {labels.certifications.messages.emptyStateLine1}
           </Text>
           <Text size="medium" appearance="gray" weight="bold">
-            “+ Agregar solicitud”
+            {labels.certifications.messages.emptyStateAction}
           </Text>
           <Text size="medium" appearance="gray">
-            para empezar.
+            {labels.certifications.messages.emptyStateLine2}
           </Text>
         </Stack>
       </Td>
@@ -534,19 +537,21 @@ function CertificationsTable({
           handleClose={handleClose}
           modalContent={selectedRecord}
           requirements={mockRequirements}
-          title="Detalles de la certificación"
-          buttonLabel="Cerrar"
+          title={labels.certifications.assisted.detailsTitle}
+          buttonLabel={labels.certifications.assisted.closeButton}
           showRequirementsTable
         />
       )}
 
       {isSecondModalOpen && (
         <TextAreaModal
-          title="Descartar"
-          buttonText="Descartar"
-          inputLabel="Justificación"
-          inputPlaceholder="¿Por qué eliminarás el registro?"
-          description="Al descartar una solicitud esta no podrá continuar su trámite y desaparecerá. ¿Realmente quieres descartar esta solicitud?"
+          title={labels.certifications.table.deleteModalTitle}
+          buttonText={labels.certifications.table.deleteModalButton}
+          inputLabel={labels.certifications.messages.deleteJustificationLabel}
+          inputPlaceholder={
+            labels.certifications.messages.deleteJustificationPlaceholder
+          }
+          description={labels.certifications.messages.deleteConfirmation}
           maxLength={500}
           onSubmit={(values) => {
             if (selectedRequestId) {
@@ -563,7 +568,7 @@ function CertificationsTable({
           title="Información"
           titleDescription={infoModalContent.titleDescription}
           description={infoModalContent.description}
-          buttonText="Entendido"
+          buttonText={labels.certifications.modals.understood}
           onCloseModal={handleClose}
         />
       )}

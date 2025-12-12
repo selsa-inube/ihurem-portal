@@ -15,6 +15,7 @@ import { InfoModal } from "@components/modals/InfoModal";
 import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
 import { spacing } from "@design/tokens/spacing";
+import { labels } from "@i18n/labels";
 
 import { StyledAbsencesContainer } from "./styles";
 import { AbsencesTable } from "./components/AbsenscesTable";
@@ -49,8 +50,7 @@ function AbsencesOptionsUI(props: AbsencesOptionsUIProps) {
     hasActiveContract = true,
     hasPrivilege = true,
     actionDescriptions = {
-      absence:
-        "No se puede reportar ausencia, ya que no tiene un contrato activo o no cuenta con los privilegios necesarios.",
+      absence: labels.absences.ui.restrictions.noPrivilegeOrContract,
     },
     handleDeleteRequest,
     data,
@@ -69,28 +69,32 @@ function AbsencesOptionsUI(props: AbsencesOptionsUIProps) {
     description: "",
   });
 
-  const handleRestrictedAction = () => {
-    onOpenInfoModal("No tienes permisos para realizar esta acción.");
-  };
-
-  const addRequest = () => navigate("/absences/report-absence");
-
   const onOpenInfoModal = (description: string) => {
     setInfoModal({
       open: true,
-      title: "Acción inhabilitada",
+      title: labels.absences.ui.actions.restrictedActionTitle,
       description,
     });
   };
 
+  const handleRestrictedAction = () => {
+    onOpenInfoModal(labels.absences.ui.actions.restrictedAction);
+  };
+
+  const addRequest = () => navigate("/absences/report-absence");
+
   const tabs: ITab[] = [
     {
       id: "reportadas",
-      label: isMobile ? "Reportadas" : "Ausencias reportadas",
+      label: isMobile
+        ? labels.absences.ui.tabs.reportedMobile
+        : labels.absences.ui.tabs.reportedDesktop,
     },
     {
       id: "solicitudes",
-      label: isMobile ? "En trámite" : "Solicitudes de ausencias en trámite",
+      label: isMobile
+        ? labels.absences.ui.tabs.requestsMobile
+        : labels.absences.ui.tabs.requestsDesktop,
       icon: {
         appearance: "warning",
         icon: <MdOutlineWarningAmber />,
@@ -126,8 +130,9 @@ function AbsencesOptionsUI(props: AbsencesOptionsUIProps) {
               }
             }}
           >
-            Reportar ausencia
+            {labels.absences.ui.actions.reportAbsenceButton}
           </Button>
+
           {(!hasActiveContract || !hasPrivilege) && (
             <Icon
               icon={<MdOutlineInfo />}
@@ -149,7 +154,7 @@ function AbsencesOptionsUI(props: AbsencesOptionsUIProps) {
         padding={spacing.s200}
       >
         <Text type="title" size="medium">
-          Ausencias reportadas
+          {labels.absences.ui.sections.reportedAbsencesTitle}
         </Text>
 
         {renderActions()}
@@ -173,7 +178,7 @@ function AbsencesOptionsUI(props: AbsencesOptionsUIProps) {
         padding={spacing.s200}
       >
         <Text type="title" size="medium">
-          Solicitudes de ausencias en trámite
+          {labels.absences.ui.sections.requestsTitle}
         </Text>
 
         {isMobile && (
@@ -224,7 +229,7 @@ function AbsencesOptionsUI(props: AbsencesOptionsUIProps) {
       {infoModal.open && (
         <InfoModal
           title={infoModal.title}
-          titleDescription="¿Por qué está inhabilitado?"
+          titleDescription={labels.absences.ui.actions.infoTitleDescription}
           description={infoModal.description}
           onCloseModal={() =>
             setInfoModal({ open: false, title: "", description: "" })

@@ -11,6 +11,7 @@ import {
   ISpinnerAppearance,
 } from "@inubekit/inubekit";
 
+import { labels } from "@i18n/labels";
 import { spacing } from "@design/tokens/spacing";
 
 import { StyledModal, StyledContainerClose } from "./styles";
@@ -30,8 +31,8 @@ export function RequestInfoModal(props: RequestInfoModalProps) {
   const {
     requestId,
     staffName,
-    buttonText = "Entendido",
-    title = "Solicitud",
+    buttonText = labels.modals.requestInfoModal.buttonText,
+    title = labels.modals.requestInfoModal.title,
     portalId = "portal",
     iconAppearance = "primary",
     onCloseModal,
@@ -48,8 +49,11 @@ export function RequestInfoModal(props: RequestInfoModalProps) {
   }
 
   const message = staffName
-    ? `Este proceso será gestionado por ${staffName}, puede tardar algún tiempo mientras se gestiona la aprobación.`
-    : "Este proceso será gestionado por uno de nuestros funcionarios, puede tardar algún tiempo mientras se gestiona la aprobación.";
+    ? labels.modals.requestInfoModal.messageWithStaff.replace(
+        "{staffName}",
+        staffName,
+      )
+    : labels.modals.requestInfoModal.defaultMessage;
 
   return createPortal(
     <Blanket>
@@ -58,9 +62,10 @@ export function RequestInfoModal(props: RequestInfoModalProps) {
           <Text type="headline" size="small">
             {title}
           </Text>
+
           <StyledContainerClose onClick={onCloseModal}>
             <Stack alignItems="center" gap={spacing.s100}>
-              <Text>Cerrar</Text>
+              <Text>{labels.modals.close}</Text>
               <Icon
                 icon={<MdClear />}
                 size="24px"
@@ -70,18 +75,23 @@ export function RequestInfoModal(props: RequestInfoModalProps) {
             </Stack>
           </StyledContainerClose>
         </Stack>
+
         <Divider />
+
         <Stack direction="column" alignItems="center" gap={spacing.s300}>
           <Icon
             icon={<MdCheckCircle />}
             size="68px"
             appearance={iconAppearance}
           />
+
           <Text>
-            Solicitud <b>{requestId}</b>
+            {labels.modals.requestInfoModal.title} <b>{requestId}</b>
           </Text>
+
           <Text size="medium">{message}</Text>
         </Stack>
+
         <Stack justifyContent="end">
           <Button onClick={onSubmitButtonClick} fullwidth={isMobile}>
             {buttonText}

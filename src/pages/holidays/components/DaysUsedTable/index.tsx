@@ -14,6 +14,8 @@ import {
 } from "@inubekit/inubekit";
 import { useEffect, useState } from "react";
 
+import { labels } from "@i18n/labels";
+
 import { IDaysUsedTable } from "./types";
 import { StyledTd, StyledTh } from "./styles";
 import { columns, headers } from "./tableConfig";
@@ -138,7 +140,7 @@ function DaysUsedTable(props: DaysUsedTableProps) {
       <Td colSpan={headers.length} align="center" type="custom">
         <Stack justifyContent="center">
           <Text type="label" size="large" appearance="gray">
-            Aún no has utilizado ningún día de vacaciones.
+            {labels.holidays.daysUsed.empty}
           </Text>
         </Stack>
       </Td>

@@ -1,20 +1,30 @@
+import { labels } from "@i18n/labels";
+
+const t = labels.absences.reportAbsence.ui.requirementsForm;
+
 export const mockRequestDetail = [
-  { label: "Motivo", value: "Ausencia médica" },
   {
-    label: "Detalles del motivo",
+    label: labels.absences.reportAbsence.form.motiveLabel,
+    value: "Ausencia médica",
+  },
+  {
+    label: labels.absences.reportAbsence.form.detailsLabel,
     value:
       "El empleado se tuvo que ausentar debido a una diligencia personal relacionada con el pago de un servicio urgente que requirió su asistencia personal.",
   },
 ];
 
 export const mockDocuments = [
-  { id: 1, name: "Cita médica programada - (Opcional)" },
+  {
+    id: 1,
+    name: `${t.documents.doc1} ${t.table.optionalSuffix}`,
+  },
   {
     id: 2,
-    name: "Incapacidad médica emitida por una EPS o prepagada - *Requerido*",
+    name: `${t.documents.doc2} ${t.table.requiredSuffix}`,
   },
   {
     id: 3,
-    name: "Orden médica de tratamiento, examen especializado o recuperación post-operatoria - (Opcional)",
+    name: `${t.documents.doc3} ${t.table.optionalSuffix}`,
   },
 ];

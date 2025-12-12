@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useMediaQuery } from "@inubekit/inubekit";
 
+import { labels } from "@i18n/labels";
 import { useHumanResourceRequests } from "@hooks/useHumanResourceRequests";
 import { useDeleteRequest } from "@hooks/useDeleteRequest";
 import { useDeleteValidation } from "@hooks/useDeleteValidation";
@@ -126,10 +127,10 @@ function HolidaysOptions() {
       />
       {validationModal.show && (
         <InfoModal
-          title="Información"
-          titleDescription="¿Por qué no se puede descartar?"
+          title={labels.holidays.infoModal.title}
+          titleDescription={labels.holidays.infoModal.reasonTitle}
           description={validationModal.message}
-          buttonText="Entendido"
+          buttonText={labels.holidays.general.understood}
           onCloseModal={closeValidationModal}
         />
       )}

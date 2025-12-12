@@ -6,6 +6,7 @@ import { RequestInfoModal } from "@components/modals/RequestInfoModal";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 import { useRequestSubmission } from "@hooks/usePostHumanResourceRequest";
 import { ERequestType } from "@ptypes/humanResourcesRequest.types";
+import { labels } from "@i18n/labels";
 
 import { ReportAbsenceUI } from "./interface";
 import { reportAbsenceSteps } from "./config/assisted.config";
@@ -216,19 +217,19 @@ function ReportAbsence() {
   };
 
   const breadcrumbs = {
-    label: "Reportar ausencia",
-    description: "Completa el asistido para reportar una ausencia.",
+    label: labels.absences.reportAbsence.breadcrumbs.label,
+    description: labels.absences.reportAbsence.breadcrumbs.description,
     crumbs: [
       { path: "/", label: "Inicio", id: "/", isActive: false },
       {
         path: "/absences",
-        label: "Ausencias",
+        label: labels.absences.breadcrumbs.appName,
         id: "/absences",
         isActive: false,
       },
       {
         path: "/absences/report-absence",
-        label: "Reportar",
+        label: labels.absences.reportAbsence.breadcrumbs.reportLabel,
         id: "/absences/report-absence",
         isActive: true,
       },
@@ -268,7 +269,7 @@ function ReportAbsence() {
 
       {modalState.isSendModalVisible && (
         <SendRequestModal
-          descriptionText="¿Realmente deseas enviar esta solicitud de ausencia?"
+          descriptionText={labels.absences.reportAbsence.modals.confirmSend}
           onSubmitButtonClick={handleConfirmSendModal}
           onCloseModal={closeSendModal}
           onSecondaryButtonClick={closeSendModal}

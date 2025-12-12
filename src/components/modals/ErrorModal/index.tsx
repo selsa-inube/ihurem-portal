@@ -11,6 +11,7 @@ import {
 import { createPortal } from "react-dom";
 import { MdClear, MdOutlineReportProblem } from "react-icons/md";
 
+import { labels } from "@i18n/labels";
 import { spacing } from "@design/tokens/spacing";
 
 import { StyledModal, StyledContainerClose } from "./styles";
@@ -29,12 +30,12 @@ export interface ErrorModalProps {
 
 export function ErrorModal(props: ErrorModalProps) {
   const {
-    buttonText = "Entendido",
-    title = "Error",
+    buttonText = labels.modals.errorModal.buttonText,
+    title = labels.modals.errorModal.title,
     portalId = "portal",
     appearance = "warning",
-    descriptionText = "*Descripción general del error. Incluye código identificador.",
-    solutionText = "*Cómo solucionarlo: Instrucciones generales que podrían conducir a la solución del error.",
+    descriptionText = labels.modals.errorModal.description,
+    solutionText = labels.modals.errorModal.solution,
     onSolutionOnly,
     onCloseModal,
     onSubmitButtonClick,
@@ -58,7 +59,7 @@ export function ErrorModal(props: ErrorModalProps) {
           </Text>
           <StyledContainerClose onClick={onCloseModal}>
             <Stack alignItems="center" gap={spacing.s100}>
-              <Text>Cerrar</Text>
+              {labels.modals.errorModal.close}
               <Icon
                 icon={<MdClear />}
                 size="24px"

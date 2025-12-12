@@ -2,6 +2,7 @@ import { Stack, Button, useMediaQuery, Text, Icon } from "@inubekit/inubekit";
 import { FormikProps } from "formik";
 import { MdInfoOutline } from "react-icons/md";
 
+import { labels } from "@i18n/labels";
 import { spacing } from "@design/tokens/spacing";
 
 import { RequiredDocumentsTable } from "./RequiredDocumentsTable";
@@ -52,8 +53,10 @@ function RequiredDocumentsFormUI(props: RequiredDocumentsFormUIProps) {
                 weight="bold"
                 size={isMobile ? "medium" : "large"}
               >
-                Aún no se han configurado requisitos documentales para las
-                condiciones de esta ausencia.
+                {
+                  labels.absences.reportAbsence.ui.requirementsForm.emptyStates
+                    .noRequirements
+                }
               </Text>
             </StyledEmptyMessage>
           )}
@@ -65,10 +68,10 @@ function RequiredDocumentsFormUI(props: RequiredDocumentsFormUIProps) {
               variant="outlined"
               appearance="gray"
             >
-              Anterior
+              {labels.absences.reportAbsence.ui.assisted.back}
             </Button>
             <Button onClick={handleNextStep} disabled={loading}>
-              Siguiente
+              {labels.absences.reportAbsence.ui.assisted.next}
             </Button>
           </Stack>
         )}

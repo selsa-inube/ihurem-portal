@@ -1,3 +1,5 @@
+import { labels } from "@i18n/labels";
+
 import { ICertificationsTable, CertificationsTableField } from "./types";
 
 export const columns = [
@@ -21,21 +23,33 @@ export const headers: {
   style?: React.CSSProperties;
 }[] = [
   {
-    label: "Número de solicitud",
+    label: labels.certifications.table.requestNumber,
     key: "requestNumber",
     style: { width: "auto" },
   },
-  { label: "Tipo de certificación", key: "type", style: { width: "auto" } },
-  { label: "Fecha de solicitud", key: "date", style: { width: "auto" } },
-  { label: "Estado de certificación", key: "status", style: { width: "auto" } },
   {
-    label: "Ver detalles",
+    label: labels.certifications.table.certificationType,
+    key: "type",
+    style: { width: "auto" },
+  },
+  {
+    label: labels.certifications.table.requestDate,
+    key: "date",
+    style: { width: "auto" },
+  },
+  {
+    label: labels.certifications.table.requestStatus,
+    key: "status",
+    style: { width: "auto" },
+  },
+  {
+    label: labels.certifications.table.viewDetails,
     key: "details",
     action: true,
     style: { width: "60px" },
   },
   {
-    label: "Eliminar solicitud",
+    label: labels.certifications.table.deleteRequest,
     key: "delete",
     action: true,
     style: { width: "60px" },

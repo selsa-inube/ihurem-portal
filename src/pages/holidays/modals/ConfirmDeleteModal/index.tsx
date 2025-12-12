@@ -2,6 +2,7 @@ import {
   TextAreaModal,
   TextAreaModalProps,
 } from "@components/modals/TextAreaModal";
+import { labels } from "@i18n/labels";
 
 interface ConfirmDeleteModalProps
   extends Omit<
@@ -17,12 +18,12 @@ export function ConfirmDeleteModal(props: ConfirmDeleteModalProps) {
   return (
     <TextAreaModal
       {...rest}
-      title="Eliminación"
-      buttonText="Eliminar"
-      inputLabel="Justificación"
-      inputPlaceholder="¿Por qué eliminarás el registro?"
+      title={labels.holidays.deleteModal.title}
+      buttonText={labels.holidays.deleteModal.buttonText}
+      inputLabel={labels.holidays.deleteModal.inputLabel}
+      inputPlaceholder={labels.holidays.deleteModal.inputPlaceholder}
       maxLength={120}
-      secondaryButtonText="Cancelar"
+      secondaryButtonText={labels.holidays.deleteModal.cancelButtonText}
       onSubmit={(values) => {
         onConfirmDelete(values.textarea);
       }}

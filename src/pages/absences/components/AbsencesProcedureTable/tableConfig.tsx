@@ -1,3 +1,5 @@
+import { labels } from "@i18n/labels";
+
 import { IAbsencesProcedureTable } from "./types";
 
 export const columns = [
@@ -20,11 +22,27 @@ export const headers: {
   action?: boolean;
   style?: React.CSSProperties;
 }[] = [
-  { label: "Motivo", key: "reason" },
-  { label: "Fecha de inicio", key: "date" },
-  { label: "Duración", key: "duration" },
-  { label: "Estado", key: "state" },
-  { label: "Acciones", key: "actions", action: true },
+  {
+    label: labels.absences.procedure.details.motive,
+    key: "reason",
+  },
+  {
+    label: labels.absences.procedure.details.startDate,
+    key: "date",
+  },
+  {
+    label: labels.absences.procedure.details.durationDays,
+    key: "duration",
+  },
+  {
+    label: labels.absences.procedure.headers.status,
+    key: "state",
+  },
+  {
+    label: labels.absences.procedure.headers.actions,
+    key: "actions",
+    action: true,
+  },
 ];
 
 export const pageLength = 10;

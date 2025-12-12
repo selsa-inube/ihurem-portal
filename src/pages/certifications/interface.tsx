@@ -3,6 +3,7 @@ import { Button, Stack, Text, Icon } from "@inubekit/inubekit";
 import { MdAdd, MdOutlineInfo } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 
+import { labels } from "@i18n/labels";
 import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
 import { spacing } from "@design/tokens/spacing";
@@ -40,8 +41,7 @@ function CertificationsOptionsUI(props: CertificationsOptionsUIProps) {
     hasActiveContract = true,
     hasPrivilege = true,
     actionDescriptions = {
-      application:
-        "No se puede solicitar la certificación, ya que no tiene un contrato activo o no cuenta con los privilegios necesarios.",
+      application: labels.certifications.actions.disabledApplication,
     },
     handleDeleteRequest,
   } = props;
@@ -62,7 +62,7 @@ function CertificationsOptionsUI(props: CertificationsOptionsUIProps) {
   const onOpenInfoModal = (description: string) => {
     setInfoModal({
       open: true,
-      title: "Acción inhabilitada",
+      title: labels.certifications.titles.disabledAction,
       description,
     });
   };
@@ -98,7 +98,7 @@ function CertificationsOptionsUI(props: CertificationsOptionsUIProps) {
               }
             }}
           >
-            Agregar solicitud de certificación
+            {labels.certifications.actions.addRequest}
           </Button>
           {(!hasActiveContract || !hasPrivilege) && (
             <Icon
@@ -124,7 +124,7 @@ function CertificationsOptionsUI(props: CertificationsOptionsUIProps) {
         <StyledCertificationsContainer $isMobile={isMobile}>
           <Stack justifyContent="space-between" alignItems="center">
             <Text type="title" size="medium">
-              Consulta de certificaciones en trámite
+              {labels.certifications.titles.main}
             </Text>
             {renderActions()}
           </Stack>
@@ -140,7 +140,7 @@ function CertificationsOptionsUI(props: CertificationsOptionsUIProps) {
       {infoModal.open && (
         <InfoModal
           title={infoModal.title}
-          titleDescription="¿Por qué está inhabilitado?"
+          titleDescription={labels.certifications.titles.disabledReason}
           description={infoModal.description}
           onCloseModal={() =>
             setInfoModal({ open: false, title: "", description: "" })
