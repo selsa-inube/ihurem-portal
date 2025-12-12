@@ -9,6 +9,7 @@ import {
   IEmployeeOptions,
 } from "@ptypes/employeePortalBusiness.types";
 import selsaLogo from "@assets/images/selsa.png";
+import { Logger } from "@utils/logger";
 
 import { IAppContextType, IPreferences, IClient, IUser } from "./types";
 
@@ -81,9 +82,12 @@ function AppProvider(props: AppProviderProps) {
       try {
         return JSON.parse(storedClient);
       } catch (error) {
-        console.error(
+        Logger.error(
           "Error al parsear selectedClient desde localStorage",
-          error,
+          error as Error,
+          {
+            storedClient,
+          },
         );
       }
     }

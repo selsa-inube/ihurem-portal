@@ -26,7 +26,8 @@ interface AbsenceDurationFormUIProps {
   formik: FormikProps<IAbsenceDurationEntry>;
   loading?: boolean;
   withNextButton?: boolean;
-  shouldShowMotiveText: boolean;
+  showDaysField: boolean;
+  showHoursFields: boolean;
   handleNextStep: () => void;
   handlePreviousStep: () => void;
 }
@@ -36,7 +37,8 @@ function AbsenceDurationFormUI(props: AbsenceDurationFormUIProps) {
     formik,
     loading,
     withNextButton,
-    shouldShowMotiveText,
+    showDaysField,
+    showHoursFields,
     handleNextStep,
     handlePreviousStep,
   } = props;
@@ -54,7 +56,9 @@ function AbsenceDurationFormUI(props: AbsenceDurationFormUIProps) {
   };
 
   const hasHoursDuration =
-    formik.values.hoursDuration && Number(formik.values.hoursDuration) > 0;
+    showHoursFields &&
+    formik.values.hoursDuration &&
+    Number(formik.values.hoursDuration) > 0;
 
   return (
     <form>
@@ -66,7 +70,7 @@ function AbsenceDurationFormUI(props: AbsenceDurationFormUIProps) {
       >
         <StyledContainer $isMobile={isMobile}>
           <Stack direction="column" width="100%" gap={spacing.s200}>
-            {shouldShowMotiveText && (
+            {!showDaysField && (
               <Text>
                 {labels.absences.reportAbsence.ui.durationForm.motiveInfoText}
               </Text>
@@ -87,33 +91,35 @@ function AbsenceDurationFormUI(props: AbsenceDurationFormUIProps) {
               onChange={formik.handleChange}
             />
             <Grid
-              templateColumns={`repeat(${isMobile || !shouldShowMotiveText ? 1 : 2}, 1fr)`}
+              templateColumns={`repeat(${isMobile ? 1 : showDaysField && showHoursFields ? 2 : 1}, 1fr)`}
               autoRows="auto"
               gap={spacing.s200}
               width="100%"
             >
-              <Textfield
-                label={
-                  labels.absences.reportAbsence.ui.durationForm.labels
-                    .daysDuration
-                }
-                placeholder={
-                  labels.absences.reportAbsence.ui.durationForm.placeholders
-                    .days
-                }
-                name="daysDuration"
-                id="daysDuration"
-                type="number"
-                value={formik.values.daysDuration}
-                status={getFieldState(formik, "daysDuration")}
-                message={formik.errors.daysDuration}
-                disabled={loading}
-                size="compact"
-                fullwidth
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-              />
-              {shouldShowMotiveText && (
+              {showDaysField && (
+                <Textfield
+                  label={
+                    labels.absences.reportAbsence.ui.durationForm.labels
+                      .daysDuration
+                  }
+                  placeholder={
+                    labels.absences.reportAbsence.ui.durationForm.placeholders
+                      .days
+                  }
+                  name="daysDuration"
+                  id="daysDuration"
+                  type="number"
+                  value={formik.values.daysDuration}
+                  status={getFieldState(formik, "daysDuration")}
+                  message={formik.errors.daysDuration}
+                  disabled={loading}
+                  size="compact"
+                  fullwidth
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                />
+              )}
+              {showHoursFields && (
                 <>
                   <Stack direction="column" gap={spacing.s050}>
                     <Stack gap={spacing.s050} alignItems="center">
@@ -188,7 +194,7 @@ function AbsenceDurationFormUI(props: AbsenceDurationFormUIProps) {
             </Button>
             <Button
               onClick={handleNextStep}
-              disabled={loading ?? !formik.isValid}
+              disabled={loading ? true : !formik.isValid}
             >
               {labels.absences.reportAbsence.ui.durationForm.buttons.next}
             </Button>

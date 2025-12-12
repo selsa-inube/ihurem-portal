@@ -16,6 +16,7 @@ import {
 import { createPortal } from "react-dom";
 
 import { labels } from "@i18n/labels";
+import { Logger } from "@utils/logger";
 import CheckIcon from "@assets/images/CheckIcon.svg";
 import CloseIcon from "@assets/images/CloseIcon.svg";
 import HelpIcon from "@assets/images/HelpIcon.svg";
@@ -74,7 +75,7 @@ function AbsenceRequirementsModal(props: AbsenceRequirementsModalProps) {
         <Icon
           icon={<MdOutlineVisibility />}
           appearance="dark"
-          onClick={() => console.log("Add clicked", entry)}
+          onClick={() => Logger.info("Icono de agregar clickeado", { entry })}
           spacing="compact"
           variant="empty"
           size="20px"

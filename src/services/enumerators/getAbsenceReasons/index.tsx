@@ -3,6 +3,7 @@ import {
   maxRetriesServices,
   environment,
 } from "@config/environment";
+import { Logger } from "@utils/logger";
 
 import { IAbsenceReason, IGetAbsenceReasonsParams } from "./types";
 
@@ -49,7 +50,14 @@ const getAbsenceReasons = async (
       return Array.isArray(data) ? data : [];
     } catch (error) {
       if (attempt === maxRetries) {
-        console.error("Error al obtener las razones de ausencia:", error);
+        Logger.error(
+          "Error al obtener las razones de ausencia",
+          error as Error,
+          {
+            regulatoryFramework: params.regulatoryFramework,
+            company: params.company,
+          },
+        );
         if (error instanceof Error) {
           throw error;
         }

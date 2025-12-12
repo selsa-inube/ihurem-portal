@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import { Logger } from "@utils/logger";
 import { postSelfRegistration } from "@services/employeePortal/postSelfRegistration";
 import { ISelfRegistrationRequestBody } from "@services/employeePortal/postSelfRegistration/types";
 import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
@@ -37,9 +38,9 @@ export function useSelfRegistrationAPI() {
       setIsLoading(false);
       return { success: false };
     } catch (err) {
-      console.error("Error sending self-registration:", err);
-
       const error = err instanceof Error ? err : new Error(String(err));
+      Logger.error("Error sending self-registration", error, { requestBody });
+
       setError(error);
 
       const errorConfig =

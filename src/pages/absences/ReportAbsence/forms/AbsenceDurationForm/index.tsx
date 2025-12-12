@@ -13,79 +13,82 @@ import { validationMessages } from "@validations/validationMessages";
 import { ErrorModal } from "@components/modals/ErrorModal";
 
 import { IAbsenceDurationEntry } from "./types";
-import { absenceDurationFormRequiredFields } from "./config/formConfig";
 import { AbsenceDurationFormUI } from "./interface";
+import { fullDayMotives } from "./config/formConfig";
 
-const createValidationSchema = (restrictFutureDates: boolean) =>
+const createValidationSchema = (
+  restrictFutureDates: boolean,
+  showDaysField: boolean,
+  showHoursFields: boolean,
+) =>
   object().shape({
-    startDate: absenceDurationFormRequiredFields.startDate
+    startDate: string().test(
+      "startDate-validation",
+      labels.absences.futureDateError.fieldValidation,
+      (value) => {
+        if (!value) return false;
+        if (!restrictFutureDates) return true;
+        const selected = new Date(value);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        return selected > today;
+      },
+    ),
+    daysDuration: showDaysField
       ? string()
           .required(validationMessages.required)
           .test(
-            "is-after-today",
-            labels.absences.futureDateError.fieldValidation,
-            (value) => {
-              if (!value) return false;
-              if (!restrictFutureDates) return true;
-
-              const selected = new Date(value);
-              const today = new Date();
-              today.setHours(0, 0, 0, 0);
-
-              return selected > today;
-            },
-          )
-      : string(),
-
-    daysDuration: absenceDurationFormRequiredFields.daysDuration
-      ? string()
-          .required(validationMessages.required)
-          .test(
-            "is-valid-number",
+            "is-valid-number-days",
             labels.absences.reportAbsence.validation.positiveDays,
             (value) => {
               if (!value) return false;
-              if (["-", "+"].includes(value) || isNaN(Number(value)))
+              if (value === "-" || value === "+" || isNaN(Number(value))) {
                 return false;
-              return Number(value) >= 0;
+              }
+              const numValue = Number(value);
+              return numValue > 0;
             },
           )
       : string().test(
-          "is-valid-number",
+          "is-valid-number-days-optional",
           labels.absences.reportAbsence.validation.positiveDays,
           (value) => {
             if (!value) return true;
-            if (["-", "+"].includes(value) || isNaN(Number(value)))
+            if (value === "-" || value === "+" || isNaN(Number(value))) {
               return false;
-            return Number(value) >= 0;
+            }
+            const numValue = Number(value);
+            return numValue >= 0;
           },
         ),
-
-    hoursDuration: absenceDurationFormRequiredFields.hoursDuration
+    hoursDuration: showHoursFields
       ? string()
           .required(validationMessages.required)
           .test(
-            "is-valid-number",
+            "is-valid-number-hours",
             labels.absences.reportAbsence.validation.positiveHours,
             (value) => {
               if (!value) return false;
-              if (["-", "+"].includes(value) || isNaN(Number(value)))
+              if (value === "-" || value === "+" || isNaN(Number(value))) {
                 return false;
-              return Number(value) >= 0;
+              }
+              const numValue = Number(value);
+              return numValue > 0;
             },
           )
       : string().test(
-          "is-valid-number",
-          labels.absences.reportAbsence.validation.positiveHours,
+          "is-valid-number-hours-optional",
+          labels.absences.reportAbsence.validation.positiveDays,
           (value) => {
             if (!value) return true;
-            if (["-", "+"].includes(value) || isNaN(Number(value)))
+            if (value === "-" || value === "+" || isNaN(Number(value))) {
               return false;
-            return Number(value) >= 0;
+            }
+            const numValue = Number(value);
+            return numValue >= 0;
           },
         ),
-
-    startTime: absenceDurationFormRequiredFields.hoursDuration
+    startTime: showHoursFields
       ? string().required(validationMessages.required)
       : string(),
   });
@@ -120,12 +123,19 @@ const AbsenceDurationForm = forwardRef<
   ) => {
     const [showDateErrorModal, setShowDateErrorModal] = useState(false);
 
-    const shouldShowMotiveText = motive !== "unpaid_leave";
+    const isFullDayMotive = fullDayMotives.includes(motive);
+    const showDaysField = isFullDayMotive;
+    const showHoursFields = !isFullDayMotive;
     const restrictFutureDates = motive === "unpaid_leave";
 
     const validationSchema = useMemo(
-      () => createValidationSchema(restrictFutureDates),
-      [restrictFutureDates],
+      () =>
+        createValidationSchema(
+          restrictFutureDates,
+          showDaysField,
+          showHoursFields,
+        ),
+      [restrictFutureDates, showDaysField, showHoursFields],
     );
 
     const formik = useFormik<IAbsenceDurationEntry>({
@@ -148,13 +158,12 @@ const AbsenceDurationForm = forwardRef<
 
     useEffect(() => {
       const value = formik.values.startDate;
-
-      const futureDateMessage = labels.absences.futureDateError.fieldValidation;
-
       if (!value) {
         setShowDateErrorModal(false);
-
-        if (formik.errors.startDate === futureDateMessage) {
+        if (
+          formik.errors.startDate ===
+          labels.absences.reportAbsence.unpaidLeave.short
+        ) {
           formik.setFieldError("startDate", "");
         }
         return;
@@ -166,16 +175,25 @@ const AbsenceDurationForm = forwardRef<
 
       if (restrictFutureDates) {
         if (selected <= today) {
-          formik.setFieldError("startDate", futureDateMessage);
+          formik.setFieldError(
+            "startDate",
+            labels.absences.reportAbsence.unpaidLeave.short,
+          );
           setShowDateErrorModal(true);
         } else {
-          if (formik.errors.startDate === futureDateMessage) {
+          if (
+            formik.errors.startDate ===
+            labels.absences.reportAbsence.unpaidLeave.short
+          ) {
             formik.setFieldError("startDate", "");
           }
           setShowDateErrorModal(false);
         }
       } else {
-        if (formik.errors.startDate === futureDateMessage) {
+        if (
+          formik.errors.startDate ===
+          labels.absences.reportAbsence.unpaidLeave.short
+        ) {
           formik.setFieldError("startDate", "");
         }
         setShowDateErrorModal(false);
@@ -188,11 +206,11 @@ const AbsenceDurationForm = forwardRef<
           loading={loading}
           formik={formik}
           withNextButton={withNextButton}
-          shouldShowMotiveText={shouldShowMotiveText}
+          showDaysField={showDaysField}
+          showHoursFields={showHoursFields}
           handleNextStep={handleNextStep}
           handlePreviousStep={handlePreviousStep}
         />
-
         {showDateErrorModal && (
           <ErrorModal
             title={labels.absences.futureDateError.title}

@@ -4,6 +4,8 @@ import {
   maxRetriesServices,
 } from "@config/environment";
 import { IEmployeePortalByBusinessManager } from "@ptypes/employeePortalBusiness.types";
+import { Logger } from "@utils/logger";
+
 import { mapEmployeePortalByBusinessManagerApiToEntities } from "./mappers";
 
 interface ErrorResponse {
@@ -70,7 +72,14 @@ const employeePortalByBusinessManager = async (
           "Todos los intentos fallaron. No se pudieron obtener los datos del portal.",
         );
       }
-      console.error(`Attempt ${attempt} failed:`, error);
+      Logger.error(
+        `Attempt ${attempt} failed while fetching employee portal data`,
+        error as Error,
+        {
+          codeParame,
+          attempt,
+        },
+      );
     }
   }
 

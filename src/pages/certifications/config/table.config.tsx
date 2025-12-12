@@ -7,7 +7,7 @@ import {
   HumanResourceRequest,
 } from "@ptypes/humanResourcesRequest.types";
 import { parseDataSafely, getValueFromData } from "@utils/parser";
-import { labels } from "@i18n/labels";
+import { Logger } from "@utils/logger";
 
 import { ICertificationsTable } from "../components/CertificationsTable/types";
 
@@ -37,17 +37,17 @@ export const formatHumanResourceData = (
         value: <MdOutlineVisibility />,
         type: "icon" as const,
         onClick: () =>
-          console.log(
-            `${labels.certifications.table.viewDetails} ${request.humanResourceRequestId}`,
-          ),
+          Logger.info(`Ver detalles de la solicitud`, {
+            requestId: request.humanResourceRequestId,
+          }),
       },
       delete: {
         value: <MdDeleteOutline />,
         type: "icon" as const,
         onClick: () =>
-          console.log(
-            `${labels.certifications.table.deleteRequest} ${request.humanResourceRequestId}`,
-          ),
+          Logger.info(`Eliminar solicitud`, {
+            requestId: request.humanResourceRequestId,
+          }),
       },
       dataDetails: {
         value: {

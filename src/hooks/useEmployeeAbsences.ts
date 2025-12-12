@@ -6,6 +6,7 @@ import { useHeaders } from "@hooks/useHeaders";
 import { useAppContext } from "@context/AppContext/useAppContext";
 import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
 import { modalErrorConfig } from "@config/modalErrorConfig";
+import { Logger } from "@utils/logger";
 
 const ERROR_CODE_GET_EMPLOYEE_ABSENCES_FAILED = 1022;
 
@@ -51,7 +52,11 @@ export const useEmployeeAbsences = <T>(
       setData([]);
       setRawData([]);
 
-      console.error("Error al obtener ausencias del empleado", err);
+      Logger.error("Error al obtener ausencias del empleado", err as Error, {
+        effectiveEmployeeId,
+        page,
+        perPage,
+      });
 
       const errorConfig =
         modalErrorConfig[ERROR_CODE_GET_EMPLOYEE_ABSENCES_FAILED];

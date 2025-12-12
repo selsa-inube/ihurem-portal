@@ -253,7 +253,7 @@ export const absences = {
       durationRequired: "Debes ingresar una duración válida.",
       startTimeRequired:
         "Debes seleccionar la hora de inicio cuando la duración es en horas.",
-      positiveHours: "La duración en horas debe ser un número positivo.",
+      positiveHours: "La duración en horas debe ser un número mayor a cero.",
       positiveDays: "La duración en días debe ser un número positivo.",
     },
 

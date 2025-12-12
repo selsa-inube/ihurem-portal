@@ -195,8 +195,6 @@ function HolidaysTable(props: HolidaysTableProps) {
     const dataDe = dataSource[rowIndex].dataDetails
       ?.value as unknown as HolidayTableDataDetails;
 
-    console.log("🔍 dataDe:", dataDe);
-
     const contractLabel = dataDe.contractType
       ? contractTypeLabels[dataDe.contractType]
       : "";
