@@ -1,5 +1,6 @@
 import { Text, Stack, Spinner } from "@inubekit/inubekit";
 
+import { labels } from "@i18n/labels";
 import { spacing } from "@design/tokens/spacing";
 
 interface LoadingAppUIProps {
@@ -18,10 +19,10 @@ function LoadingAppUI(props: LoadingAppUIProps) {
     >
       <Stack direction="column">
         <Text type="title" textAlign="center">
-          Cargando la aplicación
+          {labels.loginLabels.loadingApp.mainTitle}
         </Text>
         <Text type="title" size="small" textAlign="center">
-          Espere un momento, por favor.
+          {labels.loginLabels.loadingApp.subTitle}
         </Text>
       </Stack>
       <Stack alignItems="center" direction="column">

@@ -15,6 +15,7 @@ import {
 } from "react-icons/md";
 import { createPortal } from "react-dom";
 
+import { labels } from "@i18n/labels";
 import CheckIcon from "@assets/images/CheckIcon.svg";
 import CloseIcon from "@assets/images/CloseIcon.svg";
 import HelpIcon from "@assets/images/HelpIcon.svg";
@@ -133,10 +134,14 @@ function AbsenceRequirementsModal(props: AbsenceRequirementsModalProps) {
   };
 
   const infoItems = [
-    { icon: <MdOutlineVisibility />, text: "Adjuntar", appearance: "help" },
+    {
+      icon: <MdOutlineVisibility />,
+      text: labels.modals.attach,
+      appearance: "help",
+    },
     {
       icon: <MdOutlineCheckCircle />,
-      text: "Forzar Aprobación",
+      text: labels.modals.forceApproval,
       appearance: "help",
     },
   ];
@@ -151,7 +156,7 @@ function AbsenceRequirementsModal(props: AbsenceRequirementsModalProps) {
             </Text>
             <StyledContainerClose onClick={handleClose}>
               <Stack alignItems="center" gap={spacing.s100}>
-                <Text>Cerrar</Text>
+                <Text>{labels.modals.close}</Text>
                 <Icon
                   icon={<MdClear />}
                   size="24px"
@@ -196,7 +201,7 @@ function AbsenceRequirementsModal(props: AbsenceRequirementsModalProps) {
       {infoModal.open && (
         <InfoModal
           title={infoModal.title}
-          titleDescription="¿Por qué está inhabilitado?"
+          titleDescription={labels.modals.infoModal.reasonTitle}
           description={infoModal.description}
           onCloseModal={() =>
             setInfoModal({ open: false, title: "", description: "" })

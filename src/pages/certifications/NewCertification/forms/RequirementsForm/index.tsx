@@ -2,6 +2,7 @@ import { Stack, Button, useMediaQuery } from "@inubekit/inubekit";
 
 import { AlertCard } from "@components/data/AlertCard";
 import { spacing } from "@design/tokens/spacing/";
+import { labels } from "@i18n/labels";
 
 import { StyledContainer } from "./styles";
 import { alerts } from "./config/alertConfig";
@@ -22,7 +23,7 @@ const AlertCardStep = ({ handleNextStep }: AlertCardContainerProps) => {
       </StyledContainer>
       <Stack justifyContent="flex-end" gap={spacing.s100}>
         <Button appearance="primary" onClick={handleNextStep}>
-          Siguiente
+          {labels.certifications.assisted.next}
         </Button>
       </Stack>
     </Stack>

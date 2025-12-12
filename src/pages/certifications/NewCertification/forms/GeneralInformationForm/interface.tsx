@@ -10,6 +10,7 @@ import {
   useMediaQuery,
 } from "@inubekit/inubekit";
 
+import { labels } from "@i18n/labels";
 import { getFieldState } from "@utils/forms/forms";
 import { spacing } from "@design/tokens/spacing";
 import { useAppContext } from "@context/AppContext/useAppContext";
@@ -84,10 +85,10 @@ const GeneralInformationFormUI = ({
             <Select
               name="certificationType"
               size="compact"
-              label="Tipo de certificación"
+              label={labels.certifications.assisted.certificationType}
               fullwidth
               options={certificationOptions}
-              placeholder="Selecciona de la lista"
+              placeholder={labels.certifications.assisted.contractPlaceholder}
               value={formik.values.certificationType ?? ""}
               onChange={(name, value) => {
                 void formik.setFieldValue(name, value);
@@ -98,10 +99,10 @@ const GeneralInformationFormUI = ({
               fullwidth
               id="addressee"
               required
-              label="Destinatario"
+              label={labels.certifications.assisted.addressee}
               maxLength={60}
               name="addressee"
-              placeholder="Ej: A quien interese"
+              placeholder={labels.certifications.assisted.addresseePlaceholder}
               value={formik.values.addressee}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -110,11 +111,11 @@ const GeneralInformationFormUI = ({
 
           {contractOptions.length > 1 && (
             <Select
-              label="Contrato"
+              label={labels.certifications.assisted.contract}
               name="contractId"
               id="contractId"
               options={contractOptions}
-              placeholder="Selecciona de la lista"
+              placeholder={labels.certifications.assisted.contractPlaceholder}
               value={formik.values.contractId ?? ""}
               message={
                 typeof formik.errors.contractId === "string"
@@ -133,8 +134,8 @@ const GeneralInformationFormUI = ({
           )}
 
           <Textarea
-            label="Observaciones"
-            placeholder="Detalles a tener en cuenta."
+            label={labels.certifications.assisted.observations}
+            placeholder={labels.certifications.assisted.observationsPlaceholder}
             name="observationEmployee"
             id="observationEmployee"
             value={formik.values.observationEmployee}
@@ -165,7 +166,7 @@ const GeneralInformationFormUI = ({
               variant="outlined"
               onClick={handlePreviousStep}
             >
-              Anterior
+              {labels.certifications.assisted.previous}
             </Button>
             <Button
               type="submit"
@@ -174,7 +175,7 @@ const GeneralInformationFormUI = ({
                 handleNextStep();
               }}
             >
-              Siguiente
+              {labels.certifications.assisted.next}
             </Button>
           </Stack>
         )}

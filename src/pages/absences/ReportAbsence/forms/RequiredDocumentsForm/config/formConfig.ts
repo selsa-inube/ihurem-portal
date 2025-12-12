@@ -1,3 +1,5 @@
+import { labels } from "@i18n/labels";
+
 import { IDocument } from "../RequiredDocumentsTable/types";
 
 const RequiredDocumentsFormRequiredFields = {
@@ -9,19 +11,19 @@ const RequiredDocumentsFormRequiredFields = {
 const mockDocuments: IDocument[] = [
   {
     id: 1,
-    name: "Cita médica programada",
+    name: labels.absences.reportAbsence.ui.requirementsForm.documents.doc1,
     required: false,
     disabled: false,
   },
   {
     id: 2,
-    name: "Incapacidad médica emitida por una EPS o prepagada",
+    name: labels.absences.reportAbsence.ui.requirementsForm.documents.doc2,
     required: true,
     disabled: false,
   },
   {
     id: 3,
-    name: "Orden médica de tratamiento, examen especializado o recuperación post-operatoria",
+    name: labels.absences.reportAbsence.ui.requirementsForm.documents.doc3,
     required: false,
     disabled: false,
   },

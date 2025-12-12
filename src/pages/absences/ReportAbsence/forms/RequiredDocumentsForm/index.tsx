@@ -3,6 +3,8 @@ import { object } from "yup";
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { useFlag } from "@inubekit/inubekit";
 
+import { labels } from "@i18n/labels";
+
 import { IRequiredDocumentsEntry } from "./types";
 import { RequiredDocumentsFormUI } from "./interface";
 import { IDocument } from "./RequiredDocumentsTable/types";
@@ -89,8 +91,8 @@ const RequiredDocumentsForm = forwardRef<
     useEffect(() => {
       if (lastAttachedInfo) {
         addFlag({
-          title: "Documento cargado",
-          description: "¡El documento se adjuntó con éxito!",
+          title: labels.absences.flags.documentUploadedTitle,
+          description: labels.absences.flags.documentUploadedMessage,
           appearance: "success",
           duration: 5000,
         });

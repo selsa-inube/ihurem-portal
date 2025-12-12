@@ -5,7 +5,9 @@ import {
   Divider,
   IIconAppearance,
 } from "@inubekit/inubekit";
+
 import { spacing } from "@design/tokens/spacing";
+import { labels } from "@i18n/labels";
 
 import { StyledAlertCard } from "./styles";
 
@@ -41,7 +43,7 @@ function AlertCard(props: AlertCardProps) {
         <Stack direction="column" gap={spacing.s200}>
           <Stack direction="column" gap={spacing.s050}>
             <Stack alignItems="center" justifyContent="space-between">
-              <Text>Requisito:</Text>
+              <Text>{labels.data.alertCard.requirementLabel}</Text>
               <Icon icon={icon} appearance={iconAppearance} size="22px" />
             </Stack>
             <Divider />
@@ -51,7 +53,7 @@ function AlertCard(props: AlertCardProps) {
           </Stack>
           <Stack direction="column" gap={spacing.s050}>
             <Stack direction="column" gap={spacing.s050}>
-              <Text>Causa de incumplimiento:</Text>
+              <Text>{labels.data.alertCard.causeLabel}</Text>
               <Divider />
               <Text size="medium" appearance="gray" ellipsis={ellipsis}>
                 {cause}

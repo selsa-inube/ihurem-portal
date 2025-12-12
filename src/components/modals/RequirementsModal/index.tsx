@@ -17,6 +17,7 @@ import {
 } from "react-icons/md";
 import { createPortal } from "react-dom";
 
+import { labels } from "@i18n/labels";
 import CheckIcon from "@assets/images/CheckIcon.svg";
 import CloseIcon from "@assets/images/CloseIcon.svg";
 import HelpIcon from "@assets/images/HelpIcon.svg";
@@ -115,12 +116,33 @@ function RequirementsModal(props: RequirementsModalProps) {
   const getIconByTagStatus = (tagElement: React.ReactElement) => {
     const label = tagElement.props.children;
 
-    if (label === "Cumple") {
-      return <img src={CheckIcon} alt="Cumple" width={14} height={14} />;
-    } else if (label === "Sin Evaluar") {
-      return <img src={HelpIcon} alt="Sin Evaluar" width={14} height={14} />;
-    } else if (label === "No Cumple") {
-      return <img src={CloseIcon} alt="No Cumple" width={14} height={14} />;
+    if (label === labels.modals.statusLabels.success) {
+      return (
+        <img
+          src={CheckIcon}
+          alt={labels.modals.statusLabels.success}
+          width={14}
+          height={14}
+        />
+      );
+    } else if (label === labels.modals.statusLabels.warning) {
+      return (
+        <img
+          src={HelpIcon}
+          alt={labels.modals.statusLabels.warning}
+          width={14}
+          height={14}
+        />
+      );
+    } else if (label === labels.modals.statusLabels.danger) {
+      return (
+        <img
+          src={CloseIcon}
+          alt={labels.modals.statusLabels.danger}
+          width={14}
+          height={14}
+        />
+      );
     } else {
       return null;
     }
@@ -162,10 +184,14 @@ function RequirementsModal(props: RequirementsModalProps) {
   };
 
   const infoItems = [
-    { icon: <MdOutlineVisibility />, text: "Adjuntar", appearance: "help" },
+    {
+      icon: <MdOutlineVisibility />,
+      text: labels.modals.attach,
+      appearance: "help",
+    },
     {
       icon: <MdOutlineCheckCircle />,
-      text: "Forzar Aprobación",
+      text: labels.modals.forceApproval,
       appearance: "help",
     },
   ];
@@ -180,7 +206,7 @@ function RequirementsModal(props: RequirementsModalProps) {
             </Text>
             <StyledContainerClose onClick={handleClose}>
               <Stack alignItems="center" gap={spacing.s100}>
-                <Text>Cerrar</Text>
+                <Text>{labels.modals.close}</Text>
                 <Icon
                   icon={<MdClear />}
                   size="24px"
@@ -210,7 +236,7 @@ function RequirementsModal(props: RequirementsModalProps) {
                       : undefined
                   }
                 >
-                  Agregar Requisito
+                  {labels.modals.addRequirement}
                 </Button>
                 {!hasPrivilege && (
                   <Icon
@@ -221,9 +247,8 @@ function RequirementsModal(props: RequirementsModalProps) {
                     onClick={() =>
                       setInfoModal({
                         open: true,
-                        title: "Agregar Requisito",
-                        description:
-                          "No tienes permisos para agregar un requisito en este momento.",
+                        title: labels.modals.addRequirement,
+                        description: labels.modals.noPrivilegeMessage,
                       })
                     }
                   />
@@ -261,7 +286,7 @@ function RequirementsModal(props: RequirementsModalProps) {
       {infoModal.open && (
         <InfoModal
           title={infoModal.title}
-          titleDescription="¿Por qué está inhabilitado?"
+          titleDescription={labels.modals.infoModal.reasonTitle}
           description={infoModal.description}
           onCloseModal={() =>
             setInfoModal({ open: false, title: "", description: "" })

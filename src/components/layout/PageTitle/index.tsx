@@ -3,6 +3,7 @@ import { MdArrowBack } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { Stack, Text, Icon, useMediaQuery } from "@inubekit/inubekit";
 
+import { labels } from "@i18n/labels";
 import { SelectionModal } from "@components/modals/SelectionModal";
 import { spacing } from "@design/tokens/spacing";
 
@@ -23,10 +24,10 @@ export function PageTitle(props: PageTitleProps) {
     description,
     navigatePage,
     showBackModal = false,
-    modalTitle = "Regresar",
-    modalDescription = "¿Realmente quieres regresar? Se perderá el avance de tu solicitud.",
-    modalConfirmText = "Sí, regresar",
-    modalCancelText = "Cancelar",
+    modalTitle = labels.layout.pageTitle.backModalTitle,
+    modalDescription = labels.layout.pageTitle.backModalDescription,
+    modalConfirmText = labels.layout.pageTitle.backModalConfirm,
+    modalCancelText = labels.layout.pageTitle.backModalCancel,
   } = props;
 
   const smallScreen = useMediaQuery("(max-width:490px)");

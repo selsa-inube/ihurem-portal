@@ -8,6 +8,7 @@ import {
   useMemo,
 } from "react";
 
+import { labels } from "@i18n/labels";
 import { validationMessages } from "@validations/validationMessages";
 import { ErrorModal } from "@components/modals/ErrorModal";
 
@@ -22,71 +23,68 @@ const createValidationSchema = (restrictFutureDates: boolean) =>
           .required(validationMessages.required)
           .test(
             "is-after-today",
-            "Las licencias deben solicitarse con anticipación.",
+            labels.absences.futureDateError.fieldValidation,
             (value) => {
               if (!value) return false;
               if (!restrictFutureDates) return true;
+
               const selected = new Date(value);
               const today = new Date();
               today.setHours(0, 0, 0, 0);
+
               return selected > today;
             },
           )
       : string(),
+
     daysDuration: absenceDurationFormRequiredFields.daysDuration
       ? string()
           .required(validationMessages.required)
           .test(
             "is-valid-number",
-            "La duración en días debe ser un número positivo",
+            labels.absences.reportAbsence.validation.positiveDays,
             (value) => {
               if (!value) return false;
-              if (value === "-" || value === "+" || isNaN(Number(value))) {
+              if (["-", "+"].includes(value) || isNaN(Number(value)))
                 return false;
-              }
-              const numValue = Number(value);
-              return numValue >= 0;
+              return Number(value) >= 0;
             },
           )
       : string().test(
           "is-valid-number",
-          "La duración en días debe ser un número positivo",
+          labels.absences.reportAbsence.validation.positiveDays,
           (value) => {
             if (!value) return true;
-            if (value === "-" || value === "+" || isNaN(Number(value))) {
+            if (["-", "+"].includes(value) || isNaN(Number(value)))
               return false;
-            }
-            const numValue = Number(value);
-            return numValue >= 0;
+            return Number(value) >= 0;
           },
         ),
+
     hoursDuration: absenceDurationFormRequiredFields.hoursDuration
       ? string()
           .required(validationMessages.required)
           .test(
             "is-valid-number",
-            "La duración en horas debe ser un número positivo",
+            labels.absences.reportAbsence.validation.positiveHours,
             (value) => {
               if (!value) return false;
-              if (value === "-" || value === "+" || isNaN(Number(value))) {
+              if (["-", "+"].includes(value) || isNaN(Number(value)))
                 return false;
-              }
-              const numValue = Number(value);
-              return numValue >= 0;
+              return Number(value) >= 0;
             },
           )
       : string().test(
           "is-valid-number",
-          "La duración en horas debe ser un número positivo",
+          labels.absences.reportAbsence.validation.positiveHours,
           (value) => {
             if (!value) return true;
-            if (value === "-" || value === "+" || isNaN(Number(value))) {
+            if (["-", "+"].includes(value) || isNaN(Number(value)))
               return false;
-            }
-            const numValue = Number(value);
-            return numValue >= 0;
+            return Number(value) >= 0;
           },
         ),
+
     startTime: absenceDurationFormRequiredFields.hoursDuration
       ? string().required(validationMessages.required)
       : string(),
@@ -150,12 +148,13 @@ const AbsenceDurationForm = forwardRef<
 
     useEffect(() => {
       const value = formik.values.startDate;
+
+      const futureDateMessage = labels.absences.futureDateError.fieldValidation;
+
       if (!value) {
         setShowDateErrorModal(false);
-        if (
-          formik.errors.startDate ===
-          "Las licencias deben solicitarse con anticipación."
-        ) {
+
+        if (formik.errors.startDate === futureDateMessage) {
           formik.setFieldError("startDate", "");
         }
         return;
@@ -167,25 +166,16 @@ const AbsenceDurationForm = forwardRef<
 
       if (restrictFutureDates) {
         if (selected <= today) {
-          formik.setFieldError(
-            "startDate",
-            "Las licencias deben solicitarse con anticipación.",
-          );
+          formik.setFieldError("startDate", futureDateMessage);
           setShowDateErrorModal(true);
         } else {
-          if (
-            formik.errors.startDate ===
-            "Las licencias deben solicitarse con anticipación."
-          ) {
+          if (formik.errors.startDate === futureDateMessage) {
             formik.setFieldError("startDate", "");
           }
           setShowDateErrorModal(false);
         }
       } else {
-        if (
-          formik.errors.startDate ===
-          "Las licencias deben solicitarse con anticipación."
-        ) {
+        if (formik.errors.startDate === futureDateMessage) {
           formik.setFieldError("startDate", "");
         }
         setShowDateErrorModal(false);
@@ -202,11 +192,12 @@ const AbsenceDurationForm = forwardRef<
           handleNextStep={handleNextStep}
           handlePreviousStep={handlePreviousStep}
         />
+
         {showDateErrorModal && (
           <ErrorModal
-            title="Alerta"
-            descriptionText="El el paso anterior seleccionaste Motivo: Licencias no remuneradas."
-            solutionText="Las licencias no remuneradas NO pueden registrarse en una fecha anterior al día de hoy, porque deben solicitarse con anticipación."
+            title={labels.absences.futureDateError.title}
+            descriptionText={labels.absences.futureDateError.description}
+            solutionText={labels.absences.futureDateError.solution}
             onCloseModal={() => setShowDateErrorModal(false)}
             onSubmitButtonClick={() => setShowDateErrorModal(false)}
           />
