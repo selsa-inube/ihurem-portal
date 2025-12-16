@@ -130,6 +130,12 @@ const modalErrorConfig: Record<number, ModalErrorDetail> = {
     solutionText:
       "Verifica tu conexión a internet e intenta nuevamente. Si el problema persiste, contacta al soporte técnico.",
   },
+  1024: {
+    descriptionText:
+      "No tienes contratos formalizados activos. La sesión se cerrará automáticamente.",
+    solutionText:
+      "Contacta al área de recursos humanos para validar el estado de tus contratos.",
+  },
 };
 
 export { modalErrorConfig };

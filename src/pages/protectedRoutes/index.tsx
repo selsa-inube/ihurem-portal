@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { RouterProvider } from "react-router-dom";
-import { useIAuth } from "@inube/iauth-react";
 
+import { useIAuth } from "@inube/iauth-react";
 import { ErrorPage } from "@components/layout/ErrorPage";
 import { GlobalStyles } from "@styles/global";
 import { AppProvider } from "@context/AppContext";
@@ -14,6 +14,8 @@ import { InfoModal } from "@components/modals/InfoModal";
 import { protectedRouter } from "@routes/publicRouter";
 import { useSignOut } from "@hooks/useSignOut";
 import { usePortalAuth } from "@hooks/usePortalAuth";
+import { useEmployeeContracts } from "@hooks/useEmployeeContract";
+import { Logger } from "@utils/logger";
 
 export function ProtectedRoutes() {
   const {
@@ -75,10 +77,31 @@ export function ProtectedRoutes() {
     businessUnitData.publicCode ?? "",
   );
 
+  const {
+    contracts,
+    loading: contractsLoading,
+    error: contractsError,
+    codeError: contractsCode,
+  } = useEmployeeContracts(businessUnitData.publicCode ?? "");
+
+  useEffect(() => {
+    if (!contractsLoading && contracts.length > 0) {
+      const formalizedContract = contracts.find(
+        (c) => c.contractStatus === "formalized",
+      );
+
+      if (!formalizedContract) {
+        Logger.warn(
+          "[ProtectedRoutes] No hay contrato formalizado. Cerrando sesión.",
+        );
+        signOut(`/error?code=1024`);
+      }
+    }
+  }, [contracts, contractsLoading, signOut]);
   useEffect(() => {
     if (portalData?.externalAuthenticationProvider !== undefined) {
-      const externalIAuthProvider = portalData.externalAuthenticationProvider;
-      if (!externalIAuthProvider) {
+      const externalProvider = portalData.externalAuthenticationProvider;
+      if (!externalProvider) {
         if (
           !isAuthenticated &&
           !isLoading &&
@@ -87,7 +110,7 @@ export function ProtectedRoutes() {
           loginWithRedirect();
         }
       } else {
-        setExternalIAuthProvider(externalIAuthProvider);
+        setExternalIAuthProvider(externalProvider);
         setShowExternalAuthNotification(true);
       }
     }
@@ -119,7 +142,13 @@ export function ProtectedRoutes() {
     setShowExternalAuthNotification(false);
   };
 
-  if (isLoading || !isReady || employeeLoading || optionsLoading) {
+  if (
+    isLoading ||
+    contractsLoading ||
+    employeeLoading ||
+    optionsLoading ||
+    !isReady
+  ) {
     return <LoadingAppUI />;
   }
 
@@ -128,6 +157,7 @@ export function ProtectedRoutes() {
     BusinessUnit ??
     employeeCode ??
     optionsCode ??
+    contractsCode ??
     (employee && employee.identificationType !== identificationType
       ? 1004
       : 1001);
@@ -137,7 +167,8 @@ export function ProtectedRoutes() {
     hasManagersError ||
     hasBusinessUnitError ||
     employeeError ||
-    optionsError
+    optionsError ||
+    contractsError
   ) {
     return <ErrorPage errorCode={errorCode} />;
   }
@@ -150,6 +181,7 @@ export function ProtectedRoutes() {
         businessUnitData={businessUnitData}
         employee={employee}
         employeeOptions={employeeOptions}
+        contracts={contracts}
       >
         <GlobalStyles />
         <RouterProvider router={protectedRouter} />

@@ -16,7 +16,7 @@ import { ModalState } from "./types";
 import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
 
 function useFormManagement() {
-  const { employees } = useAppContext();
+  const { contracts } = useAppContext();
 
   const [formValues, setFormValues] =
     useState<IUnifiedHumanResourceRequestData>({
@@ -39,9 +39,15 @@ function useFormManagement() {
     useRef<FormikProps<IUnifiedHumanResourceRequestData>>(null);
 
   useEffect(() => {
-    const contrato = employees?.employmentContracts?.[0];
+    console.log("[useFormManagement] Contracts:", contracts);
+
+    const contrato = contracts?.[0];
 
     if (contrato) {
+      console.log(
+        "[useFormManagement] Loading contract into formValues:",
+        contrato,
+      );
       setFormValues((prev) => ({
         ...prev,
         contractId: contrato.contractId ?? "",
@@ -50,12 +56,18 @@ function useFormManagement() {
         contractType: contrato.contractType ?? "",
       }));
     }
-  }, [employees]);
+  }, [contracts]);
 
   const updateFormValues = () => {
     if (generalInformationRef.current) {
+      console.log(
+        "[useFormManagement] Updating formValues from Formik:",
+        generalInformationRef.current.values,
+      );
       setFormValues(generalInformationRef.current.values);
       setIsCurrentFormValid(generalInformationRef.current.isValid);
+    } else {
+      console.log("[useFormManagement] generalInformationRef is null");
     }
   };
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   Stack,
   useMediaQuery,
@@ -26,6 +26,7 @@ import { AbsenceDurationForm } from "./forms/AbsenceDurationForm";
 import { RequiredDocumentsForm } from "./forms/RequiredDocumentsForm";
 import { VerificationForm } from "./forms/VerificationForm/VerificationBoxes";
 import { ERequestType } from "@ptypes/humanResourcesRequest.types";
+import { useAppContext } from "@context/AppContext/useAppContext";
 
 interface RequestEnjoymentUIProps {
   appName: string;
@@ -82,8 +83,13 @@ function ReportAbsenceUI(props: RequestEnjoymentUIProps) {
     !isCurrentFormValid && currentStep !== 1 && currentStep !== 4;
 
   const isTablet = useMediaQuery("(max-width: 1100px)");
-
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const { contracts } = useAppContext();
+
+  const activeContract = useMemo(() => {
+    return contracts && contracts.length > 0 ? contracts[0] : null;
+  }, [contracts]);
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
@@ -92,10 +98,10 @@ function ReportAbsenceUI(props: RequestEnjoymentUIProps) {
     motive: initialValues.motive ?? "",
     motiveDetails: initialValues.motiveDetails ?? "",
     subMotive: initialValues.subMotive,
-    contractId: initialValues.contractId ?? "",
-    contractNumber: initialValues.contractNumber ?? "",
-    businessName: initialValues.businessName ?? "",
-    contractType: initialValues.contractType ?? "",
+    contractId: activeContract?.contractId ?? "",
+    contractNumber: activeContract?.contractNumber ?? "",
+    businessName: activeContract?.businessName ?? "",
+    contractType: activeContract?.contractType ?? "",
   };
 
   const absenceDurationEntry: IAbsenceDurationEntry = {
@@ -152,7 +158,7 @@ function ReportAbsenceUI(props: RequestEnjoymentUIProps) {
             {currentStep === 2 && (
               <AbsenceMotiveForm
                 ref={absenceMotiveRef}
-                initialValues={initialValues}
+                initialValues={absenceMotiveEntry}
                 withNextButton={true}
                 onFormValid={setIsCurrentFormValid}
                 handleNextStep={handleNextStep}
@@ -162,9 +168,9 @@ function ReportAbsenceUI(props: RequestEnjoymentUIProps) {
             {currentStep === 3 && (
               <AbsenceDurationForm
                 ref={absenceDurationRef}
-                initialValues={initialValues}
+                initialValues={absenceDurationEntry}
                 withNextButton={true}
-                motive={initialValues.motive}
+                motive={absenceMotiveEntry.motive}
                 onFormValid={setIsCurrentFormValid}
                 handleNextStep={handleNextStep}
                 handlePreviousStep={handlePreviousStep}
@@ -173,7 +179,7 @@ function ReportAbsenceUI(props: RequestEnjoymentUIProps) {
             {currentStep === 4 && (
               <RequiredDocumentsForm
                 ref={requiredDocumentsRef}
-                initialValues={initialValues}
+                initialValues={requiredDocumentsEntry}
                 withNextButton={true}
                 onFormValid={setIsCurrentFormValid}
                 handleNextStep={handleNextStep}
