@@ -75,7 +75,10 @@ function AppPage(props: AppPageProps) {
 
   const configHeader = useConfigHeader(safeEmployeeOptions);
 
-  const finalLogo = businessManagers?.urlLogo ?? logoUrl;
+  console.log(businessManagers);
+
+  const finalLogo =
+    "https://avatars.githubusercontent.com/u/112717130?s=200&v=4";
 
   useContractValidation();
 
@@ -113,6 +116,7 @@ function AppPage(props: AppPageProps) {
                 actions={actions}
                 collapse={true}
                 footerLogo={finalLogo}
+                footerLogoWidth="55%"
               />
             )}
             <StyledMainScroll>
