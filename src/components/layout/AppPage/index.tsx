@@ -75,10 +75,7 @@ function AppPage(props: AppPageProps) {
 
   const configHeader = useConfigHeader(safeEmployeeOptions);
 
-  console.log(businessManagers);
-
-  const finalLogo =
-    "https://avatars.githubusercontent.com/u/112717130?s=200&v=4";
+  const finalLogo = businessManagers?.urlLogo ?? logoUrl;
 
   useContractValidation();
 
