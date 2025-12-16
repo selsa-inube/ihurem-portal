@@ -13,13 +13,13 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "@inube/iauth-react": "^2.0.1",
-    "@inubekit/inubekit": "^6.2.0",
+    "@inube/iauth-react": "^3.0.1",
+    "@inubekit/inubekit": "^6.4.0",
     "crypto-js": "^4.2.0",
     "date-holidays": "^3.24.3",
     "formik": "^2.4.6",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
     "react-router-dom": "^7.9.1",
     "styled-components": "^6.1.13",
     "vite-tsconfig-paths": "^5.0.1",
