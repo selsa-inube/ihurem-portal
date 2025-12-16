@@ -3,9 +3,10 @@ import {
   fetchTimeoutServices,
   maxRetriesServices,
 } from "@config/environment";
-import { EmployeeContractAggregate } from "@ptypes/employeeContractAggregate";
-import { mapEmployeeContractApiToEntity } from "./mappers";
 import { Logger } from "@utils/logger";
+import { EmployeeContractAggregate } from "@ptypes/employeeContractAggregate";
+
+import { mapEmployeeContractApiToEntity } from "./mappers";
 
 interface GetEmployeeContractsParams {
   page?: number;

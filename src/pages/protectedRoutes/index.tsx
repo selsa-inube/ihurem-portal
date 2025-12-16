@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { RouterProvider } from "react-router-dom";
-
 import { useIAuth } from "@inube/iauth-react";
+
 import { ErrorPage } from "@components/layout/ErrorPage";
 import { GlobalStyles } from "@styles/global";
 import { AppProvider } from "@context/AppContext";

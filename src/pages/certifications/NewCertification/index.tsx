@@ -8,6 +8,7 @@ import { ERequestType } from "@ptypes/humanResourcesRequest.types";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 import { useRequestSubmission } from "@hooks/usePostHumanResourceRequest";
 import { useAppContext } from "@context/AppContext/useAppContext";
+import { Logger } from "@utils/logger";
 
 import { NewCertificationUI } from "./interface";
 import { newCCertificationApplication } from "./config/assisted.config";
@@ -39,15 +40,17 @@ function useFormManagement() {
     useRef<FormikProps<IUnifiedHumanResourceRequestData>>(null);
 
   useEffect(() => {
-    console.log("[useFormManagement] Contracts:", contracts);
+    Logger.debug("[useFormManagement] Contracts loaded", { contracts });
 
     const contrato = contracts?.[0];
 
     if (contrato) {
-      console.log(
-        "[useFormManagement] Loading contract into formValues:",
-        contrato,
-      );
+      Logger.info("[useFormManagement] Loading contract into formValues", {
+        contractId: contrato.contractId,
+        contractNumber: contrato.contractNumber,
+        businessName: contrato.businessName,
+        contractType: contrato.contractType,
+      });
       setFormValues((prev) => ({
         ...prev,
         contractId: contrato.contractId ?? "",
@@ -60,14 +63,14 @@ function useFormManagement() {
 
   const updateFormValues = () => {
     if (generalInformationRef.current) {
-      console.log(
-        "[useFormManagement] Updating formValues from Formik:",
-        generalInformationRef.current.values,
-      );
+      Logger.debug("[useFormManagement] Updating formValues from Formik", {
+        values: generalInformationRef.current.values,
+        isValid: generalInformationRef.current.isValid,
+      });
       setFormValues(generalInformationRef.current.values);
       setIsCurrentFormValid(generalInformationRef.current.isValid);
     } else {
-      console.log("[useFormManagement] generalInformationRef is null");
+      Logger.warn("[useFormManagement] generalInformationRef is null");
     }
   };
 

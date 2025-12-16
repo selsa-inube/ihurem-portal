@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
+
 import { EmployeeContractAggregate } from "@ptypes/employeeContractAggregate";
 import { getEmployeeContracts } from "@services/employeeConsultation/getEmployeeContractById";
 import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
 import { modalErrorConfig } from "@config/modalErrorConfig";
+import { Logger } from "@utils/logger";
 
 const ERROR_CODE_INVALID_USER = 1004;
 
@@ -34,7 +36,12 @@ export const useEmployeeContracts = (businessUnit: string) => {
       } catch (err) {
         if (!isMounted) return;
 
-        console.error("Error fetching contracts:", err);
+        Logger.error(
+          "Error fetching employee contracts",
+          err instanceof Error ? err : undefined,
+          { businessUnit },
+        );
+
         setContracts([]);
         setError(true);
         setCodeError(ERROR_CODE_INVALID_USER);
