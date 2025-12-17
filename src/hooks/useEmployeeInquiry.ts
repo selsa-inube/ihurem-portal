@@ -1,24 +1,11 @@
 import { useState, useEffect } from "react";
 
-import {
-  EContractStatus,
-  IEmployee,
-  IEmploymentContract,
-} from "@ptypes/employeePortalBusiness.types";
+import { IEmployee } from "@ptypes/employeePortalBusiness.types";
 import { employeeByIdentification } from "@services/employeePortal/getEmployeeInquiry";
 import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
 import { modalErrorConfig } from "@config/modalErrorConfig";
 
 const ERROR_CODE_INVALID_USER = 1004;
-
-const validateContractStatus = (
-  employmentContracts: IEmploymentContract[],
-): boolean => {
-  if (!employmentContracts?.length) return false;
-  return employmentContracts.some(
-    (contract) => contract.contractStatus === EContractStatus.formalized,
-  );
-};
 
 export const useEmployeeByIdentification = (
   identificationType: string,
@@ -42,25 +29,23 @@ export const useEmployeeByIdentification = (
           identificationNumber,
           businessUnit,
         );
-
-        if (
-          !validateContractStatus(result?.employmentContracts) ||
-          !Object.keys(result ?? {}).length
-        ) {
+        if (!result || !Object.keys(result).length) {
           setCodeError(ERROR_CODE_INVALID_USER);
           setError(true);
           return;
         }
 
         setEmployee(result);
-      } catch (error) {
+        setError(false);
+        setCodeError(null);
+      } catch (err) {
         setError(true);
         setEmployee({} as IEmployee);
         setCodeError(ERROR_CODE_INVALID_USER);
-        const errorConfig = modalErrorConfig[ERROR_CODE_INVALID_USER];
 
+        const errorConfig = modalErrorConfig[ERROR_CODE_INVALID_USER];
         showErrorModal({
-          descriptionText: `${errorConfig.descriptionText}: ${String(error)}`,
+          descriptionText: `${errorConfig.descriptionText}: ${String(err)}`,
           solutionText: errorConfig.solutionText,
         });
       } finally {
@@ -69,7 +54,7 @@ export const useEmployeeByIdentification = (
     };
 
     fetchEmployee();
-  }, [identificationType, identificationNumber, businessUnit]);
+  }, [identificationType, identificationNumber, businessUnit, showErrorModal]);
 
   return { employee, loading, error, codeError };
 };
