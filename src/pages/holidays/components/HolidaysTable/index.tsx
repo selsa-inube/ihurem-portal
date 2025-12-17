@@ -27,6 +27,7 @@ import { spacing } from "@design/tokens/spacing";
 import { contractTypeLabels } from "@mocks/contracts/enums";
 import { showRequirements } from "@pages/holidays/config/requirements";
 import { formatDate } from "@utils/date";
+import { mockRequirementDetail } from "@mocks/requirements/mockRequirementDetail";
 
 import { IHolidaysTable, HolidayTableDataDetails } from "./types";
 import { StyledTd, StyledTh, TooltipWrapper } from "./styles";
@@ -69,6 +70,8 @@ function HolidaysTable(props: HolidaysTableProps) {
   const [selectedRequestId, setSelectedRequestId] = useState<string | null>(
     null,
   );
+
+  const [isRequirementModalOpen, setIsRequirementModalOpen] = useState(false);
 
   const mediaQueries = useMediaQueries([
     "(max-width: 1024px)",
@@ -490,6 +493,18 @@ function HolidaysTable(props: HolidaysTableProps) {
           showRequirementsTable
           title="Detalles de solicitudes de vacaciones"
           buttonLabel="Cerrar"
+          onRequirementView={() => {
+            setIsRequirementModalOpen(true);
+          }}
+        />
+      )}
+
+      {isRequirementModalOpen && (
+        <RequestComponentDetail
+          title="Detalles"
+          buttonLabel="Cerrar"
+          handleClose={() => setIsRequirementModalOpen(false)}
+          modalContent={mockRequirementDetail}
         />
       )}
 
