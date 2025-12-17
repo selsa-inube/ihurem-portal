@@ -30,7 +30,7 @@ const getEmployeeVacationDays = async (
 
       const url =
         `${environment.IVITE_IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE}` +
-        `/employees/${encodeURIComponent(employeeId)}`;
+        `/employee-contracts/employees/${encodeURIComponent(employeeId)}`;
 
       const res = await fetch(url, options);
 
