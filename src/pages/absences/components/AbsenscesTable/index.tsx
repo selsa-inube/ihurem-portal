@@ -62,10 +62,14 @@ const formatDetailsForModal = (
   if (!details) return [];
 
   const reasonES =
-    AbsenceReasonES[details.absenceReason] ?? details.absenceReason ?? "N/A";
+    AbsenceReasonES[details.absenceReason] ??
+    details.absenceReason ??
+    labels.absences.general.notAvailable;
 
   const subReasonES =
-    ESubReasonES[details.subReason as ESubReason] ?? details.subReason ?? "N/A";
+    ESubReasonES[details.subReason as ESubReason] ??
+    details.subReason ??
+    labels.absences.general.notAvailable;
 
   const items: IModalDetailItem[] = [
     {
@@ -74,13 +78,14 @@ const formatDetailsForModal = (
     },
     {
       label: labels.absences.reportAbsence.form.descriptionMotive,
-      value: details.absenceReasonDetails ?? "N/A",
+      value:
+        details.absenceReasonDetails ?? labels.absences.general.notAvailable,
     },
     {
       label: labels.absences.procedure.details.startDate,
       value: details.absenceStartDate
         ? formatDate(details.absenceStartDate)
-        : "N/A",
+        : labels.absences.general.notAvailable,
     },
   ];
 
@@ -100,14 +105,14 @@ const formatDetailsForModal = (
           details.absenceStartHour !== undefined &&
           details.absenceStartHour !== null
             ? String(details.absenceStartHour)
-            : "N/A",
+            : labels.absences.general.notAvailable,
       },
       {
         label: labels.absences.procedure.detailModal.fields.hours,
         value:
           details.hoursAbsent !== undefined && details.hoursAbsent !== null
             ? String(details.hoursAbsent)
-            : "N/A",
+            : labels.absences.general.notAvailable,
       },
     );
   }
@@ -144,8 +149,8 @@ function AbsencesTable({
     useState<SelectedModalContent>(null);
 
   const [modalInfo, setModalInfo] = useState({
-    title: "Información",
-    titleDescription: "No tienes privilegios.",
+    title: labels.absences.procedure.modals.info.title,
+    titleDescription: labels.absences.procedure.modals.info.noPrivilegesTitle,
     description: "",
   });
 
@@ -251,7 +256,7 @@ function AbsencesTable({
 
   const menuOptions: IOptions[] = [
     {
-      title: "Detalles",
+      title: labels.absences.ui.actions.detail,
       icon: <MdOutlineVisibility />,
       visible: true,
       onClick: () => {
@@ -261,7 +266,7 @@ function AbsencesTable({
       appearance: "gray",
     },
     {
-      title: "Documentos",
+      title: labels.absences.ui.actions.viewDocumentsButton,
       icon: <MdOutlineFileUpload />,
       visible: true,
       onClick: () => {
@@ -304,10 +309,18 @@ function AbsencesTable({
   const determineVisibleHeaders = () => {
     if (isMobile) {
       return [
-        { label: "Motivo", key: "reason", style: { width: "50%" } },
-        { label: "M/A", key: "date", style: { width: "30%" } },
         {
-          label: "Acciones",
+          label: labels.absences.reportAbsence.form.motiveLabel,
+          key: "reason",
+          style: { width: "50%" },
+        },
+        {
+          label: labels.absences.procedure.headers.ma,
+          key: "date",
+          style: { width: "30%" },
+        },
+        {
+          label: labels.absences.procedure.headers.actions,
           key: "actions",
           style: { width: "20%" },
           action: true,
@@ -396,7 +409,7 @@ function AbsencesTable({
     if (headerKey === "reason") {
       const details = rowData.dataDetails?.value as AbsencesTableDataDetails;
 
-      if (!details?.absenceReason) return "N/A";
+      if (!details?.absenceReason) return labels.absences.general.notAvailable;
 
       return AbsenceReasonES[details.absenceReason] ?? details.absenceReason;
     }

@@ -5,33 +5,32 @@ import { ILinkNav } from "@inubekit/inubekit";
 import { useLocation } from "react-router-dom";
 import { ReactNode } from "react";
 
+import { labels } from "@i18n/labels";
 import { IEmployeeOptions } from "@ptypes/employeePortalBusiness.types";
 
 const baseNavLinks = [
   {
     id: "vacations",
     serviceCode: "vacations",
-    label: "Vacaciones",
+    label: labels.config.nav.holidays.label,
     path: "/holidays",
-    description:
-      "Son los días de descanso remunerado que le corresponden al empleado por cada año trabajado.",
+    description: labels.config.nav.holidays.description,
     order: 1,
   },
   {
     id: "absences",
     serviceCode: "absences",
-    label: "Ausencias",
+    label: labels.config.nav.absences.label,
     path: "/absences",
-    description: "Son documentos que acreditan fallas o faltas.",
+    description: labels.config.nav.absences.description,
     order: 2,
   },
   {
     id: "certifications",
     serviceCode: "certifications",
-    label: "Certificaciones",
+    label: labels.config.nav.certifications.label,
     path: "/certifications",
-    description:
-      "Son documentos que acreditan la formación o experiencia laboral de un empleado.",
+    description: labels.config.nav.certifications.description,
     order: 3,
   },
 ];

@@ -8,6 +8,7 @@ import { data } from "./data";
 import { selfRegistrationLabels } from "./self-registration";
 import { protectedRouteLabels } from "./protectedRoute";
 import { loginLabels } from "./login";
+import { config } from "./config";
 
 export const labels = {
   absences,
@@ -20,6 +21,7 @@ export const labels = {
   selfRegistrationLabels,
   protectedRouteLabels,
   loginLabels,
+  config,
 };
 
 export type Labels = typeof labels;

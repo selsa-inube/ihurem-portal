@@ -46,7 +46,7 @@ export function TextAreaModal(props: TextAreaModalProps) {
     inputLabel,
     inputPlaceholder,
     maxLength = 200,
-    portalId = "portal",
+    portalId = labels.modals.portalId,
     readOnly = false,
     disableTextarea = false,
     secondaryButtonText = labels.modals.textAreaModal.cancel,

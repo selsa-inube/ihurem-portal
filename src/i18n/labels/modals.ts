@@ -1,4 +1,5 @@
 export const modals = {
+  portalId: "portal",
   close: "Cerrar",
   attach: "Adjuntar",
   forceApproval: "Forzar Aprobación",

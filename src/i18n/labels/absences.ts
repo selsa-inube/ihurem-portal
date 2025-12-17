@@ -1,12 +1,16 @@
 export const absences = {
   general: {
     noData: "Sin dato",
+    notAvailable: "N/A",
     hours: "horas",
     days: "días",
     selectPlaceholder: "Selecciona de la lista",
   },
 
   procedure: {
+    table: {
+      caption: "Consulta de solicitudes en trámite",
+    },
     modals: {
       info: {
         title: "Información",
@@ -108,8 +112,10 @@ export const absences = {
   },
 
   breadcrumbs: {
+    home: "Inicio",
     appName: "Ausencias",
     description: "Consulta y gestión de tus ausencias",
+    pending: "Descripción ausencias (pendiente)",
   },
 
   ui: {
@@ -123,6 +129,7 @@ export const absences = {
     actions: {
       reportAbsenceButton: "Reportar ausencia",
       viewDocumentsButton: "Documentos",
+      detail: "Detalle",
       restrictedAction: "No tienes permisos para realizar esta acción.",
       restrictedActionTitle: "Acción inhabilitada",
       infoTitleDescription: "¿Por qué está inhabilitado?",

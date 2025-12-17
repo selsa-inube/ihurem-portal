@@ -46,4 +46,4 @@ export const headers: {
 ];
 
 export const pageLength = 10;
-export const caption = "Consulta de solicitudes en trámite";
+export const caption = labels.absences.procedure.table.caption;
