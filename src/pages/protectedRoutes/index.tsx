@@ -40,6 +40,7 @@ export function ProtectedRoutes() {
   }
 
   const [isReady, setIsReady] = useState(false);
+
   const { loginWithRedirect, isAuthenticated, isLoading, user, error } =
     useIAuth();
 
@@ -50,7 +51,7 @@ export function ProtectedRoutes() {
   const {
     businessUnitData,
     hasError: hasBusinessUnitError,
-    codeError: BusinessUnit,
+    codeError: businessUnitErrorCode,
   } = useBusinessUnit(portalData);
 
   const identificationNumber = user?.id ?? "";
@@ -82,25 +83,41 @@ export function ProtectedRoutes() {
     loading: contractsLoading,
     error: contractsError,
     codeError: contractsCode,
-  } = useEmployeeContracts(businessUnitData.publicCode ?? "");
+    fetched: contractsFetched,
+  } = useEmployeeContracts(
+    businessUnitData.publicCode ?? "",
+    employee?.employeeId ? String(employee.employeeId) : undefined,
+  );
 
   useEffect(() => {
-    if (!contractsLoading && contracts.length > 0) {
-      const formalizedContract = contracts.find(
-        (c) => c.contractStatus === "formalized",
-      );
-
-      if (!formalizedContract) {
-        Logger.warn(
-          "[ProtectedRoutes] No hay contrato formalizado. Cerrando sesión.",
-        );
-        signOut(`/error?code=1024`);
-      }
+    if (!contractsFetched || contractsLoading || !employee?.employeeId) {
+      return;
     }
-  }, [contracts, contractsLoading, signOut]);
+
+    Logger.info("[ProtectedRoutes] Contratos recibidos", {
+      employeeId: employee.employeeId,
+      totalContracts: contracts.length,
+      statuses: contracts.map((c) => c.contractStatus),
+    });
+
+    if (contracts.length === 0) {
+      signOut("/error?code=1024");
+      return;
+    }
+
+    const hasFormalizedContract = contracts.some(
+      (contract) => contract.contractStatus?.toLowerCase() === "formalized",
+    );
+
+    if (!hasFormalizedContract) {
+      signOut("/error?code=1024");
+    }
+  }, [contracts, contractsLoading, contractsFetched, employee, signOut]);
+
   useEffect(() => {
     if (portalData?.externalAuthenticationProvider !== undefined) {
       const externalProvider = portalData.externalAuthenticationProvider;
+
       if (!externalProvider) {
         if (
           !isAuthenticated &&
@@ -135,7 +152,6 @@ export function ProtectedRoutes() {
     loginWithRedirect,
     portalData.externalAuthenticationProvider,
     hasPortalError,
-    pathStart,
   ]);
 
   const handleCloseExternalAuthNotification = () => {
@@ -154,7 +170,7 @@ export function ProtectedRoutes() {
 
   const errorCode =
     managersErrorCode ??
-    BusinessUnit ??
+    businessUnitErrorCode ??
     employeeCode ??
     optionsCode ??
     contractsCode ??

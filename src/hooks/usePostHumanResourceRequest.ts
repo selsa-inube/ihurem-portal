@@ -27,7 +27,15 @@ export function useRequestSubmission(
 ) {
   const [requestNum, setRequestNum] = useState("");
 
-  const { employees } = useAppContext();
+  const { employees, contracts } = useAppContext();
+
+  const contrato = contracts?.[0];
+  const baseContractData = {
+    contractId: contrato?.contractId ?? "",
+    contractNumber: contrato?.contractNumber ?? "",
+    businessName: contrato?.businessName ?? "",
+    contractType: contrato?.contractType ?? "",
+  };
 
   const {
     submitRequestToAPI,
@@ -47,11 +55,8 @@ export function useRequestSubmission(
         humanResourceRequestData = JSON.stringify({
           certificationType: formValues.certificationType ?? "",
           addressee: formValues.addressee ?? "",
-          contractId: formValues.contractId ?? "",
-          contractNumber: formValues.contractNumber ?? "",
-          businessName: formValues.businessName ?? "",
-          contractType: formValues.contractType ?? "",
           observationEmployee: formValues.observationEmployee ?? "",
+          ...baseContractData,
         });
       } else if (
         typeRequest === ERequestType.paid_vacations &&
@@ -60,11 +65,8 @@ export function useRequestSubmission(
         humanResourceRequestData = JSON.stringify({
           daysToPay: formValues.daysToPay ?? "",
           disbursementDate: "",
-          contractId: formValues.contractId ?? "",
-          contractNumber: formValues.contractNumber ?? "",
-          businessName: formValues.businessName ?? "",
-          contractType: formValues.contractType ?? "",
           observationEmployee: formValues.observationEmployee ?? "",
+          ...baseContractData,
         });
       } else if (
         typeRequest === ERequestType.vacations_enjoyed &&
@@ -75,11 +77,8 @@ export function useRequestSubmission(
           startDateEnyoment: formValues.startDateEnyoment
             ? formatWithOffset(new Date(formValues.startDateEnyoment))
             : "",
-          contractId: formValues.contractId ?? "",
-          contractNumber: formValues.contractNumber ?? "",
-          businessName: formValues.businessName ?? "",
-          contractType: formValues.contractType ?? "",
           observationEmployee: formValues.observationEmployee ?? "",
+          ...baseContractData,
         });
       } else if (typeRequest === ERequestType.absence) {
         humanResourceRequestData = JSON.stringify({
@@ -88,10 +87,7 @@ export function useRequestSubmission(
           motifDetail: formValues.motiveDetails ?? "",
           startDate: formValues.startDate ?? "",
           durationOfDays: formValues.daysDuration ?? "",
-          contractId: formValues.contractId ?? "",
-          contractNumber: formValues.contractNumber ?? "",
-          businessName: formValues.businessName ?? "",
-          contractType: formValues.contractType ?? "",
+          ...baseContractData,
         });
       } else {
         throw new Error("Tipo de solicitud no reconocido.");
