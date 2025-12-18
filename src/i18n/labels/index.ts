@@ -9,6 +9,7 @@ import { selfRegistrationLabels } from "./self-registration";
 import { protectedRouteLabels } from "./protectedRoute";
 import { loginLabels } from "./login";
 import { config } from "./config";
+import { validations } from "./validations";
 
 export const labels = {
   absences,
@@ -22,6 +23,7 @@ export const labels = {
   protectedRouteLabels,
   loginLabels,
   config,
+  validations,
 };
 
 export type Labels = typeof labels;

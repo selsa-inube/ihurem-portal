@@ -40,7 +40,7 @@ const noop = () => undefined;
 const actions = [
   {
     id: "logout",
-    label: "Cerrar sesión",
+    label: labels.config.nav.logout.label,
     icon: <MdLogout />,
     action: () => {
       window.location.href = "/logout";
@@ -143,7 +143,7 @@ const userMenu = [
     links: [
       {
         id: "logout",
-        title: "Cerrar sesión",
+        title: labels.config.nav.logout.label,
         path: "/logout",
         iconBefore: <MdLogout />,
       },
