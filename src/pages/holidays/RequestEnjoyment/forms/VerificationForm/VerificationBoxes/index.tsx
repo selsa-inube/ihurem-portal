@@ -6,6 +6,7 @@ import { useAppContext } from "@context/AppContext/useAppContext";
 import { showRequirements } from "@pages/holidays/config/requirements";
 import { contractTypeLabels } from "@mocks/contracts/enums";
 import { formatDate } from "@utils/date";
+import { labels } from "@i18n/labels";
 
 import { IGeneralInformationEntry } from "../../GeneralInformationForm/types";
 import { IFormsUpdateData } from "../../../types";
@@ -41,18 +42,18 @@ const renderPersonalInfoVerification = (
         width="100%"
       >
         <BoxAttribute
-          label="Días de disfrute:"
+          label={labels.holidays.verificationForm.enjoymentDays}
           value={values.daysOff}
           direction="column"
         />
         <BoxAttribute
-          label="Fecha de inicio:"
+          label={labels.holidays.verificationForm.startDate}
           value={formatDate(values.startDate)}
           direction="column"
         />
         {hasMultipleContracts && (
           <BoxAttribute
-            label="Contrato:"
+            label={labels.holidays.verificationForm.contract}
             value={contractDisplay}
             direction="column"
           />
@@ -60,7 +61,7 @@ const renderPersonalInfoVerification = (
       </Grid>
       <Stack width="100%" direction="column">
         <BoxAttribute
-          label="Observaciones:"
+          label={labels.holidays.verificationForm.observations}
           value={values.observations}
           direction="column"
         />
@@ -99,16 +100,15 @@ function VerificationBoxes({
   stepKey,
   isTablet,
 }: VerificationBoxesProps) {
-  const { employees } = useAppContext();
+  const { contracts } = useAppContext();
 
   const adjustedStepKey = showRequirements ? stepKey : stepKey + 1;
-
-  const contracts = employees.employmentContracts as IContract[];
   const hasMultipleContracts = (contracts?.length ?? 0) > 1;
 
   return (
     <>
       {showRequirements && adjustedStepKey === 1 && renderAlerts(isTablet)}
+
       {adjustedStepKey === 2 &&
         renderPersonalInfoVerification(
           updatedData.personalInformation.values,

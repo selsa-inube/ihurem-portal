@@ -11,6 +11,7 @@ import { useEffect, useMemo } from "react";
 import { FormikProps } from "formik";
 import * as Yup from "yup";
 
+import { labels } from "@i18n/labels";
 import { isRequired, getFieldState } from "@utils/forms/forms";
 import { spacing } from "@design/tokens/spacing";
 import { useAppContext } from "@context/AppContext/useAppContext";
@@ -31,16 +32,16 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
   const { formik, validationSchema, loading, withNextButton, handleNextStep } =
     props;
   const isMobile = useMediaQuery("(max-width: 700px)");
-  const { employees } = useAppContext();
+  const { contracts } = useAppContext();
 
   const contractOptions = useMemo(
     () =>
-      (employees.employmentContracts ?? []).map((c) => ({
+      (contracts ?? []).map((c) => ({
         id: c.contractId,
         value: c.contractId,
         label: `${c.businessName} - ${contractTypeLabels[c.contractType]}`,
       })),
-    [employees.employmentContracts],
+    [contracts],
   );
 
   useEffect(() => {
@@ -48,9 +49,7 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
       const opt = contractOptions[0];
       formik.setFieldValue("contractId", opt.value);
 
-      const contrato = employees.employmentContracts?.find(
-        (c) => c.contractId === opt.value,
-      );
+      const contrato = contracts?.find((c) => c.contractId === opt.value);
 
       if (contrato) {
         formik.setFieldValue("businessName", contrato.businessName);
@@ -58,7 +57,7 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
         formik.setFieldValue("contractNumber", contrato.contractNumber);
       }
     }
-  }, [contractOptions]);
+  }, [contractOptions, contracts]);
 
   return (
     <form>
@@ -67,8 +66,12 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
           <Stack direction="column" width="100%" gap={spacing.s200}>
             <Stack direction={isMobile ? "column" : "row"} gap={spacing.s200}>
               <Textfield
-                label="Días de disfrute"
-                placeholder="Ej: 2"
+                label={
+                  labels.holidays.generalInformationForm.enjoymentDaysLabel
+                }
+                placeholder={
+                  labels.holidays.generalInformationForm.daysToPayPlaceholder
+                }
                 name="daysOff"
                 id="daysOff"
                 type="number"
@@ -84,7 +87,7 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
               />
 
               <Date
-                label="Fecha de inicio"
+                label={labels.holidays.generalInformationForm.startDateLabel}
                 name="startDateEnyoment"
                 id="startDateEnyoment"
                 value={formik.values.startDateEnyoment}
@@ -101,10 +104,12 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
 
             {contractOptions.length > 1 && (
               <Select
-                label="Contrato"
+                label={labels.holidays.generalInformationForm.contractLabel}
                 name="contractId"
                 options={contractOptions}
-                placeholder="Selecciona de la lista"
+                placeholder={
+                  labels.holidays.generalInformationForm.contractPlaceholder
+                }
                 value={formik.values.contractId ?? ""}
                 message={formik.errors.contractId}
                 disabled={loading}
@@ -112,9 +117,8 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
                 fullwidth
                 onChange={(_, v) => {
                   formik.setFieldValue("contractId", v);
-                  const contrato = employees.employmentContracts?.find(
-                    (c) => c.contractId === v,
-                  );
+
+                  const contrato = contracts?.find((c) => c.contractId === v);
 
                   if (contrato) {
                     formik.setFieldValue("businessName", contrato.businessName);
@@ -125,13 +129,15 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
                     );
                   }
                 }}
-                required={isRequired(props.validationSchema, "contractId")}
+                required={isRequired(validationSchema, "contractId")}
               />
             )}
 
             <Textarea
-              label="Observaciones"
-              placeholder="Detalles a tener en cuenta."
+              label={labels.holidays.generalInformationForm.observationsLabel}
+              placeholder={
+                labels.holidays.generalInformationForm.observationsPlaceholder
+              }
               name="observationEmployee"
               id="observationEmployee"
               value={formik.values.observationEmployee}
@@ -157,7 +163,7 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
               onClick={handleNextStep}
               disabled={loading ?? !formik.isValid}
             >
-              Siguiente
+              {labels.holidays.generalInformationForm.nextButton}
             </Button>
           </Stack>
         )}

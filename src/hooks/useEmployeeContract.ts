@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+import { useSignOut } from "@hooks/useSignOut";
 import { EmployeeContractAggregate } from "@ptypes/employeeContractAggregate";
 import { getEmployeeContracts } from "@services/employeeConsultation/getEmployeeContractById";
 import { useHeaders } from "@hooks/useHeaders";
@@ -14,6 +15,8 @@ export const useEmployeeContracts = (employeeId?: string) => {
   const [error, setError] = useState(false);
   const [codeError, setCodeError] = useState<number | null>(null);
   const [fetched, setFetched] = useState(false);
+
+  const { signOut } = useSignOut();
 
   const { getHeaders } = useHeaders();
   const { showErrorModal } = useErrorModal();
@@ -51,6 +54,8 @@ export const useEmployeeContracts = (employeeId?: string) => {
           descriptionText: `${errorConfig.descriptionText}: ${String(err)}`,
           solutionText: errorConfig.solutionText,
         });
+
+        signOut("/error?code=1007");
       } finally {
         setLoading(false);
         setFetched(true);

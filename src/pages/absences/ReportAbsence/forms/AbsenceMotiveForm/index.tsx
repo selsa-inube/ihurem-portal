@@ -3,6 +3,7 @@ import { object, string } from "yup";
 import { forwardRef, useEffect, useImperativeHandle, useMemo } from "react";
 import { IOption } from "@inubekit/inubekit";
 
+import { labels } from "@i18n/labels";
 import { validationMessages } from "@validations/validationMessages";
 import { validationRules } from "@validations/validationRules";
 import { useAppContext } from "@context/AppContext/useAppContext";
@@ -89,7 +90,7 @@ const AbsenceMotiveForm = forwardRef<
     },
     ref,
   ) => {
-    const { employees } = useAppContext();
+    const { contracts } = useAppContext();
 
     const formik = useFormik<IAbsenceMotiveEntry>({
       initialValues,
@@ -102,8 +103,9 @@ const AbsenceMotiveForm = forwardRef<
 
     const { data: absenceRelations, isLoading: isLoadingAbsenceReasons } =
       useAbsenceReasons({
-        regulatoryFramework: "Marco legal",
-        company: "SISTEMAS ENLINEA S.A.",
+        regulatoryFramework:
+          labels.absences.reportAbsence.motive.regulatoryFramework,
+        company: labels.absences.reportAbsence.motive.companyName,
       });
 
     const { data: absenceReasonEnums, isLoading: isLoadingAbsenceReasonEnums } =
@@ -154,8 +156,6 @@ const AbsenceMotiveForm = forwardRef<
     ]);
 
     useEffect(() => {
-      const contracts = employees.employmentContracts ?? [];
-
       if (contracts.length === 1 && !formik.values.contractId) {
         const contract = contracts[0];
 
@@ -164,7 +164,7 @@ const AbsenceMotiveForm = forwardRef<
         formik.setFieldValue("contractType", contract.contractType);
         formik.setFieldValue("contractNumber", contract.contractNumber);
       }
-    }, [employees.employmentContracts, formik.values.contractId]);
+    }, [contracts, formik.values.contractId]);
 
     useEffect(() => {
       if (onFormValid) {

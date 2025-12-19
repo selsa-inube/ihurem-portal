@@ -7,6 +7,7 @@ import {
   useMediaQueries,
 } from "@inubekit/inubekit";
 
+import { labels } from "@i18n/labels";
 import { spacing } from "@design/tokens/spacing";
 import { environment } from "@config/environment";
 import selsaLogo from "@assets/images/logoInube.png";
@@ -46,11 +47,11 @@ const ListContent = ({ items }: { items: string[] }) => (
 function ErrorPage(props: ErrorPageProps) {
   const {
     logo = selsaLogo,
-    logoAlt = "Sistemas Enlinea",
-    heading = "¡Ups! Algo salió mal...",
+    logoAlt = labels.layout.errorPage.defaultLogoAlt,
+    heading = labels.layout.errorPage.defaultHeading,
     image = errorImage,
-    imageAlt = "Ha surgido un error. Revisa la descripción",
-    nameButton = "Regresar",
+    imageAlt = labels.layout.errorPage.defaultImageAlt,
+    nameButton = labels.layout.errorPage.defaultButton,
     errorCode = 0,
     onClick,
   } = props;
@@ -117,7 +118,7 @@ function ErrorPage(props: ErrorPageProps) {
               >
                 <Stack direction="column" gap={spacing.s300} width="100%">
                   <Text type="headline" size="medium" weight="bold">
-                    ¿Qué salió mal?
+                    {labels.layout.errorPage.whatWentWrong}
                   </Text>
                   <StyledDiv>
                     <ListContent items={errorDetail.whatWentWrong} />
@@ -127,7 +128,7 @@ function ErrorPage(props: ErrorPageProps) {
                 {isMobile && <Divider dashed />}
                 <Stack direction="column" gap={spacing.s300} width="100%">
                   <Text type="headline" size="medium" weight="bold">
-                    ¿Cómo solucionarlo?
+                    {labels.layout.errorPage.howToFix}
                   </Text>
                   <StyledDiv>
                     <ListContent items={errorDetail.howToFix} />
@@ -155,7 +156,7 @@ function ErrorPage(props: ErrorPageProps) {
       </StyledMainContent>
       <StyledFooter>
         <Text appearance="gray" textAlign="center" size="small" weight="bold">
-          © 2024 Inube
+          {labels.layout.errorPage.footerCopyright}
         </Text>
       </StyledFooter>
     </StyledContainer>

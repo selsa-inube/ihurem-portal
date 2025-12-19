@@ -29,13 +29,22 @@ export function useRequestSubmission(
 
   const { employees, contracts } = useAppContext();
 
-  const contrato = contracts?.[0];
-  const baseContractData = {
-    contractId: contrato?.contractId ?? "",
-    contractNumber: contrato?.contractNumber ?? "",
-    businessName: contrato?.businessName ?? "",
-    contractType: contrato?.contractType ?? "",
-  };
+  const hasSingleContract = (contracts?.length ?? 0) === 1;
+  const singleContract = hasSingleContract ? contracts![0] : null;
+
+  const baseContractData = hasSingleContract
+    ? {
+        contractId: singleContract!.contractId ?? "",
+        contractNumber: singleContract!.contractNumber ?? "",
+        businessName: singleContract!.businessName ?? "",
+        contractType: singleContract!.contractType ?? "",
+      }
+    : {
+        contractId: formValues.contractId ?? "",
+        contractNumber: formValues.contractNumber ?? "",
+        businessName: formValues.businessName ?? "",
+        contractType: formValues.contractType ?? "",
+      };
 
   const {
     submitRequestToAPI,

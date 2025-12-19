@@ -1,5 +1,6 @@
 import { ReactNode, useState, useEffect } from "react";
 
+import { labels } from "@i18n/labels";
 import { useAppContext } from "@context/AppContext/useAppContext";
 import { InfoModal } from "@components/modals/InfoModal";
 
@@ -36,10 +37,10 @@ function ProtectedRoute({
   if (showModal) {
     return (
       <InfoModal
-        title="Acceso denegado"
-        titleDescription="No tienes privilegios para acceder a esta ruta."
-        description="Por favor, contacta con el administrador si crees que es un error."
-        buttonText="Entendido"
+        title={labels.protectedRouteLabels.modal.title}
+        titleDescription={labels.protectedRouteLabels.modal.titleDescription}
+        description={labels.protectedRouteLabels.modal.description}
+        buttonText={labels.protectedRouteLabels.modal.buttonText}
         onCloseModal={() => (window.location.href = "/")}
       />
     );

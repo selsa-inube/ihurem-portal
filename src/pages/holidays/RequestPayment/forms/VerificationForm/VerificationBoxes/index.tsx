@@ -1,5 +1,6 @@
 import { Grid, Stack } from "@inubekit/inubekit";
 
+import { labels } from "@i18n/labels";
 import { BoxAttribute } from "@components/cards/BoxAttribute";
 import { spacing } from "@design/tokens/spacing";
 import { useAppContext } from "@context/AppContext/useAppContext";
@@ -39,13 +40,13 @@ const renderPersonalInfoVerification = (
         width="100%"
       >
         <BoxAttribute
-          label="Días hábiles a pagar:"
+          label={labels.holidays.verificationForm.daysToPay}
           value={values.daysToPay}
           direction="column"
         />
         {hasMultipleContracts && (
           <BoxAttribute
-            label="Contrato:"
+            label={labels.holidays.verificationForm.contract}
             value={contractDisplay}
             direction="column"
           />
@@ -53,7 +54,7 @@ const renderPersonalInfoVerification = (
       </Grid>
       <Stack width="100%" direction="column">
         <BoxAttribute
-          label="Observaciones:"
+          label={labels.holidays.verificationForm.observations}
           value={values.observations}
           direction="column"
         />
@@ -92,11 +93,9 @@ function VerificationBoxes({
   isTablet,
   stepKey,
 }: VerificationBoxesProps) {
-  const { employees } = useAppContext();
+  const { contracts } = useAppContext();
 
-  const contracts = employees.employmentContracts as IContract[];
   const hasMultipleContracts = (contracts?.length ?? 0) > 1;
-
   const adjustedStepKey = showRequirements ? stepKey : stepKey + 1;
 
   return (

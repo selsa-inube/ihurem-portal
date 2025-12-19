@@ -1,16 +1,18 @@
+import { labels } from "@i18n/labels";
+
 export const breadcrumbs = {
-  label: "Ausencias",
-  description: "Descripción ausencias (pendiente)",
+  label: labels.absences.breadcrumbs.appName,
+  description: labels.absences.breadcrumbs.pending,
   crumbs: [
     {
       path: "/",
-      label: "Inicio",
+      label: labels.absences.breadcrumbs.home,
       id: "/",
       isActive: false,
     },
     {
       path: "/absences",
-      label: "Ausencias",
+      label: labels.absences.breadcrumbs.appName,
       id: "/absences",
       isActive: true,
     },

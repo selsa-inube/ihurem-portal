@@ -16,6 +16,7 @@ import {
 } from "@config/nav.config";
 import { useEmployeeOptions } from "@hooks/useEmployeeOptions";
 import { spacing } from "@design/tokens/spacing";
+import { labels } from "@i18n/labels";
 import { useSignOut } from "@hooks/useSignOut";
 import { useAppContext } from "@context/AppContext/useAppContext";
 import { useContractValidation } from "@hooks/useContractValidation";
@@ -70,11 +71,8 @@ function AppPage(props: AppPageProps) {
   }
 
   const safeEmployeeOptions = employeeOptions ?? [];
-
   const navConfig = useNavConfig(safeEmployeeOptions);
-
   const configHeader = useConfigHeader(safeEmployeeOptions);
-
   const finalLogo = businessManagers?.urlLogo ?? logoUrl;
 
   useContractValidation();
@@ -90,13 +88,14 @@ function AppPage(props: AppPageProps) {
           navigation={{ nav: configHeader, breakpoint: "800px" }}
           logoURL={renderLogo(
             businessUnit?.urlLogo ?? logoUrl,
-            businessUnit?.abbreviatedName ?? "Sin unidad seleccionada",
+            businessUnit?.abbreviatedName ?? labels.layout.noBusinessUnit,
           )}
           user={{
             username: employees
               ? `${employees.names} ${employees.surnames}`
-              : (user?.username ?? "Nombre de usuario"),
-            client: businessUnit?.abbreviatedName ?? "Sin unidad seleccionada",
+              : (user?.username ?? labels.layout.defaultUsername),
+            client:
+              businessUnit?.abbreviatedName ?? labels.layout.noBusinessUnit,
             breakpoint: "800px",
           }}
           menu={userMenu}
@@ -123,7 +122,7 @@ function AppPage(props: AppPageProps) {
                 <StyledFooter>
                   <Stack alignItems="center" gap={spacing.s050}>
                     <Text as="span" size="small" appearance="gray">
-                      ®
+                      {labels.layout.registeredSymbol}
                     </Text>
                     <StyledFinalLogo src={finalLogo} />
                   </Stack>

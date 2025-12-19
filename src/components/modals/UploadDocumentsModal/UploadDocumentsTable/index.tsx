@@ -9,7 +9,9 @@ import {
   Icon,
 } from "@inubekit/inubekit";
 import { MdOutlineAttachFile } from "react-icons/md";
+
 import { spacing } from "@design/tokens/spacing";
+import { labels } from "@i18n/labels";
 
 import { Document } from "./types";
 import { StyledTh, StyledTd, StyledTableContainer } from "./styles";
@@ -73,7 +75,7 @@ export function UploadDocumentsTable(props: UploadDocumentsTableProps) {
             <Tr>
               <StyledTd colSpan={headers.length} align="center">
                 <Text type="body" size="small">
-                  No hay documentos para mostrar
+                  {labels.modals.uploadDocumentsTable.noDocuments}
                 </Text>
               </StyledTd>
             </Tr>

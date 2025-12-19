@@ -10,6 +10,7 @@ import {
   useMediaQuery,
 } from "@inubekit/inubekit";
 
+import { labels } from "@i18n/labels";
 import { spacing } from "@design/tokens/spacing";
 
 import { StyledModal, StyledContainerClose } from "./styles";
@@ -25,10 +26,10 @@ export interface InfoDescModalProps {
 
 export function InfoDescModal(props: InfoDescModalProps) {
   const {
-    buttonText = "Entendido",
-    description = "Descripcion por defecto",
+    buttonText = labels.modals.infoDescModal.buttonText,
+    description = labels.modals.infoDescModal.defaultDescription,
     children,
-    title = "Información",
+    title = labels.modals.infoDescModal.title,
     portalId = "portal",
     onCloseModal,
   } = props;
@@ -51,7 +52,7 @@ export function InfoDescModal(props: InfoDescModalProps) {
           </Text>
           <StyledContainerClose onClick={onCloseModal}>
             <Stack alignItems="center" gap={spacing.s100}>
-              <Text>Cerrar</Text>
+              {labels.modals.infoDescModal.close}
               <Icon
                 icon={<MdClear />}
                 size="24px"
