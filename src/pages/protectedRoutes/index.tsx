@@ -124,7 +124,8 @@ export function ProtectedRoutes() {
         if (
           !isAuthenticated &&
           !isLoading &&
-          window.location.pathname !== "/self-registration"
+          window.location.pathname !== "/self-registration" &&
+          window.location.pathname !== "/logout"
         ) {
           loginWithRedirect();
         }
@@ -142,7 +143,8 @@ export function ProtectedRoutes() {
       !hasPortalError &&
       !pathStart.includes(window.location.pathname) &&
       !portalData.externalAuthenticationProvider &&
-      window.location.pathname !== "/self-registration"
+      window.location.pathname !== "/self-registration" &&
+      window.location.pathname !== "/logout"
     ) {
       loginWithRedirect();
     } else {

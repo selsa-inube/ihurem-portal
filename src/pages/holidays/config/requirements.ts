@@ -1,1 +1,1 @@
-export const showRequirements = false;
+export const showRequirements = true;

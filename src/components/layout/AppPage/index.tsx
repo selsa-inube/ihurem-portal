@@ -112,6 +112,7 @@ function AppPage(props: AppPageProps) {
                 actions={actions}
                 collapse={true}
                 footerLogo={finalLogo}
+                footerLogoWidth="55%"
               />
             )}
             <StyledMainScroll>

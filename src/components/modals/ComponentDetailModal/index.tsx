@@ -44,6 +44,7 @@ export interface RequestComponentDetailProps {
   showRequirementsTable?: boolean;
   handleClose: () => void;
   filterCriteria?: (item: ModalContent) => boolean;
+  onRequirementView?: (entry: IEntries) => void;
 }
 
 function RequestComponentDetail(props: RequestComponentDetailProps) {
@@ -56,6 +57,7 @@ function RequestComponentDetail(props: RequestComponentDetailProps) {
     showRequirementsTable = false,
     handleClose,
     filterCriteria,
+    onRequirementView,
   } = props;
 
   const infoItems = [
@@ -90,20 +92,20 @@ function RequestComponentDetail(props: RequestComponentDetailProps) {
       {
         id: "ver",
         actionName: "",
-        content: () => (
-          <Stack>
-            <Icon
-              icon={<MdOutlineVisibility />}
-              size="20px"
-              appearance="dark"
-              cursorHover
-            />
-          </Stack>
+        content: (entry: IEntries) => (
+          <Icon
+            icon={<MdOutlineVisibility />}
+            size="20px"
+            appearance="dark"
+            cursorHover
+            onClick={() => {
+              onRequirementView?.(entry);
+            }}
+          />
         ),
       },
     ];
   };
-
   const getActionsMobileIcon = () => {
     return [
       {
