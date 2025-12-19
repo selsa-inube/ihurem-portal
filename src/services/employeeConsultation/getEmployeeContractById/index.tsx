@@ -10,29 +10,23 @@ import { mapEmployeeContractApiToEntity } from "./mappers";
 interface GetEmployeeContractsParams {
   page?: number;
   perPage?: number;
-  businessUnit: string;
   employeeId: string;
+  headers: Record<string, string>;
 }
 
 const getEmployeeContracts = async ({
   page = 1,
   perPage = 50,
-  businessUnit,
   employeeId,
+  headers,
 }: GetEmployeeContractsParams): Promise<EmployeeContractAggregate[]> => {
-  if (!businessUnit) {
-    throw new Error("Falta el header X-Business-Unit");
-  }
-
   if (!employeeId) {
     throw new Error("Falta el employeeId");
   }
 
-  const headers = {
-    "Content-Type": "application/json; charset=UTF-8",
-    "X-Action": "SearchAllEmployeeContracts",
-    "X-Business-Unit": businessUnit,
-  };
+  if (!headers || Object.keys(headers).length === 0) {
+    throw new Error("Headers requeridos para la petición");
+  }
 
   const queryParams = new URLSearchParams({
     page: String(page),
@@ -52,7 +46,11 @@ const getEmployeeContracts = async ({
         `${environment.IVITE_IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE}/employee-contracts?${queryParams}`,
         {
           method: "GET",
-          headers,
+          headers: {
+            ...headers,
+            "Content-Type": "application/json; charset=UTF-8",
+            "X-Action": "SearchAllEmployeeContracts",
+          },
           signal: controller.signal,
         },
       );
@@ -68,14 +66,11 @@ const getEmployeeContracts = async ({
 
       const data = await res.json();
 
-      Logger.info("[EmployeeContracts] respuesta API", data);
-
       return (data as Record<string, unknown>[]).map(
         mapEmployeeContractApiToEntity,
       );
     } catch (error) {
       Logger.warn(`Intento ${attempt} fallido al obtener contratos`, {
-        businessUnit,
         employeeId,
         attempt,
         error:

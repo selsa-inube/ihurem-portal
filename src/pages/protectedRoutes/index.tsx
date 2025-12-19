@@ -15,7 +15,6 @@ import { protectedRouter } from "@routes/publicRouter";
 import { useSignOut } from "@hooks/useSignOut";
 import { usePortalAuth } from "@hooks/usePortalAuth";
 import { useEmployeeContracts } from "@hooks/useEmployeeContract";
-import { Logger } from "@utils/logger";
 
 export function ProtectedRoutes() {
   const {
@@ -85,7 +84,6 @@ export function ProtectedRoutes() {
     codeError: contractsCode,
     fetched: contractsFetched,
   } = useEmployeeContracts(
-    businessUnitData.publicCode ?? "",
     employee?.employeeId ? String(employee.employeeId) : undefined,
   );
 
@@ -94,14 +92,12 @@ export function ProtectedRoutes() {
       return;
     }
 
-    Logger.info("[ProtectedRoutes] Contratos recibidos", {
-      employeeId: employee.employeeId,
-      totalContracts: contracts.length,
-      statuses: contracts.map((c) => c.contractStatus),
-    });
+    if (contractsError) {
+      return;
+    }
 
     if (contracts.length === 0) {
-      signOut("/error?code=1024");
+      signOut("/error?code=1004");
       return;
     }
 
@@ -110,10 +106,16 @@ export function ProtectedRoutes() {
     );
 
     if (!hasFormalizedContract) {
-      signOut("/error?code=1024");
+      signOut("/error?code=1004");
     }
-  }, [contracts, contractsLoading, contractsFetched, employee, signOut]);
-
+  }, [
+    contracts,
+    contractsLoading,
+    contractsFetched,
+    contractsError,
+    employee,
+    signOut,
+  ]);
   useEffect(() => {
     if (portalData?.externalAuthenticationProvider !== undefined) {
       const externalProvider = portalData.externalAuthenticationProvider;
