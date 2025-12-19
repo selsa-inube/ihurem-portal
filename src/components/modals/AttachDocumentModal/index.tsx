@@ -12,6 +12,7 @@ import {
   Grid,
 } from "@inubekit/inubekit";
 
+import { labels } from "@i18n/labels";
 import { spacing } from "@design/tokens/spacing";
 import { formatFileSize } from "@utils/forms/size";
 import { File } from "@components/data/File";
@@ -148,7 +149,7 @@ export function AttachDocumentModal(props: AttachDocumentModalProps) {
           </Text>
           <StyledContainerClose onClick={onCloseModal}>
             <Stack alignItems="center" gap={spacing.s100}>
-              <Text>Cerrar</Text>
+              <Text>{labels.modals.close}</Text>
               <Icon
                 icon={<MdClear />}
                 size="24px"
@@ -167,11 +168,15 @@ export function AttachDocumentModal(props: AttachDocumentModalProps) {
           $isDragging={isDragging}
         >
           <Stack direction="column" alignItems="center">
-            <Text appearance="gray">Arrastra un archivo</Text>
-            <Text appearance="gray">o</Text>
+            <Text appearance="gray">
+              {labels.modals.attachDocumentModal.drag}
+            </Text>
+            <Text appearance="gray">
+              {labels.modals.attachDocumentModal.or}
+            </Text>
           </Stack>
           <Button spacing="compact" onClick={handleBrowseClick}>
-            Busca un archivo
+            {labels.modals.attachDocumentModal.browse}
           </Button>
           <input
             type="file"
@@ -183,14 +188,15 @@ export function AttachDocumentModal(props: AttachDocumentModalProps) {
           />
         </StyledAttachContainer>
         <Text size="small" appearance="gray">
-          Peso máximo por archivo: 2.5MB
+          {labels.modals.attachDocumentModal.maxSize}
         </Text>
         {selectedFiles.length > 0 && (
           <>
             <Divider dashed />
             <Stack direction="column" gap={spacing.s300}>
               <Text type="title" size="medium" weight="bold" appearance="gray">
-                Archivos adjuntos ({selectedFiles.length})
+                {labels.modals.attachDocumentModal.attachmentsTitle} (
+                {selectedFiles.length})
               </Text>
               <Grid
                 templateColumns={`repeat(${isMobile ? 1 : 2}, 1fr)`}
@@ -216,9 +222,12 @@ export function AttachDocumentModal(props: AttachDocumentModalProps) {
           gap={spacing.s250}
         >
           <Button onClick={onCloseModal} variant="outlined" appearance="gray">
-            Cancelar
+            {labels.modals.attachDocumentModal.cancel}
           </Button>
-          <Button onClick={handleAttachFiles}>Adjuntar</Button>
+          <Button onClick={handleAttachFiles}>
+            {" "}
+            {labels.modals.attachDocumentModal.attach}
+          </Button>
         </Stack>
       </StyledModal>
       {isViewerOpen && viewerUrl && (

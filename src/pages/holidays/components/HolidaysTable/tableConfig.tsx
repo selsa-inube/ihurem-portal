@@ -1,3 +1,5 @@
+import { labels } from "@i18n/labels";
+
 import { IHolidaysTable } from "./types";
 
 export const columns = [
@@ -21,21 +23,33 @@ export const headers: {
   style?: React.CSSProperties;
 }[] = [
   {
-    label: "Tipo de solicitud de vacaciones",
+    label: labels.holidays.inProgressTable.headers.requestType,
     key: "description",
     style: { width: "auto" },
   },
-  { label: "Fecha de solicitud", key: "date", style: { width: "auto" } },
-  { label: "Cantidad de días hábiles", key: "days", style: { width: "auto" } },
-  { label: "Estado de la solicitud", key: "status", style: { width: "auto" } },
   {
-    label: "Ver detalles de la solicitud",
+    label: labels.holidays.inProgressTable.headers.requestDate,
+    key: "date",
+    style: { width: "auto" },
+  },
+  {
+    label: labels.holidays.inProgressTable.headers.businessDays,
+    key: "days",
+    style: { width: "auto" },
+  },
+  {
+    label: labels.holidays.inProgressTable.headers.status,
+    key: "status",
+    style: { width: "auto" },
+  },
+  {
+    label: labels.holidays.inProgressTable.headers.viewDetails,
     key: "details",
     action: true,
     style: { width: "60px" },
   },
   {
-    label: "Eliminar solicitud",
+    label: labels.holidays.inProgressTable.headers.delete,
     key: "delete",
     action: true,
     style: { width: "60px" },

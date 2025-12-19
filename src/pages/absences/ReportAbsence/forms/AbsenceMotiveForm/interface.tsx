@@ -10,6 +10,7 @@ import { FormikProps } from "formik";
 import * as Yup from "yup";
 import { IOption } from "@inubekit/inubekit";
 
+import { labels } from "@i18n/labels";
 import { isRequired, getFieldState } from "@utils/forms/forms";
 import { spacing } from "@design/tokens/spacing";
 
@@ -80,10 +81,10 @@ function AbsenceMotiveFormUI(props: AbsenceMotiveFormUIProps) {
           <Stack direction="column" width="100%" gap={spacing.s200}>
             <Stack direction={isMobile ? "column" : "row"} gap={spacing.s200}>
               <Select
-                label="Motivo"
+                label={labels.absences.reportAbsence.form.motiveLabel}
                 name="motive"
                 options={motiveOptions}
-                placeholder="Selecciona de la lista"
+                placeholder={labels.absences.general.selectPlaceholder}
                 value={formik.values.motive}
                 message={formik.errors.motive}
                 disabled={loading ?? motiveOptions.length === 0}
@@ -91,11 +92,12 @@ function AbsenceMotiveFormUI(props: AbsenceMotiveFormUIProps) {
                 fullwidth
                 onChange={(_, v) => handleChange("motive", v)}
               />
+
               <Select
-                label="Submotivo"
+                label={labels.absences.reportAbsence.form.subMotiveLabel}
                 name="subMotive"
                 options={subMotiveOptions}
-                placeholder="Selecciona de la lista"
+                placeholder={labels.absences.general.selectPlaceholder}
                 value={formik.values.subMotive}
                 message={formik.errors.subMotive}
                 disabled={isSubMotiveDisabled}
@@ -106,8 +108,10 @@ function AbsenceMotiveFormUI(props: AbsenceMotiveFormUIProps) {
             </Stack>
 
             <Textarea
-              label="Detalles del motivo"
-              placeholder="Más detalles acerca de la ausencia."
+              label={labels.absences.reportAbsence.form.detailsLabel}
+              placeholder={
+                labels.absences.reportAbsence.form.detailsPlaceholder
+              }
               name="motiveDetails"
               id="motiveDetails"
               value={formik.values.motiveDetails}
@@ -135,13 +139,14 @@ function AbsenceMotiveFormUI(props: AbsenceMotiveFormUIProps) {
               variant="outlined"
               appearance="gray"
             >
-              Anterior
+              {labels.absences.reportAbsence.ui.assisted.back}
             </Button>
+
             <Button
               onClick={handleNextStep}
               disabled={loading ? true : !formik.isValid}
             >
-              Siguiente
+              {labels.absences.reportAbsence.ui.assisted.next}
             </Button>
           </Stack>
         )}

@@ -13,6 +13,7 @@ import { Formik, Form, Field, FieldProps, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import { MdClear } from "react-icons/md";
 
+import { labels } from "@i18n/labels";
 import { spacing } from "@design/tokens/spacing";
 
 import { StyledModal, StyledContainerClose } from "./styles";
@@ -45,10 +46,10 @@ export function TextAreaModal(props: TextAreaModalProps) {
     inputLabel,
     inputPlaceholder,
     maxLength = 200,
-    portalId = "portal",
+    portalId = labels.modals.portalId,
     readOnly = false,
     disableTextarea = false,
-    secondaryButtonText = "Cancelar",
+    secondaryButtonText = labels.modals.textAreaModal.cancel,
     description,
     onSubmit,
     onCloseModal,
@@ -59,8 +60,8 @@ export function TextAreaModal(props: TextAreaModalProps) {
     textarea: readOnly
       ? Yup.string()
       : Yup.string()
-          .max(maxLength, "El número de caracteres es demasiado largo")
-          .required("Este campo es obligatorio"),
+          .max(maxLength, labels.modals.textAreaModal.charCountError)
+          .required(labels.modals.textAreaModal.requiredError),
   });
 
   const isMobile = useMediaQuery("(max-width: 700px)");
@@ -81,7 +82,7 @@ export function TextAreaModal(props: TextAreaModalProps) {
           </Text>
           <StyledContainerClose onClick={onCloseModal}>
             <Stack alignItems="center" gap="8px">
-              <Text>Cerrar</Text>
+              <Text>{labels.modals.textAreaModal.close}</Text>
               <Icon
                 icon={<MdClear />}
                 size="24px"

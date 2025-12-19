@@ -21,6 +21,7 @@ import {
 } from "./styles";
 import { Document } from "./UploadDocumentsTable/types";
 import { UploadDocumentsTable } from "./UploadDocumentsTable";
+import { labels } from "@i18n/labels"; // <-- centralizamos los textos
 
 export interface UploadDocumentsModalProps {
   portalId?: string;
@@ -45,11 +46,11 @@ export function UploadDocumentsModal(props: UploadDocumentsModalProps) {
       <StyledModal $smallScreen={isMobile}>
         <StyledContainerTitle>
           <Text type="headline" size="small">
-            Cargar documentos
+            {labels.modals.uploadDocumentsTable.modalTitle}
           </Text>
           <StyledContainerClose onClick={handleClose}>
             <Stack alignItems="center" gap={spacing.s100}>
-              <Text>Cerrar</Text>
+              <Text>{labels.modals.close}</Text>
               <Icon
                 icon={<MdClear />}
                 size="24px"
@@ -70,7 +71,7 @@ export function UploadDocumentsModal(props: UploadDocumentsModalProps) {
               <Stack gap={spacing.s150}>
                 <Icon icon={<MdInfoOutline />} size="20px" appearance="help" />
                 <Text type="body" size="medium" weight="bold">
-                  La ausencia no incluyó requisitos.
+                  {labels.modals.uploadDocumentsTable.emptyMessage}
                 </Text>
               </Stack>
             </StyledMessageContainer>
@@ -79,7 +80,7 @@ export function UploadDocumentsModal(props: UploadDocumentsModalProps) {
 
         <Stack justifyContent="flex-end" gap={spacing.s100}>
           <Button appearance="primary" onClick={handleClose} cursorHover>
-            Cerrar
+            {labels.modals.close}
           </Button>
         </Stack>
       </StyledModal>

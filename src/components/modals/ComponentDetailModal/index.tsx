@@ -16,6 +16,7 @@ import {
 } from "react-icons/md";
 import { createPortal } from "react-dom";
 
+import { labels } from "@i18n/labels";
 import CheckIcon from "@assets/images/CheckIcon.svg";
 import CloseIcon from "@assets/images/CloseIcon.svg";
 import HelpIcon from "@assets/images/HelpIcon.svg";
@@ -60,10 +61,14 @@ function RequestComponentDetail(props: RequestComponentDetailProps) {
   } = props;
 
   const infoItems = [
-    { icon: <MdAddCircleOutline />, text: "Adjuntar", appearance: "help" },
+    {
+      icon: <MdAddCircleOutline />,
+      text: labels.modals.attach,
+      appearance: "help",
+    },
     {
       icon: <MdOutlineCheckCircle />,
-      text: "Forzar Aprobación",
+      text: labels.modals.forceApproval,
       appearance: "help",
     },
   ];
@@ -146,7 +151,7 @@ function RequestComponentDetail(props: RequestComponentDetailProps) {
           </Text>
           <StyledContainerClose onClick={handleClose}>
             <Stack alignItems="center" gap={spacing.s100}>
-              <Text>Cerrar</Text>
+              <Text>{labels.modals.close}</Text>
               <Icon
                 icon={<MdClear />}
                 size="24px"
@@ -185,7 +190,7 @@ function RequestComponentDetail(props: RequestComponentDetailProps) {
           {showRequirementsTable && requirements && requirements.length > 0 && (
             <Stack direction="column" alignItems="center" gap={spacing.s100}>
               <Text type="label" weight="bold">
-                Requisitos
+                {labels.modals.requirementsModal.title}
               </Text>
 
               <StyledTableContainer $smallScreen={isMobile}>
