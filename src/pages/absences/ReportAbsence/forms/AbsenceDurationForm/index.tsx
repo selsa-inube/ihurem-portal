@@ -8,6 +8,7 @@ import {
   useMemo,
 } from "react";
 
+import { labels } from "@i18n/labels";
 import { validationMessages } from "@validations/validationMessages";
 import { ErrorModal } from "@components/modals/ErrorModal";
 
@@ -23,7 +24,7 @@ const createValidationSchema = (
   object().shape({
     startDate: string().test(
       "startDate-validation",
-      "Las licencias deben solicitarse con anticipación.",
+      labels.absences.futureDateError.fieldValidation,
       (value) => {
         if (!value) return false;
         if (!restrictFutureDates) return true;
@@ -38,7 +39,7 @@ const createValidationSchema = (
           .required(validationMessages.required)
           .test(
             "is-valid-number-days",
-            "La duración en días debe ser un número mayor a cero",
+            labels.absences.reportAbsence.validation.positiveDays,
             (value) => {
               if (!value) return false;
               if (value === "-" || value === "+" || isNaN(Number(value))) {
@@ -50,7 +51,7 @@ const createValidationSchema = (
           )
       : string().test(
           "is-valid-number-days-optional",
-          "La duración en días debe ser un número positivo",
+          labels.absences.reportAbsence.validation.positiveDays,
           (value) => {
             if (!value) return true;
             if (value === "-" || value === "+" || isNaN(Number(value))) {
@@ -65,7 +66,7 @@ const createValidationSchema = (
           .required(validationMessages.required)
           .test(
             "is-valid-number-hours",
-            "La duración en horas debe ser un número mayor a cero",
+            labels.absences.reportAbsence.validation.positiveHours,
             (value) => {
               if (!value) return false;
               if (value === "-" || value === "+" || isNaN(Number(value))) {
@@ -77,7 +78,7 @@ const createValidationSchema = (
           )
       : string().test(
           "is-valid-number-hours-optional",
-          "La duración en horas debe ser un número positivo",
+          labels.absences.reportAbsence.validation.positiveDays,
           (value) => {
             if (!value) return true;
             if (value === "-" || value === "+" || isNaN(Number(value))) {
@@ -161,7 +162,7 @@ const AbsenceDurationForm = forwardRef<
         setShowDateErrorModal(false);
         if (
           formik.errors.startDate ===
-          "Las licencias deben solicitarse con anticipación."
+          labels.absences.reportAbsence.unpaidLeave.short
         ) {
           formik.setFieldError("startDate", "");
         }
@@ -176,13 +177,13 @@ const AbsenceDurationForm = forwardRef<
         if (selected <= today) {
           formik.setFieldError(
             "startDate",
-            "Las licencias deben solicitarse con anticipación.",
+            labels.absences.reportAbsence.unpaidLeave.short,
           );
           setShowDateErrorModal(true);
         } else {
           if (
             formik.errors.startDate ===
-            "Las licencias deben solicitarse con anticipación."
+            labels.absences.reportAbsence.unpaidLeave.short
           ) {
             formik.setFieldError("startDate", "");
           }
@@ -191,7 +192,7 @@ const AbsenceDurationForm = forwardRef<
       } else {
         if (
           formik.errors.startDate ===
-          "Las licencias deben solicitarse con anticipación."
+          labels.absences.reportAbsence.unpaidLeave.short
         ) {
           formik.setFieldError("startDate", "");
         }
@@ -212,9 +213,9 @@ const AbsenceDurationForm = forwardRef<
         />
         {showDateErrorModal && (
           <ErrorModal
-            title="Alerta"
-            descriptionText="El el paso anterior seleccionaste Motivo: Licencias no remuneradas."
-            solutionText="Las licencias no remuneradas NO pueden registrarse en una fecha anterior al día de hoy, porque deben solicitarse con anticipación."
+            title={labels.absences.futureDateError.title}
+            descriptionText={labels.absences.futureDateError.description}
+            solutionText={labels.absences.futureDateError.solution}
             onCloseModal={() => setShowDateErrorModal(false)}
             onSubmitButtonClick={() => setShowDateErrorModal(false)}
           />

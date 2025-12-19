@@ -8,6 +8,7 @@ import {
 import { Button, Stack, Tabs, ITab, Text, Icon } from "@inubekit/inubekit";
 import { useNavigate } from "react-router-dom";
 
+import { labels } from "@i18n/labels";
 import { useAppContext } from "@context/AppContext/useAppContext";
 import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
@@ -57,10 +58,8 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
     hasEnjoymentPrivilege = true,
     hasPaymentPrivilege = true,
     actionDescriptions = {
-      enjoyment:
-        "No se puede solicitar disfrute de vacaciones, ya que no tiene un contrato activo o no cuenta con los privilegios necesarios.",
-      payment:
-        "No se puede solicitar pago de vacaciones, ya que no tiene un contrato activo o no cuenta con los privilegios necesarios.",
+      enjoyment: labels.holidays.infoModal.enjoymentBlocked,
+      payment: labels.holidays.infoModal.paymentBlocked,
     },
     handleDeleteRequest,
   } = props;
@@ -89,12 +88,12 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
     vacationDays?.reduce((sum, contract) => sum + contract.pendingDays, 0) ?? 0;
 
   const tabs: ITab[] = [
-    { id: "dias", label: "Días utilizados" },
+    { id: "dias", label: labels.holidays.tabs.daysUsed },
     {
       id: "solicitudes",
       label: isMobile
-        ? "Solicitudes en trámite"
-        : "Solicitudes de vacaciones en trámite",
+        ? labels.holidays.tabs.requestsMobile
+        : labels.holidays.tabs.requestsDesktop,
       icon: {
         appearance: "warning",
         icon: <MdOutlineWarningAmber />,
@@ -109,7 +108,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
   const onOpenInfoModal = (description: string) => {
     setInfoModal({
       open: true,
-      title: "Acción inhabilitada",
+      title: labels.holidays.infoModal.title,
       description,
     });
   };
@@ -117,7 +116,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
   const pendingDaysWidget = (
     <Widget
       icon={<MdOutlineBeachAccess />}
-      label="Días pendientes"
+      label={labels.holidays.widget.pendingDays}
       value={totalDays}
       isLoading={loadingDays}
     />
@@ -163,7 +162,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
               }
             }}
           >
-            Agregar solicitud de disfrute
+            {labels.holidays.actions.enjoyment}
           </Button>
           {(!hasActiveContract || !hasEnjoymentPrivilege) && (
             <Icon
@@ -190,7 +189,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
               }
             }}
           >
-            Agregar solicitud de pago
+            {labels.holidays.actions.payment}
           </Button>
           {(!hasActiveContract || !hasPaymentPrivilege) && (
             <Icon
@@ -212,7 +211,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
       <StyledHolidaysContainer $isMobile={isMobile}>
         <Stack alignItems="center" justifyContent="space-between">
           <Text type="title" size="medium">
-            Consulta de días utilizados
+            {labels.holidays.daysUsed.title}
           </Text>
           {renderActions()}
         </Stack>
@@ -270,7 +269,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
               <StyledHolidaysContainer $isMobile={isMobile}>
                 <Stack alignItems="center" justifyContent="space-between">
                   <Text type="title" size="medium">
-                    Solicitudes en trámite
+                    {labels.holidays.inProgress.title}
                   </Text>
                 </Stack>
                 <HolidaysTable

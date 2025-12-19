@@ -10,6 +10,7 @@ import {
   useMediaQuery,
 } from "@inubekit/inubekit";
 
+import { labels } from "@i18n/labels";
 import { spacing } from "@design/tokens/spacing";
 
 import { StyledModal, StyledContainerClose } from "./styles";
@@ -28,10 +29,10 @@ export interface SendRequestModalProps {
 export function SendRequestModal(props: SendRequestModalProps) {
   const {
     descriptionText,
-    buttonText = "Enviar",
-    title = "Enviar solicitud",
+    buttonText = labels.modals.sendRequestModal.buttonText,
+    title = labels.modals.sendRequestModal.title,
     portalId = "portal",
-    secondaryButtonText = "Cancelar",
+    secondaryButtonText = labels.modals.sendRequestModal.secondaryButtonText,
     onCloseModal,
     onSubmitButtonClick,
     onSecondaryButtonClick,
@@ -55,7 +56,7 @@ export function SendRequestModal(props: SendRequestModalProps) {
           </Text>
           <StyledContainerClose onClick={onCloseModal}>
             <Stack alignItems="center" gap={spacing.s100}>
-              <Text>Cerrar</Text>
+              <Text>{labels.modals.sendRequestModal.close}</Text>
               <Icon
                 icon={<MdClear />}
                 size="24px"

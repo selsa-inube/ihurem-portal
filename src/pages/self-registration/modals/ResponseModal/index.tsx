@@ -11,6 +11,7 @@ import {
   useMediaQuery,
 } from "@inubekit/inubekit";
 
+import { labels } from "@i18n/labels";
 import { spacing } from "@design/tokens/spacing";
 
 import { StyledModal, StyledContainerClose } from "./styles";
@@ -40,8 +41,8 @@ export function ResponseModal(props: ResponseModalProps) {
   }
 
   const message = isRequestSent
-    ? "Este proceso será gestionado por uno de nuestros funcionarios, puede tardar algún tiempo mientras se gestiona la aprobación."
-    : `El documento de identidad suministrado, no cumple los requisitos para acceder al portal. Consulte con nuestro equipo de gestión humana.`;
+    ? labels.selfRegistrationLabels.responseModal.successMessage
+    : labels.selfRegistrationLabels.responseModal.failureMessage;
 
   return createPortal(
     <Blanket>
@@ -49,7 +50,9 @@ export function ResponseModal(props: ResponseModalProps) {
         <Stack justifyContent="flex-end">
           <StyledContainerClose onClick={onCloseModal}>
             <Stack alignItems="center" gap={spacing.s100}>
-              <Text>Cerrar</Text>
+              <Text>
+                {labels.selfRegistrationLabels.responseModal.closeButton}
+              </Text>
               <Icon
                 icon={<MdClear />}
                 size="24px"
@@ -69,8 +72,8 @@ export function ResponseModal(props: ResponseModalProps) {
           <Text weight="bold">
             <b>
               {isRequestSent
-                ? "¡Solicitud enviada exitosamente!"
-                : "Lo sentimos"}
+                ? labels.selfRegistrationLabels.responseModal.successTitle
+                : labels.selfRegistrationLabels.responseModal.failureTitle}
             </b>
           </Text>
           <Text appearance="gray">
@@ -78,7 +81,9 @@ export function ResponseModal(props: ResponseModalProps) {
           </Text>
         </Stack>
         <Stack justifyContent="end">
-          <Button onClick={onCloseModal}>Entendido</Button>
+          <Button onClick={onCloseModal}>
+            {labels.selfRegistrationLabels.responseModal.confirmButton}
+          </Button>
         </Stack>
       </StyledModal>
     </Blanket>,
