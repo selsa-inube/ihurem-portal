@@ -1,10 +1,8 @@
 import { useIAuth } from "@inube/iauth-react";
-import { useEffect } from "react";
+import { environment } from "@config/environment";
 
 export function LogOut() {
   const { logout } = useIAuth();
-  useEffect(() => {
-    logout();
-  }, [logout]);
+  logout({ logoutParams: { returnTo: environment.REDIRECT_URI } });
   return null;
 }
