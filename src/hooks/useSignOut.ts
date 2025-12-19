@@ -6,9 +6,8 @@ export const useSignOut = () => {
   const { logout } = useIAuth();
 
   const signOut = (redirect?: string) => {
-    localStorage.clear();
     if (!redirect) {
-      logout({ logoutParams: { returnTo: environment.REDIRECT_URI } });
+      logout();
     } else {
       logout({
         logoutParams: { returnTo: environment.REDIRECT_URI + redirect },

@@ -31,6 +31,7 @@ export function AuthWrapper({ children }: AuthWrapperProps) {
       state={environment.STATE}
       applicationName={environment.APPLICATION_NAME}
       originatorCode={environment.ORIGINATOR_CODE}
+      registerUrl={`${environment.REDIRECT_URI}/self-registration?portal=${portalCode}`}
     >
       {children}
     </IAuthProvider>

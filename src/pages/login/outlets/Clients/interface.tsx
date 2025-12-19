@@ -5,7 +5,11 @@ function ClientsUI() {
   const { loginWithRedirect, isAuthenticated, isLoading } = useIAuth();
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
+    if (
+      !isLoading &&
+      !isAuthenticated &&
+      window.location.pathname !== "/logout"
+    ) {
       loginWithRedirect();
     }
   }, [isLoading, isAuthenticated, loginWithRedirect]);
