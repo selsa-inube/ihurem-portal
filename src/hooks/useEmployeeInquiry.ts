@@ -14,7 +14,7 @@ const ERROR_CODE_INVALID_USER = 1004;
 const validateContractStatus = (
   employmentContracts: IEmploymentContract[],
 ): boolean => {
-  if (!employmentContracts?.length) return true;
+  if (!employmentContracts?.length) return false;
   return employmentContracts.some(
     (contract) => contract.contractStatus === EContractStatus.formalized,
   );
