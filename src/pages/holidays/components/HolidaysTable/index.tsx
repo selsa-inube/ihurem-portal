@@ -28,6 +28,7 @@ import { contractTypeLabels } from "@mocks/contracts/enums";
 import { showRequirements } from "@pages/holidays/config/requirements";
 import { formatDate } from "@utils/date";
 import { labels } from "@i18n/labels";
+import { mockRequirementDetail } from "@mocks/requirements/mockRequirementDetail";
 
 import { IHolidaysTable, HolidayTableDataDetails } from "./types";
 import { StyledTd, StyledTh, TooltipWrapper } from "./styles";
@@ -70,6 +71,8 @@ function HolidaysTable(props: HolidaysTableProps) {
   const [selectedRequestId, setSelectedRequestId] = useState<string | null>(
     null,
   );
+
+  const [isRequirementModalOpen, setIsRequirementModalOpen] = useState(false);
 
   const mediaQueries = useMediaQueries([
     "(max-width: 1024px)",
@@ -174,7 +177,7 @@ function HolidaysTable(props: HolidaysTableProps) {
 
   const showInfoModal = (titleDescription: string, description: string) => {
     setInfoModalContent({
-      title: "Información",
+      title: labels.holidays.infoModal.info,
       titleDescription,
       description,
     });
@@ -497,13 +500,25 @@ function HolidaysTable(props: HolidaysTableProps) {
           showRequirementsTable
           title={labels.holidays.modal.detailsTitle}
           buttonLabel={labels.holidays.modal.close}
+          onRequirementView={() => {
+            setIsRequirementModalOpen(true);
+          }}
+        />
+      )}
+
+      {isRequirementModalOpen && (
+        <RequestComponentDetail
+          title={labels.holidays.deleteModal.date}
+          buttonLabel={labels.holidays.modal.close}
+          handleClose={() => setIsRequirementModalOpen(false)}
+          modalContent={mockRequirementDetail}
         />
       )}
 
       {isSecondModalOpen && (
         <TextAreaModal
-          title="Descartar"
-          buttonText="Descartar"
+          title={labels.holidays.deleteModal.discardTitle}
+          buttonText={labels.holidays.deleteModal.discardButton}
           inputLabel={labels.holidays.deleteModal.inputLabel}
           inputPlaceholder={labels.holidays.deleteModal.inputPlaceholder}
           description={labels.holidays.deleteModal.discardDescription}

@@ -35,6 +35,7 @@ export const holidays = {
     cancelButtonText: "Cancelar",
     discardTitle: "Descartar",
     discardButton: "Descartar",
+    date: "Detalles",
     discardDescription:
       "Al descartar una solicitud esta no podrá continuar su trámite y desaparecerá. ¿Realmente quieres descartar esta solicitud?",
   },
