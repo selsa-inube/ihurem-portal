@@ -14,7 +14,7 @@ import { InfoModal } from "@components/modals/InfoModal";
 import { protectedRouter } from "@routes/publicRouter";
 import { useSignOut } from "@hooks/useSignOut";
 import { usePortalAuth } from "@hooks/usePortalAuth";
-import { useEmployeeContracts } from "@hooks/useEmployeeContract";
+import { useEmployeeContractsValidation } from "@hooks/useEmployeeContract";
 
 export function ProtectedRoutes() {
   const {
@@ -80,21 +80,13 @@ export function ProtectedRoutes() {
   const {
     contracts,
     loading: contractsLoading,
-    error: contractsError,
-    codeError: contractsCode,
-    fetched: contractsFetched,
-  } = useEmployeeContracts(
+    validated: contractsValidated,
+  } = useEmployeeContractsValidation(
     employee?.employeeId ? String(employee.employeeId) : undefined,
   );
 
   useEffect(() => {
-    if (!contractsFetched || contractsLoading || !employee?.employeeId) {
-      return;
-    }
-
-    if (contractsError) {
-      return;
-    }
+    if (!contractsValidated || contractsLoading) return;
 
     if (contracts.length === 0) {
       signOut("/error?code=1004");
@@ -108,14 +100,8 @@ export function ProtectedRoutes() {
     if (!hasFormalizedContract) {
       signOut("/error?code=1004");
     }
-  }, [
-    contracts,
-    contractsLoading,
-    contractsFetched,
-    contractsError,
-    employee,
-    signOut,
-  ]);
+  }, [contractsValidated, contractsLoading, contracts, signOut]);
+
   useEffect(() => {
     if (portalData?.externalAuthenticationProvider !== undefined) {
       const externalProvider = portalData.externalAuthenticationProvider;
@@ -158,15 +144,11 @@ export function ProtectedRoutes() {
     hasPortalError,
   ]);
 
-  const handleCloseExternalAuthNotification = () => {
-    setShowExternalAuthNotification(false);
-  };
-
   if (
     isLoading ||
-    contractsLoading ||
     employeeLoading ||
     optionsLoading ||
+    contractsLoading ||
     !isReady
   ) {
     return <LoadingAppUI />;
@@ -177,18 +159,14 @@ export function ProtectedRoutes() {
     businessUnitErrorCode ??
     employeeCode ??
     optionsCode ??
-    contractsCode ??
-    (employee && employee.identificationType !== identificationType
-      ? 1004
-      : 1001);
+    1001;
 
   if (
     hasPortalError ||
     hasManagersError ||
     hasBusinessUnitError ||
     employeeError ||
-    optionsError ||
-    contractsError
+    optionsError
   ) {
     return <ErrorPage errorCode={errorCode} />;
   }
@@ -213,7 +191,7 @@ export function ProtectedRoutes() {
           titleDescription="Proveedor de autenticación externo"
           description={`Este portal utiliza un método de autenticación externo a través de ${externalIAuthProvider}. Por favor, utiliza las credenciales correspondientes a este proveedor para acceder al sistema.`}
           buttonText="Entendido"
-          onCloseModal={handleCloseExternalAuthNotification}
+          onCloseModal={() => setShowExternalAuthNotification(false)}
           portalId="root"
         />
       )}

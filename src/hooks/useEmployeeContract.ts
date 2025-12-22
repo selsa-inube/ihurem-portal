@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { useSignOut } from "@hooks/useSignOut";
 import { EmployeeContractAggregate } from "@ptypes/employeeContractAggregate";
@@ -9,30 +9,23 @@ import { modalErrorConfig } from "@config/modalErrorConfig";
 
 const ERROR_CODE_GET_CONTRACTS = 1007;
 
-export const useEmployeeContracts = (employeeId?: string) => {
+export const useEmployeeContractsValidation = (employeeId?: string) => {
   const [contracts, setContracts] = useState<EmployeeContractAggregate[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
-  const [codeError, setCodeError] = useState<number | null>(null);
-  const [fetched, setFetched] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [validated, setValidated] = useState(false);
+
+  const hasRunRef = useRef(false);
 
   const { signOut } = useSignOut();
-
   const { getHeaders } = useHeaders();
   const { showErrorModal } = useErrorModal();
 
   useEffect(() => {
-    if (!employeeId) {
-      setFetched(false);
-      return;
-    }
+    if (!employeeId || hasRunRef.current) return;
 
-    const fetchContracts = async () => {
-      setLoading(true);
-      setError(false);
-      setCodeError(null);
-      setFetched(false);
+    hasRunRef.current = true;
 
+    const validateContracts = async () => {
       try {
         const headers = await getHeaders(true);
 
@@ -44,12 +37,10 @@ export const useEmployeeContracts = (employeeId?: string) => {
         });
 
         setContracts(result);
+        setValidated(true);
       } catch (err) {
-        setContracts([]);
-        setError(true);
-        setCodeError(ERROR_CODE_GET_CONTRACTS);
-
         const errorConfig = modalErrorConfig[ERROR_CODE_GET_CONTRACTS];
+
         showErrorModal({
           descriptionText: `${errorConfig.descriptionText}: ${String(err)}`,
           solutionText: errorConfig.solutionText,
@@ -58,18 +49,15 @@ export const useEmployeeContracts = (employeeId?: string) => {
         signOut("/error?code=1007");
       } finally {
         setLoading(false);
-        setFetched(true);
       }
     };
 
-    fetchContracts();
-  }, [employeeId, getHeaders, showErrorModal]);
+    validateContracts();
+  }, [employeeId, getHeaders, showErrorModal, signOut]);
 
   return {
     contracts,
     loading,
-    error,
-    codeError,
-    fetched,
+    validated,
   };
 };
