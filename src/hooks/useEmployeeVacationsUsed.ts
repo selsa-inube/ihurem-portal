@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import {
   getEmployeeVacationsUsed,
   IVacationUsedResponse,
+  GetEmployeeVacationsUsedParams,
 } from "@services/employeeConsultation/getEmployeeVacationsUsed";
 import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
 import { modalErrorConfig } from "@config/modalErrorConfig";
@@ -17,15 +18,11 @@ interface UseEmployeeVacationsUsedResult {
   refetch: () => void;
 }
 
-interface UseEmployeeVacationsUsedParams {
-  page?: number;
-  perPage?: number;
-}
+export const useEmployeeVacationsUsed = (
+  params: GetEmployeeVacationsUsedParams = {},
+): UseEmployeeVacationsUsedResult => {
+  const { page = 1, perPage = 50, contractId, employeeId } = params;
 
-export const useEmployeeVacationsUsed = ({
-  page = 1,
-  perPage = 50,
-}: UseEmployeeVacationsUsedParams): UseEmployeeVacationsUsedResult => {
   const [vacationsUsed, setVacationsUsed] = useState<IVacationUsedResponse[]>(
     [],
   );
@@ -40,7 +37,7 @@ export const useEmployeeVacationsUsed = ({
 
   const fetchVacationsUsed = useCallback(
     async (forceRefetch = false) => {
-      const currentParams = `${page}-${perPage}`;
+      const currentParams = `${page}-${perPage}-${contractId ?? ""}-${employeeId ?? ""}`;
 
       if (
         !forceRefetch &&
@@ -58,7 +55,12 @@ export const useEmployeeVacationsUsed = ({
       try {
         const headers = await getHeaders();
 
-        const data = await getEmployeeVacationsUsed(headers);
+        const data = await getEmployeeVacationsUsed(headers, {
+          page,
+          perPage,
+          contractId,
+          employeeId,
+        });
         setVacationsUsed(data);
       } catch (err) {
         const errorMessage =
@@ -78,12 +80,12 @@ export const useEmployeeVacationsUsed = ({
         setLoadingVacations(false);
       }
     },
-    [page, perPage, getHeaders, showErrorModal],
+    [page, perPage, contractId, employeeId, getHeaders, showErrorModal],
   );
 
   useEffect(() => {
     fetchVacationsUsed();
-  }, [page, perPage]);
+  }, [page, perPage, contractId, employeeId]);
 
   const refetch = useCallback(() => {
     fetchVacationsUsed(true);

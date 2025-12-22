@@ -18,14 +18,21 @@ interface IVacationUsedAPIResponse {
   earlyReturnDate?: string;
 }
 
+interface GetEmployeeVacationsUsedParams {
+  page?: number;
+  perPage?: number;
+  contractId?: string;
+  employeeId?: string;
+}
+
 const getEmployeeVacationsUsed = async (
   headers: Record<string, string>,
+  params: GetEmployeeVacationsUsedParams = {},
 ): Promise<IVacationUsedResponse[]> => {
   const maxRetries = maxRetriesServices;
   const fetchTimeout = fetchTimeoutServices;
 
-  const page = 1;
-  const perPage = 1000;
+  const { page = 1, perPage = 50, contractId, employeeId } = params;
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
@@ -36,6 +43,13 @@ const getEmployeeVacationsUsed = async (
         page: page.toString(),
         per_page: perPage.toString(),
       });
+
+      if (contractId) {
+        queryParams.append("contractId", contractId);
+      }
+      if (employeeId) {
+        queryParams.append("employeeId", employeeId);
+      }
 
       const options: RequestInit = {
         method: "GET",
@@ -89,13 +103,13 @@ const getEmployeeVacationsUsed = async (
         Logger.error(
           "Error obteniendo vacaciones utilizadas",
           error instanceof Error ? error : undefined,
-          { page, perPage },
+          { page, perPage, contractId, employeeId },
         );
         if (error instanceof Error) {
           throw error;
         }
         throw new Error(
-          `Todos los intentos fallaron. No se pudieron obtener las vacaciones utilizadas para la unidad de negocio.`,
+          `Todos los intentos fallaron. No se pudieron obtener las vacaciones utilizadas.`,
         );
       }
     }
@@ -105,4 +119,4 @@ const getEmployeeVacationsUsed = async (
 };
 
 export { getEmployeeVacationsUsed };
-export type { IVacationUsedResponse };
+export type { IVacationUsedResponse, GetEmployeeVacationsUsedParams };
