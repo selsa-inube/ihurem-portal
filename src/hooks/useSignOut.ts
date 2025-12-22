@@ -7,7 +7,7 @@ export const useSignOut = () => {
 
   const signOut = (redirect?: string) => {
     if (!redirect) {
-      logout({ logoutParams: { returnTo: environment.REDIRECT_URI } });
+      logout();
     } else {
       logout({
         logoutParams: { returnTo: environment.REDIRECT_URI + redirect },
