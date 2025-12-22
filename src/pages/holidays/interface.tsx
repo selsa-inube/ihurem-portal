@@ -19,12 +19,13 @@ import { contractTypeLabels } from "@mocks/contracts/enums";
 import { useEmployee } from "@hooks/useEmployee";
 import { Widget } from "@components/cards/Widget";
 import { useEmployeeVacationDays } from "@hooks/useEmployeeVacationDays";
+import { useEmployeeVacationsUsed } from "@hooks/useEmployeeVacationsUsed";
 
 import { StyledHolidaysContainer } from "./styles";
 import { HolidaysTable } from "./components/HolidaysTable";
 import { DaysUsedTable } from "./components/DaysUsedTable";
 import { IHolidaysTable } from "./components/HolidaysTable/types";
-import { formatVacationHistory } from "./config/table.config";
+import { formatVacationHistoryFromVacationsUsed } from "./config/table.config";
 import { Detail } from "./components/Detail";
 
 interface HolidaysOptionsUIProps {
@@ -80,6 +81,8 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
   const { vacationDays, loadingDays } = useEmployeeVacationDays(
     employee?.employeeId ?? null,
   );
+
+  const { vacationsUsed, loadingVacations } = useEmployeeVacationsUsed({});
 
   const totalDays =
     vacationDays?.reduce((sum, contract) => sum + contract.pendingDays, 0) ?? 0;
@@ -204,17 +207,14 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
       </Stack>
 
       {contracts.map((contract) => {
-        const contractVacationData = formatVacationHistory([
-          {
-            ...employee,
-            employmentContracts: [
-              {
-                ...contract,
-                vacationsHistory: [],
-              },
-            ],
-          },
-        ]);
+        const contractVacations = vacationsUsed?.filter(
+          (v) => String(v.contractId) === String(contract.contractId),
+        );
+
+        const contractVacationData = formatVacationHistoryFromVacationsUsed(
+          contractVacations ?? [],
+          contract,
+        );
 
         return (
           <div key={contract.contractId}>
@@ -233,7 +233,10 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
               </Text>
             )}
 
-            <DaysUsedTable data={contractVacationData} loading={isLoading} />
+            <DaysUsedTable
+              data={contractVacationData}
+              loading={isLoading ?? loadingVacations}
+            />
           </div>
         );
       })}
