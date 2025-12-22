@@ -82,6 +82,23 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
     employee?.employeeId ?? null,
   );
 
+  const contractsVacationsData = contracts.map((contract) => {
+    const { vacationsUsed, loadingVacations } = useEmployeeVacationsUsed({
+      contractId: String(contract.contractId),
+      employeeId: String(employee?.employeeId ?? ""),
+    });
+
+    return {
+      contract,
+      vacationsUsed,
+      loadingVacations,
+      formattedData: formatVacationHistoryFromVacationsUsed(
+        vacationsUsed ?? [],
+        contract,
+      ),
+    };
+  });
+
   const totalDays =
     vacationDays?.reduce((sum, contract) => sum + contract.pendingDays, 0) ?? 0;
 
@@ -204,21 +221,8 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
         {renderActions()}
       </Stack>
 
-      {contracts.map((contract) => {
-        const {
-          vacationsUsed: contractVacations,
-          loadingVacations: contractLoading,
-        } = useEmployeeVacationsUsed({
-          contractId: String(contract.contractId),
-          employeeId: String(employee?.employeeId ?? ""),
-        });
-
-        const contractVacationData = formatVacationHistoryFromVacationsUsed(
-          contractVacations ?? [],
-          contract,
-        );
-
-        return (
+      {contractsVacationsData.map(
+        ({ contract, formattedData, loadingVacations }) => (
           <div key={contract.contractId}>
             {contracts.length > 1 && (
               <Text
@@ -236,12 +240,12 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
             )}
 
             <DaysUsedTable
-              data={contractVacationData}
-              loading={isLoading ?? contractLoading}
+              data={formattedData}
+              loading={isLoading ?? loadingVacations}
             />
           </div>
-        );
-      })}
+        ),
+      )}
     </StyledHolidaysContainer>
   );
 
