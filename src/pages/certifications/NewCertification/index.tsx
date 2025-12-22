@@ -8,6 +8,7 @@ import { ERequestType } from "@ptypes/humanResourcesRequest.types";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 import { useRequestSubmission } from "@hooks/usePostHumanResourceRequest";
 import { useAppContext } from "@context/AppContext/useAppContext";
+import { Logger } from "@utils/logger";
 import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
 import { labels } from "@i18n/labels";
 
@@ -15,7 +16,7 @@ import { NewCertificationUI } from "./interface";
 import { newCCertificationApplication } from "./config/assisted.config";
 import { ModalState } from "./types";
 function useFormManagement() {
-  const { employees } = useAppContext();
+  const { contracts } = useAppContext();
 
   const [formValues, setFormValues] =
     useState<IUnifiedHumanResourceRequestData>({
@@ -38,9 +39,17 @@ function useFormManagement() {
     useRef<FormikProps<IUnifiedHumanResourceRequestData>>(null);
 
   useEffect(() => {
-    const contrato = employees?.employmentContracts?.[0];
+    Logger.debug("[useFormManagement] Contracts loaded", { contracts });
+
+    const contrato = contracts?.[0];
 
     if (contrato) {
+      Logger.info("[useFormManagement] Loading contract into formValues", {
+        contractId: contrato.contractId,
+        contractNumber: contrato.contractNumber,
+        businessName: contrato.businessName,
+        contractType: contrato.contractType,
+      });
       setFormValues((prev) => ({
         ...prev,
         contractId: contrato.contractId ?? "",
@@ -49,12 +58,18 @@ function useFormManagement() {
         contractType: contrato.contractType ?? "",
       }));
     }
-  }, [employees]);
+  }, [contracts]);
 
   const updateFormValues = () => {
     if (generalInformationRef.current) {
+      Logger.debug("[useFormManagement] Updating formValues from Formik", {
+        values: generalInformationRef.current.values,
+        isValid: generalInformationRef.current.isValid,
+      });
       setFormValues(generalInformationRef.current.values);
       setIsCurrentFormValid(generalInformationRef.current.isValid);
+    } else {
+      Logger.warn("[useFormManagement] generalInformationRef is null");
     }
   };
 

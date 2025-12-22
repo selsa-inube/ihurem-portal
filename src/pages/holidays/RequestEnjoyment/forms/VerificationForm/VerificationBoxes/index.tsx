@@ -100,16 +100,15 @@ function VerificationBoxes({
   stepKey,
   isTablet,
 }: VerificationBoxesProps) {
-  const { employees } = useAppContext();
+  const { contracts } = useAppContext();
 
   const adjustedStepKey = showRequirements ? stepKey : stepKey + 1;
-
-  const contracts = employees.employmentContracts as IContract[];
   const hasMultipleContracts = (contracts?.length ?? 0) > 1;
 
   return (
     <>
       {showRequirements && adjustedStepKey === 1 && renderAlerts(isTablet)}
+
       {adjustedStepKey === 2 &&
         renderPersonalInfoVerification(
           updatedData.personalInformation.values,

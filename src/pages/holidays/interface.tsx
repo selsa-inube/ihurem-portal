@@ -65,20 +65,17 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
   } = props;
 
   const [selectedTab, setSelectedTab] = useState("dias");
-  const { employees } = useAppContext();
   const navigate = useNavigate();
-  const [infoModal, setInfoModal] = useState<{
-    open: boolean;
-    title: string;
-    description: string;
-  }>({
+
+  const { contracts } = useAppContext();
+
+  const [infoModal, setInfoModal] = useState({
     open: false,
     title: "",
     description: "",
   });
 
-  const { employee, isLoading } = useEmployee(employees.employeeId);
-  const contracts = employee?.employmentContracts ?? [];
+  const { employee, isLoading } = useEmployee(contracts[0]?.employeeId ?? null);
 
   const { vacationDays, loadingDays } = useEmployeeVacationDays(
     employee?.employeeId ?? null,
@@ -103,6 +100,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
   ];
 
   const handleRequestEnjoyment = () => navigate("/holidays/request-enjoyment");
+
   const handleRequestPayment = () => navigate("/holidays/request-payment");
 
   const onOpenInfoModal = (description: string) => {
@@ -130,36 +128,32 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
           disableEnjoyment={!hasEnjoymentPrivilege || !hasActiveContract}
           disablePayment={!hasPaymentPrivilege || !hasActiveContract}
           actionDescriptions={actionDescriptions}
-          hasTableData={tableData && tableData.length > 0}
+          hasTableData={tableData?.length > 0}
           onRequestEnjoyment={() => {
             if (hasActiveContract && hasEnjoymentPrivilege) {
-              void handleRequestEnjoyment();
+              handleRequestEnjoyment();
             }
           }}
           onRequestPayment={() => {
             if (hasActiveContract && hasPaymentPrivilege) {
-              void handleRequestPayment();
+              handleRequestPayment();
             }
           }}
-          onInfoIconClick={(desc) => {
-            void onOpenInfoModal(desc);
-          }}
+          onInfoIconClick={onOpenInfoModal}
         />
       </Stack>
     ) : (
       <Stack gap={spacing.s150} justifyContent="end" direction="row">
         {pendingDaysWidget}
+
         <Stack gap={spacing.s025} alignItems="center">
           <Button
             spacing="wide"
             variant="filled"
             iconBefore={<MdAdd />}
-            fullwidth={isMobile}
             disabled={!hasActiveContract || !hasEnjoymentPrivilege}
             onClick={() => {
-              if (hasActiveContract && hasEnjoymentPrivilege) {
-                void handleRequestEnjoyment();
-              }
+              void handleRequestEnjoyment();
             }}
           >
             {labels.holidays.actions.enjoyment}
@@ -170,23 +164,19 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
               appearance="primary"
               size="16px"
               cursorHover
-              onClick={() => {
-                void onOpenInfoModal(actionDescriptions.enjoyment);
-              }}
+              onClick={() => onOpenInfoModal(actionDescriptions.enjoyment)}
             />
           )}
         </Stack>
+
         <Stack gap={spacing.s025} alignItems="center">
           <Button
             spacing="wide"
             variant="filled"
             iconBefore={<MdAdd />}
-            fullwidth={isMobile}
             disabled={!hasActiveContract || !hasPaymentPrivilege}
             onClick={() => {
-              if (hasActiveContract && hasPaymentPrivilege) {
-                void handleRequestPayment();
-              }
+              void handleRequestPayment();
             }}
           >
             {labels.holidays.actions.payment}
@@ -197,55 +187,58 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
               appearance="primary"
               size="16px"
               cursorHover
-              onClick={() => {
-                void onOpenInfoModal(actionDescriptions.payment);
-              }}
+              onClick={() => onOpenInfoModal(actionDescriptions.payment)}
             />
           )}
         </Stack>
       </Stack>
     );
 
-  const renderDaysUsedContent = () => {
-    return (
-      <StyledHolidaysContainer $isMobile={isMobile}>
-        <Stack alignItems="center" justifyContent="space-between">
-          <Text type="title" size="medium">
-            {labels.holidays.daysUsed.title}
-          </Text>
-          {renderActions()}
-        </Stack>
-        {contracts.map((contract) => {
-          const contractVacationData = formatVacationHistory([
-            {
-              ...employee,
-              employmentContracts: [contract],
-            },
-          ]);
+  const renderDaysUsedContent = () => (
+    <StyledHolidaysContainer $isMobile={isMobile}>
+      <Stack alignItems="center" justifyContent="space-between">
+        <Text type="title" size="medium">
+          {labels.holidays.daysUsed.title}
+        </Text>
+        {renderActions()}
+      </Stack>
 
-          return (
-            <div key={contract.contractId}>
-              {contracts.length > 1 && (
-                <Text
-                  type="title"
-                  weight="bold"
-                  size="small"
-                  appearance="gray"
-                  padding={`${spacing.s100} ${spacing.s0}`}
-                >
-                  {`${capitalizeWords(contract.businessName)} - ${
-                    contractTypeLabels[contract.contractType] ??
-                    contract.contractType
-                  }`}
-                </Text>
-              )}
-              <DaysUsedTable data={contractVacationData} loading={isLoading} />
-            </div>
-          );
-        })}
-      </StyledHolidaysContainer>
-    );
-  };
+      {contracts.map((contract) => {
+        const contractVacationData = formatVacationHistory([
+          {
+            ...employee,
+            employmentContracts: [
+              {
+                ...contract,
+                vacationsHistory: [],
+              },
+            ],
+          },
+        ]);
+
+        return (
+          <div key={contract.contractId}>
+            {contracts.length > 1 && (
+              <Text
+                type="title"
+                weight="bold"
+                size="small"
+                appearance="gray"
+                padding={`${spacing.s100} ${spacing.s0}`}
+              >
+                {`${capitalizeWords(contract.businessName)} - ${
+                  contractTypeLabels[contract.contractType] ??
+                  contract.contractType
+                }`}
+              </Text>
+            )}
+
+            <DaysUsedTable data={contractVacationData} loading={isLoading} />
+          </div>
+        );
+      })}
+    </StyledHolidaysContainer>
+  );
 
   return (
     <>
@@ -255,16 +248,17 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
         appRoute={appRoute}
         navigatePage={navigatePage}
       >
-        {!tableData || tableData.length === 0 ? (
+        {!tableData?.length ? (
           renderDaysUsedContent()
         ) : (
           <>
             <Tabs
               tabs={tabs}
               selectedTab={selectedTab}
-              onChange={(tabId) => setSelectedTab(tabId)}
+              onChange={setSelectedTab}
               scroll={false}
             />
+
             {selectedTab === "solicitudes" ? (
               <StyledHolidaysContainer $isMobile={isMobile}>
                 <Stack alignItems="center" justifyContent="space-between">
@@ -272,6 +266,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
                     {labels.holidays.inProgress.title}
                   </Text>
                 </Stack>
+
                 <HolidaysTable
                   data={tableData}
                   loading={isLoadingRequests}
@@ -286,6 +281,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
           </>
         )}
       </AppMenu>
+
       {infoModal.open && (
         <InfoModal
           title={infoModal.title}

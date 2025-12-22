@@ -5,6 +5,7 @@ import {
   IEmployee,
   IEmployeeOptions,
 } from "@ptypes/employeePortalBusiness.types";
+import { EmployeeContractAggregate } from "@ptypes/employeeContractAggregate";
 
 export interface IPreferences {
   boardOrientation: "vertical" | "horizontal";
@@ -63,5 +64,9 @@ export interface IAppContextType {
   setEmployees: React.Dispatch<React.SetStateAction<IEmployee>>;
   employeeOptions: IEmployeeOptions[];
   setEmployeeOptions: React.Dispatch<React.SetStateAction<IEmployeeOptions[]>>;
+  contracts: EmployeeContractAggregate[];
+  setContracts: React.Dispatch<
+    React.SetStateAction<EmployeeContractAggregate[]>
+  >;
   isLoadingUser: boolean;
 }

@@ -11,6 +11,7 @@ import { MdClear, MdInfoOutline } from "react-icons/md";
 import { createPortal } from "react-dom";
 
 import { spacing } from "@design/tokens/spacing";
+import { labels } from "@i18n/labels";
 
 import {
   StyledContainerClose,
@@ -21,7 +22,6 @@ import {
 } from "./styles";
 import { Document } from "./UploadDocumentsTable/types";
 import { UploadDocumentsTable } from "./UploadDocumentsTable";
-import { labels } from "@i18n/labels"; // <-- centralizamos los textos
 
 export interface UploadDocumentsModalProps {
   portalId?: string;

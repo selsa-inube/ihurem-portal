@@ -8,6 +8,7 @@ import {
   IEmployee,
   IEmployeeOptions,
 } from "@ptypes/employeePortalBusiness.types";
+import { EmployeeContractAggregate } from "@ptypes/employeeContractAggregate";
 import selsaLogo from "@assets/images/selsa.png";
 import { Logger } from "@utils/logger";
 
@@ -22,6 +23,7 @@ interface AppProviderProps {
   businessUnitData: IBusinessUnitsPortalEmployee;
   employee: IEmployee;
   employeeOptions?: IEmployeeOptions[] | null;
+  contracts?: EmployeeContractAggregate[];
 }
 
 function AppProvider(props: AppProviderProps) {
@@ -32,10 +34,13 @@ function AppProvider(props: AppProviderProps) {
     businessUnitData,
     employee,
     employeeOptions,
+    contracts: initialContracts = [],
   } = props;
   const { user: IAuthUser, isLoading: isIAuthLoading } = useIAuth();
 
   const [user, setUser] = useState<IUser | null>(null);
+  const [contracts, setContracts] =
+    useState<EmployeeContractAggregate[]>(initialContracts);
 
   useEffect(() => {
     if (!isIAuthLoading) {
@@ -67,7 +72,6 @@ function AppProvider(props: AppProviderProps) {
 
   const [businessManagers, setBusinessManagers] =
     useState<IBusinessManagers>(businessManagersData);
-
   const [businessUnit, setBusinessUnit] =
     useState<IBusinessUnitsPortalEmployee>(businessUnitData);
   const [employees, setEmployees] = useState<IEmployee>(employee);
@@ -85,9 +89,7 @@ function AppProvider(props: AppProviderProps) {
         Logger.error(
           "Error al parsear selectedClient desde localStorage",
           error as Error,
-          {
-            storedClient,
-          },
+          { storedClient },
         );
       }
     }
@@ -139,6 +141,8 @@ function AppProvider(props: AppProviderProps) {
         setEmployees,
         employeeOptions: employeeOptionsState,
         setEmployeeOptions,
+        contracts,
+        setContracts,
         isLoadingUser: isIAuthLoading,
       }}
     >

@@ -18,7 +18,7 @@ import { requestPaymentSteps } from "./config/assisted.config";
 import { ModalState } from "./types";
 
 function useFormManagement() {
-  const { employees } = useAppContext();
+  const { contracts } = useAppContext();
 
   const [formValues, setFormValues] =
     useState<IUnifiedHumanResourceRequestData>({
@@ -41,7 +41,7 @@ function useFormManagement() {
     useRef<FormikProps<IUnifiedHumanResourceRequestData>>(null);
 
   useEffect(() => {
-    const contrato = employees?.employmentContracts?.[0];
+    const contrato = contracts?.[0];
 
     if (contrato) {
       setFormValues((prev) => ({
@@ -52,7 +52,7 @@ function useFormManagement() {
         contractType: contrato.contractType ?? "",
       }));
     }
-  }, [employees]);
+  }, [contracts]);
 
   const updateFormValues = () => {
     if (generalInformationRef.current) {

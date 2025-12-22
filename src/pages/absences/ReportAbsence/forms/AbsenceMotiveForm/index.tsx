@@ -90,7 +90,7 @@ const AbsenceMotiveForm = forwardRef<
     },
     ref,
   ) => {
-    const { employees } = useAppContext();
+    const { contracts } = useAppContext();
 
     const formik = useFormik<IAbsenceMotiveEntry>({
       initialValues,
@@ -156,8 +156,6 @@ const AbsenceMotiveForm = forwardRef<
     ]);
 
     useEffect(() => {
-      const contracts = employees.employmentContracts ?? [];
-
       if (contracts.length === 1 && !formik.values.contractId) {
         const contract = contracts[0];
 
@@ -166,7 +164,7 @@ const AbsenceMotiveForm = forwardRef<
         formik.setFieldValue("contractType", contract.contractType);
         formik.setFieldValue("contractNumber", contract.contractNumber);
       }
-    }, [employees.employmentContracts, formik.values.contractId]);
+    }, [contracts, formik.values.contractId]);
 
     useEffect(() => {
       if (onFormValid) {

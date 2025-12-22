@@ -39,24 +39,22 @@ const GeneralInformationFormUI = ({
   handlePreviousStep,
   isFormValid,
 }: GeneralInformationFormUIProps) => {
-  const { employees } = useAppContext();
+  const { contracts } = useAppContext();
 
   const contractOptions = useMemo(
     () =>
-      (employees.employmentContracts ?? []).map((c) => ({
+      (contracts ?? []).map((c) => ({
         id: c.contractId,
         value: c.contractId,
         label: `${c.businessName} - ${contractTypeLabels[c.contractType]}`,
       })),
-    [employees.employmentContracts],
+    [contracts],
   );
 
   const handleContractChange = (name: string, value: string) => {
     formik.setFieldValue(name, value);
 
-    const contrato = employees.employmentContracts?.find(
-      (c) => c.contractId === value,
-    );
+    const contrato = contracts?.find((c) => c.contractId === value);
 
     if (contrato) {
       formik.setFieldValue("businessName", contrato.businessName);

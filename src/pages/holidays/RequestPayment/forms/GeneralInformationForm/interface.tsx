@@ -36,24 +36,22 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
     props;
 
   const isMobile = useMediaQuery("(max-width: 700px)");
-  const { employees } = useAppContext();
+  const { contracts } = useAppContext();
 
   const contractOptions = useMemo(
     () =>
-      (employees.employmentContracts ?? []).map((c) => ({
+      (contracts ?? []).map((c) => ({
         id: c.contractId,
         value: c.contractId,
         label: `${c.businessName} - ${contractTypeLabels[c.contractType]}`,
       })),
-    [employees.employmentContracts],
+    [contracts],
   );
 
   const handleContractChange = (name: string, value: string) => {
     formik.setFieldValue(name, value);
 
-    const contrato = employees.employmentContracts?.find(
-      (c) => c.contractId === value,
-    );
+    const contrato = contracts?.find((c) => c.contractId === value);
 
     if (contrato) {
       formik.setFieldValue("businessName", contrato.businessName);
@@ -70,8 +68,8 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
   }, [contractOptions, formik.values.contractId]);
 
   useEffect(() => {
-    if (formik.values.contractId && employees.employmentContracts?.length) {
-      const contrato = employees.employmentContracts.find(
+    if (formik.values.contractId && contracts?.length) {
+      const contrato = contracts.find(
         (c) => c.contractId === formik.values.contractId,
       );
 
@@ -81,7 +79,7 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
         formik.setFieldValue("contractNumber", contrato.contractNumber);
       }
     }
-  }, [formik.values.contractId, employees.employmentContracts]);
+  }, [formik.values.contractId, contracts]);
 
   return (
     <form>

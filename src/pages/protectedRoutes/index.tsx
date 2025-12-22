@@ -14,6 +14,7 @@ import { InfoModal } from "@components/modals/InfoModal";
 import { protectedRouter } from "@routes/publicRouter";
 import { useSignOut } from "@hooks/useSignOut";
 import { usePortalAuth } from "@hooks/usePortalAuth";
+import { useEmployeeContractsValidation } from "@hooks/useEmployeeContract";
 
 export function ProtectedRoutes() {
   const {
@@ -38,6 +39,7 @@ export function ProtectedRoutes() {
   }
 
   const [isReady, setIsReady] = useState(false);
+
   const { loginWithRedirect, isAuthenticated, isLoading, user, error } =
     useIAuth();
 
@@ -48,7 +50,7 @@ export function ProtectedRoutes() {
   const {
     businessUnitData,
     hasError: hasBusinessUnitError,
-    codeError: BusinessUnit,
+    codeError: businessUnitErrorCode,
   } = useBusinessUnit(portalData);
 
   const identificationNumber = user?.id ?? "";
@@ -75,10 +77,36 @@ export function ProtectedRoutes() {
     businessUnitData.publicCode ?? "",
   );
 
+  const {
+    contracts,
+    loading: contractsLoading,
+    validated: contractsValidated,
+  } = useEmployeeContractsValidation(
+    employee?.employeeId ? String(employee.employeeId) : undefined,
+  );
+
+  useEffect(() => {
+    if (!contractsValidated || contractsLoading) return;
+
+    if (contracts.length === 0) {
+      signOut("/error?code=1004");
+      return;
+    }
+
+    const hasFormalizedContract = contracts.some(
+      (contract) => contract.contractStatus?.toLowerCase() === "formalized",
+    );
+
+    if (!hasFormalizedContract) {
+      signOut("/error?code=1004");
+    }
+  }, [contractsValidated, contractsLoading, contracts, signOut]);
+
   useEffect(() => {
     if (portalData?.externalAuthenticationProvider !== undefined) {
-      const externalIAuthProvider = portalData.externalAuthenticationProvider;
-      if (!externalIAuthProvider) {
+      const externalProvider = portalData.externalAuthenticationProvider;
+
+      if (!externalProvider) {
         if (
           !isAuthenticated &&
           !isLoading &&
@@ -88,7 +116,7 @@ export function ProtectedRoutes() {
           loginWithRedirect();
         }
       } else {
-        setExternalIAuthProvider(externalIAuthProvider);
+        setExternalIAuthProvider(externalProvider);
         setShowExternalAuthNotification(true);
       }
     }
@@ -114,25 +142,24 @@ export function ProtectedRoutes() {
     loginWithRedirect,
     portalData.externalAuthenticationProvider,
     hasPortalError,
-    pathStart,
   ]);
 
-  const handleCloseExternalAuthNotification = () => {
-    setShowExternalAuthNotification(false);
-  };
-
-  if (isLoading || !isReady || employeeLoading || optionsLoading) {
+  if (
+    isLoading ||
+    employeeLoading ||
+    optionsLoading ||
+    contractsLoading ||
+    !isReady
+  ) {
     return <LoadingAppUI />;
   }
 
   const errorCode =
     managersErrorCode ??
-    BusinessUnit ??
+    businessUnitErrorCode ??
     employeeCode ??
     optionsCode ??
-    (employee && employee.identificationType !== identificationType
-      ? 1004
-      : 1001);
+    1001;
 
   if (
     hasPortalError ||
@@ -152,6 +179,7 @@ export function ProtectedRoutes() {
         businessUnitData={businessUnitData}
         employee={employee}
         employeeOptions={employeeOptions}
+        contracts={contracts}
       >
         <GlobalStyles />
         <RouterProvider router={protectedRouter} />
@@ -163,7 +191,7 @@ export function ProtectedRoutes() {
           titleDescription="Proveedor de autenticación externo"
           description={`Este portal utiliza un método de autenticación externo a través de ${externalIAuthProvider}. Por favor, utiliza las credenciales correspondientes a este proveedor para acceder al sistema.`}
           buttonText="Entendido"
-          onCloseModal={handleCloseExternalAuthNotification}
+          onCloseModal={() => setShowExternalAuthNotification(false)}
           portalId="root"
         />
       )}

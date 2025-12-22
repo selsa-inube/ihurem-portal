@@ -117,9 +117,8 @@ function VerificationBoxes({
   isTablet,
   contractOptions,
 }: VerificationBoxesProps) {
-  const { employees } = useAppContext();
+  const { contracts } = useAppContext();
 
-  const contracts = employees.employmentContracts as IContract[];
   const hasMultipleContracts = (contracts?.length ?? 0) > 1;
 
   return (

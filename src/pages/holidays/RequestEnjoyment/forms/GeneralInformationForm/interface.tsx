@@ -32,16 +32,16 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
   const { formik, validationSchema, loading, withNextButton, handleNextStep } =
     props;
   const isMobile = useMediaQuery("(max-width: 700px)");
-  const { employees } = useAppContext();
+  const { contracts } = useAppContext();
 
   const contractOptions = useMemo(
     () =>
-      (employees.employmentContracts ?? []).map((c) => ({
+      (contracts ?? []).map((c) => ({
         id: c.contractId,
         value: c.contractId,
         label: `${c.businessName} - ${contractTypeLabels[c.contractType]}`,
       })),
-    [employees.employmentContracts],
+    [contracts],
   );
 
   useEffect(() => {
@@ -49,9 +49,7 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
       const opt = contractOptions[0];
       formik.setFieldValue("contractId", opt.value);
 
-      const contrato = employees.employmentContracts?.find(
-        (c) => c.contractId === opt.value,
-      );
+      const contrato = contracts?.find((c) => c.contractId === opt.value);
 
       if (contrato) {
         formik.setFieldValue("businessName", contrato.businessName);
@@ -59,7 +57,7 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
         formik.setFieldValue("contractNumber", contrato.contractNumber);
       }
     }
-  }, [contractOptions]);
+  }, [contractOptions, contracts]);
 
   return (
     <form>
@@ -119,9 +117,8 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
                 fullwidth
                 onChange={(_, v) => {
                   formik.setFieldValue("contractId", v);
-                  const contrato = employees.employmentContracts?.find(
-                    (c) => c.contractId === v,
-                  );
+
+                  const contrato = contracts?.find((c) => c.contractId === v);
 
                   if (contrato) {
                     formik.setFieldValue("businessName", contrato.businessName);
@@ -132,7 +129,7 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
                     );
                   }
                 }}
-                required={isRequired(props.validationSchema, "contractId")}
+                required={isRequired(validationSchema, "contractId")}
               />
             )}
 
