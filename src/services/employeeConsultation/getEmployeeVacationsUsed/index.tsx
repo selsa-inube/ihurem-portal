@@ -25,7 +25,7 @@ const getEmployeeVacationsUsed = async (
   const fetchTimeout = fetchTimeoutServices;
 
   const page = 1;
-  const perPage = 50;
+  const perPage = 1000;
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
