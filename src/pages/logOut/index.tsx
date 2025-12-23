@@ -6,7 +6,7 @@ export function LogOut() {
   const { signOut } = useSignOut();
 
   useEffect(() => {
-    signOut("/error?code=1002");
+    signOut("/");
   }, [signOut]);
 
   return null;
