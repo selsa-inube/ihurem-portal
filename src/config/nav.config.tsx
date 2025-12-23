@@ -13,7 +13,7 @@ const baseNavLinks = [
     id: "vacations",
     serviceCode: "vacations",
     label: labels.config.nav.holidays.label,
-    path: "/holidays",
+    path: "/holidays-confirmation",
     description: labels.config.nav.holidays.description,
     order: 1,
   },

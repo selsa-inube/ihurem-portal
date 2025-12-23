@@ -12,6 +12,7 @@ import { ProtectedRoute } from "@pages/protectedRoute";
 import { LogOut } from "@pages/logOut";
 
 import { SelfRegistrationRoutes } from "./self-registration";
+import { HolidaysConfirmationRoutes } from "./holidaysConfirmation";
 import { LoginRoutes } from "./login";
 import { HolidaysRoutes } from "./holidays";
 import { CertificationsRoutes } from "./certifications";
@@ -31,8 +32,13 @@ const protectedRouter = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="/self-registration" element={<SelfRegistrationRoutes />} />
+      <Route path="/*" element={<AppPage withNav={false} />}>
+        <Route
+          path="holidays-confirmation/*"
+          element={<HolidaysConfirmationRoutes />}
+        />
+      </Route>
       <Route path="/login/*" element={<LoginRoutes />} />
-
       <Route index element={<ContractValidationWrapper />} />
       <Route path="/" element={<ContractValidationWrapper />} />
       <Route path="/*" element={<AppPage />}>
