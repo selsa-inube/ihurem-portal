@@ -19,12 +19,13 @@ import { contractTypeLabels } from "@mocks/contracts/enums";
 import { useEmployee } from "@hooks/useEmployee";
 import { Widget } from "@components/cards/Widget";
 import { useEmployeeVacationDays } from "@hooks/useEmployeeVacationDays";
+import { useEmployeeVacationsUsed } from "@hooks/useEmployeeVacationsUsed";
 
 import { StyledHolidaysContainer } from "./styles";
 import { HolidaysTable } from "./components/HolidaysTable";
 import { DaysUsedTable } from "./components/DaysUsedTable";
 import { IHolidaysTable } from "./components/HolidaysTable/types";
-import { formatVacationHistory } from "./config/table.config";
+import { formatVacationHistoryFromVacationsUsed } from "./config/table.config";
 import { Detail } from "./components/Detail";
 
 interface HolidaysOptionsUIProps {
@@ -80,6 +81,23 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
   const { vacationDays, loadingDays } = useEmployeeVacationDays(
     employee?.employeeId ?? null,
   );
+
+  const contractsVacationsData = contracts.map((contract) => {
+    const { vacationsUsed, loadingVacations } = useEmployeeVacationsUsed({
+      contractId: String(contract.contractId),
+      employeeId: String(employee?.employeeId ?? ""),
+    });
+
+    return {
+      contract,
+      vacationsUsed,
+      loadingVacations,
+      formattedData: formatVacationHistoryFromVacationsUsed(
+        vacationsUsed ?? [],
+        contract,
+      ),
+    };
+  });
 
   const totalDays =
     vacationDays?.reduce((sum, contract) => sum + contract.pendingDays, 0) ?? 0;
@@ -203,20 +221,8 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
         {renderActions()}
       </Stack>
 
-      {contracts.map((contract) => {
-        const contractVacationData = formatVacationHistory([
-          {
-            ...employee,
-            employmentContracts: [
-              {
-                ...contract,
-                vacationsHistory: [],
-              },
-            ],
-          },
-        ]);
-
-        return (
+      {contractsVacationsData.map(
+        ({ contract, formattedData, loadingVacations }) => (
           <div key={contract.contractId}>
             {contracts.length > 1 && (
               <Text
@@ -233,10 +239,13 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
               </Text>
             )}
 
-            <DaysUsedTable data={contractVacationData} loading={isLoading} />
+            <DaysUsedTable
+              data={formattedData}
+              loading={isLoading ?? loadingVacations}
+            />
           </div>
-        );
-      })}
+        ),
+      )}
     </StyledHolidaysContainer>
   );
 
