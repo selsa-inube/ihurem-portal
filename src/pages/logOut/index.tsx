@@ -1,10 +1,13 @@
-import { useIAuth } from "@inube/iauth-react";
 import { useEffect } from "react";
 
+import { useSignOut } from "@hooks/useSignOut";
+
 export function LogOut() {
-  const { logout } = useIAuth();
+  const { signOut } = useSignOut();
+
   useEffect(() => {
-    logout();
-  }, [logout]);
+    signOut("/");
+  }, [signOut]);
+
   return null;
 }

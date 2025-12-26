@@ -1,18 +1,16 @@
 import { MdOutlineVisibility, MdDeleteOutline } from "react-icons/md";
 
-import { Logger } from "@utils/logger";
 import {
   ERequestType,
   HumanResourceRequest,
   requestTypeMap,
   requestTypeLabels,
 } from "@ptypes/humanResourcesRequest.types";
-import { Employee } from "@ptypes/employeePortalConsultation.types";
+import { Logger } from "@utils/logger";
 import { formatDate } from "@utils/date";
 import { parseDataSafely, getValueFromData } from "@utils/parser";
 
 import { HumanResourceRequestStatus } from "./enums";
-import { IDaysUsedTable } from "../components/DaysUsedTable/types";
 
 export const formatHolidaysData = (holidays: HumanResourceRequest[]) =>
   holidays.map((holiday) => {
@@ -82,41 +80,31 @@ export const formatHolidaysData = (holidays: HumanResourceRequest[]) =>
     };
   });
 
-export const formatVacationHistory = (
-  employees: Employee[],
-): (IDaysUsedTable & { businessName: string; contractType: string })[] => {
-  const allVacations: (IDaysUsedTable & {
-    businessName: string;
-    contractType: string;
-  })[] = [];
-  employees.forEach((employee) => {
-    if (
-      !employee.employmentContracts ||
-      employee.employmentContracts.length === 0
-    ) {
-      return;
-    }
-    employee.employmentContracts.forEach((contract) => {
-      contract.vacationsHistory.forEach((vacation) => {
-        allVacations.push({
-          startDate: {
-            value: formatDate(vacation.startDateVacationEnjoyment),
-          },
-          usageMode: {
-            value:
-              vacation.vacationType === "holiday_pay"
-                ? "Pagadas"
-                : "Disfrutadas",
-          },
-          days: {
-            value: vacation.businessDaysOfVacation,
-          },
-          businessName: contract.businessName,
-          contractType: contract.contractType,
-        });
-      });
-    });
-  });
-
-  return allVacations;
+export const formatVacationHistoryFromVacationsUsed = (
+  vacationsUsed: {
+    businessDayOfVacation: string;
+    confirmationDateOfEmployment: string;
+    contractId: string;
+    earlyReturnDate: string;
+    startDateVacationEmployment: string;
+    vacationId: string;
+    vacationType: string;
+    employeeId: string;
+  }[],
+  contract: { businessName?: string; contractType?: string },
+) => {
+  return vacationsUsed.map((vacation) => ({
+    startDate: {
+      value: formatDate(vacation.startDateVacationEmployment),
+    },
+    usageMode: {
+      value:
+        vacation.vacationType === "holiday_pay" ? "Pagadas" : "Disfrutadas",
+    },
+    days: {
+      value: Number(vacation.businessDayOfVacation),
+    },
+    businessName: contract.businessName ?? "",
+    contractType: contract.contractType ?? "",
+  }));
 };

@@ -26,6 +26,15 @@ export function ProtectedRoutes() {
     errorCode: managersErrorCode,
   } = usePortalAuth();
 
+  if (window.location.pathname === "/self-registration") {
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams(url.search);
+    const portalParam = params.get("portal");
+    if (!portalParam) {
+      return <ErrorPage errorCode={1000} />;
+    }
+  }
+
   const { signOut } = useSignOut();
 
   const [showExternalAuthNotification, setShowExternalAuthNotification] =
@@ -144,13 +153,7 @@ export function ProtectedRoutes() {
     hasPortalError,
   ]);
 
-  if (
-    isLoading ||
-    employeeLoading ||
-    optionsLoading ||
-    contractsLoading ||
-    !isReady
-  ) {
+  if (isLoading || employeeLoading || optionsLoading || !isReady) {
     return <LoadingAppUI />;
   }
 
