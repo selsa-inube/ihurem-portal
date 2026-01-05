@@ -1,17 +1,22 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useMemo } from "react";
 import { FormikProps } from "formik";
 import { useMediaQuery } from "@inubekit/inubekit";
 
 import { labels } from "@i18n/labels";
 import { SendRequestModal } from "@components/modals/SendRequestModal";
 import { RequestInfoModal } from "@components/modals/RequestInfoModal";
+import { ProcessingRequestModal } from "@components/modals/ProcessingRequestModal";
+import { useTaskExecutionMode } from "@hooks/useTaskExecutionMode";
+import { IStep } from "@components/feedback/AssistedProcess/types";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 import { useRequestSubmission } from "@hooks/usePostHumanResourceRequest";
 import {
   IUnifiedHumanResourceRequestData,
   ERequestType,
+  ETaskStatus,
 } from "@ptypes/humanResourcesRequest.types";
 import { useAppContext } from "@context/AppContext/useAppContext";
+import { useHumanResourceRequestById } from "@hooks/useHumanResourceRequestById";
 
 import { RequestEnjoymentUI } from "./interface";
 import { requestEnjoymentSteps } from "./config/assisted.config";
@@ -100,6 +105,9 @@ function useModalManagement() {
 
 function RequestEnjoyment() {
   const [currentStep, setCurrentStep] = useState(1);
+  const [showProcessingModal, setShowProcessingModal] = useState(false);
+  const [requestIdToTrack, setRequestIdToTrack] = useState<string>("");
+  const [pollingTick, setPollingTick] = useState(0);
 
   const {
     formValues,
@@ -122,6 +130,7 @@ function RequestEnjoyment() {
 
   const {
     requestNum,
+    requestId,
     submitRequestHandler,
     navigateAfterSubmission,
     showErrorFlag,
@@ -133,6 +142,72 @@ function RequestEnjoyment() {
     userCodeInCharge,
     userNameInCharge,
   );
+
+  const { isAutomatic, isLoading } = useTaskExecutionMode(requestId ?? "");
+
+  const { humanResourceRequest } = useHumanResourceRequestById(
+    requestIdToTrack,
+    pollingTick,
+  );
+
+  const assistedSteps: IStep[] = useMemo(() => {
+    if (humanResourceRequest?.tasksToManageTheHumanResourcesRequests?.length) {
+      return humanResourceRequest.tasksToManageTheHumanResourcesRequests.map(
+        (task, index) => ({
+          id: index + 1,
+          number: index + 1,
+          name: task.taskName,
+          label: task.taskName,
+          description: task.description,
+          status: task.taskStatus,
+        }),
+      );
+    }
+    return requestEnjoymentSteps.map((step, index) => ({
+      id: typeof step.id === "number" ? step.id : index + 1,
+      label: step.name,
+      number: step.number,
+      name: step.name,
+      description: step.description,
+    }));
+  }, [humanResourceRequest, requestEnjoymentSteps]);
+
+  useEffect(() => {
+    if (!requestId || isLoading) return;
+
+    if (isAutomatic) {
+      setRequestIdToTrack(requestId);
+      setShowProcessingModal(true);
+    }
+  }, [requestId, isAutomatic, isLoading]);
+
+  useEffect(() => {
+    if (!showProcessingModal || !requestIdToTrack) return;
+
+    const interval = setInterval(() => {
+      setPollingTick((prev) => prev + 1);
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [showProcessingModal, requestIdToTrack]);
+
+  useEffect(() => {
+    if (
+      !showProcessingModal ||
+      !humanResourceRequest?.tasksToManageTheHumanResourcesRequests
+    ) {
+      return;
+    }
+
+    const tasks = humanResourceRequest.tasksToManageTheHumanResourcesRequests;
+
+    const completedTasks = tasks.filter(
+      (task) => task.taskStatus === ETaskStatus.completed,
+    );
+
+    const nextStep = completedTasks.length + 1;
+    setCurrentStep(Math.min(nextStep, assistedSteps.length));
+  }, [humanResourceRequest, showProcessingModal, assistedSteps.length]);
 
   useErrorFlag(showErrorFlag, errorMessage, "Error", false, 10000);
 
@@ -236,6 +311,17 @@ function RequestEnjoyment() {
           staffName={userNameInCharge ?? ""}
           onCloseModal={handleSubmitRequestInfoModal}
           onSubmitButtonClick={handleSubmitRequestInfoModal}
+        />
+      )}
+
+      {showProcessingModal && (
+        <ProcessingRequestModal
+          steps={assistedSteps}
+          currentStepId={Math.min(currentStep, assistedSteps.length)}
+          onCloseModal={() => {
+            setShowProcessingModal(false);
+            navigateAfterSubmission("vacations");
+          }}
         />
       )}
     </>

@@ -1,16 +1,21 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { FormikProps } from "formik";
 
 import {
   IUnifiedHumanResourceRequestData,
   ERequestType,
+  ETaskStatus,
 } from "@ptypes/humanResourcesRequest.types";
 import { SendRequestModal } from "@components/modals/SendRequestModal";
 import { RequestInfoModal } from "@components/modals/RequestInfoModal";
+import { ProcessingRequestModal } from "@components/modals/ProcessingRequestModal";
 import { useErrorFlag } from "@hooks/useErrorFlag";
+import { useTaskExecutionMode } from "@hooks/useTaskExecutionMode";
 import { useRequestSubmission } from "@hooks/usePostHumanResourceRequest";
 import { useAppContext } from "@context/AppContext/useAppContext";
+import { useHumanResourceRequestById } from "@hooks/useHumanResourceRequestById";
+import { IStep } from "@components/feedback/AssistedProcess/types";
 import { labels } from "@i18n/labels";
 
 import { RequestPaymentUI } from "./interface";
@@ -42,7 +47,6 @@ function useFormManagement() {
 
   useEffect(() => {
     const contrato = contracts?.[0];
-
     if (contrato) {
       setFormValues((prev) => ({
         ...prev,
@@ -55,10 +59,9 @@ function useFormManagement() {
   }, [contracts]);
 
   const updateFormValues = () => {
-    if (generalInformationRef.current) {
-      setFormValues(generalInformationRef.current.values);
-      setIsCurrentFormValid(generalInformationRef.current.isValid);
-    }
+    if (!generalInformationRef.current) return;
+    setFormValues(generalInformationRef.current.values);
+    setIsCurrentFormValid(generalInformationRef.current.isValid);
   };
 
   return {
@@ -76,30 +79,31 @@ function useModalManagement() {
     isRequestInfoModalVisible: false,
   });
 
-  const openSendModal = () =>
-    setModalState((prev) => ({ ...prev, isSendModalVisible: true }));
-  const closeSendModal = () =>
-    setModalState((prev) => ({ ...prev, isSendModalVisible: false }));
-  const openInfoModal = () =>
-    setModalState({
-      isSendModalVisible: false,
-      isRequestInfoModalVisible: true,
-    });
-  const closeInfoModal = () =>
-    setModalState((prev) => ({ ...prev, isRequestInfoModalVisible: false }));
-
   return {
     modalState,
-    openSendModal,
-    closeSendModal,
-    openInfoModal,
-    closeInfoModal,
+    openSendModal: () =>
+      setModalState((p) => ({ ...p, isSendModalVisible: true })),
+    closeSendModal: () =>
+      setModalState((p) => ({ ...p, isSendModalVisible: false })),
+    openInfoModal: () =>
+      setModalState({
+        isSendModalVisible: false,
+        isRequestInfoModalVisible: true,
+      }),
+    closeInfoModal: () =>
+      setModalState((p) => ({ ...p, isRequestInfoModalVisible: false })),
   };
 }
 
 function RequestPayment() {
   const navigate = useNavigate();
+
   const [currentStep, setCurrentStep] = useState(1);
+  const [showProcessingModal, setShowProcessingModal] = useState(false);
+  const [requestIdToTrack, setRequestIdToTrack] = useState<string>("");
+  const [pollingTick, setPollingTick] = useState(0);
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
+  const [processingCurrentStep, setProcessingCurrentStep] = useState(1);
 
   const {
     formValues,
@@ -122,6 +126,7 @@ function RequestPayment() {
 
   const {
     requestNum,
+    requestId,
     submitRequestHandler,
     showErrorFlag,
     errorMessage,
@@ -133,34 +138,120 @@ function RequestPayment() {
     userNameInCharge,
   );
 
+  const { isAutomatic, isLoading } = useTaskExecutionMode(requestId ?? "");
+
+  useEffect(() => {
+    if (!requestId || isLoading) return;
+
+    openSendModal();
+  }, [requestId, isLoading]);
+
+  const { humanResourceRequest } = useHumanResourceRequestById(
+    requestIdToTrack,
+    pollingTick,
+  );
+
+  useEffect(() => {
+    if (humanResourceRequest?.tasksToManageTheHumanResourcesRequests?.length) {
+      setIsDataLoaded(true);
+    }
+  }, [humanResourceRequest]);
+
+  const assistedSteps: IStep[] = useMemo(() => {
+    if (humanResourceRequest?.tasksToManageTheHumanResourcesRequests?.length) {
+      return humanResourceRequest.tasksToManageTheHumanResourcesRequests.map(
+        (task, index) => ({
+          id: index + 1,
+          number: index + 1,
+          name: task.taskName,
+          label: task.taskName,
+          description: task.description,
+          status: task.taskStatus,
+        }),
+      );
+    }
+    return [];
+  }, [humanResourceRequest]);
+
+  useEffect(() => {
+    if (!showProcessingModal || !requestIdToTrack) return;
+
+    const interval = setInterval(() => {
+      setPollingTick((prev) => prev + 1);
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [showProcessingModal, requestIdToTrack]);
+
+  useEffect(() => {
+    if (isDataLoaded && requestIdToTrack && isAutomatic) {
+      setShowProcessingModal(true);
+    }
+  }, [isDataLoaded, requestIdToTrack, isAutomatic]);
+
+  useEffect(() => {
+    if (!humanResourceRequest?.tasksToManageTheHumanResourcesRequests) {
+      return;
+    }
+
+    const tasks = humanResourceRequest.tasksToManageTheHumanResourcesRequests;
+
+    const completedTasks = tasks.filter(
+      (task) => task.taskStatus === ETaskStatus.completed,
+    );
+
+    const nextStep = completedTasks.length + 1;
+    setProcessingCurrentStep(Math.min(nextStep, assistedSteps.length));
+
+    const allCompleted = completedTasks.length === tasks.length;
+
+    if (allCompleted) {
+      setShowProcessingModal(false);
+      setPollingTick(0);
+      openInfoModal();
+    }
+  }, [humanResourceRequest]);
+
+  const handleCloseProcessingModal = useCallback(() => {
+    setShowProcessingModal(false);
+    openInfoModal();
+  }, [openInfoModal]);
+
+  const handleFinishAssisted = () => {
+    updateFormValues();
+    setShowErrorFlag(false);
+
+    if (isAutomatic) {
+      return;
+    }
+
+    submitRequestHandler().then((isSuccess) => {
+      if (!isSuccess) return;
+    });
+  };
+
   useErrorFlag(showErrorFlag, errorMessage, "Error", false, 10000);
 
   const handleNextStep = () => {
     if (currentStep < requestPaymentSteps.length) {
       updateFormValues();
-      setCurrentStep(currentStep + 1);
+      setCurrentStep((prev) => prev + 1);
     }
   };
 
   const handlePreviousStep = () => {
     if (currentStep > 1) {
-      setCurrentStep(currentStep - 1);
+      setCurrentStep((prev) => prev - 1);
     }
   };
 
-  const handleFinishAssisted = () => {
-    openSendModal();
-  };
+  const handleConfirmSendModal = () => {
+    closeSendModal();
 
-  const handleConfirmSendModal = async () => {
-    setShowErrorFlag(false);
-    const isSuccess = await submitRequestHandler();
-
-    if (isSuccess) {
-      closeSendModal();
-      openInfoModal();
+    if (isAutomatic) {
+      setRequestIdToTrack(requestId ?? "");
     } else {
-      closeSendModal();
+      openInfoModal();
     }
   };
 
@@ -235,6 +326,14 @@ function RequestPayment() {
           staffName={userNameInCharge}
           onCloseModal={handleSubmitRequestInfoModal}
           onSubmitButtonClick={handleSubmitRequestInfoModal}
+        />
+      )}
+
+      {showProcessingModal && (
+        <ProcessingRequestModal
+          steps={assistedSteps}
+          currentStepId={Math.min(processingCurrentStep, assistedSteps.length)}
+          onCloseModal={handleCloseProcessingModal}
         />
       )}
     </>

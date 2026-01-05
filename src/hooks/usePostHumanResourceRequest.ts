@@ -27,6 +27,8 @@ export function useRequestSubmission(
 ) {
   const [requestNum, setRequestNum] = useState("");
 
+  const [requestId, setRequestId] = useState("");
+
   const { employees, contracts } = useAppContext();
 
   const hasSingleContract = (contracts?.length ?? 0) === 1;
@@ -122,6 +124,7 @@ export function useRequestSubmission(
 
       if (success && response?.humanResourceRequestId) {
         setRequestNum(response.humanResourceRequestNumber);
+        setRequestId(response.humanResourceRequestId);
 
         if (humanResourceRequestId) {
           navigateAfterSubmission(typeRequestKey);
@@ -144,6 +147,7 @@ export function useRequestSubmission(
 
   return {
     requestNum,
+    requestId,
     submitRequestHandler,
     navigateAfterSubmission,
     showErrorFlag,

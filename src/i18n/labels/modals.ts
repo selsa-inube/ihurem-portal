@@ -86,6 +86,19 @@ export const modals = {
     requiredError: "Este campo es obligatorio",
   },
 
+  processingRequest: {
+    title: "Procesando solicitud",
+    buttonText: "Entendido",
+    description: "Descripción por defecto",
+  },
+
+  requestDetail: {
+    attach: "Adjuntar",
+    forceApproval: "Forzar Aprobación",
+    requirements: "Requisitos",
+    errorPortalNode: "El nodo del portal no está definido.",
+  },
+
   uploadDocumentsTable: {
     noDocuments: "No hay documentos para mostrar",
     documentRequested: "Documento solicitado",

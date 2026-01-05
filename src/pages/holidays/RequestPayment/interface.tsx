@@ -16,6 +16,7 @@ import { RequirementsModal } from "@components/modals/RequirementsModal";
 import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
 import { mockAlertCards } from "@mocks/requirements/requirements-2.mock";
 import { ButtonRequirements } from "@components/inputs/ButtonWithCounter";
+import { AlertCardStep } from "./forms/RequirementsForm";
 
 import { GeneralInformationForm } from "./forms/GeneralInformationForm";
 import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
@@ -58,7 +59,7 @@ function RequestPaymentUI(props: RequestPaymentUIProps) {
   } = props;
 
   const isTablet = useMediaQuery("(max-width: 1100px)");
-  const shouldDisableNext = !isCurrentFormValid;
+  const shouldDisableNext = currentStep !== 1 && !isCurrentFormValid;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => setIsModalOpen(true);
@@ -107,6 +108,9 @@ function RequestPaymentUI(props: RequestPaymentUIProps) {
 
           <Stack direction="column">
             {currentStep === 1 && (
+              <AlertCardStep handleNextStep={handleNextStep} />
+            )}
+            {currentStep === 2 && (
               <GeneralInformationForm
                 ref={generalInformationRef}
                 initialValues={initialGeneralInformationValues}
@@ -115,7 +119,7 @@ function RequestPaymentUI(props: RequestPaymentUIProps) {
                 handleNextStep={handleNextStep}
               />
             )}
-            {currentStep === 2 && (
+            {currentStep === 3 && (
               <VerificationForm
                 updatedData={{
                   personalInformation: {
