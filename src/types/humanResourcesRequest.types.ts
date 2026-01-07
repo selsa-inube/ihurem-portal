@@ -161,8 +161,8 @@ export const absenceReasonLabels: Record<EAbsenceReason, string> = {
 };
 
 export enum ETaskStatus {
-  assigned = "Asignada",
-  executed = "Ejecutada",
+  assigned = "assigned",
+  executed = "executed",
   pending = "PENDING",
   completed = "COMPLETED",
   failed = "FAILED",

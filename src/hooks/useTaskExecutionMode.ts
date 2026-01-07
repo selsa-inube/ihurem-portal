@@ -14,6 +14,7 @@ export const useTaskExecutionMode = (humanResourceRequestId: string) => {
   const [isAutomatic, setIsAutomatic] = useState(false);
   const [isManual, setIsManual] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   const { showErrorModal } = useErrorModal();
   const { getHeaders } = useHeaders();
@@ -29,6 +30,7 @@ export const useTaskExecutionMode = (humanResourceRequestId: string) => {
 
     const fetchTaskExecutionMode = async () => {
       setIsLoading(true);
+      setError(false);
 
       try {
         const headers = await getHeaders(true);
@@ -57,6 +59,8 @@ export const useTaskExecutionMode = (humanResourceRequestId: string) => {
         setIsAutomatic(allAutomatic);
         setIsManual(allManual);
       } catch (_error) {
+        setError(true);
+
         Logger.error(
           "Error obteniendo modo de ejecución",
           _error instanceof Error ? _error : undefined,
@@ -83,5 +87,6 @@ export const useTaskExecutionMode = (humanResourceRequestId: string) => {
     isAutomatic,
     isManual,
     isLoading,
+    error,
   };
 };
