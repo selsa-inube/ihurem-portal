@@ -363,7 +363,6 @@ function RequestEnjoyment() {
   const handleCloseProcessingModal = () => {
     setShowErrorFlag(false);
     setShowProcessingModal(false);
-    // Detener polling limpiando requestIdToTrack
     setRequestIdToTrack("");
     navigateAfterSubmission("vacations");
   };
