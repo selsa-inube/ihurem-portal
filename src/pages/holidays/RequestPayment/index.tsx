@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useMemo } from "react";
+import { useRef, useState, useEffect, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { FormikProps } from "formik";
 
@@ -85,19 +85,36 @@ function useModalManagement() {
     isRequestInfoModalVisible: false,
   });
 
-  return {
-    modalState,
-    openSendModal: () =>
-      setModalState((p) => ({ ...p, isSendModalVisible: true })),
-    closeSendModal: () =>
-      setModalState((p) => ({ ...p, isSendModalVisible: false })),
-    openInfoModal: () =>
+  const openSendModal = useCallback(
+    () => setModalState((p) => ({ ...p, isSendModalVisible: true })),
+    [],
+  );
+
+  const closeSendModal = useCallback(
+    () => setModalState((p) => ({ ...p, isSendModalVisible: false })),
+    [],
+  );
+
+  const openInfoModal = useCallback(
+    () =>
       setModalState({
         isSendModalVisible: false,
         isRequestInfoModalVisible: true,
       }),
-    closeInfoModal: () =>
-      setModalState((p) => ({ ...p, isRequestInfoModalVisible: false })),
+    [],
+  );
+
+  const closeInfoModal = useCallback(
+    () => setModalState((p) => ({ ...p, isRequestInfoModalVisible: false })),
+    [],
+  );
+
+  return {
+    modalState,
+    openSendModal,
+    closeSendModal,
+    openInfoModal,
+    closeInfoModal,
   };
 }
 
@@ -111,7 +128,6 @@ function RequestPayment() {
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [waitingForExecutionMode, setWaitingForExecutionMode] = useState(false);
   const [hasStartedLoading, setHasStartedLoading] = useState(false);
-  const [hasPollingError, setHasPollingError] = useState(false);
 
   const {
     formValues,
@@ -169,15 +185,13 @@ function RequestPayment() {
     useHumanResourceRequestById(requestIdToTrack, pollingTick);
 
   useEffect(() => {
-    if (pollingError && !hasPollingError) {
-      setHasPollingError(true);
+    if (pollingError) {
       setShowProcessingModal(false);
-
       setTimeout(() => {
         navigate("/holidays");
       }, 100);
     }
-  }, [pollingError, hasPollingError, navigate]);
+  }, [pollingError, navigate]);
 
   const assistedSteps: IStep[] = useMemo(() => {
     if (!tasks?.length) {
@@ -281,14 +295,14 @@ function RequestPayment() {
   }, [humanResourceRequest]);
 
   useEffect(() => {
-    if (!requestIdToTrack || hasPollingError) return;
+    if (!requestIdToTrack) return;
 
     const interval = setInterval(() => {
       setPollingTick((prev) => prev + 1);
     }, 2000);
 
     return () => clearInterval(interval);
-  }, [requestIdToTrack, hasPollingError]);
+  }, [requestIdToTrack]);
 
   useEffect(() => {
     if (isDataLoaded && requestIdToTrack && isAutomatic) {
@@ -296,30 +310,10 @@ function RequestPayment() {
     }
   }, [isDataLoaded, requestIdToTrack, isAutomatic]);
 
-  useEffect(() => {
-    if (!showProcessingModal || assistedSteps.length === 0) return;
-
-    const allCompleted = assistedSteps.every(
-      (step) => step.status === ETaskStatus.completed,
-    );
-
-    if (allCompleted) {
-      setShowProcessingModal(false);
-
-      navigate("/holidays", {
-        state: {
-          showFlag: true,
-          flagTitle: labels.holidays.flags.sentTitle,
-          flagMessage: labels.holidays.flags.sentMessage,
-          isSuccess: true,
-        },
-      });
-    }
-  }, [assistedSteps, showProcessingModal, navigate]);
-
   const handleCloseProcessingModal = () => {
     setShowErrorFlag(false);
     setShowProcessingModal(false);
+    setRequestIdToTrack("");
     navigate("/holidays", {
       state: {
         showFlag: true,
