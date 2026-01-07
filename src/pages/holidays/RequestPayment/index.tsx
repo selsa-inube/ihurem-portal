@@ -294,15 +294,27 @@ function RequestPayment() {
     }
   }, [humanResourceRequest]);
 
+  const allTasksCompleted = useMemo(() => {
+    if (!humanResourceRequest?.tasksToManageTheHumanResourcesRequests?.length) {
+      return false;
+    }
+
+    return humanResourceRequest.tasksToManageTheHumanResourcesRequests.every(
+      (task) =>
+        task.taskStatus === ETaskStatus.executed ||
+        task.taskStatus === ETaskStatus.completed,
+    );
+  }, [humanResourceRequest]);
+
   useEffect(() => {
-    if (!requestIdToTrack) return;
+    if (!requestIdToTrack || allTasksCompleted) return;
 
     const interval = setInterval(() => {
       setPollingTick((prev) => prev + 1);
     }, 2000);
 
     return () => clearInterval(interval);
-  }, [requestIdToTrack]);
+  }, [requestIdToTrack, allTasksCompleted]);
 
   useEffect(() => {
     if (isDataLoaded && requestIdToTrack && isAutomatic) {

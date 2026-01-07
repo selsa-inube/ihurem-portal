@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useMemo } from "react";
+import { useRef, useState, useEffect, useMemo, useCallback } from "react";
 import { FormikProps } from "formik";
 import { useMediaQuery } from "@inubekit/inubekit";
 
@@ -17,6 +17,7 @@ import {
 } from "@ptypes/humanResourcesRequest.types";
 import { useAppContext } from "@context/AppContext/useAppContext";
 import { useHumanResourceRequestById } from "@hooks/useHumanResourceRequestById";
+import { HumanResourceTaskExecution } from "@ptypes/humanResourcesTaskExecution.types";
 
 import { RequestEnjoymentUI } from "./interface";
 import { requestEnjoymentSteps } from "./config/assisted.config";
@@ -79,20 +80,30 @@ function useModalManagement() {
     isRequestInfoModalVisible: false,
   });
 
-  const openSendModal = () =>
-    setModalState((prev) => ({ ...prev, isSendModalVisible: true }));
+  const openSendModal = useCallback(
+    () => setModalState((prev) => ({ ...prev, isSendModalVisible: true })),
+    [],
+  );
 
-  const closeSendModal = () =>
-    setModalState((prev) => ({ ...prev, isSendModalVisible: false }));
+  const closeSendModal = useCallback(
+    () => setModalState((prev) => ({ ...prev, isSendModalVisible: false })),
+    [],
+  );
 
-  const openInfoModal = () =>
-    setModalState({
-      isSendModalVisible: false,
-      isRequestInfoModalVisible: true,
-    });
+  const openInfoModal = useCallback(
+    () =>
+      setModalState({
+        isSendModalVisible: false,
+        isRequestInfoModalVisible: true,
+      }),
+    [],
+  );
 
-  const closeInfoModal = () =>
-    setModalState((prev) => ({ ...prev, isRequestInfoModalVisible: false }));
+  const closeInfoModal = useCallback(
+    () =>
+      setModalState((prev) => ({ ...prev, isRequestInfoModalVisible: false })),
+    [],
+  );
 
   return {
     modalState,
@@ -108,6 +119,9 @@ function RequestEnjoyment() {
   const [showProcessingModal, setShowProcessingModal] = useState(false);
   const [requestIdToTrack, setRequestIdToTrack] = useState<string>("");
   const [pollingTick, setPollingTick] = useState(0);
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
+  const [waitingForExecutionMode, setWaitingForExecutionMode] = useState(false);
+  const [hasStartedLoading, setHasStartedLoading] = useState(false);
 
   const {
     formValues,
@@ -143,71 +157,171 @@ function RequestEnjoyment() {
     userNameInCharge,
   );
 
-  const { isAutomatic, isLoading } = useTaskExecutionMode(requestId ?? "");
+  const {
+    tasks,
+    isAutomatic,
+    isLoading,
+    error: taskExecutionError,
+  } = useTaskExecutionMode(requestId ?? "");
 
-  const { humanResourceRequest } = useHumanResourceRequestById(
-    requestIdToTrack,
-    pollingTick,
-  );
+  useEffect(() => {
+    if (requestId && isLoading && !hasStartedLoading) {
+      setHasStartedLoading(true);
+    }
+  }, [requestId, isLoading, hasStartedLoading]);
+
+  useEffect(() => {
+    if (taskExecutionError) {
+      setWaitingForExecutionMode(false);
+    }
+  }, [taskExecutionError]);
+
+  const { humanResourceRequest, error: pollingError } =
+    useHumanResourceRequestById(requestIdToTrack, pollingTick);
+
+  useEffect(() => {
+    if (pollingError) {
+      setShowProcessingModal(false);
+      setTimeout(() => {
+        navigateAfterSubmission("vacations");
+      }, 100);
+    }
+  }, [pollingError, navigateAfterSubmission]);
 
   const assistedSteps: IStep[] = useMemo(() => {
-    if (humanResourceRequest?.tasksToManageTheHumanResourcesRequests?.length) {
-      return humanResourceRequest.tasksToManageTheHumanResourcesRequests.map(
-        (task, index) => ({
+    if (!tasks?.length) {
+      return [];
+    }
+
+    const activeTasks =
+      humanResourceRequest?.tasksToManageTheHumanResourcesRequests ?? [];
+    const currentTask =
+      activeTasks.find(
+        (task) =>
+          task.taskStatus !== ETaskStatus.executed &&
+          task.taskStatus !== ETaskStatus.completed,
+      ) ?? activeTasks[activeTasks.length - 1];
+
+    const currentTaskIndex = currentTask
+      ? tasks.findIndex((t) => t.taskCode === currentTask.taskCode)
+      : -1;
+
+    const steps = tasks.map(
+      (task: HumanResourceTaskExecution, index: number): IStep => {
+        let stepStatus: ETaskStatus;
+
+        if (currentTaskIndex === -1) {
+          stepStatus = ETaskStatus.pending;
+        } else if (index < currentTaskIndex) {
+          stepStatus = ETaskStatus.completed;
+        } else if (index === currentTaskIndex) {
+          if (currentTask!.taskStatus === ETaskStatus.executed) {
+            stepStatus = ETaskStatus.completed;
+          } else {
+            stepStatus = currentTask!.taskStatus;
+          }
+        } else {
+          stepStatus = ETaskStatus.pending;
+        }
+
+        return {
           id: index + 1,
           number: index + 1,
           name: task.taskName,
           label: task.taskName,
-          description: task.description,
-          status: task.taskStatus,
-        }),
-      );
-    }
-    return requestEnjoymentSteps.map((step, index) => ({
-      id: typeof step.id === "number" ? step.id : index + 1,
-      label: step.name,
-      number: step.number,
-      name: step.name,
-      description: step.description,
-    }));
-  }, [humanResourceRequest, requestEnjoymentSteps]);
+          description: task.methodOfExecution,
+          status: stepStatus,
+        };
+      },
+    );
+
+    const allTasksCompleted = steps.every(
+      (step) => step.status === ETaskStatus.completed,
+    );
+
+    steps.push({
+      id: steps.length + 1,
+      number: steps.length + 1,
+      name: "Proceso completado",
+      label: "Proceso completado",
+      description: "La solicitud ha sido procesada exitosamente",
+      status: allTasksCompleted ? ETaskStatus.completed : ETaskStatus.pending,
+    });
+
+    return steps;
+  }, [tasks, humanResourceRequest]);
+
+  const currentStepIndex = useMemo(() => {
+    const pendingIndex = assistedSteps.findIndex(
+      (step) => step.status !== ETaskStatus.completed,
+    );
+    return pendingIndex >= 0 ? pendingIndex + 1 : assistedSteps.length;
+  }, [assistedSteps]);
 
   useEffect(() => {
-    if (!requestId || isLoading) return;
+    if (
+      !waitingForExecutionMode ||
+      !requestId ||
+      isLoading ||
+      !hasStartedLoading
+    )
+      return;
+
+    setWaitingForExecutionMode(false);
 
     if (isAutomatic) {
       setRequestIdToTrack(requestId);
-      setShowProcessingModal(true);
+    } else {
+      openInfoModal();
     }
-  }, [requestId, isAutomatic, isLoading]);
+  }, [
+    waitingForExecutionMode,
+    requestId,
+    isAutomatic,
+    isLoading,
+    hasStartedLoading,
+    openInfoModal,
+  ]);
 
   useEffect(() => {
-    if (!showProcessingModal || !requestIdToTrack) return;
+    if (humanResourceRequest?.tasksToManageTheHumanResourcesRequests?.length) {
+      setIsDataLoaded(true);
+    }
+  }, [humanResourceRequest]);
+
+  const allTasksCompleted = useMemo(() => {
+    if (!humanResourceRequest?.tasksToManageTheHumanResourcesRequests?.length) {
+      return false;
+    }
+
+    return humanResourceRequest.tasksToManageTheHumanResourcesRequests.every(
+      (task) =>
+        task.taskStatus === ETaskStatus.executed ||
+        task.taskStatus === ETaskStatus.completed,
+    );
+  }, [humanResourceRequest]);
+
+  useEffect(() => {
+    if (allTasksCompleted && requestIdToTrack) {
+      console.log("✅ Todas las tareas completadas - Polling detenido");
+    }
+  }, [allTasksCompleted, requestIdToTrack]);
+
+  useEffect(() => {
+    if (!requestIdToTrack || allTasksCompleted) return;
 
     const interval = setInterval(() => {
       setPollingTick((prev) => prev + 1);
     }, 2000);
 
     return () => clearInterval(interval);
-  }, [showProcessingModal, requestIdToTrack]);
+  }, [requestIdToTrack, allTasksCompleted]);
 
   useEffect(() => {
-    if (
-      !showProcessingModal ||
-      !humanResourceRequest?.tasksToManageTheHumanResourcesRequests
-    ) {
-      return;
+    if (isDataLoaded && requestIdToTrack && isAutomatic) {
+      setShowProcessingModal(true);
     }
-
-    const tasks = humanResourceRequest.tasksToManageTheHumanResourcesRequests;
-
-    const completedTasks = tasks.filter(
-      (task) => task.taskStatus === ETaskStatus.completed,
-    );
-
-    const nextStep = completedTasks.length + 1;
-    setCurrentStep(Math.min(nextStep, assistedSteps.length));
-  }, [humanResourceRequest, showProcessingModal, assistedSteps.length]);
+  }, [isDataLoaded, requestIdToTrack, isAutomatic]);
 
   useErrorFlag(showErrorFlag, errorMessage, "Error", false, 10000);
 
@@ -225,23 +339,32 @@ function RequestEnjoyment() {
   };
 
   const handleFinishAssisted = () => {
+    updateFormValues();
+    setShowErrorFlag(false);
     openSendModal();
   };
 
   const handleConfirmSendModal = async () => {
-    setShowErrorFlag(false);
+    closeSendModal();
+
     const isSuccess = await submitRequestHandler();
 
-    if (isSuccess) {
-      closeSendModal();
-      openInfoModal();
-    } else {
-      closeSendModal();
-    }
+    if (!isSuccess) return;
+
+    setHasStartedLoading(false);
+    setWaitingForExecutionMode(true);
   };
 
   const handleSubmitRequestInfoModal = () => {
     closeInfoModal();
+    navigateAfterSubmission("vacations");
+  };
+
+  const handleCloseProcessingModal = () => {
+    setShowErrorFlag(false);
+    setShowProcessingModal(false);
+    // Detener polling limpiando requestIdToTrack
+    setRequestIdToTrack("");
     navigateAfterSubmission("vacations");
   };
 
@@ -317,11 +440,8 @@ function RequestEnjoyment() {
       {showProcessingModal && (
         <ProcessingRequestModal
           steps={assistedSteps}
-          currentStepId={Math.min(currentStep, assistedSteps.length)}
-          onCloseModal={() => {
-            setShowProcessingModal(false);
-            navigateAfterSubmission("vacations");
-          }}
+          currentStepId={currentStepIndex}
+          onCloseModal={handleCloseProcessingModal}
         />
       )}
     </>
