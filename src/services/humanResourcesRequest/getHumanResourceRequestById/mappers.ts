@@ -5,24 +5,22 @@ import {
   ETaskStatus,
   TaskToManageHumanResourceRequest,
   HumanResourceRequestApi,
+  TaskToManageHumanResourceRequestApi,
 } from "@ptypes/humanResourcesRequest.types";
 
-interface ApiTask {
-  description?: string;
-  humanResourceRequestId?: string;
-  taskCode?: string;
-  taskManagingId?: string;
-  taskName?: string;
-  taskStatus: string;
-}
-
-const mapTask = (task: ApiTask): TaskToManageHumanResourceRequest => ({
+const mapTask = (
+  task: TaskToManageHumanResourceRequestApi,
+): TaskToManageHumanResourceRequest => ({
   description: task.description ?? "",
   humanResourceRequestId: task.humanResourceRequestId ?? "",
   taskCode: task.taskCode ?? "",
   taskManagingId: task.taskManagingId ?? "",
   taskName: task.taskName ?? "",
   taskStatus: task.taskStatus as ETaskStatus,
+  staffName: task.staffName ?? undefined,
+  staffLastName: task.staffLastName ?? undefined,
+  identificationDocumentNumber: task.identificationDocumentNumber ?? undefined,
+  positionName: task.positionName ?? undefined,
 });
 
 export const mapHumanResourceRequestApiToEntity = (

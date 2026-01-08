@@ -6,20 +6,17 @@ import {
   IUnifiedHumanResourceRequestData,
   ERequestType,
 } from "@ptypes/humanResourcesRequest.types";
-
 import { HumanResourceTaskExecution } from "@ptypes/humanResourcesTaskExecution.types";
 import { ETaskStatus } from "@ptypes/humanResourcesRequest.types";
 import { SendRequestModal } from "@components/modals/SendRequestModal";
 import { RequestInfoModal } from "@components/modals/RequestInfoModal";
 import { ProcessingRequestModal } from "@components/modals/ProcessingRequestModal";
-
+import { capitalizeWords } from "@utils/texts";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 import { useTaskExecutionMode } from "@hooks/useTaskExecutionMode";
 import { useRequestSubmission } from "@hooks/usePostHumanResourceRequest";
 import { useHumanResourceRequestById } from "@hooks/useHumanResourceRequestById";
-
 import { useAppContext } from "@context/AppContext/useAppContext";
-
 import { IStep } from "@components/feedback/AssistedProcess/types";
 import { labels } from "@i18n/labels";
 
@@ -128,6 +125,7 @@ function RequestPayment() {
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [waitingForExecutionMode, setWaitingForExecutionMode] = useState(false);
   const [hasStartedLoading, setHasStartedLoading] = useState(false);
+  const [manualStaffName, setManualStaffName] = useState<string>("");
 
   const {
     formValues,
@@ -193,6 +191,31 @@ function RequestPayment() {
     }
   }, [pollingError, navigate]);
 
+  useEffect(() => {
+    if (!requestId || isAutomatic === undefined) return;
+
+    if (!isAutomatic && humanResourceRequest) {
+      const tasks = humanResourceRequest.tasksToManageTheHumanResourcesRequests;
+
+      if (tasks && tasks.length > 0) {
+        const taskWithStaff = tasks.find((task) => {
+          return task.staffName && task.staffLastName;
+        });
+
+        if (taskWithStaff) {
+          const fullName = capitalizeWords(
+            `${taskWithStaff.staffName} ${taskWithStaff.staffLastName}`,
+          );
+          setManualStaffName(fullName);
+        }
+      }
+    }
+  }, [
+    requestId,
+    isAutomatic,
+    humanResourceRequest?.tasksToManageTheHumanResourcesRequests,
+  ]);
+
   const assistedSteps: IStep[] = useMemo(() => {
     if (!tasks?.length) {
       return [];
@@ -247,9 +270,9 @@ function RequestPayment() {
     steps.push({
       id: steps.length + 1,
       number: steps.length + 1,
-      name: "Proceso completado",
-      label: "Proceso completado",
-      description: "La solicitud ha sido procesada exitosamente",
+      name: labels.holidays.completedProcess.name,
+      label: labels.holidays.completedProcess.label,
+      description: labels.holidays.completedProcess.description,
       status: allTasksCompleted ? ETaskStatus.completed : ETaskStatus.pending,
     });
 
@@ -368,6 +391,7 @@ function RequestPayment() {
 
   const handleSubmitRequestInfoModal = () => {
     closeInfoModal();
+    setManualStaffName("");
     navigate("/holidays", {
       state: {
         showFlag: true,
@@ -434,7 +458,9 @@ function RequestPayment() {
       {modalState.isRequestInfoModalVisible && (
         <RequestInfoModal
           requestId={requestNum}
-          staffName={userNameInCharge}
+          staffName={
+            manualStaffName || labels.holidays.completedProcess.descriptionModal
+          }
           onCloseModal={handleSubmitRequestInfoModal}
           onSubmitButtonClick={handleSubmitRequestInfoModal}
         />
