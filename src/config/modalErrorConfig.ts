@@ -130,6 +130,12 @@ const modalErrorConfig: Record<number, ModalErrorDetail> = {
     solutionText:
       "Verifica tu conexión a internet e intenta nuevamente. Si el problema persiste, contacta al soporte técnico.",
   },
+  1024: {
+    descriptionText:
+      "No se pudieron obtener las vacaciones utilizadas del empleado.",
+    solutionText:
+      "Intenta nuevamente más tarde. Si el problema persiste, contacta al soporte técnico.",
+  },
 };
 
 export { modalErrorConfig };
