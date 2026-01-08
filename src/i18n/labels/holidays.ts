@@ -112,6 +112,7 @@ export const holidays = {
     caption: "Consulta de días utilizados",
     headers: {
       startDate: "Fecha de inicio o pago",
+      endDate: "Fecha de finalización de disfrute",
       usageMode: "Modalidad de uso",
       days: "Días",
       actions: "Acciones",

@@ -16,6 +16,7 @@ import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
 import { mockAlertCards } from "@mocks/requirements/requirements-2.mock";
 import { ButtonRequirements } from "@components/inputs/ButtonWithCounter";
 
+import { AlertCardContainer } from "./forms/RequirementsForm";
 import { GeneralInformationForm } from "./forms/GeneralInformationForm";
 import { VerificationForm } from "./forms/VerificationForm";
 import { IGeneralInformationEntry } from "./forms/GeneralInformationForm/types";
@@ -57,7 +58,7 @@ function RequestEnjoymentUI({
   handlePreviousStep,
   handleFinishAssisted,
 }: RequestEnjoymentUIProps) {
-  const shouldDisableNext = !isCurrentFormValid;
+  const shouldDisableNext = currentStep !== 1 && !isCurrentFormValid;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => {
@@ -111,6 +112,9 @@ function RequestEnjoymentUI({
 
           <Stack direction="column">
             {currentStep === 1 && (
+              <AlertCardContainer handleNextStep={handleNextStep} />
+            )}
+            {currentStep === 2 && (
               <GeneralInformationForm
                 ref={generalInformationRef}
                 initialValues={initialGeneralInformationValues}
@@ -120,7 +124,7 @@ function RequestEnjoymentUI({
               />
             )}
 
-            {currentStep === 2 && (
+            {currentStep === 3 && (
               <VerificationForm
                 updatedData={{
                   personalInformation: {

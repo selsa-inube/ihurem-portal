@@ -161,8 +161,11 @@ export const absenceReasonLabels: Record<EAbsenceReason, string> = {
 };
 
 export enum ETaskStatus {
-  assigned = "Asignada",
-  executed = "Ejecutada",
+  assigned = "assigned",
+  executed = "executed",
+  pending = "PENDING",
+  completed = "COMPLETED",
+  failed = "FAILED",
 }
 
 export enum HumanResourceRequestStatus {
@@ -248,6 +251,50 @@ export interface HumanResourceRequest {
   tasksToManageTheHumanResourcesRequests: TaskToManageHumanResourceRequest[];
   userCodeInCharge: string;
   userNameInCharge: string;
+}
+
+export interface HumanResourceRequestBlockingPerTask {
+  blockType: string;
+  description: string;
+  errorId: string;
+  registrationDate: string;
+  taskManagingId: string;
+}
+
+export interface TaskToManageHumanResourceRequestApi {
+  description: string;
+  humanResourceRequestId: string;
+  identificationDocumentNumber: string;
+  positionName: string;
+  staffLastName: string;
+  staffName: string;
+  taskCode: string;
+  taskManagingId: string;
+  taskName: string;
+  taskStatus: string;
+  humanResourceRequestBlockingPerTask: HumanResourceRequestBlockingPerTask[];
+}
+
+export interface HumanResourceRequestTraceabilityApi {
+  actionExecuted: string;
+  description: string;
+  executionDate: string;
+  humanResourceRequestId: string;
+  traceabilityId: string;
+  userWhoExecutedAction: string;
+}
+
+export interface HumanResourceRequestApi {
+  employeeId: string;
+  humanResourceRequestData: string;
+  humanResourceRequestDate: string;
+  humanResourceRequestDescription: string;
+  humanResourceRequestId: string;
+  humanResourceRequestNumber: string;
+  humanResourceRequestStatus: string;
+  humanResourceRequestTraceabilities: HumanResourceRequestTraceabilityApi[];
+  humanResourceRequestType: string;
+  tasksToManageTheHumanResourcesRequests: TaskToManageHumanResourceRequestApi[];
 }
 
 export type HumanResourceRequests = HumanResourceRequest[];
