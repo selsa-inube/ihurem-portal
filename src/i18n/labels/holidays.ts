@@ -3,6 +3,13 @@ export const holidays = {
     understood: "Entendido",
   },
 
+  completedProcess: {
+    name: "Proceso completado",
+    label: "Proceso completado",
+    description: "La solicitud ha sido procesada exitosamente",
+    descriptionModal: "uno de nuestros funcionarios",
+  },
+
   breadcrumbs: {
     home: "Inicio",
     vacations: "Vacaciones",

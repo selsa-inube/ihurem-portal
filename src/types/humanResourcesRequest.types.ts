@@ -236,6 +236,10 @@ export interface TaskToManageHumanResourceRequest {
   taskManagingId: string;
   taskName: string;
   taskStatus: ETaskStatus;
+  staffName?: string;
+  staffLastName?: string;
+  identificationDocumentNumber?: string;
+  positionName?: string;
 }
 
 export interface HumanResourceRequest {
