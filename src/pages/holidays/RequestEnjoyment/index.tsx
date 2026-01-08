@@ -302,12 +302,6 @@ function RequestEnjoyment() {
   }, [humanResourceRequest]);
 
   useEffect(() => {
-    if (allTasksCompleted && requestIdToTrack) {
-      console.log("✅ Todas las tareas completadas - Polling detenido");
-    }
-  }, [allTasksCompleted, requestIdToTrack]);
-
-  useEffect(() => {
     if (!requestIdToTrack || allTasksCompleted) return;
 
     const interval = setInterval(() => {
