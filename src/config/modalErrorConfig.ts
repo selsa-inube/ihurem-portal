@@ -136,6 +136,12 @@ const modalErrorConfig: Record<number, ModalErrorDetail> = {
     solutionText:
       "Intenta nuevamente más tarde. Si el problema persiste, contacta al soporte técnico.",
   },
+  1025: {
+    descriptionText:
+      "No se pudieron obtener los días de vacaciones pendientes asociados a la solicitud de recursos humanos.",
+    solutionText:
+      "Verifica que la solicitud tenga información válida de vacaciones. Si el problema persiste, contacta al soporte técnico.",
+  },
 };
 
 export { modalErrorConfig };

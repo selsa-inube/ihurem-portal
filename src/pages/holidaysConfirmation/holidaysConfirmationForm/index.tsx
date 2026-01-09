@@ -4,23 +4,35 @@ import {
   Stack,
   Button,
   useMediaQuery,
+  Spinner,
 } from "@inubekit/inubekit";
 import { useState } from "react";
 
 import { spacing } from "@design/tokens/spacing";
 import { TextAreaModal } from "@components/modals/TextAreaModal";
 import { ResponseSuccesModal } from "@components/modals/ResponseSuccesModal";
+import { usePendingVacationDaysByRequest } from "@hooks/usePendingVacationDaysByRequest";
+import { useApprovalHumanResourceRequestAPI } from "@hooks/useApprovalHumanResourceRequestAPI";
+import { ApprovalAction } from "@services/employeeConsultation/postApprovalHumanResourceRequest/types";
+import { formatDate } from "@utils/date";
+import { capitalizeWords } from "@utils/texts";
 
 import {
   StyledHolidaysConfirmationFormContainer,
   StyledDescriptionContainer,
 } from "./styles";
 
-function HolidaysConfirmationForm() {
+interface HolidaysConfirmationFormProps {
+  humanResourceRequestId: string;
+  userWhoExecutedAction: string;
+  taskManagingId: string;
+}
+
+function HolidaysConfirmationForm(props: HolidaysConfirmationFormProps) {
+  const { humanResourceRequestId, userWhoExecutedAction, taskManagingId } =
+    props;
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [submittedObjection, setSubmittedObjection] = useState<string | null>(
-    null,
-  );
+
   const [isResponseModalOpen, setIsResponseModalOpen] = useState(false);
   const [responseConfig, setResponseConfig] = useState<{
     isRequestSent?: boolean;
@@ -30,32 +42,89 @@ function HolidaysConfirmationForm() {
 
   const isMobile = useMediaQuery("(max-width: 880px)");
 
+  const { submitApproval, isLoading: isSubmitting } =
+    useApprovalHumanResourceRequestAPI();
+
   const handleOpen = () => setIsModalOpen(true);
   const handleClose = () => setIsModalOpen(false);
 
-  const handleSubmit = (values: { textarea: string }) => {
-    setSubmittedObjection(values.textarea);
+  const handleSubmit = async (values: { textarea: string }) => {
+    const result = await submitApproval({
+      humanResourceRequestId,
+      taskManagingId,
+      actionExecuted: ApprovalAction.CONFIRM_PERIOD,
+      description: values.textarea,
+      userWhoExecutedAction,
+    });
+
     setIsModalOpen(false);
-    setResponseConfig({
-      isRequestSent: true,
-      title: "Objeción enviada",
-      description: "¡La solicitud de objeción ha sido enviada!",
-    });
+
+    if (result.success) {
+      setResponseConfig({
+        isRequestSent: true,
+        title: "Objeción enviada",
+        description: "¡La solicitud de objeción ha sido enviada exitosamente!",
+      });
+    } else {
+      setResponseConfig({
+        isRequestSent: false,
+        title: "Error al enviar objeción",
+        description:
+          "No se pudo enviar la objeción. Por favor, intenta nuevamente.",
+      });
+    }
     setIsResponseModalOpen(true);
   };
 
-  const handleConfirm = () => {
-    setResponseConfig({
-      isRequestSent: true,
-      title: "Respuesta enviada",
-      description: "¡La respuesta fue recibida!",
+  const handleConfirm = async () => {
+    const result = await submitApproval({
+      humanResourceRequestId,
+      taskManagingId,
+      actionExecuted: ApprovalAction.CONFIRM_PERIOD,
+      description: "Confirmación del periodo de disfrute de vacaciones",
+      userWhoExecutedAction,
     });
+
+    if (result.success) {
+      setResponseConfig({
+        isRequestSent: true,
+        title: "Confirmación enviada",
+        description:
+          "¡La confirmación del periodo de vacaciones fue enviada exitosamente!",
+      });
+    } else {
+      setResponseConfig({
+        isRequestSent: false,
+        title: "Error al confirmar",
+        description:
+          "No se pudo confirmar el periodo. Por favor, intenta nuevamente.",
+      });
+    }
     setIsResponseModalOpen(true);
   };
-
-  console.log(submittedObjection);
 
   const handleCloseResponseModal = () => setIsResponseModalOpen(false);
+
+  const { data: pendingVacationDays, isLoading: pendingLoading } =
+    usePendingVacationDaysByRequest(humanResourceRequestId);
+
+  const first =
+    pendingVacationDays && pendingVacationDays.length > 0
+      ? pendingVacationDays[0]
+      : null;
+  const employeeFullName = first
+    ? `${first.employeeName} ${first.employeeSurname}`
+    : "";
+  const periodFrom = first ? formatDate(first.periodFrom) : "";
+  const periodTo = first ? formatDate(first.periodTo) : "";
+
+  if (pendingLoading) {
+    return (
+      <Stack alignItems="center" direction="column">
+        <Spinner size="large" />
+      </Stack>
+    );
+  }
 
   return (
     <StyledHolidaysConfirmationFormContainer $isMobile={isMobile}>
@@ -65,8 +134,8 @@ function HolidaysConfirmationForm() {
       <Divider dashed />
       <StyledDescriptionContainer>
         <Text>
-          Yo, Sergio Andrés Nieto Alba confirmo que he disfrutado el periodo de
-          vacaciones de:
+          Yo, {capitalizeWords(employeeFullName)}
+          confirmo que he disfrutado el periodo de vacaciones de:
         </Text>
         <Stack
           gap={spacing.s100}
@@ -76,19 +145,30 @@ function HolidaysConfirmationForm() {
           direction={isMobile ? "column" : "row"}
         >
           <Text type="title" weight="bold" size="large">
-            02/Dic/2025
+            {periodFrom}
           </Text>
           <Text>a</Text>
           <Text type="title" weight="bold" size="large">
-            02/Dic/2025
+            {periodTo}
           </Text>
         </Stack>
       </StyledDescriptionContainer>
       <Stack gap={spacing.s250} justifyContent="flex-end" width="100%">
-        <Button appearance="danger" variant="outlined" onClick={handleOpen}>
+        <Button
+          appearance="danger"
+          variant="outlined"
+          onClick={handleOpen}
+          disabled={isSubmitting}
+        >
           Objetar
         </Button>
-        <Button onClick={handleConfirm}>Confirmar</Button>
+        <Button
+          onClick={() => void handleConfirm()}
+          disabled={isSubmitting}
+          loading={isSubmitting}
+        >
+          Confirmar
+        </Button>
       </Stack>
       {isModalOpen && (
         <TextAreaModal
