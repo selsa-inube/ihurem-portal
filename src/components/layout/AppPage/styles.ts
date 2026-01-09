@@ -13,6 +13,10 @@ interface IStyledFooter {
   theme?: typeof inube;
 }
 
+interface IStyledMain {
+  $withNav: boolean;
+}
+
 const StyledAppPage = styled.div`
   display: inherit;
   box-sizing: border-box;
@@ -27,10 +31,10 @@ const StyledContainer = styled.div`
   }
 `;
 
-const StyledMain = styled.main`
+const StyledMain = styled.main<IStyledMain>`
   box-sizing: border-box;
   width: 100%;
-  max-width: 1192px;
+  max-width: ${({ $withNav }) => ($withNav ? "1192px" : "100%")};
   flex: 1;
   display: flex;
   flex-direction: column;

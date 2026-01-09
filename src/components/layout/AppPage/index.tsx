@@ -116,7 +116,7 @@ function AppPage(props: AppPageProps) {
               />
             )}
             <StyledMainScroll>
-              <StyledMain>
+              <StyledMain $withNav={withNav}>
                 <Outlet />
               </StyledMain>
               {isTablet && finalLogo && (

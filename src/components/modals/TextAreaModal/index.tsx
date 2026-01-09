@@ -7,6 +7,7 @@ import {
   useMediaQuery,
   Blanket,
   Divider,
+  IButtonAppearance,
 } from "@inubekit/inubekit";
 import { createPortal } from "react-dom";
 import { Formik, Form, Field, FieldProps, FormikHelpers } from "formik";
@@ -34,6 +35,7 @@ export interface TextAreaModalProps {
   disableTextarea?: boolean;
   secondaryButtonText?: string;
   description?: string;
+  submitButtonAppearance?: IButtonAppearance;
   onSubmit?: (values: { textarea: string }) => void;
   onCloseModal?: () => void;
   onSecondaryButtonClick?: () => void;
@@ -51,6 +53,7 @@ export function TextAreaModal(props: TextAreaModalProps) {
     disableTextarea = false,
     secondaryButtonText = labels.modals.textAreaModal.cancel,
     description,
+    submitButtonAppearance,
     onSubmit,
     onCloseModal,
     onSecondaryButtonClick,
@@ -103,55 +106,62 @@ export function TextAreaModal(props: TextAreaModalProps) {
             onCloseModal?.();
           }}
         >
-          {({ errors, touched, values }) => (
-            <Form>
-              <Field name="textarea">
-                {({ field }: FieldProps) => (
-                  <Textarea
-                    {...field}
-                    id="textarea"
-                    label={inputLabel}
-                    placeholder={inputPlaceholder}
-                    maxLength={maxLength}
-                    status={
-                      touched.textarea && errors.textarea
-                        ? "invalid"
-                        : "pending"
-                    }
-                    message={
-                      touched.textarea && errors.textarea ? errors.textarea : ""
-                    }
-                    fullwidth
-                    disabled={disableTextarea}
-                  />
-                )}
-              </Field>
-              <Stack
-                justifyContent="end"
-                margin={`${spacing.s150} ${spacing.s0}`}
-                gap={spacing.s250}
-              >
-                <Button
-                  type="button"
-                  variant="outlined"
-                  appearance="gray"
-                  onClick={() => {
-                    onSecondaryButtonClick?.();
-                    onCloseModal?.();
-                  }}
+          {({ errors, touched, values }) => {
+            const submitAppearance = values.textarea
+              ? (submitButtonAppearance ?? "danger")
+              : "gray";
+            return (
+              <Form>
+                <Field name="textarea">
+                  {({ field }: FieldProps) => (
+                    <Textarea
+                      {...field}
+                      id="textarea"
+                      label={inputLabel}
+                      placeholder={inputPlaceholder}
+                      maxLength={maxLength}
+                      status={
+                        touched.textarea && errors.textarea
+                          ? "invalid"
+                          : "pending"
+                      }
+                      message={
+                        touched.textarea && errors.textarea
+                          ? errors.textarea
+                          : ""
+                      }
+                      fullwidth
+                      disabled={disableTextarea}
+                    />
+                  )}
+                </Field>
+                <Stack
+                  justifyContent="end"
+                  margin={`${spacing.s150} ${spacing.s0}`}
+                  gap={spacing.s250}
                 >
-                  {secondaryButtonText}
-                </Button>
-                <Button
-                  type="submit"
-                  disabled={!values.textarea || disableTextarea}
-                  appearance={values.textarea ? "danger" : "gray"}
-                >
-                  {buttonText}
-                </Button>
-              </Stack>
-            </Form>
-          )}
+                  <Button
+                    type="button"
+                    variant="outlined"
+                    appearance="gray"
+                    onClick={() => {
+                      onSecondaryButtonClick?.();
+                      onCloseModal?.();
+                    }}
+                  >
+                    {secondaryButtonText}
+                  </Button>
+                  <Button
+                    type="submit"
+                    disabled={!values.textarea || disableTextarea}
+                    appearance={submitAppearance}
+                  >
+                    {buttonText}
+                  </Button>
+                </Stack>
+              </Form>
+            );
+          }}
         </Formik>
       </StyledModal>
     </Blanket>,
