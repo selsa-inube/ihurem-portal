@@ -3,6 +3,13 @@ export const holidays = {
     understood: "Entendido",
   },
 
+  completedProcess: {
+    name: "Proceso completado",
+    label: "Proceso completado",
+    description: "La solicitud ha sido procesada exitosamente",
+    descriptionModal: "uno de nuestros funcionarios",
+  },
+
   breadcrumbs: {
     home: "Inicio",
     vacations: "Vacaciones",
@@ -112,6 +119,7 @@ export const holidays = {
     caption: "Consulta de días utilizados",
     headers: {
       startDate: "Fecha de inicio o pago",
+      endDate: "Fecha de finalización de disfrute",
       usageMode: "Modalidad de uso",
       days: "Días",
       actions: "Acciones",

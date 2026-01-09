@@ -218,6 +218,12 @@ function HolidaysTable(props: HolidaysTableProps) {
           : "",
       },
       {
+        label: labels.holidays.daysUsed.headers.endDate,
+        value: dataDe.endDateEnjoyment
+          ? formatDate(dataDe.endDateEnjoyment)
+          : "",
+      },
+      {
         label: labels.holidays.generalInformationForm.contractLabel,
         value:
           dataDe.businessName && contractLabel
