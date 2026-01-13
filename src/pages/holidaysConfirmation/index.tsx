@@ -1,6 +1,6 @@
+import { useParams } from "react-router-dom";
 import { Text } from "@inubekit/inubekit";
 
-import { useSearchParams } from "react-router-dom";
 import { useAppContext } from "@context/AppContext/useAppContext";
 
 import { StyledVacationsApproval, StyledFooter } from "./styles";
@@ -8,15 +8,12 @@ import { HolidaysConfirmationForm } from "./holidaysConfirmationForm";
 
 function HolidaysConfirmation() {
   const { user } = useAppContext();
-  const [searchParams] = useSearchParams();
-
-  const humanResourceRequestId = searchParams.get("requestId") ?? "";
-
+  const { requestId } = useParams();
   return (
     <>
       <StyledVacationsApproval>
         <HolidaysConfirmationForm
-          humanResourceRequestId={humanResourceRequestId}
+          humanResourceRequestId={requestId ?? ""}
           userWhoExecutedAction={user?.id ?? ""}
           taskManagingId={user?.id ?? ""}
         />

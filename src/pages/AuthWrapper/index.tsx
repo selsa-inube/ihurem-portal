@@ -24,9 +24,10 @@ export function AuthWrapper({ children }: AuthWrapperProps) {
     "/holidays-confirmation",
   );
   const callbackUrl = isHolidaysConfirmation
-    ? `${environment.REDIRECT_URI}/holidays-confirmation`
+    ? window.location.href
     : environment.REDIRECT_URI;
-
+  console.log("🍔 Callback URL:", callbackUrl);
+  console.log("😒 url base", window.location);
   return (
     <IAuthProvider
       originatorId={environment.ORIGINATOR_ID}
