@@ -7,7 +7,9 @@ import {
   Spinner,
 } from "@inubekit/inubekit";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
+import { labels } from "@i18n/labels";
 import { spacing } from "@design/tokens/spacing";
 import { TextAreaModal } from "@components/modals/TextAreaModal";
 import { ResponseSuccesModal } from "@components/modals/ResponseSuccesModal";
@@ -25,12 +27,13 @@ import {
 interface HolidaysConfirmationFormProps {
   humanResourceRequestId: string;
   userWhoExecutedAction: string;
-  taskManagingId: string;
 }
 
-function HolidaysConfirmationForm(props: HolidaysConfirmationFormProps) {
-  const { humanResourceRequestId, userWhoExecutedAction, taskManagingId } =
-    props;
+function HolidaysConfirmationForm({
+  humanResourceRequestId,
+  userWhoExecutedAction,
+}: HolidaysConfirmationFormProps) {
+  const navigate = useNavigate();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isResponseModalOpen, setIsResponseModalOpen] = useState(false);
@@ -39,96 +42,118 @@ function HolidaysConfirmationForm(props: HolidaysConfirmationFormProps) {
     isRequestSent?: boolean;
     title: string;
     description: string;
-  }>({ isRequestSent: true, title: "", description: "" });
+  }>({
+    isRequestSent: false,
+    title: "",
+    description: "",
+  });
 
   const isMobile = useMediaQuery("(max-width: 880px)");
 
   const { submitApproval, isLoading: isSubmitting } =
     useApprovalHumanResourceRequestAPI();
 
-  const handleOpen = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleClose = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleSubmit = async (values: { textarea: string }) => {
-    const result = await submitApproval({
-      humanResourceRequestId,
-      taskManagingId,
-      actionExecuted: ApprovalAction.CONFIRM_PERIOD,
-      description: values.textarea,
-      userWhoExecutedAction,
-    });
-
-    setIsModalOpen(false);
-
-    if (result.success) {
-      setResponseConfig({
-        isRequestSent: true,
-        title: "Objeción enviada",
-        description: "¡La solicitud de objeción ha sido enviada exitosamente!",
-      });
-    } else {
-      setResponseConfig({
-        isRequestSent: false,
-        title: "Error al enviar objeción",
-        description:
-          "No se pudo enviar la objeción. Por favor, intenta nuevamente.",
-      });
-    }
-
-    setIsResponseModalOpen(true);
-  };
-
-  const handleConfirm = async () => {
-    const result = await submitApproval({
-      humanResourceRequestId,
-      taskManagingId,
-      actionExecuted: ApprovalAction.CONFIRM_PERIOD,
-      description: "Confirmación del periodo de disfrute de vacaciones",
-      userWhoExecutedAction,
-    });
-
-    if (result.success) {
-      setResponseConfig({
-        isRequestSent: true,
-        title: "Confirmación enviada",
-        description:
-          "¡La confirmación del periodo de vacaciones fue enviada exitosamente!",
-      });
-    } else {
-      setResponseConfig({
-        isRequestSent: false,
-        title: "Error al confirmar",
-        description:
-          "No se pudo confirmar el periodo. Por favor, intenta nuevamente.",
-      });
-    }
-
-    setIsResponseModalOpen(true);
-  };
-
-  const handleCloseResponseModal = () => {
-    setIsResponseModalOpen(false);
-  };
-
   const { data: pendingVacationDays, isLoading: pendingLoading } =
-    usePendingVacationDaysByRequest(humanResourceRequestId);
+    humanResourceRequestId
+      ? usePendingVacationDaysByRequest(humanResourceRequestId)
+      : { data: null, isLoading: false };
 
   const first =
     pendingVacationDays && pendingVacationDays.length > 0
       ? pendingVacationDays[0]
       : null;
 
-  const employeeFullName = first
-    ? `${first.employeeName} ${first.employeeSurname}`
-    : "";
+  const employeeFullName =
+    `${first?.employeeName ?? ""} ${first?.employeeSurname ?? ""}`.trim();
 
   const periodFrom = first ? formatDate(first.periodFrom) : "";
   const periodTo = first ? formatDate(first.periodTo) : "";
+
+  const realTaskManagingId = first?.taskManagingId ?? "";
+  const hasConfirmTask = first?.taskCode === "confirm_vacation_completion";
+
+  const handleSubmit = async (values: { textarea: string }) => {
+    if (!humanResourceRequestId || !realTaskManagingId) return;
+
+    const result = await submitApproval({
+      humanResourceRequestId,
+      taskManagingId: realTaskManagingId,
+      actionExecuted: ApprovalAction.CANCEL_REQUEST,
+      description: values.textarea,
+      userWhoExecutedAction,
+    });
+
+    setIsModalOpen(false);
+
+    setResponseConfig(
+      result.success
+        ? {
+            isRequestSent: true,
+            title: labels.holidays.confirmationForm.responses.objectionSent,
+            description:
+              labels.holidays.confirmationForm.responses
+                .objectionSentDescription,
+          }
+        : {
+            isRequestSent: false,
+            title: labels.holidays.confirmationForm.responses.objectionError,
+            description:
+              labels.holidays.confirmationForm.responses
+                .objectionErrorDescription,
+          },
+    );
+
+    setIsResponseModalOpen(true);
+  };
+
+  const handleConfirm = async () => {
+    if (!humanResourceRequestId || !realTaskManagingId || !hasConfirmTask) {
+      setResponseConfig({
+        isRequestSent: false,
+        title: labels.holidays.confirmationForm.responses.confirmationError,
+        description: labels.holidays.confirmationForm.responses.taskNotFound,
+      });
+
+      setIsResponseModalOpen(true);
+      return;
+    }
+
+    const result = await submitApproval({
+      humanResourceRequestId,
+      taskManagingId: realTaskManagingId,
+      actionExecuted: ApprovalAction.CONFIRM_PERIOD,
+      description: labels.holidays.confirmationForm.confirmationDescription,
+      userWhoExecutedAction,
+    });
+
+    setResponseConfig(
+      result.success
+        ? {
+            isRequestSent: true,
+            title: labels.holidays.confirmationForm.responses.confirmationSent,
+            description:
+              labels.holidays.confirmationForm.responses
+                .confirmationSentDescription,
+          }
+        : {
+            isRequestSent: false,
+            title: labels.holidays.confirmationForm.responses.confirmationError,
+            description:
+              labels.holidays.confirmationForm.responses
+                .confirmationErrorDescription,
+          },
+    );
+
+    setIsResponseModalOpen(true);
+  };
+
+  const handleCloseResponseModal = () => {
+    setIsResponseModalOpen(false);
+
+    if (responseConfig.isRequestSent) {
+      navigate("/");
+    }
+  };
 
   if (pendingLoading) {
     return (
@@ -141,15 +166,16 @@ function HolidaysConfirmationForm(props: HolidaysConfirmationFormProps) {
   return (
     <StyledHolidaysConfirmationFormContainer $isMobile={isMobile}>
       <Text type="title" weight="bold" textAlign="center">
-        Constancia de disfrute vacaciones
+        {labels.holidays.confirmationForm.title}
       </Text>
 
       <Divider dashed />
 
       <StyledDescriptionContainer>
         <Text>
-          Yo, {capitalizeWords(employeeFullName)} confirmo que he disfrutado el
-          periodo de vacaciones de:
+          {labels.holidays.confirmationForm.confirmationText}{" "}
+          {capitalizeWords(employeeFullName)}{" "}
+          {labels.holidays.confirmationForm.confirmationTextContinuation}
         </Text>
 
         <Stack
@@ -162,7 +188,7 @@ function HolidaysConfirmationForm(props: HolidaysConfirmationFormProps) {
           <Text type="title" weight="bold" size="large">
             {periodFrom}
           </Text>
-          <Text>a</Text>
+          <Text>{labels.holidays.confirmationForm.periodConnector}</Text>
           <Text type="title" weight="bold" size="large">
             {periodTo}
           </Text>
@@ -173,10 +199,10 @@ function HolidaysConfirmationForm(props: HolidaysConfirmationFormProps) {
         <Button
           appearance="danger"
           variant="outlined"
-          onClick={handleOpen}
+          onClick={() => setIsModalOpen(true)}
           disabled={isSubmitting}
         >
-          Objetar
+          {labels.holidays.confirmationForm.buttons.object}
         </Button>
 
         <Button
@@ -184,20 +210,20 @@ function HolidaysConfirmationForm(props: HolidaysConfirmationFormProps) {
           disabled={isSubmitting}
           loading={isSubmitting}
         >
-          Confirmar
+          {labels.holidays.confirmationForm.buttons.confirm}
         </Button>
       </Stack>
 
       {isModalOpen && (
         <TextAreaModal
-          title="Objetar"
-          buttonText="Objetar"
-          inputLabel="Observaciones"
-          inputPlaceholder="Proporciona detalles acerca de la objeción de la constancia"
+          title={labels.holidays.objectModal.title}
+          buttonText={labels.holidays.objectModal.buttonText}
+          inputLabel={labels.holidays.objectModal.inputLabel}
+          inputPlaceholder={labels.holidays.objectModal.inputPlaceholder}
           maxLength={500}
-          description="Describe el motivo por el cual deseas objetar la constancia de disfrute de vacaciones."
+          description={labels.holidays.objectModal.description}
           onSubmit={handleSubmit}
-          onCloseModal={handleClose}
+          onCloseModal={() => setIsModalOpen(false)}
         />
       )}
 

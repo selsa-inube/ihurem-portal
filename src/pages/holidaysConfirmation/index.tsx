@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { Text } from "@inubekit/inubekit";
 
 import { useAppContext } from "@context/AppContext/useAppContext";
+import { labels } from "@i18n/labels";
 
 import { StyledVacationsApproval, StyledFooter } from "./styles";
 import { HolidaysConfirmationForm } from "./holidaysConfirmationForm";
@@ -15,13 +16,12 @@ function HolidaysConfirmation() {
         <HolidaysConfirmationForm
           humanResourceRequestId={requestId ?? ""}
           userWhoExecutedAction={user?.id ?? ""}
-          taskManagingId={user?.id ?? ""}
         />
       </StyledVacationsApproval>
 
       <StyledFooter>
         <Text textAlign="center" size="large" appearance="gray">
-          © *Marca*
+          {labels.holidays.footer.copyright}
         </Text>
       </StyledFooter>
     </>

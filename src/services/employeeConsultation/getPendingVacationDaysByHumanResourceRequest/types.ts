@@ -15,6 +15,9 @@ export interface IPendingVacationDaysApi {
   leadEmployeeSurname: string;
   periodFrom: string;
   periodTo: string;
+  taskManagingId: string;
+  taskCode: string;
+  taskName: string;
 }
 
 export interface IPendingVacationDays {
@@ -34,4 +37,7 @@ export interface IPendingVacationDays {
   leadEmployeeSurname: string;
   periodFrom: string;
   periodTo: string;
+  taskManagingId: string;
+  taskCode: string;
+  taskName: string;
 }

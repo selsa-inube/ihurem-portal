@@ -56,4 +56,5 @@ export interface IApprovalResponse {
 
 export enum ApprovalAction {
   CONFIRM_PERIOD = "confirm_the_period_of_use",
+  CANCEL_REQUEST = "cancel_the_request_at_employees_request",
 }

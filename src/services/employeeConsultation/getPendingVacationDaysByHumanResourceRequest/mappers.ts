@@ -21,7 +21,10 @@ export const isPendingVacationApi = (
     typeof record.leadEmployeeName === "string" &&
     typeof record.leadEmployeeSurname === "string" &&
     typeof record.periodFrom === "string" &&
-    typeof record.periodTo === "string"
+    typeof record.periodTo === "string" &&
+    typeof record.taskManagingId === "string" &&
+    typeof record.taskCode === "string" &&
+    typeof record.taskName === "string"
   );
 };
 
@@ -46,5 +49,8 @@ export const mapPendingVacationApiToEntity = (
     leadEmployeeSurname: api.leadEmployeeSurname,
     periodFrom: api.periodFrom,
     periodTo: api.periodTo,
+    taskManagingId: api.taskManagingId,
+    taskCode: api.taskCode,
+    taskName: api.taskName,
   };
 };
