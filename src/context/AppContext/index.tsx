@@ -43,6 +43,10 @@ function AppProvider(props: AppProviderProps) {
     useState<EmployeeContractAggregate[]>(initialContracts);
 
   useEffect(() => {
+    setContracts(initialContracts);
+  }, [initialContracts]);
+
+  useEffect(() => {
     if (!isIAuthLoading) {
       if (IAuthUser) {
         setUser({

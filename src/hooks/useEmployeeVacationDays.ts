@@ -15,6 +15,7 @@ interface UseEmployeeVacationDaysResult {
   loadingDays: boolean;
   error: string | null;
   refetch: () => void;
+  hasLoaded: boolean;
 }
 
 export const useEmployeeVacationDays = (
@@ -23,6 +24,7 @@ export const useEmployeeVacationDays = (
   const [vacationDays, setVacationDays] = useState<IVacationDaysResponse[]>([]);
   const [loadingDays, setLoadingDays] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [hasLoaded, setHasLoaded] = useState<boolean>(false);
   const { getHeaders } = useHeaders();
 
   const lastFetchedEmployeeId = useRef<string>("");
@@ -54,6 +56,7 @@ export const useEmployeeVacationDays = (
         const headers = await getHeaders();
         const data = await getEmployeeVacationDays(employeeId, headers);
         setVacationDays(data);
+        setHasLoaded(true);
       } catch (err) {
         const errorMessage =
           err instanceof Error
@@ -68,6 +71,7 @@ export const useEmployeeVacationDays = (
           solutionText: errorConfig.solutionText,
         });
         setVacationDays([]);
+        setHasLoaded(true);
       } finally {
         setLoadingDays(false);
       }
@@ -83,5 +87,5 @@ export const useEmployeeVacationDays = (
     fetchVacationDays(true);
   }, [fetchVacationDays]);
 
-  return { vacationDays, loadingDays, error, refetch };
+  return { vacationDays, loadingDays, error, refetch, hasLoaded };
 };
