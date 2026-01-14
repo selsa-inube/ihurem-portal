@@ -16,7 +16,6 @@ import { spacing } from "@design/tokens/spacing";
 import { InfoModal } from "@components/modals/InfoModal";
 import { capitalizeWords } from "@utils/texts";
 import { contractTypeLabels } from "@mocks/contracts/enums";
-import { useEmployee } from "@hooks/useEmployee";
 import { Widget } from "@components/cards/Widget";
 import { useEmployeeVacationDays } from "@hooks/useEmployeeVacationDays";
 import { useEmployeeVacationsUsed } from "@hooks/useEmployeeVacationsUsed";
@@ -68,7 +67,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
   const [selectedTab, setSelectedTab] = useState("dias");
   const navigate = useNavigate();
 
-  const { contracts } = useAppContext();
+  const { contracts, employees: employee } = useAppContext();
 
   const [infoModal, setInfoModal] = useState({
     open: false,
@@ -76,9 +75,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
     description: "",
   });
 
-  const { employee, isLoading } = useEmployee(contracts[0]?.employeeId ?? null);
-
-  const { vacationDays, loadingDays } = useEmployeeVacationDays(
+  const { vacationDays, loadingDays, hasLoaded } = useEmployeeVacationDays(
     employee?.employeeId ?? null,
   );
 
@@ -134,7 +131,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
       icon={<MdOutlineBeachAccess />}
       label={labels.holidays.widget.pendingDays}
       value={totalDays}
-      isLoading={loadingDays}
+      isLoading={loadingDays ?? !hasLoaded}
     />
   );
 
@@ -239,10 +236,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
               </Text>
             )}
 
-            <DaysUsedTable
-              data={formattedData}
-              loading={isLoading ?? loadingVacations}
-            />
+            <DaysUsedTable data={formattedData} loading={loadingVacations} />
           </div>
         ),
       )}
