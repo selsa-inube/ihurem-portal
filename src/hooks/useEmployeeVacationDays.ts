@@ -58,7 +58,6 @@ export const useEmployeeVacationDays = (
         setVacationDays(data);
         setHasLoaded(true);
       } catch (err) {
-        console.error("Error fetching vacation days:", err);
         const errorMessage =
           err instanceof Error
             ? err.message

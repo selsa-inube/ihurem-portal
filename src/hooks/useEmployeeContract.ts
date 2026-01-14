@@ -39,7 +39,6 @@ export const useEmployeeContractsValidation = (employeeId?: string) => {
         setContracts(result);
         setValidated(true);
       } catch (err) {
-        console.error("Error getting contracts:", err);
         const errorConfig = modalErrorConfig[ERROR_CODE_GET_CONTRACTS];
 
         showErrorModal({
