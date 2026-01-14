@@ -3,6 +3,46 @@ export const holidays = {
     understood: "Entendido",
   },
 
+  objectModal: {
+    title: "Objetar",
+    buttonText: "Objetar",
+    inputLabel: "Observaciones",
+    inputPlaceholder:
+      "Proporciona detalles acerca de la objeción de la constancia",
+    description:
+      "Describe el motivo por el cual deseas objetar la constancia de disfrute de vacaciones.",
+  },
+
+  confirmationForm: {
+    title: "Constancia de disfrute vacaciones",
+    confirmationText: "Yo,",
+    confirmationTextContinuation:
+      "confirmo que he disfrutado el periodo de vacaciones de:",
+    periodConnector: "a",
+    buttons: {
+      object: "Objetar",
+      confirm: "Confirmar",
+    },
+    responses: {
+      objectionSent: "Objeción enviada",
+      objectionSentDescription:
+        "¡La solicitud de objeción ha sido enviada exitosamente!",
+      objectionError: "Error al enviar objeción",
+      objectionErrorDescription:
+        "No se pudo enviar la objeción. Por favor, intenta nuevamente.",
+      confirmationSent: "Confirmación enviada",
+      confirmationSentDescription:
+        "¡La confirmación del periodo de vacaciones fue enviada exitosamente!",
+      confirmationError: "Error al confirmar",
+      confirmationErrorDescription:
+        "No se pudo confirmar el periodo. Por favor, intenta nuevamente.",
+      taskNotFound:
+        "No se encontró la tarea necesaria para confirmar el disfrute de vacaciones.",
+    },
+    confirmationDescription:
+      "Confirmación del periodo de disfrute de vacaciones",
+  },
+
   completedProcess: {
     name: "Proceso completado",
     label: "Proceso completado",
@@ -181,5 +221,9 @@ export const holidays = {
     serverCertificate: "Certificado de servidor",
     companyMembership: "Certificado de pertenencia a empresa",
     representativeCertificate: "Certificado de representante",
+  },
+
+  footer: {
+    copyright: "© Marca",
   },
 };

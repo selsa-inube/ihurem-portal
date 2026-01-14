@@ -20,10 +20,16 @@ export function AuthWrapper({ children }: AuthWrapperProps) {
     return <ErrorPage errorCode={errorCode ?? 1000} />;
   }
 
+  const isHolidaysConfirmation = window.location.pathname.includes(
+    "/holidays-confirmation",
+  );
+  const callbackUrl = isHolidaysConfirmation
+    ? window.location.href
+    : environment.REDIRECT_URI;
   return (
     <IAuthProvider
       originatorId={environment.ORIGINATOR_ID}
-      callbackUrl={environment.REDIRECT_URI}
+      callbackUrl={callbackUrl}
       iAuthUrl={environment.IAUTH_URL}
       serviceUrl={environment.IAUTH_SERVICE_URL}
       codeVerifier={environment.CODE_VERIFIER}
