@@ -9,12 +9,13 @@ import { LoadingAppUI } from "@pages/login/outlets/LoadingApp/interface";
 import { useBusinessUnit } from "@hooks/useBusinessUnit";
 import { useEmployeeByIdentification } from "@hooks/useEmployeeInquiry";
 import { useEmployeeOptions } from "@hooks/useEmployeeOptions";
+import { usePortalAuth } from "@hooks/usePortalAuth";
+import { useSignOut } from "@hooks/useSignOut";
+import { useEmployeeContractsValidation } from "@hooks/useEmployeeContract";
 import { pathStart } from "@config/nav.config";
 import { InfoModal } from "@components/modals/InfoModal";
 import { protectedRouter } from "@routes/publicRouter";
-import { useSignOut } from "@hooks/useSignOut";
-import { usePortalAuth } from "@hooks/usePortalAuth";
-import { useEmployeeContractsValidation } from "@hooks/useEmployeeContract";
+import { EmployeeContractAggregate } from "@ptypes/employeeContractAggregate";
 
 export function ProtectedRoutes() {
   const {
@@ -103,7 +104,8 @@ export function ProtectedRoutes() {
     }
 
     const hasFormalizedContract = contracts.some(
-      (contract) => contract.contractStatus?.toLowerCase() === "formalized",
+      (contract: EmployeeContractAggregate) =>
+        contract.contractStatus?.toLowerCase() === "formalized",
     );
 
     if (!hasFormalizedContract) {
