@@ -61,7 +61,6 @@ const getEmployeeVacationDays = async (
 
       return vacationDays;
     } catch (error) {
-      console.error(`Attempt ${attempt} failed:`, error);
       if (attempt === maxRetries) {
         Logger.error(
           "Error obteniendo días de vacaciones",
