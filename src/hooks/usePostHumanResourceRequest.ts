@@ -75,7 +75,6 @@ export function useRequestSubmission(
       ) {
         humanResourceRequestData = JSON.stringify({
           daysToPay: formValues.daysToPay ?? "",
-          disbursementDate: "",
           observationEmployee: formValues.observationEmployee ?? "",
           ...baseContractData,
         });
