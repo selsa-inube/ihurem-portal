@@ -14,6 +14,7 @@ interface IGetOptionsParams {
 
 const getEmployeeOptions = async (
   params: IGetOptionsParams = {},
+  headers: Record<string, string>,
 ): Promise<IEmployeeOptions[]> => {
   const maxRetries = maxRetriesServices;
   const fetchTimeout = fetchTimeoutServices;
@@ -41,6 +42,7 @@ const getEmployeeOptions = async (
       const options: RequestInit = {
         method: "GET",
         headers: {
+          ...headers,
           "X-Action": "SearchOptionsEmployeePortalByBusinessUnit",
           "Content-Type": "application/json; charset=UTF-8",
         },
