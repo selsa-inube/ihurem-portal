@@ -9,6 +9,7 @@ import { mapBusinessManagerApiToEntity } from "./mappers";
 
 const getBusinessManagers = async (
   businessManagerId: string,
+  headers: Record<string, string>,
 ): Promise<IBusinessManagers> => {
   const maxRetries = maxRetriesServices;
   const fetchTimeout = fetchTimeoutServices;
@@ -21,6 +22,7 @@ const getBusinessManagers = async (
       const options: RequestInit = {
         method: "GET",
         headers: {
+          ...headers,
           "X-Action": "SearchByIdBusinessManager",
           "Content-type": "application/json; charset=UTF-8",
         },

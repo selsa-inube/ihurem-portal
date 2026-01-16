@@ -8,6 +8,7 @@ import { mapBusinessUnitsPortalEmployeeApiToEntity } from "./mappers";
 
 const businessUnitsPortalEmployee = async (
   businessUnit: string,
+  headers: Record<string, string>,
 ): Promise<IBusinessUnitsPortalEmployee> => {
   const maxRetries = maxRetriesServices;
   const fetchTimeout = fetchTimeoutServices;
@@ -20,6 +21,7 @@ const businessUnitsPortalEmployee = async (
       const options: RequestInit = {
         method: "GET",
         headers: {
+          ...headers,
           "X-Action": "SearchByIdBusinessUnit",
           "Content-type": "application/json; charset=UTF-8",
         },

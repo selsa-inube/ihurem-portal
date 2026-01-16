@@ -7,6 +7,7 @@ import {
 import { getBusinessManagers } from "@services/employeePortal/getBusinessManager";
 import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
 import { modalErrorConfig } from "@config/modalErrorConfig";
+import { getPreAuthHeaders } from "@utils/preAuthHeaders";
 
 export const useBusinessManagers = (
   portalPublicCode: IEmployeePortalByBusinessManager,
@@ -21,38 +22,47 @@ export const useBusinessManagers = (
   useEffect(() => {
     const fetchBusinessManagers = async () => {
       if (!portalPublicCode) return;
+
       try {
+        const headers = getPreAuthHeaders();
+
         const fetchedBusinessManagers = await getBusinessManagers(
           portalPublicCode.businessManagerId,
+          headers,
         );
+
         if (!fetchedBusinessManagers) {
           setHasError(true);
           return;
         }
+
         if (Object.keys(fetchedBusinessManagers).length === 0) {
           setCodeError(1002);
           return;
         }
+
         setBusinessManagersData(fetchedBusinessManagers);
+        setHasError(false);
       } catch (error) {
         setHasError(true);
+
         const errorMessage =
           error instanceof Error
             ? error.message
             : "Ocurrió un error al actualizar la solicitud";
+
         const errorConfig = modalErrorConfig[1002];
         showErrorModal({
           descriptionText: `${errorConfig.descriptionText}: ${errorMessage}`,
           solutionText: errorConfig.solutionText,
         });
-      }
-      if (hasError) {
+
         setCodeError(1002);
       }
     };
 
     fetchBusinessManagers();
-  }, [portalPublicCode]);
+  }, [portalPublicCode, showErrorModal]);
 
   return { businessManagersData, hasError, codeError };
 };

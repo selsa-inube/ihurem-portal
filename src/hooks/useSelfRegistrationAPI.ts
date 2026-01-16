@@ -5,6 +5,7 @@ import { postSelfRegistration } from "@services/employeePortal/postSelfRegistrat
 import { ISelfRegistrationRequestBody } from "@services/employeePortal/postSelfRegistration/types";
 import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
 import { modalErrorConfig } from "@config/modalErrorConfig";
+import { getPreAuthHeaders } from "@utils/preAuthHeaders";
 
 const ERROR_CODE_POST_REGISTRATION_REQUESTS_FAILED = 1023;
 
@@ -23,10 +24,8 @@ export function useSelfRegistrationAPI() {
     setError(null);
 
     try {
-      const headers = {
-        "Content-type": "application/json; charset=UTF-8",
-        "X-Business-unit": "test",
-      };
+      const headers = getPreAuthHeaders();
+
       const response = await postSelfRegistration(requestBody, headers);
 
       if (response?.humanResourceRequestId) {

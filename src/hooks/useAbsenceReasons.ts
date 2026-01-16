@@ -7,8 +7,7 @@ import {
 import { getAbsenceReasons } from "@services/enumerators/getAbsenceReasons";
 import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
 import { modalErrorConfig } from "@config/modalErrorConfig";
-
-import { useHeaders } from "./useHeaders";
+import { useHeaders } from "@hooks/useHeaders";
 
 const ERROR_CODE_GET_ABSENCE_REASONS_FAILED = 1021;
 

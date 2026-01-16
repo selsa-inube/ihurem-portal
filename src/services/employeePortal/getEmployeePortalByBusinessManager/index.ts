@@ -16,6 +16,7 @@ interface ErrorResponse {
 
 const employeePortalByBusinessManager = async (
   codeParame: string,
+  headers: Record<string, string>,
 ): Promise<IEmployeePortalByBusinessManager> => {
   const maxRetries = maxRetriesServices;
   const fetchTimeout = fetchTimeoutServices;
@@ -31,6 +32,7 @@ const employeePortalByBusinessManager = async (
       const options: RequestInit = {
         method: "GET",
         headers: {
+          ...headers,
           "Content-type": "application/json; charset=UTF-8",
           "X-Action": "SearchAllEmployeePortalsByBusinessManager",
         },

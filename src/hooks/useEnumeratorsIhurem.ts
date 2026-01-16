@@ -4,8 +4,7 @@ import { getEnumeratorsIhurem } from "@services/enumerators/getEnumeratorsIhurem
 import { IEnumeratorItem } from "@services/enumerators/types";
 import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
 import { modalErrorConfig } from "@config/modalErrorConfig";
-
-import { useHeaders } from "./useHeaders";
+import { useHeaders } from "@hooks/useHeaders";
 
 const ERROR_CODE_GET_ENUMERATORS_FAILED = 1021;
 

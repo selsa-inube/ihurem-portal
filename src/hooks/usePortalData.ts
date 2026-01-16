@@ -4,6 +4,7 @@ import { Logger } from "@utils/logger";
 import { encrypt } from "@utils/encrypt";
 import { employeePortalByBusinessManager } from "@services/employeePortal/getEmployeePortalByBusinessManager";
 import { IEmployeePortalByBusinessManager } from "@ptypes/employeePortalBusiness.types";
+import { getPreAuthHeaders } from "@utils/preAuthHeaders";
 
 export const usePortalData = (codeParame: string) => {
   const [portalData, setPortalData] =
@@ -15,8 +16,12 @@ export const usePortalData = (codeParame: string) => {
   useEffect(() => {
     const fetchPortalData = async () => {
       try {
-        const employeePortalData =
-          await employeePortalByBusinessManager(codeParame);
+        const headers = getPreAuthHeaders();
+        const employeePortalData = await employeePortalByBusinessManager(
+          codeParame,
+          headers,
+        );
+
         if (
           !employeePortalData ||
           Object.keys(employeePortalData).length === 0
@@ -24,6 +29,7 @@ export const usePortalData = (codeParame: string) => {
           setHasError(true);
           return;
         }
+
         const encryptedParamValue = encrypt(codeParame);
         localStorage.setItem("portalCode", encryptedParamValue);
         setPortalData(employeePortalData);

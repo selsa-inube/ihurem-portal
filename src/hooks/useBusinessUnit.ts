@@ -6,6 +6,7 @@ import {
   IEmployeePortalByBusinessManager,
 } from "@ptypes/employeePortalBusiness.types";
 import { businessUnitsPortalEmployee } from "@services/employeePortal/getBusinessUnits";
+import { getPreAuthHeaders } from "@utils/preAuthHeaders";
 
 export const useBusinessUnit = (
   portalPublicCode: IEmployeePortalByBusinessManager,
@@ -18,12 +19,17 @@ export const useBusinessUnit = (
   useEffect(() => {
     let isMounted = true;
 
-    const fetchBusinessManagers = async () => {
+    const fetchBusinessUnitData = async () => {
       if (!portalPublicCode) return;
+
       try {
+        const headers = getPreAuthHeaders();
+
         const fetchBusinessUnit = await businessUnitsPortalEmployee(
           portalPublicCode.businessUnit,
+          headers,
         );
+
         if (!fetchBusinessUnit) {
           if (isMounted) {
             setHasError(true);
@@ -31,6 +37,7 @@ export const useBusinessUnit = (
           }
           return;
         }
+
         if (isMounted) {
           setBusinessUnit(fetchBusinessUnit);
           setHasError(false);
@@ -40,6 +47,7 @@ export const useBusinessUnit = (
         Logger.error("Error obteniendo la unidad de negocio", error as Error, {
           portalPublicCode,
         });
+
         if (isMounted) {
           setHasError(true);
           setCodeError(1003);
@@ -47,7 +55,7 @@ export const useBusinessUnit = (
       }
     };
 
-    fetchBusinessManagers();
+    fetchBusinessUnitData();
 
     return () => {
       isMounted = false;
