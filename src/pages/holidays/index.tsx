@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useMediaQuery } from "@inubekit/inubekit";
 
 import { labels } from "@i18n/labels";
-import { useHumanResourceRequests } from "@hooks/useHumanResourceRequests";
+import { usePendingVacationRequests } from "@hooks/usePendingVacationReques";
 import { useDeleteRequest } from "@hooks/useDeleteRequest";
 import { useDeleteValidation } from "@hooks/useDeleteValidation";
 import { useErrorFlag } from "@hooks/useErrorFlag";
@@ -21,43 +21,36 @@ function HolidaysOptions() {
   const location = useLocation();
   const isMobile = useMediaQuery("(max-width: 1060px)");
 
+  /**
+   * NUEVO HOOK – un solo llamado al backend
+   */
   const {
-    data: enjoyedData,
-    isLoading: isLoadingEnjoyed,
-    rawData: rawEnjoyedData,
-  } = useHumanResourceRequests<IHolidaysTable>(
-    formatHolidaysData,
-    ERequestType.vacations_enjoyed,
-  );
+    data: tableData,
+    rawData,
+    isLoading: isLoadingRequests,
+  } = usePendingVacationRequests<IHolidaysTable>(formatHolidaysData);
 
-  const {
-    data: paidData,
-    isLoading: isLoadingPaid,
-    rawData: rawPaidData,
-  } = useHumanResourceRequests<IHolidaysTable>(
-    formatHolidaysData,
-    ERequestType.paid_vacations,
-  );
-
-  const [tableData, setTableData] = useState<IHolidaysTable[]>([]);
+  const [localTableData, setLocalTableData] = useState<IHolidaysTable[]>([]);
 
   const hasActiveContract = true;
   const hasEnjoymentPrivilege = true;
   const hasPaymentPrivilege = true;
 
   const { handleDelete } = useDeleteRequest((filterFn) => {
-    setTableData((prev) => prev.filter(filterFn));
+    setLocalTableData((prev) => prev.filter(filterFn));
   });
 
   const { validateDelete, validationModal, closeValidationModal } =
     useDeleteValidation();
 
+  /**
+   * Eliminar solicitud
+   */
   const handleDeleteRequest = (requestId: string, justification?: string) => {
-    const request = tableData.find((item) => item.requestId === requestId);
+    const request = localTableData.find((item) => item.requestId === requestId);
     const requestNumber = request?.requestNumber ?? "";
 
-    const allRawData = [...(rawEnjoyedData ?? []), ...(rawPaidData ?? [])];
-    const originalRequest = allRawData.find(
+    const originalRequest = rawData.find(
       (req) => req.humanResourceRequestId === requestId,
     );
 
@@ -66,16 +59,12 @@ function HolidaysOptions() {
       const parsedData = parseDataSafely(
         originalRequest.humanResourceRequestData,
       );
+
       requestData = {
         requestType: originalRequest.humanResourceRequestType as ERequestType,
         disbursementDate: getValueFromData(
           parsedData,
           "disbursementDate",
-          null,
-        ) as string | null,
-        startDateEnment: getValueFromData(
-          parsedData,
-          "startDateEnment",
           null,
         ) as string | null,
       };
@@ -88,13 +77,16 @@ function HolidaysOptions() {
     void handleDelete(requestId, justification, requestNumber);
   };
 
+  /**
+   * Sincronizar data local
+   */
   useEffect(() => {
-    const combined: IHolidaysTable[] = [...enjoyedData, ...paidData];
-    setTableData(combined);
-  }, [enjoyedData, paidData]);
+    setLocalTableData(tableData);
+  }, [tableData]);
 
-  const isLoadingRequests = isLoadingEnjoyed ?? isLoadingPaid;
-
+  /**
+   * Manejo de flags
+   */
   useEffect(() => {
     if (location.state?.showFlag) {
       const timer = setTimeout(() => {
@@ -102,7 +94,7 @@ function HolidaysOptions() {
       }, 5000);
       return () => clearTimeout(timer);
     }
-  }, [location.state?.showFlag]);
+  }, [location.state?.showFlag, navigate, location.pathname]);
 
   useErrorFlag(
     location.state?.showFlag,
@@ -117,7 +109,7 @@ function HolidaysOptions() {
         appName={breadcrumbs.label}
         appRoute={breadcrumbs.crumbs}
         navigatePage={breadcrumbs.url}
-        tableData={tableData}
+        tableData={localTableData}
         isLoadingRequests={isLoadingRequests}
         hasActiveContract={hasActiveContract}
         isMobile={isMobile}
@@ -125,6 +117,7 @@ function HolidaysOptions() {
         hasPaymentPrivilege={hasPaymentPrivilege}
         handleDeleteRequest={handleDeleteRequest}
       />
+
       {validationModal.show && (
         <InfoModal
           title={labels.holidays.infoModal.title}
