@@ -17,10 +17,8 @@ export const usePortalData = (codeParame: string) => {
     const fetchPortalData = async () => {
       try {
         const headers = getPreAuthHeaders();
-        const employeePortalData = await employeePortalByBusinessManager(
-          codeParame,
-          headers,
-        );
+        const employeePortalData =
+          await employeePortalByBusinessManager(headers);
 
         if (
           !employeePortalData ||

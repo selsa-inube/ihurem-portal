@@ -7,7 +7,6 @@ import { decrypt, encrypt } from "@utils/encrypt";
 interface AuthConfig {
   clientId: string;
   clientSecret: string;
-  originatorCode?: string;
 }
 
 export function usePortalAuth() {
@@ -19,7 +18,6 @@ export function usePortalAuth() {
   const portalCode = portalParam ?? decryptedPortal;
 
   const [authConfig, setAuthConfig] = useState<AuthConfig | null>(null);
-  const [publicCode, setPublicCode] = useState<string | null>(null);
 
   useEffect(() => {
     if (portalParam && portalParam !== decryptedPortal) {
@@ -36,12 +34,6 @@ export function usePortalAuth() {
   } = useBusinessManagers(portalData);
 
   useEffect(() => {
-    if (portalData?.portalCode) {
-      setPublicCode(portalData.portalCode);
-    }
-  }, [portalData]);
-
-  useEffect(() => {
     if (
       businessManagersData.clientId &&
       businessManagersData.clientSecret &&
@@ -51,7 +43,6 @@ export function usePortalAuth() {
       setAuthConfig({
         clientId: businessManagersData.clientId,
         clientSecret: businessManagersData.clientSecret,
-        originatorCode: businessManagersData.publicCode,
       });
     }
   }, [businessManagersData, hasPortalError, hasManagersError]);
@@ -61,7 +52,6 @@ export function usePortalAuth() {
 
   return {
     portalCode,
-    publicCode,
     portalData,
     authConfig,
     hasAuthError,

@@ -15,7 +15,6 @@ interface ErrorResponse {
 }
 
 const employeePortalByBusinessManager = async (
-  codeParame: string,
   headers: Record<string, string>,
 ): Promise<IEmployeePortalByBusinessManager> => {
   const maxRetries = maxRetriesServices;
@@ -24,7 +23,7 @@ const employeePortalByBusinessManager = async (
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
       const queryParams = new URLSearchParams({
-        portalCode: codeParame,
+        publicCode: environment.ORIGINATOR_CODE,
       });
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), fetchTimeout);
@@ -77,10 +76,7 @@ const employeePortalByBusinessManager = async (
       Logger.error(
         `Attempt ${attempt} failed while fetching employee portal data`,
         error as Error,
-        {
-          codeParame,
-          attempt,
-        },
+        { publicCode: environment.ORIGINATOR_CODE },
       );
     }
   }
