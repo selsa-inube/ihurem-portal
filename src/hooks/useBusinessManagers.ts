@@ -15,13 +15,21 @@ export const useBusinessManagers = (
   const [businessManagersData, setBusinessManagersData] =
     useState<IBusinessManagers>({} as IBusinessManagers);
   const [hasError, setHasError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [codeError, setCodeError] = useState<number | undefined>(undefined);
 
   const { showErrorModal } = useErrorModal();
 
   useEffect(() => {
     const fetchBusinessManagers = async () => {
-      if (!portalPublicCode) return;
+      // Si no hay businessManagerId, no hacer nada aún
+      if (!portalPublicCode?.businessManagerId) {
+        setIsLoading(true);
+        return;
+      }
+
+      setIsLoading(true);
+      setHasError(false);
 
       try {
         const headers = getPreAuthHeaders();
@@ -33,18 +41,31 @@ export const useBusinessManagers = (
 
         if (!fetchedBusinessManagers) {
           setHasError(true);
+          setCodeError(1002);
+          setIsLoading(false);
           return;
         }
 
         if (Object.keys(fetchedBusinessManagers).length === 0) {
+          setHasError(true);
           setCodeError(1002);
+          setIsLoading(false);
+
+          const errorConfig = modalErrorConfig[1002];
+          showErrorModal({
+            descriptionText: errorConfig.descriptionText,
+            solutionText: errorConfig.solutionText,
+          });
           return;
         }
 
         setBusinessManagersData(fetchedBusinessManagers);
         setHasError(false);
+        setIsLoading(false);
       } catch (error) {
         setHasError(true);
+        setCodeError(1002);
+        setIsLoading(false);
 
         const errorMessage =
           error instanceof Error
@@ -56,13 +77,11 @@ export const useBusinessManagers = (
           descriptionText: `${errorConfig.descriptionText}: ${errorMessage}`,
           solutionText: errorConfig.solutionText,
         });
-
-        setCodeError(1002);
       }
     };
 
     fetchBusinessManagers();
-  }, [portalPublicCode, showErrorModal]);
+  }, [portalPublicCode?.businessManagerId, showErrorModal]);
 
-  return { businessManagersData, hasError, codeError };
+  return { businessManagersData, hasError, codeError, isLoading };
 };
