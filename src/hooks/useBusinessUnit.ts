@@ -14,13 +14,24 @@ export const useBusinessUnit = (
   const [businessUnitData, setBusinessUnit] =
     useState<IBusinessUnitsPortalEmployee>({} as IBusinessUnitsPortalEmployee);
   const [hasError, setHasError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [codeError, setCodeError] = useState<number | undefined>(undefined);
 
   useEffect(() => {
     let isMounted = true;
 
     const fetchBusinessUnitData = async () => {
-      if (!portalPublicCode) return;
+      if (!portalPublicCode?.businessUnit) {
+        if (isMounted) {
+          setIsLoading(true);
+        }
+        return;
+      }
+
+      if (isMounted) {
+        setIsLoading(true);
+        setHasError(false);
+      }
 
       try {
         const headers = getPreAuthHeaders();
@@ -34,6 +45,7 @@ export const useBusinessUnit = (
           if (isMounted) {
             setHasError(true);
             setCodeError(1003);
+            setIsLoading(false);
           }
           return;
         }
@@ -42,6 +54,7 @@ export const useBusinessUnit = (
           setBusinessUnit(fetchBusinessUnit);
           setHasError(false);
           setCodeError(undefined);
+          setIsLoading(false);
         }
       } catch (error) {
         Logger.error("Error obteniendo la unidad de negocio", error as Error, {
@@ -51,6 +64,7 @@ export const useBusinessUnit = (
         if (isMounted) {
           setHasError(true);
           setCodeError(1003);
+          setIsLoading(false);
         }
       }
     };
@@ -60,7 +74,7 @@ export const useBusinessUnit = (
     return () => {
       isMounted = false;
     };
-  }, [portalPublicCode]);
+  }, [portalPublicCode?.businessUnit]);
 
-  return { businessUnitData, hasError, codeError };
+  return { businessUnitData, hasError, codeError, isLoading };
 };
