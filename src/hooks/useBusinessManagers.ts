@@ -22,7 +22,6 @@ export const useBusinessManagers = (
 
   useEffect(() => {
     const fetchBusinessManagers = async () => {
-      // Si no hay businessManagerId, no hacer nada aún
       if (!portalPublicCode?.businessManagerId) {
         setIsLoading(true);
         return;
