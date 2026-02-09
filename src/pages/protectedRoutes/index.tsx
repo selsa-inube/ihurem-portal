@@ -25,6 +25,7 @@ export function ProtectedRoutes() {
     hasManagersError,
     businessManagersData,
     errorCode: managersErrorCode,
+    isLoading: isLoadingPortalAuth,
   } = usePortalAuth();
 
   if (window.location.pathname === "/self-registration") {
@@ -61,6 +62,7 @@ export function ProtectedRoutes() {
     businessUnitData,
     hasError: hasBusinessUnitError,
     codeError: businessUnitErrorCode,
+    isLoading: isLoadingBusinessUnit,
   } = useBusinessUnit(portalData);
 
   const identificationNumber = user?.id ?? "";
@@ -155,7 +157,14 @@ export function ProtectedRoutes() {
     hasPortalError,
   ]);
 
-  if (isLoading || employeeLoading || optionsLoading || !isReady) {
+  if (
+    isLoading ||
+    isLoadingPortalAuth ||
+    isLoadingBusinessUnit ||
+    employeeLoading ||
+    optionsLoading ||
+    !isReady
+  ) {
     return <LoadingAppUI />;
   }
 
