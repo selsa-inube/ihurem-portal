@@ -9,6 +9,10 @@ interface StyledMainProps {
   theme?: typeof inube;
 }
 
+interface IStyledAppPage {
+  theme?: typeof inube;
+}
+
 interface IStyledCollapseIcon {
   $collapse: boolean;
   $isTablet: boolean;
@@ -18,11 +22,15 @@ interface IStyledFooter {
   theme?: typeof inube;
 }
 
-const StyledAppPage = styled.div`
+const StyledAppPage = styled.div<IStyledAppPage>`
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   box-sizing: border-box;
+  margin: auto;
+  max-width: 1400px;
+  outline: 1px solid
+    ${({ theme }) => theme?.palette?.neutral?.N40 ?? inube.palette.neutral.N40};
 `;
 
 const StyledContainer = styled.div`
