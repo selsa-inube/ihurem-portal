@@ -27,16 +27,21 @@ export function usePortalAuth() {
     }
   }, [portalParam, decryptedPortal]);
 
-  const { portalData, hasError: hasPortalError } = usePortalData(portalCode);
+  const {
+    portalData,
+    hasError: hasPortalError,
+    isLoading: isLoadingPortal,
+  } = usePortalData(portalCode);
+
   const {
     businessManagersData,
     hasError: hasManagersError,
     codeError: BusinessManagersCode,
     isLoading: isLoadingManagers,
-  } = useBusinessManagers(portalData);
+  } = useBusinessManagers(portalData, isLoadingPortal);
 
   useEffect(() => {
-    if (isLoadingManagers) {
+    if (isLoadingPortal || isLoadingManagers) {
       setIsLoading(true);
       return;
     }
@@ -57,6 +62,7 @@ export function usePortalAuth() {
     businessManagersData,
     hasPortalError,
     hasManagersError,
+    isLoadingPortal,
     isLoadingManagers,
   ]);
 

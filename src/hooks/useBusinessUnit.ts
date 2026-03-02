@@ -15,16 +15,14 @@ export const useBusinessUnit = (
     useState<IBusinessUnitsPortalEmployee>({} as IBusinessUnitsPortalEmployee);
   const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [codeError, setCodeError] = useState<number | undefined>(undefined);
+  const [codeError, setCodeError] = useState<number | undefined>();
 
   useEffect(() => {
     let isMounted = true;
 
     const fetchBusinessUnitData = async () => {
-      if (!portalPublicCode?.businessUnit) {
-        if (isMounted) {
-          setIsLoading(true);
-        }
+      if (!portalPublicCode?.businessUnitCode) {
+        if (isMounted) setIsLoading(false);
         return;
       }
 
@@ -36,12 +34,14 @@ export const useBusinessUnit = (
       try {
         const headers = getPreAuthHeaders();
 
-        const fetchBusinessUnit = await businessUnitsPortalEmployee(
-          portalPublicCode.businessUnit,
+        const response = await businessUnitsPortalEmployee(
           headers,
+          portalPublicCode.businessUnitCode,
         );
 
-        if (!fetchBusinessUnit) {
+        const businessUnit = response[0];
+
+        if (!businessUnit) {
           if (isMounted) {
             setHasError(true);
             setCodeError(1003);
@@ -51,7 +51,7 @@ export const useBusinessUnit = (
         }
 
         if (isMounted) {
-          setBusinessUnit(fetchBusinessUnit);
+          setBusinessUnit(businessUnit);
           setHasError(false);
           setCodeError(undefined);
           setIsLoading(false);
@@ -74,7 +74,7 @@ export const useBusinessUnit = (
     return () => {
       isMounted = false;
     };
-  }, [portalPublicCode?.businessUnit]);
+  }, [portalPublicCode?.businessUnitCode]);
 
   return { businessUnitData, hasError, codeError, isLoading };
 };

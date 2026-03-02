@@ -12,9 +12,11 @@ export const usePortalData = (codeParame: string) => {
       {} as IEmployeePortalByBusinessManager,
     );
   const [hasError, setHasError] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchPortalData = async () => {
+      setIsLoading(true);
       try {
         const headers = getPreAuthHeaders();
         const employeePortalData =
@@ -25,6 +27,7 @@ export const usePortalData = (codeParame: string) => {
           Object.keys(employeePortalData).length === 0
         ) {
           setHasError(true);
+          setIsLoading(false);
           return;
         }
 
@@ -32,16 +35,18 @@ export const usePortalData = (codeParame: string) => {
         localStorage.setItem("portalCode", encryptedParamValue);
         setPortalData(employeePortalData);
         setHasError(false);
+        setIsLoading(false);
       } catch (error) {
         Logger.error("Error fetching portal data", error as Error, {
           codeParame,
         });
         setHasError(true);
+        setIsLoading(false);
       }
     };
 
     void fetchPortalData();
   }, [codeParame]);
 
-  return { portalData, hasError };
+  return { portalData, hasError, isLoading };
 };

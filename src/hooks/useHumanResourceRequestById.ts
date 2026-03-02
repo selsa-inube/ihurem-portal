@@ -6,7 +6,7 @@ import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
 import { modalErrorConfig } from "@config/modalErrorConfig";
 import { useHeaders } from "@hooks/useHeaders";
 
-const ERROR_CODE_GENERIC = 1004;
+const ERROR_CODE_GENERIC = 100;
 
 export const useHumanResourceRequestById = (
   humanResourceRequestId: string,
