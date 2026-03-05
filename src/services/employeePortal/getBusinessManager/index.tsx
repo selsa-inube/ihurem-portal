@@ -3,13 +3,14 @@ import {
   maxRetriesServices,
   environment,
 } from "@config/environment";
+
 import { IBusinessManagers } from "@ptypes/employeePortalBusiness.types";
 
 import { mapBusinessManagerApiToEntity } from "./mappers";
 
 const getBusinessManagers = async (
-  businessManagerId: string,
   headers: Record<string, string>,
+  publicCode: string,
 ): Promise<IBusinessManagers> => {
   const maxRetries = maxRetriesServices;
   const fetchTimeout = fetchTimeoutServices;
@@ -23,45 +24,44 @@ const getBusinessManagers = async (
         method: "GET",
         headers: {
           ...headers,
-          "X-Action": "SearchByIdBusinessManager",
+          "X-Action": "SearchAllBusinessManager",
           "Content-type": "application/json; charset=UTF-8",
         },
         signal: controller.signal,
       };
 
-      const res = await fetch(
-        `${environment.IVITE_ISAAS_QUERY_PROCESS_SERVICE}/business-managers/${businessManagerId}`,
-        options,
-      );
+      const url = `${environment.IVITE_ISAAS_QUERY_PROCESS_SERVICE}/business-managers?publicCode=${publicCode}`;
+
+      const res = await fetch(url, options);
 
       clearTimeout(timeoutId);
-
-      if (res.status === 204) {
-        return {} as IBusinessManagers;
-      }
 
       const data = await res.json();
 
       if (!res.ok) {
         const errorMessage =
-          data?.message ?? "Error al obtener los datos del operador";
+          data?.message ?? "Error al obtener el business manager";
         throw new Error(errorMessage);
       }
 
-      return mapBusinessManagerApiToEntity(data);
+      if (!Array.isArray(data) || data.length === 0) {
+        throw new Error(
+          "No se encontró ningún business manager para el publicCode dado.",
+        );
+      }
+
+      return mapBusinessManagerApiToEntity(data[0]);
     } catch (error) {
       if (attempt === maxRetries) {
-        if (error instanceof Error) {
-          throw error;
-        }
+        if (error instanceof Error) throw error;
         throw new Error(
-          "Todos los intentos fallaron. No se pudieron obtener los datos del operador.",
+          "Todos los intentos fallaron obteniendo el business manager.",
         );
       }
     }
   }
 
-  return {} as IBusinessManagers;
+  throw new Error("Error inesperado obteniendo el business manager.");
 };
 
 export { getBusinessManagers };

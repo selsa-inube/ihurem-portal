@@ -58,24 +58,27 @@ interface IEmployeeReference {
   referenceType: string;
 }
 
-interface IOptionsByEmployeePortalBusinessManager {
-  optionEmployeeId: string;
-  employeePortalCatalogId: string;
+interface IOptionsByEmployeePortalBusinessManagers {
   employeePortalId: string;
+  optionCode: string;
+  portalCatalogCode: string;
 }
 
 interface IEmployeePortalByBusinessManager {
   abbreviatedName: string;
-  businessManagerId: string;
-  businessUnit: string;
+  brandImageUrl: string;
+  businessManagerCode: string;
+  businessManagerName: string;
+  businessUnitCode: string;
+  businessUnitName: string;
   descriptionUse: string;
-  portalCode: string;
-  employeePortalCatalogId: string;
   employeePortalId: string;
-  optionsByEmployeePortalBusinessManager?: IOptionsByEmployeePortalBusinessManager[];
   externalAuthenticationProvider: string;
+  optionsByEmployeePortalBusinessManagers?: IOptionsByEmployeePortalBusinessManagers[];
+  portalCatalogCode: string;
+  portalCode: string;
+  url: string;
 }
-
 interface IBusinessManagers {
   id: string;
   publicCode: string;
@@ -90,13 +93,16 @@ interface IBusinessManagers {
 }
 interface IBusinessUnitsPortalEmployee {
   abbreviatedName: string;
+  alias: string;
   businessManagersByBusinessesUnit?: BusinessManagersByBusinessesUnit[];
   businessUnit: string;
+  countryIso: string;
   descriptionUse: string;
   firstMonthOfFiscalYear: string;
-  languageId: string;
+  languageIso: string;
   publicCode: string;
   publicCodeTablesByBusinessesUnit?: PublicCodeTablesByBusinessesUnit[];
+  iconUrl: string;
   urlLogo: string;
   useCasesByBusinessesUnit: UseCasesByBusinessesUnit[];
 }
@@ -104,6 +110,7 @@ interface IBusinessUnitsPortalEmployee {
 interface BusinessManagersByBusinessesUnit {
   businessManagerId: string;
   businessUnit: string;
+  isSame: string;
 }
 
 interface PublicCodeTablesByBusinessesUnit {
@@ -118,7 +125,7 @@ interface PublicCodeTablesByBusinessesUnit {
 interface UseCasesByBusinessesUnit {
   businessUnit: string;
   effectiveDate: string;
-  useCaseId: string;
+  useCaseName: string;
 }
 interface IEmployeeOptions {
   abbreviatedName: string;
@@ -183,11 +190,52 @@ export enum EContractStatus {
   in_the_process_of_ending = "in_the_process_of_ending",
 }
 
+interface IBusinessUnitsPortalEmployeeApi {
+  abbreviatedName?: string;
+  alias?: string;
+  businessUnit?: string;
+  countryIso?: string;
+  descriptionUse?: string;
+  firstMonthOfFiscalYear?: string;
+  languageIso?: string;
+  publicCode?: string;
+  iconUrl?: string;
+  urlLogo?: string;
+  businessManagersByBusinessesUnit?: IBusinessManagersByBusinessesUnitApi[];
+  publicCodeTablesByBusinessesUnit?: IPublicCodeTablesByBusinessesUnitApi[];
+  useCasesByBusinessesUnit?: IUseCasesByBusinessesUnitApi[];
+}
+
+interface IBusinessManagersByBusinessesUnitApi {
+  businessManagerId?: string;
+  businessUnit?: string;
+  isSame?: string;
+}
+
+interface IPublicCodeTablesByBusinessesUnitApi {
+  algorithmToPublicCode?: string;
+  businessTableId?: string;
+  businessUnit?: string;
+  lengthToPublicCode?: number;
+  prefixToPublicCode?: string;
+  publicCodeGeneration?: string;
+}
+
+interface IUseCasesByBusinessesUnitApi {
+  businessUnit?: string;
+  effectiveDate?: string;
+  useCaseName?: string;
+}
+
 export type {
   IEmployee,
   IEmploymentContract,
   IEmployeeReference,
-  IOptionsByEmployeePortalBusinessManager,
+  IBusinessUnitsPortalEmployeeApi,
+  IPublicCodeTablesByBusinessesUnitApi,
+  IBusinessManagersByBusinessesUnitApi,
+  IUseCasesByBusinessesUnitApi,
+  IOptionsByEmployeePortalBusinessManagers,
   IEmployeePortalByBusinessManager,
   IBusinessManagers,
   IBusinessUnitsPortalEmployee,

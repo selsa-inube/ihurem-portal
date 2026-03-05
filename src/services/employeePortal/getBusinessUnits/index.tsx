@@ -4,62 +4,63 @@ import {
   fetchTimeoutServices,
   maxRetriesServices,
 } from "@config/environment";
-import { mapBusinessUnitsPortalEmployeeApiToEntity } from "./mappers";
+import { mapBusinessUnitsPortalEmployeeToEntities } from "./mappers";
 
 const businessUnitsPortalEmployee = async (
-  businessUnit: string,
   headers: Record<string, string>,
-): Promise<IBusinessUnitsPortalEmployee> => {
-  const maxRetries = maxRetriesServices;
-  const fetchTimeout = fetchTimeoutServices;
-
-  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+  publicCode?: string,
+): Promise<IBusinessUnitsPortalEmployee[]> => {
+  for (let attempt = 1; attempt <= maxRetriesServices; attempt++) {
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), fetchTimeout);
+      const timeoutId = setTimeout(
+        () => controller.abort(),
+        fetchTimeoutServices,
+      );
 
-      const options: RequestInit = {
+      const url = new URL(
+        `${environment.IVITE_ISAAS_QUERY_PROCESS_SERVICE}/businesses-unit`,
+      );
+
+      if (publicCode) {
+        url.searchParams.append("publicCode", publicCode);
+      }
+
+      const response = await fetch(url.toString(), {
         method: "GET",
         headers: {
           ...headers,
-          "X-Action": "SearchByIdBusinessUnit",
-          "Content-type": "application/json; charset=UTF-8",
+          "X-Action": "SearchAllBusinessUnit",
+          "Content-Type": "application/json",
         },
         signal: controller.signal,
-      };
-
-      const res = await fetch(
-        `${environment.IVITE_ISAAS_QUERY_PROCESS_SERVICE}/businesses-unit/${businessUnit}`,
-        options,
-      );
+      });
 
       clearTimeout(timeoutId);
 
-      if (res.status === 204) {
-        return {} as IBusinessUnitsPortalEmployee;
+      if (response.status === 204) {
+        return [];
       }
 
-      const data = await res.json();
+      const data = await response.json();
 
-      if (!res.ok) {
-        throw {
-          message: "Error al obtener los datos de la unidad de negocio.",
-          status: res.status,
-          data,
-        };
-      }
-      const normalizeData = mapBusinessUnitsPortalEmployeeApiToEntity(data);
-      return normalizeData;
-    } catch {
-      if (attempt === maxRetries) {
+      if (!response.ok) {
         throw new Error(
-          "Todos los intentos fallaron. No se pudieron obtener los datos de la unidad de negocio.",
+          data?.message ?? "Error obteniendo unidades de negocio",
         );
+      }
+
+      return mapBusinessUnitsPortalEmployeeToEntities(data);
+    } catch (error) {
+      if (attempt === maxRetriesServices) {
+        throw error instanceof Error
+          ? error
+          : new Error("Todos los intentos fallaron obteniendo business units");
       }
     }
   }
 
-  return {} as IBusinessUnitsPortalEmployee;
+  return [];
 };
 
 export { businessUnitsPortalEmployee };

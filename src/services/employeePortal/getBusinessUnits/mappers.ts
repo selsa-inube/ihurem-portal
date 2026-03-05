@@ -3,161 +3,83 @@ import {
   IBusinessUnitsPortalEmployee,
   PublicCodeTablesByBusinessesUnit,
   UseCasesByBusinessesUnit,
+  IBusinessUnitsPortalEmployeeApi,
+  IBusinessManagersByBusinessesUnitApi,
+  IPublicCodeTablesByBusinessesUnitApi,
+  IUseCasesByBusinessesUnitApi,
 } from "@ptypes/employeePortalBusiness.types";
 
 const mapBusinessUnitsPortalEmployeeApiToEntity = (
-  businessUnit: Record<string, string | number | object>,
-): IBusinessUnitsPortalEmployee => {
-  const businessUnitData: IBusinessUnitsPortalEmployee = {
-    abbreviatedName:
-      typeof businessUnit.abbreviatedName === "string" ||
-      typeof businessUnit.abbreviatedName === "number"
-        ? String(businessUnit.abbreviatedName)
-        : "",
-    businessManagersByBusinessesUnit:
-      businessUnit.businessManagersByBusinessesUnit
-        ? mapBusinessManagersByBusinessesUnit(
-            businessUnit.businessManagersByBusinessesUnit as Record<
-              string,
-              string | number | object
-            >[],
-          )
-        : [],
-    businessUnit:
-      typeof businessUnit.businessUnit === "string" ||
-      typeof businessUnit.businessUnit === "number"
-        ? String(businessUnit.businessUnit)
-        : "",
-    descriptionUse:
-      typeof businessUnit.descriptionUse === "string" ||
-      typeof businessUnit.descriptionUse === "number"
-        ? String(businessUnit.descriptionUse)
-        : "",
-    firstMonthOfFiscalYear:
-      typeof businessUnit.firstMonthOfFiscalYear === "string" ||
-      typeof businessUnit.firstMonthOfFiscalYear === "number"
-        ? String(businessUnit.firstMonthOfFiscalYear)
-        : "",
-    languageId:
-      typeof businessUnit.languageId === "string" ||
-      typeof businessUnit.languageId === "number"
-        ? String(businessUnit.languageId)
-        : "",
-    publicCode:
-      typeof businessUnit.publicCode === "string" ||
-      typeof businessUnit.publicCode === "number"
-        ? String(businessUnit.publicCode)
-        : "",
-    publicCodeTablesByBusinessesUnit:
-      businessUnit.publicCodeTablesByBusinessesUnit
-        ? mapPublicCodeTablesByBusinessesUnit(
-            businessUnit.publicCodeTablesByBusinessesUnit as Record<
-              string,
-              string | number | object
-            >[],
-          )
-        : [],
-    urlLogo:
-      typeof businessUnit.urlLogo === "string" ||
-      typeof businessUnit.urlLogo === "number"
-        ? String(businessUnit.urlLogo)
-        : "",
-    useCasesByBusinessesUnit: Array.isArray(
-      businessUnit.useCasesByBusinessesUnit,
-    )
-      ? mapUseCasesByBusinessesUnit(
-          businessUnit.useCasesByBusinessesUnit as Record<
-            string,
-            string | number | object
-          >[],
-        )
-      : [],
-  };
-  return businessUnitData;
-};
+  businessUnit: IBusinessUnitsPortalEmployeeApi,
+): IBusinessUnitsPortalEmployee => ({
+  abbreviatedName: businessUnit.abbreviatedName ?? "",
+  alias: businessUnit.alias ?? "",
+  businessUnit: businessUnit.businessUnit ?? "",
+  countryIso: businessUnit.countryIso ?? "",
+  descriptionUse: businessUnit.descriptionUse ?? "",
+  firstMonthOfFiscalYear: businessUnit.firstMonthOfFiscalYear ?? "",
+  languageIso: businessUnit.languageIso ?? "",
+  publicCode: businessUnit.publicCode ?? "",
+  iconUrl: businessUnit.iconUrl ?? "",
+  urlLogo: businessUnit.urlLogo ?? "",
+
+  businessManagersByBusinessesUnit: Array.isArray(
+    businessUnit.businessManagersByBusinessesUnit,
+  )
+    ? mapBusinessManagersByBusinessesUnit(
+        businessUnit.businessManagersByBusinessesUnit,
+      )
+    : [],
+
+  publicCodeTablesByBusinessesUnit: Array.isArray(
+    businessUnit.publicCodeTablesByBusinessesUnit,
+  )
+    ? mapPublicCodeTablesByBusinessesUnit(
+        businessUnit.publicCodeTablesByBusinessesUnit,
+      )
+    : [],
+
+  useCasesByBusinessesUnit: Array.isArray(businessUnit.useCasesByBusinessesUnit)
+    ? mapUseCasesByBusinessesUnit(businessUnit.useCasesByBusinessesUnit)
+    : [],
+});
 
 const mapBusinessManagersByBusinessesUnit = (
-  businessManagers: Record<string, string | number | object>[],
-): BusinessManagersByBusinessesUnit[] => {
-  return businessManagers.map((businessManager) => ({
-    businessManagerId:
-      typeof businessManager.businessManagerId === "string" ||
-      typeof businessManager.businessManagerId === "number"
-        ? String(businessManager.businessManagerId)
-        : "",
-    businessUnit:
-      typeof businessManager.businessUnit === "string" ||
-      typeof businessManager.businessUnit === "number"
-        ? String(businessManager.businessUnit)
-        : "",
+  businessManagers: IBusinessManagersByBusinessesUnitApi[],
+): BusinessManagersByBusinessesUnit[] =>
+  businessManagers.map((bm) => ({
+    businessManagerId: bm.businessManagerId ?? "",
+    businessUnit: bm.businessUnit ?? "",
+    isSame: bm.isSame ?? "",
   }));
-};
+
 const mapPublicCodeTablesByBusinessesUnit = (
-  publicCodeTables: Record<string, string | number | object>[],
-): PublicCodeTablesByBusinessesUnit[] => {
-  return publicCodeTables.map((publicCodeTable) => ({
-    algorithmToPublicCode:
-      typeof publicCodeTable.algorithmToPublicCode === "string" ||
-      typeof publicCodeTable.algorithmToPublicCode === "number"
-        ? String(publicCodeTable.algorithmToPublicCode)
-        : "",
-    businessTableId:
-      typeof publicCodeTable.businessTableId === "string" ||
-      typeof publicCodeTable.businessTableId === "number"
-        ? String(publicCodeTable.businessTableId)
-        : "",
-    businessUnit:
-      typeof publicCodeTable.businessUnit === "string" ||
-      typeof publicCodeTable.businessUnit === "number"
-        ? String(publicCodeTable.businessUnit)
-        : "",
-    lengthToPublicCode:
-      typeof publicCodeTable.lengthToPublicCode === "string" ||
-      typeof publicCodeTable.lengthToPublicCode === "number"
-        ? Number(publicCodeTable.lengthToPublicCode)
-        : 0,
-    prefixToPublicCode:
-      typeof publicCodeTable.prefixToPublicCode === "string" ||
-      typeof publicCodeTable.prefixToPublicCode === "number"
-        ? String(publicCodeTable.prefixToPublicCode)
-        : "",
-    publicCodeGeneration:
-      typeof publicCodeTable.publicCodeGeneration === "string" ||
-      typeof publicCodeTable.publicCodeGeneration === "number"
-        ? String(publicCodeTable.publicCodeGeneration)
-        : "",
+  publicCodeTables: IPublicCodeTablesByBusinessesUnitApi[],
+): PublicCodeTablesByBusinessesUnit[] =>
+  publicCodeTables.map((pct) => ({
+    algorithmToPublicCode: pct.algorithmToPublicCode ?? "",
+    businessTableId: pct.businessTableId ?? "",
+    businessUnit: pct.businessUnit ?? "",
+    lengthToPublicCode: pct.lengthToPublicCode ?? 0,
+    prefixToPublicCode: pct.prefixToPublicCode ?? "",
+    publicCodeGeneration: pct.publicCodeGeneration ?? "",
   }));
-};
 
 const mapUseCasesByBusinessesUnit = (
-  useCases: Record<string, string | number | object>[],
-): UseCasesByBusinessesUnit[] => {
-  return useCases.map((useCase) => ({
-    businessUnit:
-      typeof useCase.businessUnit === "string" ||
-      typeof useCase.businessUnit === "number"
-        ? String(useCase.businessUnit)
-        : "",
-    effectiveDate:
-      typeof useCase.effectiveDate === "string" ||
-      typeof useCase.effectiveDate === "number"
-        ? String(useCase.effectiveDate)
-        : "",
-    useCaseId:
-      typeof useCase.useCaseId === "string" ||
-      typeof useCase.useCaseId === "number"
-        ? String(useCase.useCaseId)
-        : "",
+  useCases: IUseCasesByBusinessesUnitApi[],
+): UseCasesByBusinessesUnit[] =>
+  useCases.map((uc) => ({
+    businessUnit: uc.businessUnit ?? "",
+    effectiveDate: uc.effectiveDate ?? "",
+    useCaseName: uc.useCaseName ?? "",
   }));
-};
 
 const mapBusinessUnitsPortalEmployeeToEntities = (
-  resend: Record<string, string | number | object>[],
-): IBusinessUnitsPortalEmployee[] => {
-  return resend.map(mapBusinessUnitsPortalEmployeeApiToEntity);
-};
+  response: IBusinessUnitsPortalEmployeeApi[],
+): IBusinessUnitsPortalEmployee[] =>
+  response.map(mapBusinessUnitsPortalEmployeeApiToEntity);
 
 export {
-  mapBusinessUnitsPortalEmployeeToEntities,
   mapBusinessUnitsPortalEmployeeApiToEntity,
+  mapBusinessUnitsPortalEmployeeToEntities,
 };

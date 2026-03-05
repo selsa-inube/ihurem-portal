@@ -1,10 +1,10 @@
-import { IEmployeePortalByBusinessManager } from "@ptypes/employeePortalBusiness.types";
+import {
+  IEmployeePortalByBusinessManager,
+  IOptionsByEmployeePortalBusinessManagers,
+} from "@ptypes/employeePortalBusiness.types";
 
 function toSafeString(value: unknown): string {
-  if (value === null || value === undefined) {
-    return "";
-  }
-
+  if (value === null || value === undefined) return "";
   if (typeof value === "object") {
     try {
       return JSON.stringify(value);
@@ -12,34 +12,50 @@ function toSafeString(value: unknown): string {
       return "";
     }
   }
-
   switch (typeof value) {
     case "boolean":
     case "number":
     case "string":
     case "bigint":
       return String(value);
-    case "symbol":
-    case "function":
     default:
       return "";
   }
 }
+
+const mapOptionsByEmployeePortalBusinessManagers = (
+  options: unknown,
+): IOptionsByEmployeePortalBusinessManagers[] => {
+  if (!Array.isArray(options)) return [];
+  return options.map((option: Record<string, unknown>) => ({
+    employeePortalId: toSafeString(option.employeePortalId),
+    optionCode: toSafeString(option.optionCode),
+    portalCatalogCode: toSafeString(option.portalCatalogCode),
+  }));
+};
 
 const mapEmployeePortalByBusinessManagerApiToEntity = (
   resend: Record<string, unknown>,
 ): IEmployeePortalByBusinessManager => {
   return {
     abbreviatedName: toSafeString(resend.abbreviatedName),
-    businessManagerId: toSafeString(resend.businessManagerId),
-    businessUnit: toSafeString(resend.businessUnit),
+    brandImageUrl: toSafeString(resend.brandImageUrl),
+    businessManagerCode: toSafeString(resend.businessManagerCode),
+    businessManagerName: toSafeString(resend.businessManagerName),
+    businessUnitCode: toSafeString(resend.businessUnitCode),
+    businessUnitName: toSafeString(resend.businessUnitName),
     descriptionUse: toSafeString(resend.descriptionUse),
-    portalCode: toSafeString(resend.portalCode),
-    employeePortalCatalogId: toSafeString(resend.employeePortalCatalogId),
     employeePortalId: toSafeString(resend.employeePortalId),
     externalAuthenticationProvider: toSafeString(
       resend.externalAuthenticationProvider,
     ),
+    optionsByEmployeePortalBusinessManagers:
+      mapOptionsByEmployeePortalBusinessManagers(
+        resend.optionsByEmployeePortalBusinessManagers,
+      ),
+    portalCatalogCode: toSafeString(resend.portalCatalogCode),
+    portalCode: toSafeString(resend.portalCode),
+    url: toSafeString(resend.url),
   };
 };
 
